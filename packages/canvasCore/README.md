@@ -1,5 +1,0 @@
-## ✨ Quick Start
-
-```
-yarn start
-```
