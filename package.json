@@ -7,9 +7,8 @@
   ],
   "private": true,
   "scripts": {
-    "start": "yarn start:chatApp",
-    "dev":"yarn workspace @icedesign/scaffold-electron start",
-    "start:chatApp": "yarn workspace chatApp start"
+    "start": "yarn start:sheetOne",
+    "start:sheetOne": "yarn workspace sheetOne start"
   },
   "repository": "git@github.com:breakfriday/canvasTable.git",
   "author": "breakhappy <break_happy@163.com>",
