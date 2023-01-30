@@ -2,6 +2,15 @@
   "name": "canvastable",
   "version": "1.0.0",
   "main": "index.js",
+  "workspaces": [
+    "packages/*"
+  ],
+  "private": true,
+  "scripts": {
+    "start": "yarn start:chatApp",
+    "dev":"yarn workspace @icedesign/scaffold-electron start",
+    "start:chatApp": "yarn workspace chatApp start"
+  },
   "repository": "git@github.com:breakfriday/canvasTable.git",
   "author": "breakhappy <break_happy@163.com>",
   "license": "MIT"
