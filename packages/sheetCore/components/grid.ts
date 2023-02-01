@@ -40,6 +40,18 @@ const grid_layer = () => {
           })`,
         );
       });
+
+    //   cell.on('mouseover', (evt) => {
+    //     const shape = evt.target;
+    //     shape.fill('blue');
+
+    //   });
+    //   cell.on('mouseout', (evt) => {
+    //     const shape = evt.target;
+    //     shape.fill('white');
+
+    //   });
+
       grid_layer.add(cell);
     }
   }
