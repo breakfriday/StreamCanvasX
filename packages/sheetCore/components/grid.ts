@@ -34,3 +34,6 @@ const grid_layer = () => {
   return grid_layer;
 };
 
+
+
+export default grid_layer
