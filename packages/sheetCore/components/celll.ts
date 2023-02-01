@@ -15,12 +15,14 @@ const cell_shape = (cellWidth, cellHeight, x_inx, y_inx) => {
     width: cellWidth,
     height: cellHeight,
     fill: 'white',
+    stroke: 'lightgray',
+    strokeWidth: 1,
   });
 
   const cellText = new Konva.Text({
     x: cellWidth / 2,
     y: cellHeight / 2,
-    text: (i * 10 + j).toString(),
+    text: (x_inx * 10 + y_inx).toString(),
     fontSize: 20,
     fontFamily: 'Calibri',
     fill: 'black',
@@ -33,3 +35,6 @@ const cell_shape = (cellWidth, cellHeight, x_inx, y_inx) => {
 
   return cell;
 };
+
+
+export default cell_shape;

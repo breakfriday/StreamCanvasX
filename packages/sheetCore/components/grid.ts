@@ -1,4 +1,5 @@
 import Konva from 'konva';
+import cell_shape from './celll';
 
 const grid_layer = () => {
   const grid_layer = new Konva.Layer();
@@ -22,15 +23,17 @@ const grid_layer = () => {
 
   for (let i = 0; i < gridSize; i++) {
     for (let j = 0; j < gridSize; j++) {
-      const cell = new Konva.Rect({
-        x: j * cellSize,
-        y: i * cellSize,
-        width: cellSize,
-        height: cellSize,
-        fill: 'white',
-        stroke: 'lightgray',
-        strokeWidth: 1,
-      });
+    //   const cell = new Konva.Rect({
+    //     x: j * cellSize,
+    //     y: i * cellSize,
+    //     width: cellSize,
+    //     height: cellSize,
+    //     fill: 'white',
+    //     stroke: 'lightgray',
+    //     strokeWidth: 1,
+    //   });
+
+      const cell = cell_shape(cellSize, cellSize, i, j);
       cell.on('click', function () {
         alert(
           `Cell index: (${
@@ -41,16 +44,18 @@ const grid_layer = () => {
         );
       });
 
-    //   cell.on('mouseover', (evt) => {
-    //     const shape = evt.target;
-    //     shape.fill('blue');
+  
 
-    //   });
-    //   cell.on('mouseout', (evt) => {
-    //     const shape = evt.target;
-    //     shape.fill('white');
+      //   cell.on('mouseover', (evt) => {
+      //     const shape = evt.target;
+      //     shape.fill('blue');
 
-    //   });
+      //   });
+      //   cell.on('mouseout', (evt) => {
+      //     const shape = evt.target;
+      //     shape.fill('white');
+
+      //   });
 
       grid_layer.add(cell);
     }
