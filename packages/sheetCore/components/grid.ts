@@ -7,6 +7,19 @@ const grid_layer = () => {
   const cellSize = 60;
   const gridSize = 100;
 
+
+  const cell_render = (cellSize, i, j) => {
+    return new Konva.Rect({
+      x: i * cellSize,
+      y: j * cellSize,
+      width: cellSize,
+      height: cellSize,
+      fill: 'white',
+      stroke: 'black',
+      strokeWidth: 1,
+    });
+  };
+
   for (let i = 0; i < gridSize; i++) {
     for (let j = 0; j < gridSize; j++) {
       const cell = new Konva.Rect({
@@ -35,5 +48,4 @@ const grid_layer = () => {
 };
 
 
-
-export default grid_layer
+export default grid_layer;
