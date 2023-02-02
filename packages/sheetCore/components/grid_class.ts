@@ -42,6 +42,9 @@ class Grid_layer {
       strokeWidth: 1,
       draggable: false,
       data: {
+        cell_x: x,
+        cell_y: y,
+
         name2: '从前有座山',
       },
     });
