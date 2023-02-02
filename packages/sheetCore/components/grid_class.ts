@@ -95,11 +95,9 @@ class Grid_layer {
     this.layer.on('click', (evt) => {
       const shape = evt.target;
 
-      debugger;
       const x = evt.evt.layerX;
       const y = evt.evt.layerY;
 
-      debugger;
       alert(
         `Cell index: (${
           Math.floor(x / 100) + 1
