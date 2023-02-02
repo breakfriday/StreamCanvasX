@@ -13,12 +13,35 @@ class Grid_layer {
     this.stage = stage;
     this.create_grid_layer();
 
-    this.cell_hover_event()
+    this.cell_hover_event();
   }
 
   create_grid_layer() {
     this.layer = new Konva.Layer();
     this.stage.add(this.layer);
+  }
+
+  create_cell_group(x, y, w, h) {
+    const cell_group = new Konva.Group({
+      x,
+      y,
+      width: w,
+      height: h,
+    });
+
+    const square = new Konva.Rect({
+      x: 0,
+      y: 0,
+      width: w,
+      height: h,
+      fill: 'white',
+      stroke: 'lightgray',
+      strokeWidth: 1,
+      draggable: false,
+    });
+    cell_group.add(square);
+
+    return cell_group;
   }
 
   create_cell(cell_width, cell_height) {
@@ -30,16 +53,10 @@ class Grid_layer {
     const rows = Math.floor(this.stage_height / (rectHeight + padding));
     for (let i = 0; i < cols; i++) {
       for (let j = 0; j < rows; j++) {
-        const rect = new Konva.Rect({
-          x: i * (rectWidth + padding),
-          y: j * (rectHeight + padding),
-          width: rectWidth,
-          height: rectHeight,
-          fill: 'white',
-          stroke: 'lightgray',
-          strokeWidth: 1,
-          draggable: false,
-        });
+        const x = i * (rectWidth + padding);
+        const y = j * (rectHeight + padding);
+
+        const rect = this.create_cell_group(x, y, cell_width, cell_height);
         rects.push(rect);
 
         this.layer.add(rect);
