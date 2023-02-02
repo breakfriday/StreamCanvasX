@@ -27,6 +27,9 @@ class Grid_layer {
       y,
       width: w,
       height: h,
+      data: {
+        name: '从前有座山',
+      },
     });
 
     const square = new Konva.Rect({
@@ -38,6 +41,9 @@ class Grid_layer {
       stroke: 'lightgray',
       strokeWidth: 1,
       draggable: false,
+      data: {
+        name2: '从前有座山',
+      },
     });
     cell_group.add(square);
 
@@ -86,13 +92,16 @@ class Grid_layer {
     this.layer.on('click', (evt) => {
       const shape = evt.target;
 
+      debugger;
       const x = evt.evt.layerX;
       const y = evt.evt.layerY;
+
+      debugger;
       alert(
         `Cell index: (${
-          Math.floor(x / 100)+1
+          Math.floor(x / 100) + 1
         }, ${
-          Math.floor(y / 50)+1
+          Math.floor(y / 50) + 1
         })`,
       );
     });
