@@ -1,7 +1,8 @@
+import { Rect } from 'konva/lib/shapes/Rect';
 import Konva from 'konva';
 
 const creat_cells = (stage_width, stage_height, cell_width: 100, cell_height: 50) => {
-  const rects = [];
+  const rects: Rect[] = [];
   const rectWidth = cell_width;
   const rectHeight = cell_height;
   const padding = 0;
@@ -22,5 +23,7 @@ const creat_cells = (stage_width, stage_height, cell_width: 100, cell_height: 50
       rects.push(rect);
     }
   }
+
+  return rects;
 };
 
