@@ -1,34 +1,25 @@
+
 import Konva from 'konva';
+import { Rect } from 'konva/lib/shapes/Rect';
 
-const grid_layer = () => {
-  const grid_layer = new Konva.Layer();
+import grid_cells from './grid_cell';
 
-  const rects = [];
-  const rectWidth = 100;
-  const rectHeight = 50;
-  const padding = 0;
-  const cols = Math.floor(stage.width() / (rectWidth + padding));
-  const rows = Math.floor(stage.height() / (rectHeight + padding));
-  for (let i = 0; i < cols; i++) {
-    for (let j = 0; j < rows; j++) {
-      const rect = new Konva.Rect({
-        x: i * (rectWidth + padding),
-        y: j * (rectHeight + padding),
-        width: rectWidth,
-        height: rectHeight,
-        fill: 'white',
-        stroke: 'lightgray',
-        strokeWidth: 1,
-        draggable: false,
-      });
-      rects.push(rect);
-      grid_layer.add(rect);
-    }
-  }
+const grid_layer = (stage: any) => {
+  const layer = new Konva.Layer();
 
-  return grid_layer;
+  const stage_width = stage.width();
+  const stage_height = stage.height();
+
+  const cells: Rect[] = grid_cells(stage_width, stage_height, 100, 50);
+
+
+  debugger
+  layer.add(cells);
+
+  debugger
+
+  return layer;
 };
 
 
-
-export default grid_layer
+export default grid_layer;

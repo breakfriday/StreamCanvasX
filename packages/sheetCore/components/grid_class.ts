@@ -1,0 +1,72 @@
+import Konva from 'konva';
+import { Rect } from 'konva/lib/shapes/Rect';
+import { Stage } from 'konva/lib/Stage';
+
+class Grid_layer {
+  private stage_width: number;
+  private stage_height: number;
+  private layer: any;
+  private stage: Stage;
+  constructor(stage) {
+    this.stage_width = stage.width();
+    this.stage_height = stage.height();
+    this.stage = stage;
+    this.create_grid_layer();
+
+    this.cell_hover_event()
+  }
+
+  create_grid_layer() {
+    this.layer = new Konva.Layer();
+    this.stage.add(this.layer);
+  }
+
+  create_cell(cell_width, cell_height) {
+    const rects: Rect[] = [];
+    const rectWidth = cell_width;
+    const rectHeight = cell_height;
+    const padding = 0;
+    const cols = Math.floor(this.stage_width / (rectWidth + padding));
+    const rows = Math.floor(this.stage_height / (rectHeight + padding));
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < rows; j++) {
+        const rect = new Konva.Rect({
+          x: i * (rectWidth + padding),
+          y: j * (rectHeight + padding),
+          width: rectWidth,
+          height: rectHeight,
+          fill: 'white',
+          stroke: 'lightgray',
+          strokeWidth: 1,
+          draggable: false,
+        });
+        rects.push(rect);
+
+        this.layer.add(rect);
+      }
+    }
+  }
+
+  render_layer() {
+    this.create_cell(100, 50);
+    this.layer.draw();
+  }
+
+  cell_hover_event() {
+    this.layer.on('mouseover', (evt) => {
+      const shape = evt.target;
+      document.body.style.cursor = 'pointer';
+      shape.fill('#00D2FF');
+      this.layer.draw();
+    });
+    this.layer.on('mouseout', (evt) => {
+      const shape = evt.target;
+      document.body.style.cursor = 'default';
+      shape.fill('white');
+      this.layer.draw();
+    });
+  }
+}
+
+
+export default Grid_layer;
