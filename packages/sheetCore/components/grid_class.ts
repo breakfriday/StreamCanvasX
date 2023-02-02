@@ -56,10 +56,10 @@ class Grid_layer {
         const x = i * (rectWidth + padding);
         const y = j * (rectHeight + padding);
 
-        const rect = this.create_cell_group(x, y, cell_width, cell_height);
-        rects.push(rect);
+        const cell_group = this.create_cell_group(x, y, cell_width, cell_height);
+        rects.push(cell_group);
 
-        this.layer.add(rect);
+        this.layer.add(cell_group);
       }
     }
   }
@@ -81,6 +81,20 @@ class Grid_layer {
       document.body.style.cursor = 'default';
       shape.fill('white');
       this.layer.draw();
+    });
+
+    this.layer.on('click', (evt) => {
+      const shape = evt.target;
+
+      const x = evt.evt.layerX;
+      const y = evt.evt.layerY;
+      alert(
+        `Cell index: (${
+          Math.floor(x / 100)+1
+        }, ${
+          Math.floor(y / 50)+1
+        })`,
+      );
     });
   }
 }
