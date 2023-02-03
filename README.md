@@ -12,6 +12,6 @@ yarn start
 <p align="center">
     <img src="images/demo.jpg" alt="" />
 </p>
-<p align="center">
+<!-- <p align="center">
     <img src="images/demo2.jpg" alt="" />
-</p>
+</p> -->
