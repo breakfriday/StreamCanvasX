@@ -1,6 +1,7 @@
 import Konva from 'konva';
 import { Rect } from 'konva/lib/shapes/Rect';
 import { Stage } from 'konva/lib/Stage';
+import { Group } from 'konva/lib/Group';
 
 class Grid_layer {
   private stage_width: number;
@@ -48,13 +49,30 @@ class Grid_layer {
         name2: '从前有座山',
       },
     });
+
+    const text = new Konva.Text({
+      x: 0,
+      y: 0,
+      width: w,
+      height: h,
+      fontFamily: 'Calibri',
+      fontSize: 14,
+      fill: 'black',
+      text: 'hello_word',
+      align: 'center',
+
+      textDecoration: '',
+
+    });
+
     cell_group.add(square);
+    cell_group.add(text);
 
     return cell_group;
   }
 
   create_cell(cell_width, cell_height) {
-    const rects: Rect[] = [];
+    const rects: Group[] = [];
     const rectWidth = cell_width;
     const rectHeight = cell_height;
     const padding = 0;
@@ -88,7 +106,7 @@ class Grid_layer {
     this.layer.on('mouseout', (evt) => {
       const shape = evt.target;
       document.body.style.cursor = 'default';
-      shape.fill('white');
+      shape.fill('black');
       this.layer.draw();
     });
 
