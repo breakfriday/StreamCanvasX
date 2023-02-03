@@ -23,6 +23,9 @@ class Grid_layer {
     this.layer = new Konva.Layer();
     this.stage.add(this.layer);
   }
+  get grid_layer(): string {
+    return this.layer;
+  }
 
   create_cell_group(x, y, w, h, i, j) {
     const cell_group = new Konva.Group({
