@@ -24,7 +24,7 @@ class Grid_layer {
     this.stage.add(this.layer);
   }
 
-  create_cell_group(x, y, w, h) {
+  create_cell_group(x, y, w, h, i, j) {
     const cell_group = new Konva.Group({
       x,
       y,
@@ -60,7 +60,7 @@ class Grid_layer {
       fontFamily: 'Calibri',
       fontSize: 14,
       fill: 'black',
-      text: 'hello_word',
+      text: `data  ${i}  ${j}`,
       align: 'center',
 
       textDecoration: '',
@@ -85,7 +85,7 @@ class Grid_layer {
         const x = i * (rectWidth + padding);
         const y = j * (rectHeight + padding);
 
-        const cell_group = this.create_cell_group(x, y, cell_width, cell_height);
+        const cell_group = this.create_cell_group(x, y, cell_width, cell_height, i, j);
         rects.push(cell_group);
 
         this.cell_groups.push(cell_group);
@@ -98,6 +98,10 @@ class Grid_layer {
   render_layer() {
     this.create_cell(100, 50);
     this.layer.draw();
+  }
+
+  set_grid_data(gridData) {
+
   }
 
   cell_hover_event() {
