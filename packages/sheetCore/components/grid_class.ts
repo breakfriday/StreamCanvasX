@@ -8,6 +8,7 @@ class Grid_layer {
   private stage_height: number;
   private layer: any;
   private stage: Stage;
+  private cell_groups: Group[];
   constructor(stage) {
     this.stage_width = stage.width();
     this.stage_height = stage.height();
@@ -15,6 +16,7 @@ class Grid_layer {
     this.create_grid_layer();
 
     this.cell_hover_event();
+    this.cell_groups = [];
   }
 
   create_grid_layer() {
@@ -85,6 +87,8 @@ class Grid_layer {
 
         const cell_group = this.create_cell_group(x, y, cell_width, cell_height);
         rects.push(cell_group);
+
+        this.cell_groups.push(cell_group);
 
         this.layer.add(cell_group);
       }
