@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { RendererProps } from './Grid';
 import { Group, Rect, Text } from 'react-konva';
-import { KonvaEventObject } from 'konva/types/Node';
+import { KonvaEventObject } from 'konva/lib/index-types';
 import { isNull } from './helpers';
 
 export interface CellProps extends RendererProps {
