@@ -1,22 +1,14 @@
-import React, { useRef } from 'react';
 import Konva from 'konva';
-import { Stage, Layer, Rect, Text } from 'react-konva';
-import SpreadSheet from 'konvaGrid';
+import React, { useRef, useEffect } from 'react';
+import Sheet from './components/sheet';
 
-const SheetPage2 = () => {
+const Home = () => {
+
   return (
     <>
-      <SpreadSheet autoFocus={false} />
-
-      <Stage width={window.innerWidth} height={window.innerHeight}>
-        <Layer>
-          <Text text="Try click on rect" />
-
-        </Layer>
-      </Stage>
+      <Sheet x={150} y={150} radius={50} color="red" />
     </>
   );
 };
 
-export default SheetPage2;
-
+export default Home;
