@@ -59,16 +59,15 @@ class Grid_layer {
       x: 0,
       y: 0,
       width: w,
-      height: h,
       fontFamily: 'Calibri',
       fontSize: 14,
       fill: 'black',
       text: `data  ${i}  ${j}`,
       align: 'center',
-
       textDecoration: '',
-
     });
+    text.y((h - text.height()) / 2);
+
 
     cell_group.add(square);
     cell_group.add(text);
@@ -108,33 +107,33 @@ class Grid_layer {
   }
 
   cell_hover_event() {
-    this.layer.on('mouseover', (evt) => {
-      const shape = evt.target;
-      document.body.style.cursor = 'pointer';
-      shape.fill('#00D2FF');
-      this.layer.draw();
-    });
-    this.layer.on('mouseout', (evt) => {
-      const shape = evt.target;
-      document.body.style.cursor = 'default';
-      shape.fill('black');
-      this.layer.draw();
-    });
+    // this.layer.on('mouseover', (evt) => {
+    //   const shape = evt.target;
+    //   document.body.style.cursor = 'pointer';
+    //   shape.fill('#00D2FF');
+    //   this.layer.draw();
+    // });
+    // this.layer.on('mouseout', (evt) => {
+    //   const shape = evt.target;
+    //   document.body.style.cursor = 'default';
+    //   shape.fill('black');
+    //   this.layer.draw();
+    // });
 
-    this.layer.on('click', (evt) => {
-      const shape = evt.target;
+    // this.layer.on('click', (evt) => {
+    //   const shape = evt.target;
 
-      const x = evt.evt.layerX;
-      const y = evt.evt.layerY;
+    //   const x = evt.evt.layerX;
+    //   const y = evt.evt.layerY;
 
-      alert(
-        `Cell index: (${
-          Math.floor(x / 100) + 1
-        }, ${
-          Math.floor(y / 50) + 1
-        })`,
-      );
-    });
+    //   alert(
+    //     `Cell index: (${
+    //       Math.floor(x / 100) + 1
+    //     }, ${
+    //       Math.floor(y / 50) + 1
+    //     })`,
+    //   );
+    // });
   }
 }
 
