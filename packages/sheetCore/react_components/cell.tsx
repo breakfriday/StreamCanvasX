@@ -1,23 +1,14 @@
 import React, { memo } from 'react';
-import { RendererProps } from './Grid';
 import { Group, Rect, Text } from 'react-konva';
-import { KonvaEventObject } from 'konva/lib/index-types';
+import { KonvaEventObject } from 'konva/lib/Node';
 import { isNull } from './helpers';
 
-export interface CellProps extends RendererProps {
-  value?: string;
-  textColor?: string;
-  padding?: number;
-  fontWeight?: string;
-  fontStyle?: string;
-  onClick?: (e: KonvaEventObject<MouseEvent>) => void;
-}
 
 /**
  * Default cell component
  * @param props
  */
-const Cell: React.FC<CellProps> = memo((props) => {
+const Cell: React.FC = memo((props: any) => {
   const {
     x = 0,
     y = 0,
@@ -92,7 +83,7 @@ const Cell: React.FC<CellProps> = memo((props) => {
  * Default CellRenderer
  * @param props
  */
-const CellRenderer = (props: RendererProps) => {
+const CellRenderer = (props: any) => {
   return <Cell {...props} />;
 };
 
