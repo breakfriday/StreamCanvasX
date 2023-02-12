@@ -1,8 +1,8 @@
-import React, { memo } from "react";
-import { RendererProps } from "./Grid";
-import { Group, Rect, Text } from "react-konva";
-import { KonvaEventObject } from "konva/types/Node";
-import { isNull } from "./helpers";
+import React, { memo } from 'react';
+import { RendererProps } from './Grid';
+import { Group, Rect, Text } from 'react-konva';
+import { KonvaEventObject } from 'konva/types/Node';
+import { isNull } from './helpers';
 
 export interface CellProps extends RendererProps {
   value?: string;
@@ -24,23 +24,23 @@ const Cell: React.FC<CellProps> = memo((props) => {
     width,
     height,
     value,
-    fill = "white",
+    fill = 'white',
     strokeWidth = 1,
-    stroke = "#d9d9d9",
-    align = "left",
-    verticalAlign = "middle",
-    textColor = "#333",
+    stroke = '#d9d9d9',
+    align = 'left',
+    verticalAlign = 'middle',
+    textColor = '#333',
     padding = 5,
-    fontFamily = "Arial",
+    fontFamily = 'Arial',
     fontSize = 12,
     children,
-    wrap = "none",
-    fontWeight = "normal",
-    fontStyle = "normal",
+    wrap = 'none',
+    fontWeight = 'normal',
+    fontStyle = 'normal',
     textDecoration,
     alpha = 1,
     strokeEnabled = true,
-    globalCompositeOperation = "multiply",
+    globalCompositeOperation = 'multiply',
     isOverlay,
     ...rest
   } = props;

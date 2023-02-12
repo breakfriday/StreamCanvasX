@@ -49,6 +49,19 @@ const Sheet = React.forwardRef<HTMLImageElement>((props) => {
       layer.draw();
     });
 
+    const list = ['Item 1', 'Item 2', 'Item 3'];
+
+    const textNodes = list.map((item, index) => {
+      return new Konva.Text({
+        text: `${index + 1}. ${item}`,
+        fontSize: 24,
+        x: stage.width() / 2,
+        y: index * 50 + 50,
+        fill: 'blue',
+      });
+    });
+
+    textNodes.forEach(node => layer.add(node));
 
     layer.add(text);
     stage.add(layer);
