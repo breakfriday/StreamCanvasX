@@ -1,0 +1,25 @@
+{
+    "name": "editorCore",
+    "version": "0.1.0",
+    "description": "editorCore",
+    "dependencies": {
+      "react": ">=18.0.0",
+      "react-dom": ">=18.0.0",
+      "konva": "^8.3.13",
+      "react-reconciler": "~0.29.0"
+    },
+    "devDependencies": {
+      "@iceworks/spec": "^1.0.0",
+      "@types/react": "^17.0.2",
+      "@types/react-dom": "^17.0.2",
+      "eslint": "^7.30.0",
+      "ice.js": "^2.0.0",
+      "stylelint": "^13.7.2"
+    },
+  
+  
+  
+    "private": true
+  
+  }
+  
