@@ -5,7 +5,8 @@
   "dependencies": {
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
-    "konva": "^8.3.13"
+    "konva": "^8.3.13",
+    "react-reconciler": "~0.29.0"
   },
   "devDependencies": {
     "@iceworks/spec": "^1.0.0",

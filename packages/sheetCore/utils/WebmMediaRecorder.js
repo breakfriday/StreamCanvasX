@@ -1,5 +1,5 @@
 
-
+// MediaRecorder 将canvas 转视频流
 export default class WebmMediaRecorder {
   constructor({ name = 'unnamed', framerate = 60 } = {}) {
     this.recordedBlobs = [];
