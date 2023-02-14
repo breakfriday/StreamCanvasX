@@ -1,0 +1,21 @@
+{
+  "name": "threeCore",
+  "version": "0.1.0",
+  "description": "threeCore",
+  "dependencies": {
+    "@types/diff": "^5.0.2",
+    "@types/three": "^0.132.1",
+    "three": "^0.132.2",
+    "diff": "^5.0.0",
+    "mathjax": "3",
+  },
+  "devDependencies": {
+    "eslint": "^7.30.0",
+    "stylelint": "^13.7.2"
+  },
+
+
+
+  "private": true
+
+}
