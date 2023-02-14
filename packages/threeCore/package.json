@@ -7,7 +7,7 @@
     "@types/three": "^0.132.1",
     "three": "^0.132.2",
     "diff": "^5.0.0",
-    "mathjax": "3",
+    "mathjax": "3"
   },
   "devDependencies": {
     "eslint": "^7.30.0",
