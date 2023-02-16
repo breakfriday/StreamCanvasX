@@ -26,6 +26,8 @@ const Home = () => {
           style={{ cursor: 'pointer' }}
           onClick={() => {
             Game.startRace();
+
+            debugger
           }}
         >start_game
         </div>

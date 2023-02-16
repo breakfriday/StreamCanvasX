@@ -12,6 +12,15 @@ class RacingGame {
   private tween: any;
   private trackPath = [];
 
+  get Layer(): Layer {
+    return this.layer;
+  }
+
+
+  set Layer(value: Layer) {
+    this.layer = value;
+  }
+
 
   constructor(containerId) {
     this.stage = new Konva.Stage({
