@@ -12,6 +12,8 @@ const RxjsPage = lazy(() => import('@/pages/rxPage'));
 
 const GridDemo1 = lazy(() => import('@/pages/gird_demo1'));
 
+const ComplexLoad = lazy(() => import('@/pages/complexLoad'));
+
 const routerConfig: IRouterConfig[] = [
   {
     path: '/',
@@ -47,6 +49,11 @@ const routerConfig: IRouterConfig[] = [
     path: '/GridDemo1',
     exact: true,
     component: GridDemo1,
+  },
+  {
+    path: '/ComplexLoad',
+    exact: true,
+    component: ComplexLoad,
   },
 ];
 
