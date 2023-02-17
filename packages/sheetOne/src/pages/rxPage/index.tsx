@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Subject, interval, fromEvent, of, from, defer } from 'rxjs';
+import { Subject, interval, fromEvent, of, from, defer, BehaviorSubject } from 'rxjs';
 import { map, scan, startWith, switchMap, takeUntil, takeWhile, mergeMap, delay } from 'rxjs/operators';
 
 const taskSubject = new Subject();
