@@ -49,8 +49,13 @@ const Complex_Load = () => {
 
   };
 
-  const handle_drag_end = () => {
+  const handle_drag_end = (evt) => {
+    const history = stage_history.slice(0, cur_history_step + 1);
 
+    const pos = {
+      x: evt.target.x(),
+      y: evt.target.y(),
+    };
   };
 
   return (
