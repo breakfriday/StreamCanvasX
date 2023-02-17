@@ -29,17 +29,14 @@ function createDarth(attrs) {
   });
 }
 
+const stage_history = [{
+  x: 20,
+  y: 20,
+}];
+
+let history_step = 0;
 const Complex_Load = () => {
-  const [stage_history, set_stage_history] = useState([
-    {
-      x: 20,
-      y: 20,
-    },
-  ]);
-
-  const [cur_history_step, set_cur_history_step] = useState(0);
-
-  const position = stage_history[cur_history_step];
+  const [position, set_position] = useState(stage_history[history_step]);
 
   const undo_handle = () => {
 
@@ -50,12 +47,17 @@ const Complex_Load = () => {
   };
 
   const handle_drag_end = (evt) => {
-    const history = stage_history.slice(0, cur_history_step + 1);
+    let history = stage_history.slice(0, history_step + 1);
 
     const pos = {
       x: evt.target.x(),
       y: evt.target.y(),
     };
+
+    history = history.concat([pos]);
+    history_step += 1;
+
+    set_position(pos);
   };
 
   return (
