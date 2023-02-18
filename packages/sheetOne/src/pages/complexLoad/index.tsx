@@ -1,6 +1,6 @@
 import Konva from 'konva';
 import React, { useRef, useEffect, useState } from 'react';
-import { Stage, Layer, Rect, Text } from 'react-konva';
+import { Stage, Layer, Rect, Text, Circle } from 'react-konva';
 
 
 const possibleFilters = ['', 'blur', 'invert'];
@@ -35,8 +35,26 @@ let stage_history = [{
 }];
 
 let history_step = 0;
+
+
+function generateItems() {
+  const items = [];
+  for (let i = 0; i < 10; i++) {
+    items.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      id: `node-${i}`,
+      color: Konva.Util.getRandomColor(),
+    });
+  }
+  return items;
+}
+
+
 const Complex_Load = () => {
   const [position, set_position] = useState(stage_history[history_step]);
+
+  const [cirecle_items, set_circle_items] = useState(generateItems());
 
   const undo_handle = () => {
     if (history_step === 0) {
@@ -87,6 +105,20 @@ const Complex_Load = () => {
           draggable
           onDragEnd={handle_drag_end}
         />
+
+        {cirecle_items.map((item: any) => (
+          <Circle
+            key={item.id}
+            name={item.id}
+            draggable
+            x={item.x}
+            y={item.y}
+            fill={item.color}
+            radius={50}
+            onDragStart={() => {}}
+            onDragEnd={() => {}}
+          />
+        ))}
       </Layer>
 
     </Stage>

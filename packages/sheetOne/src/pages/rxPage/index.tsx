@@ -16,6 +16,19 @@ const addTask = (task) => {
   taskSubject.next(task);
 };
 
+// function generateItems() {
+//   const items = [];
+//   for (let i = 0; i < 10; i++) {
+//     items.push({
+//       x: Math.random() * window.innerWidth,
+//       y: Math.random() * window.innerHeight,
+//       id: `node-${i}`,
+//       color: Konva.Util.getRandomColor(),
+//     });
+//   }
+//   return items;
+// }
+
 const Elevator = () => {
   return (
     <div onClick={() => {
