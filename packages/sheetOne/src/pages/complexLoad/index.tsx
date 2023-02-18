@@ -119,37 +119,40 @@ const Complex_Load = () => {
   };
 
   return (
-    <Stage width={window.innerWidth} height={window.innerHeight}>
+    <>
+      <div style={{ height: '40px' }} />
+      <Stage width={window.innerWidth} height={window.innerHeight} style={{ border: '1px solid grey' }}>
 
-      <Layer>
-        <Text text="undo" onClick={undo_handle} />
-        <Text text="redo" x={40} onClick={redo_handle} />
-        <Rect
-          x={position.x}
-          y={position.y}
-          width={50}
-          height={50}
-          fill="black"
-          draggable
-          onDragEnd={handle_drag_end}
-        />
-
-        {cirecle_items.map((item: any) => (
-          <Circle
-            key={item.id}
-            name={item.id}
+        <Layer>
+          <Text text="undo" onClick={undo_handle} />
+          <Text text="redo" x={40} onClick={redo_handle} />
+          <Rect
+            x={position.x}
+            y={position.y}
+            width={50}
+            height={50}
+            fill="black"
             draggable
-            x={item.x}
-            y={item.y}
-            fill={item.color}
-            radius={50}
-            onDragStart={handle_drag_circle_start}
-            onDragEnd={handle_drag_circle_end}
+            onDragEnd={handle_drag_end}
           />
-        ))}
-      </Layer>
 
-    </Stage>
+          {cirecle_items.map((item: any) => (
+            <Circle
+              key={item.id}
+              name={item.id}
+              draggable
+              x={item.x}
+              y={item.y}
+              fill={item.color}
+              radius={50}
+              onDragStart={handle_drag_circle_start}
+              onDragEnd={handle_drag_circle_end}
+            />
+          ))}
+        </Layer>
+
+      </Stage>
+    </>
   );
 };
 
