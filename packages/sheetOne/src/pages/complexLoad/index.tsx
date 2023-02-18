@@ -103,6 +103,20 @@ const Complex_Load = () => {
     set_circle_items(items);
   };
 
+  const handle_drag_circle_end = (evt) => {
+    const id = evt.target.name();
+    const items = cirecle_items.slice();
+    const item = items.find((i) => i.id === id);
+    const index = items.indexOf(item);
+
+    items[index] = {
+      ...item,
+      x: evt.target.x(),
+      y: evt.target.y(),
+    };
+
+    set_circle_items(items);
+  };
 
   return (
     <Stage width={window.innerWidth} height={window.innerHeight}>
@@ -130,7 +144,7 @@ const Complex_Load = () => {
             fill={item.color}
             radius={50}
             onDragStart={handle_drag_circle_start}
-            onDragEnd={() => {}}
+            onDragEnd={handle_drag_circle_end}
           />
         ))}
       </Layer>
