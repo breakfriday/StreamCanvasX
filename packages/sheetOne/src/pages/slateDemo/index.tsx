@@ -63,7 +63,7 @@ const RichTextExample = () => {
           // let h=editor
           // let b =Editor
           // debugger
-          editor.insertText('hello china');
+          editor.insertText(' hello china ');
         }}
         >test
         </div>
