@@ -10,7 +10,7 @@ import {
 } from 'slate';
 import { withHistory } from 'slate-history';
 
-import { Button, Icon, Toolbar } from '../components';
+import { Button, Icon, Toolbar } from './components/index';
 
 const HOTKEYS = {
   'mod+b': 'bold',
@@ -44,7 +44,7 @@ const RichTextExample = () => {
         <BlockButton format="right" icon="format_align_right" />
         <BlockButton format="justify" icon="format_align_justify" />
       </Toolbar>
-      
+
       <Editable
         renderElement={renderElement}
         renderLeaf={renderLeaf}
