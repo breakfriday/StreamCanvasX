@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import isHotkey from 'is-hotkey';
-import { Editable, withReact, useSlate, Slate } from 'slate-react';
+import { Editable, withReact, useSlate, Slate, useSlateStatic, useSelected, useFocused, ReactEditor } from 'slate-react';
 import {
   Editor,
   Transforms,
@@ -9,6 +9,7 @@ import {
   Element as SlateElement,
 } from 'slate';
 import { withHistory } from 'slate-history';
+import { css } from '@emotion/css';
 
 import { Button, Icon, Toolbar } from './components/index';
 
@@ -89,7 +90,24 @@ const RichTextExample = () => {
           Transforms.insertNodes(editor, customNode);
         //   editor.insertText(' hello china ');
         }}
-        >test
+        >insert node
+        </div>
+
+        <div onClick={() => {
+          const { selection } = editor;
+          const selectedMarks = selection && editor.marks;
+          console.info(selection);
+        }}
+        >
+          selection
+        </div>
+        <div onClick={() => {
+          const { selection } = editor;
+          const selectedMarks = selection && editor.marks;
+          console.info(selection);
+        }}
+        >
+          selection
         </div>
       </Toolbar>
       <Editable
@@ -261,6 +279,7 @@ const BlockButton = ({ format, icon }) => {
       }}
     >
       <Icon>{icon}</Icon>
+      <span>BlockButton </span>
     </Button>
   );
 };
@@ -276,6 +295,7 @@ const MarkButton = ({ format, icon }) => {
       }}
     >
       <Icon>{icon}</Icon>
+      <span>MarkButton </span>
     </Button>
   );
 };
