@@ -63,7 +63,31 @@ const RichTextExample = () => {
           // let h=editor
           // let b =Editor
           // debugger
-          editor.insertText(' hello china ');
+          const customNode = {
+            type: 'custom-node',
+            children: [
+              {
+                type: 'bulleted-list',
+                children: [
+                  {
+                    type: 'list-item',
+                    children: [
+                      { text: 'Red text', marks: [{ type: 'color', value: 'red' }] },
+                    ],
+                  },
+                  {
+                    type: 'list-item',
+                    children: [
+                      { text: 'Blue text', marks: [{ type: 'color', value: 'blue' }] },
+                    ],
+                  },
+                ],
+              },
+            ],
+          };
+
+          Transforms.insertNodes(editor, customNode);
+        //   editor.insertText(' hello china ');
         }}
         >test
         </div>
