@@ -40,7 +40,7 @@ const RichTextExample = () => {
           console.info(editor.operations);
           // Save the value to Local Storage.
           const content = JSON.stringify(value);
-          console.info(value)
+          console.info(value);
           localStorage.setItem('content', content);
         }
       }}
@@ -59,6 +59,14 @@ const RichTextExample = () => {
         <BlockButton format="center" icon="format_align_center" />
         <BlockButton format="right" icon="format_align_right" />
         <BlockButton format="justify" icon="format_align_justify" />
+        <div onClick={() => {
+          // let h=editor
+          // let b =Editor
+          // debugger
+          editor.insertText('hello china');
+        }}
+        >test
+        </div>
       </Toolbar>
       <Editable
         renderElement={renderElement}
