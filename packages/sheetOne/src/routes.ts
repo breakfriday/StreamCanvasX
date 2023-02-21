@@ -16,6 +16,8 @@ const ComplexLoad = lazy(() => import('@/pages/complexLoad'));
 
 const SlateDemo = lazy(() => import('@/pages/slateDemo'));
 
+const BuildingMap = lazy(() => import('@/pages/buildmap'));
+
 const routerConfig: IRouterConfig[] = [
   {
     path: '/',
@@ -58,9 +60,9 @@ const routerConfig: IRouterConfig[] = [
     component: ComplexLoad,
   },
   {
-    path: '/SlateDemo',
+    path: '/BuildingMap',
     exact: true,
-    component: SlateDemo,
+    component: BuildingMap,
   },
 ];
 
