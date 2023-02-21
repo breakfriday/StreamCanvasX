@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 let scene; let renderer; let camera; let
   controls;
@@ -29,6 +30,7 @@ function ThreeScene() {
     // Init scene
 
     const scene = new THREE.Scene();
+    // scene.background = new THREE.Color(0x00FFFF);
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.9, 1000);
     camera.position.z = 5;
 
@@ -46,6 +48,9 @@ function ThreeScene() {
     gridHelper.position.y = -0.9;
     gridHelper.position.x = -1;
     scene.add(gridHelper);
+
+    const light = new THREE.AmbientLight(0x404040); // soft white light
+    scene.add(light);
 
 
     renderer.render(scene, camera);
