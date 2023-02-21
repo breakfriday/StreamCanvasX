@@ -102,9 +102,21 @@ const RichTextExample = () => {
           selection
         </div>
         <div onClick={() => {
-          const { selection } = editor;
-          const selectedMarks = selection && editor.marks;
-          console.info(selection);
+          const [start, end] = Editor.edges(editor, editor.selection);
+          const range = { anchor: start, focus: end };
+          const nodes = Array.from(
+            Editor.nodes(editor, { at: range }),
+            ([node, path]) => [node, path],
+          );
+          for (const [node, path] of nodes) {
+            const newProperties = {
+              style: { backgroundColor: 'yellow' },
+              className: 'highlight',
+            };
+            if (!Editor.isEditor(node) && SlateElement.isElement(node)) {
+              Transforms.setNodes(editor, newProperties, { at: path });
+            }
+          }
         }}
         >
           selection
