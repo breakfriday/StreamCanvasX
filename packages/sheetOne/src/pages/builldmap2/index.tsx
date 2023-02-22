@@ -7,6 +7,10 @@ import {
 
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
+import { getDistance,getRhumbLineBearing} from "geolib"
+
+import map_data  from './map.json'
+
 let scene; let renderer; let camera; let
   controls;
 let MAT_BUILDING; let
@@ -23,11 +27,11 @@ const geos_building = [];
 const collider_building = [];
 let raycaster: any = null;
 
-const api = 'https://gistcdn.githack.com/isjeffcom/b40d625e7b67170f0b2dd0203e980893/raw/4a5df10aeb3f3928c1158977620798d0153de6ac/gistfile1.txt';
+
 
 
 function Awake() {
-  const cont = document.getElementById('cont');
+  const cont = document.body;
 
   // Init scene
   scene = new THREE.Scene();
@@ -107,39 +111,46 @@ function Update() {
 }
 
 function GetGeoJson() {
-  fetch(api).then((res) => {
-    res.json().then((data) => {
-      LoadBuildings(data);
-    });
-  });
+    let data=map_data
+    debugger
+    LoadBuildings(data);
+    debugger
+
+ 
 }
 
 function LoadBuildings(data) {
-  const { features } = data;
 
-  MAT_BUILDING = new THREE.MeshPhongMaterial();
-  MAT_ROAD = new THREE.LineBasicMaterial({ color: 0x1B4686 });
-
-  for (let i = 0; i < features.length; i++) {
-    const fel = features[i];
-    if (!fel['properties']) return;
-
-    const info = fel.properties;
-
-    if (info['building']) {
-      addBuilding(fel.geometry.coordinates, info, info['building:levels']);
-    } else if (info['highway']) {
-      if (fel.geometry.type == 'LineString' && info['highway'] != 'pedestrian' && info['highway'] != 'footway' && info['highway'] != 'path') {
-        addRoad(fel.geometry.coordinates, info);
+    let features = data.features
+    
+    MAT_BUILDING= new THREE.MeshPhongMaterial()
+    MAT_ROAD = new THREE.LineBasicMaterial( { color: 0x1B4686 } )
+  
+    for (let i = 0; i < features.length; i++) {
+        
+      let fel = features[i]
+      if (!fel['properties']) return
+      
+      let info = fel.properties
+  
+      if (info['building']) {
+        addBuilding(fel.geometry.coordinates, info, info["building:levels"])
+      }
+      
+      else if(info["highway"]){
+        if(fel.geometry.type == "LineString" && info["highway"] != "pedestrian" && info["highway"] != "footway" && info["highway"] != "path"){
+  
+          addRoad(fel.geometry.coordinates, info)
+        }
       }
     }
+    
+  
+    debugger
+    let mergeGeometry = BufferGeometryUtils.mergeBufferGeometries(geos_building)
+    let mesh = new THREE.Mesh(mergeGeometry, MAT_BUILDING)
+    iR.add(mesh)
   }
-
-
-  const mergeGeometry = BufferGeometryUtils.mergeBufferGeometries(geos_building);
-  const mesh = new THREE.Mesh(mergeGeometry, MAT_BUILDING);
-  iR.add(mesh);
-}
 
 function addBuilding(data, info, height = 1) {
   height = height || 1;
@@ -313,10 +324,10 @@ function FireRaycaster(pointer) {
 
 function GPSRelativePosition(objPosi, centerPosi) {
   // Get GPS distance
-  const dis = window.geolib.getDistance(objPosi, centerPosi);
+  const dis = getDistance(objPosi, centerPosi);
 
   // Get bearing angle
-  const bearing = window.geolib.getRhumbLineBearing(objPosi, centerPosi);
+  const bearing =getRhumbLineBearing(objPosi, centerPosi);
 
   // Calculate X by centerPosi.x + distance * cos(rad)
   const x = centerPosi[0] + (dis * Math.cos(bearing * Math.PI / 180));
@@ -334,6 +345,7 @@ function ThreeScene() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
+    Awake();
 
     //   requestAnimationFrame(animate);
 
