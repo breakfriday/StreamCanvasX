@@ -31,19 +31,23 @@ function ThreeScene() {
 
     const scene = new THREE.Scene();
     // scene.background = new THREE.Color(0x00FFFF);
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.9, 1000);
+    const camera = new THREE.PerspectiveCamera(105, window.innerWidth / window.innerHeight, 0.9, 1000);
     camera.position.z = 5;
 
+    // init 渲染器
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     document.body.appendChild(renderer.domElement);
 
+
+    // init 立方体
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
 
+    // init 网格
     const gridHelper = new THREE.GridHelper(100, 90, 0x0000ff, 0x808080);
     gridHelper.position.y = -0.9;
     gridHelper.position.x = -1;
