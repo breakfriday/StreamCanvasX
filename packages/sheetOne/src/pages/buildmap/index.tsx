@@ -41,11 +41,13 @@ function ThreeScene() {
     document.body.appendChild(renderer.domElement);
 
 
-
-
     // init 立方体
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const geometry = new THREE.BoxGeometry(1, 1, 1, 10, 10, 10);
+    const material = new THREE.MeshPhongMaterial({
+      color: 0xff0000,
+      flatShading: true,
+      wireframe: true,
+    });
     const cube = new THREE.Mesh(geometry, material);
     cube.position.set(2, 0, 0);
     scene.add(cube);
