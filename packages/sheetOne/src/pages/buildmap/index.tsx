@@ -41,19 +41,22 @@ function ThreeScene() {
     document.body.appendChild(renderer.domElement);
 
 
+
+
     // init 立方体
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     const cube = new THREE.Mesh(geometry, material);
+    cube.position.set(2, 0, 0);
     scene.add(cube);
 
     // init 网格
     const gridHelper = new THREE.GridHelper(100, 90, 0x0000ff, 0x808080);
-    gridHelper.position.y = -0.9;
+    gridHelper.position.y = -0.5;
     gridHelper.position.x = -1;
     scene.add(gridHelper);
 
-    const light = new THREE.AmbientLight(0x404040); // soft white light
+    const light = new THREE.AmbientLight(0x8FBCD4, 0.9); // soft white light
     scene.add(light);
 
 
