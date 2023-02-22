@@ -64,10 +64,10 @@ function ThreeScene() {
 
     controls = new OrbitControls(camera, renderer.domElement);
 
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.25;
-    controls.screenSpacePanning = false;
-    controls.maxDistance = 800;
+    // controls.enableDamping = true;
+    // controls.dampingFactor = 0.25;
+    // controls.screenSpacePanning = false;
+    // controls.maxDistance = 800;
 
 
     // renderer.render(scene, camera);
@@ -76,6 +76,7 @@ function ThreeScene() {
       requestAnimationFrame(animate);
       cube.rotation.y += 0.01;
       renderer.render(scene, camera);
+      controls.update();
     }
 
     animate();
