@@ -18,6 +18,9 @@ const SlateDemo = lazy(() => import('@/pages/slateDemo'));
 
 const BuildingMap = lazy(() => import('@/pages/buildmap'));
 
+
+const BuildingMap2 = lazy(() => import('@/pages/builldmap2'));
+
 const routerConfig: IRouterConfig[] = [
   {
     path: '/',
@@ -63,6 +66,11 @@ const routerConfig: IRouterConfig[] = [
     path: '/BuildingMap',
     exact: true,
     component: BuildingMap,
+  },
+  {
+    path: '/buildingMap2',
+    exact: true,
+    component: BuildingMap2,
   },
 ];
 
