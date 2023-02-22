@@ -112,7 +112,6 @@ function Update() {
 
 function GetGeoJson() {
     let data=map_data
-    debugger
     LoadBuildings(data);
     debugger
 
@@ -146,10 +145,10 @@ function LoadBuildings(data) {
     }
     
   
-    debugger
     let mergeGeometry = BufferGeometryUtils.mergeBufferGeometries(geos_building)
     let mesh = new THREE.Mesh(mergeGeometry, MAT_BUILDING)
     iR.add(mesh)
+    debugger
   }
 
 function addBuilding(data, info, height = 1) {
@@ -346,6 +345,19 @@ function ThreeScene() {
 
   useEffect(() => {
     Awake();
+
+    // When user resize window
+window.addEventListener('resize', onWindowResize, false)
+
+function onWindowResize() {
+  if (scene) {
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
+    renderer.setSize(window.innerWidth, window.innerHeight)
+  }
+}
+
+onWindowResize()
 
     //   requestAnimationFrame(animate);
 
