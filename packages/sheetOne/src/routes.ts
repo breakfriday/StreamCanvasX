@@ -21,6 +21,8 @@ const BuildingMap = lazy(() => import('@/pages/buildmap'));
 
 const BuildingMap2 = lazy(() => import('@/pages/builldmap2'));
 
+const BuildingMap3 = lazy(() => import('@/pages/buildmap3'));
+
 const routerConfig: IRouterConfig[] = [
   {
     path: '/',
@@ -71,6 +73,11 @@ const routerConfig: IRouterConfig[] = [
     path: '/buildingMap2',
     exact: true,
     component: BuildingMap2,
+  },
+  {
+    path: '/buildingMap3',
+    exact: true,
+    component: BuildingMap3,
   },
 ];
 
