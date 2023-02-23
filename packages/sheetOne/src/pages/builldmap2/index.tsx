@@ -112,7 +112,7 @@ function Update() {
 
 function GetGeoJson() {
     let data=map_data
-    LoadBuildings(data);
+     LoadBuildings(data);
     debugger
 
  
