@@ -40,7 +40,7 @@ const addTask = (time, order) => {
 
   scheduler.addTask(()=>{
    return   delay(time,order).then(()=>{
-      console.log(order)
+      console.log("task done_"+order)
 
     })
   })
