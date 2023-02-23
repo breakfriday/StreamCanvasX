@@ -33,7 +33,14 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const scheduler = new Scheduler(2);
 
 const addTask = (time, order) => {
-  scheduler.addTask(() => delay(time).then(() => console.log(order)));
+  // scheduler.addTask(() => delay(time).then(() => console.log(order)));
+
+  scheduler.addTask(()=>{
+   return   delay(time).then(()=>{
+      console.log(order)
+
+    })
+  })
 };
 
 const Home = () => {
