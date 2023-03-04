@@ -63,8 +63,7 @@ const draw = () => {
 
 const draw2 = () => {
   const app = new App();
-  const canvas_el = app.render();
-  document.body.appendChild(canvas_el);
+  app.render();
 };
 
 function ThreeScene() {
