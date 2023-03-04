@@ -2,6 +2,8 @@
   "compileOnSave": false,
   "buildOnSave": false,
   "compilerOptions": {
+    "experimentalDecorators": true,
+    "experimentalDecorators": true,
     "baseUrl": ".",
     "outDir": "build",
     "module": "esnext",
