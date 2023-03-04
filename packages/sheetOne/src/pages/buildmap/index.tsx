@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import App from './threeJsApp';
 
 let scene; let renderer; let camera; let
   controls;
@@ -60,12 +61,18 @@ const draw = () => {
   animate();
 };
 
+const draw2 = () => {
+  const app = new App();
+  const canvas_el = app.render();
+  document.body.appendChild(canvas_el);
+};
+
 function ThreeScene() {
   const sceneRef = useRef(null);
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    draw();
+    draw2();
   }, []);
 
   return <canvas ref={canvasRef} />;
