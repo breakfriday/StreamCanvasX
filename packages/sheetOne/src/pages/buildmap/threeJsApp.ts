@@ -2,18 +2,22 @@
 import * as THREE from 'three';
 import { AddScene } from './scense';
 import { AddCamera } from './camera';
+import { AddCube } from './shapes/cube';
 
 
+@AddCube()
 @AddScene('')
 @AddCamera('')
 class threeJsApp {
-  private scene!: THREE.Scene;
+  scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
   private renderer!: THREE.WebGLRenderer;
   constructor() {
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.name=212121
+    
     document.body.appendChild(this.renderer.domElement);
   }
 
