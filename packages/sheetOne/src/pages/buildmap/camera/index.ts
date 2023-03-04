@@ -1,12 +1,15 @@
 import * as THREE from 'three';
 
-export function AddCamera(targetClass) {
-  return class extends targetClass {
-    constructor(...args) {
-      super(...args);
+export function AddCamera(arams: any) {
+  return function<T extends { new (...args: any[]): {} }>(targetClass: T) {
+    return class extends targetClass {
+      camera!: THREE.PerspectiveCamera;
+      constructor(...args) {
+        super(...args);
 
-      this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      this.camera.position.z = 5;
-    }
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.camera.position.z = 5;
+      }
+    };
   };
 }

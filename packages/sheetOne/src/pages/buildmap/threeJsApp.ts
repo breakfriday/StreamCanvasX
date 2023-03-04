@@ -2,12 +2,10 @@
 import * as THREE from 'three';
 import { AddScene } from './scense';
 import { AddCamera } from './camera';
-import { Cube } from './shapes/cube';
-
-
 
 
 @AddScene('')
+@AddCamera('')
 class threeJsApp {
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
