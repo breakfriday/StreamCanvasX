@@ -5,9 +5,18 @@ export function AddCube(size = 1, position: THREE.Vector3 = new THREE.Vector3(0,
     return class extends targetClass {
       constructor(...args: any[]) {
         super(...args);
-        const geometry = new THREE.BoxGeometry();
+        // const geometry = new THREE.BoxGeometry(1, 1, 1, 10, 10, 10);
+        // const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+
+        // const cube = new THREE.Mesh(geometry, material);
+
+
+        const geometry = new THREE.BoxGeometry(1, 1, 1, 10, 10, 10);
         const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+
         const cube = new THREE.Mesh(geometry, material);
+        cube.position.set(2, 0, 0);
+
         this.scene.add(cube);
       }
     };
