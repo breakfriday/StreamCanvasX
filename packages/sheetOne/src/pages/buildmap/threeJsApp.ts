@@ -12,6 +12,8 @@ class threeJsApp {
   private renderer!: THREE.WebGLRenderer;
   constructor() {
     this.renderer = new THREE.WebGLRenderer();
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
     document.body.appendChild(this.renderer.domElement);
   }
 
