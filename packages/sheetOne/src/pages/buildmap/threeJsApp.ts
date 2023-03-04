@@ -3,9 +3,10 @@ import * as THREE from 'three';
 import { AddScene } from './scense';
 import { AddCamera } from './camera';
 import { AddCube } from './shapes/cube';
-
+import { AddGridHelp } from './shapes/gridHelper';
 
 @AddCube()
+@AddGridHelp()
 @AddScene('')
 @AddCamera('')
 class threeJsApp {
