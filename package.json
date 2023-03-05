@@ -8,7 +8,8 @@
   "private": true,
   "scripts": {
     "start": "yarn start:sheetOne",
-    "start:sheetOne": "yarn workspace sheetOne start"
+    "start:sheetOne": "yarn workspace sheetOne start",
+    "start:threejs": "yarn workspace ThreejsApp start"
   },
   "repository": "git@github.com:breakfriday/canvasTable.git",
   "author": "breakhappy <break_happy@163.com>",
