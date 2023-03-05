@@ -6,6 +6,11 @@ const asideMenuConfig = [
     path: '/',
     icon: 'smile',
   },
+  {
+    name: 'threeCube',
+    path: '/threeCube',
+    icon: 'smile',
+  },
 ];
 
 export { headerMenuConfig, asideMenuConfig };

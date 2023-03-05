@@ -2,6 +2,8 @@ import { IRouterConfig, lazy } from 'ice';
 import BasicLayout from '@/layouts/BasicLayout';
 
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
+
+const ThreeCube = lazy(() => import('@/pages/threeCube'));
 const routerConfig: IRouterConfig[] = [
   {
     path: '/',
@@ -13,9 +15,9 @@ const routerConfig: IRouterConfig[] = [
         component: Dashboard,
       },
       {
-        path: '/name',
+        path: '/threeCube',
         exact: true,
-        component: Dashboard,
+        component: ThreeCube,
       },
     ],
   },
