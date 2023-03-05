@@ -12,7 +12,7 @@ const routerConfig: IRouterConfig[] = [
       {
         path: '/',
         exact: true,
-        component: Dashboard,
+        redirect: '/threeCube',
       },
       {
         path: '/threeCube',
