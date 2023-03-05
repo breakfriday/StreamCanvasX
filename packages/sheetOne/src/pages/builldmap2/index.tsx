@@ -7,9 +7,9 @@ import {
 
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
-import { getDistance,getRhumbLineBearing} from "geolib"
+import { getDistance, getRhumbLineBearing } from 'geolib';
 
-import map_data  from './map.json'
+import map_data from './map.json';
 
 let scene; let renderer; let camera; let
   controls;
@@ -26,8 +26,6 @@ const Animated_Line_Distances = [];
 const geos_building = [];
 const collider_building = [];
 let raycaster: any = null;
-
-
 
 
 function Awake() {
@@ -111,45 +109,38 @@ function Update() {
 }
 
 function GetGeoJson() {
-    let data=map_data
-     LoadBuildings(data);
-    debugger
-
- 
+  const data = map_data;
+  LoadBuildings(data);
+  debugger;
 }
 
 function LoadBuildings(data) {
+  const { features } = data;
 
-    let features = data.features
-    
-    MAT_BUILDING= new THREE.MeshPhongMaterial()
-    MAT_ROAD = new THREE.LineBasicMaterial( { color: 0x1B4686 } )
-  
-    for (let i = 0; i < features.length; i++) {
-        
-      let fel = features[i]
-      if (!fel['properties']) return
-      
-      let info = fel.properties
-  
-      if (info['building']) {
-        addBuilding(fel.geometry.coordinates, info, info["building:levels"])
-      }
-      
-      else if(info["highway"]){
-        if(fel.geometry.type == "LineString" && info["highway"] != "pedestrian" && info["highway"] != "footway" && info["highway"] != "path"){
-  
-          addRoad(fel.geometry.coordinates, info)
-        }
+  MAT_BUILDING = new THREE.MeshPhongMaterial();
+  MAT_ROAD = new THREE.LineBasicMaterial({ color: 0x1B4686 });
+
+  for (let i = 0; i < features.length; i++) {
+    const fel = features[i];
+    if (!fel['properties']) return;
+
+    const info = fel.properties;
+
+    if (info['building']) {
+      addBuilding(fel.geometry.coordinates, info, info['building:levels']);
+    } else if (info['highway']) {
+      if (fel.geometry.type == 'LineString' && info['highway'] != 'pedestrian' && info['highway'] != 'footway' && info['highway'] != 'path') {
+        addRoad(fel.geometry.coordinates, info);
       }
     }
-    
-  
-    let mergeGeometry = BufferGeometryUtils.mergeBufferGeometries(geos_building)
-    let mesh = new THREE.Mesh(mergeGeometry, MAT_BUILDING)
-    iR.add(mesh)
-    debugger
   }
+
+
+  const mergeGeometry = BufferGeometryUtils.mergeBufferGeometries(geos_building);
+  const mesh = new THREE.Mesh(mergeGeometry, MAT_BUILDING);
+  iR.add(mesh);
+  debugger;
+}
 
 function addBuilding(data, info, height = 1) {
   height = height || 1;
@@ -326,7 +317,7 @@ function GPSRelativePosition(objPosi, centerPosi) {
   const dis = getDistance(objPosi, centerPosi);
 
   // Get bearing angle
-  const bearing =getRhumbLineBearing(objPosi, centerPosi);
+  const bearing = getRhumbLineBearing(objPosi, centerPosi);
 
   // Calculate X by centerPosi.x + distance * cos(rad)
   const x = centerPosi[0] + (dis * Math.cos(bearing * Math.PI / 180));
@@ -347,17 +338,17 @@ function ThreeScene() {
     Awake();
 
     // When user resize window
-window.addEventListener('resize', onWindowResize, false)
+    window.addEventListener('resize', onWindowResize, false);
 
-function onWindowResize() {
-  if (scene) {
-    camera.aspect = window.innerWidth / window.innerHeight
-    camera.updateProjectionMatrix()
-    renderer.setSize(window.innerWidth, window.innerHeight)
-  }
-}
+    function onWindowResize() {
+      if (scene) {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+    }
 
-onWindowResize()
+    onWindowResize();
 
     //   requestAnimationFrame(animate);
 

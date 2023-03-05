@@ -9,8 +9,10 @@ export function AddCube(size = 1, position: THREE.Vector3 = new THREE.Vector3(0,
         // const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
         // const cube = new THREE.Mesh(geometry, material);
+        this.addCube();
+      }
 
-
+      addCube() {
         const geometry = new THREE.BoxGeometry(1, 1, 1, 10, 10, 10);
         // const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
