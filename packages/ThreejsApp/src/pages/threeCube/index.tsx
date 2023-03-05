@@ -2,8 +2,8 @@ import React, { useRef, useEffect } from 'react';
 import App from './threeJsApp';
 
 
-const draw = () => {
-  const app = new App();
+const draw = (ref) => {
+  const app = new App(ref);
   app.init();
   app.render();
   app.animate();
@@ -14,10 +14,12 @@ function ThreeScene() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    draw();
+    if (canvasRef) {
+      draw(canvasRef);
+    }
   }, []);
 
-  return <canvas ref={canvasRef} />;
+  return <div ref={canvasRef} />;
 }
 
 export default ThreeScene;

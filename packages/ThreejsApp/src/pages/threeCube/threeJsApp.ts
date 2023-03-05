@@ -17,11 +17,13 @@ class threeJsApp {
   private camera!: THREE.PerspectiveCamera;
   private renderer!: THREE.WebGLRenderer;
   private controls!: any;
-  constructor() {
+  constructor(el) {
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio);
-    document.body.appendChild(this.renderer.domElement);
+
+   
+    el.current.appendChild(this.renderer.domElement);
   }
 
   init() {
