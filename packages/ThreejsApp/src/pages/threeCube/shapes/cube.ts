@@ -12,7 +12,7 @@ export function AddCube(size = 1, position: THREE.Vector3 = new THREE.Vector3(0,
         this.addCube();
       }
 
-      addCube() {
+      addCube(position: THREE.Vector3 = new THREE.Vector3(0, 0.5, 0)) {
         const geometry = new THREE.BoxGeometry(1, 1, 1, 10, 10, 10);
         // const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
@@ -23,7 +23,8 @@ export function AddCube(size = 1, position: THREE.Vector3 = new THREE.Vector3(0,
         });
 
         const cube = new THREE.Mesh(geometry, material);
-        cube.position.set(2, 0, 0);
+        // cube.position.set(0, 0, 0);
+        cube.position.copy(position)
 
         this.cube = cube;
 
