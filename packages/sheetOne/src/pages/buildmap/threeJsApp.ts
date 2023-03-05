@@ -5,7 +5,9 @@ import { AddScene } from './scense';
 import { AddCamera } from './camera';
 import { AddCube } from './shapes/cube';
 import { AddGridHelp } from './shapes/gridHelper';
+import { AddLight } from './shapes/light';
 
+@AddLight()
 @AddCube()
 @AddGridHelp()
 @AddScene('')
