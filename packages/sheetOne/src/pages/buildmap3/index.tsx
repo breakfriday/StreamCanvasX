@@ -7,9 +7,9 @@ import {
 
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
-import { getDistance,getRhumbLineBearing} from "geolib"
+import { getDistance, getRhumbLineBearing } from 'geolib';
 
-import map_data  from './map.json'
+import map_data from './map.json';
 
 let scene; let renderer; let camera; let
   controls;
@@ -25,26 +25,22 @@ const Animated_Line_Speed = 0.004;
 const Animated_Line_Distances = [];
 const geos_building = [];
 const collider_building = [];
-let raycaster: any = null;
-
+const raycaster: any = null;
 
 
 function genShape(points) {
-    const shape = new THREE.Shape();
-  
-    for (let i = 0; i < points.length; i++) {
-    
-  
-      if (i == 0) {
-        shape.moveTo(points.x, points.y);
-      } else {
-        shape.lineTo(points.x, points.y);
-      }
+  const shape = new THREE.Shape();
+
+  for (let i = 0; i < points.length; i++) {
+    if (i == 0) {
+      shape.moveTo(points.x, points.y);
+    } else {
+      shape.lineTo(points.x, points.y);
     }
-  
-    return shape;
   }
 
+  return shape;
+}
 
 
 function ThreeScene() {
@@ -53,36 +49,36 @@ function ThreeScene() {
 
   useEffect(() => {
     // 创建 Three.js 场景
-const scene = new THREE.Scene();
+    const scene = new THREE.Scene();
 
-// 创建相机
-// const camera = new THREE.PerspectiveCamera(
-//   75, // 视野角度
-//   window.innerWidth / window.innerHeight, // 宽高比
-//   0.1, // 渲染最小距离
-//   1000 // 渲染最大距离
-// );
+    // 创建相机
+    // const camera = new THREE.PerspectiveCamera(
+    //   75, // 视野角度
+    //   window.innerWidth / window.innerHeight, // 宽高比
+    //   0.1, // 渲染最小距离
+    //   1000 // 渲染最大距离
+    // );
 
-const camera = new THREE.PerspectiveCamera(105, window.innerWidth / window.innerHeight, 0.9, 1000);
+    const camera = new THREE.PerspectiveCamera(105, window.innerWidth / window.innerHeight, 0.9, 1000);
 
-camera.position.z = 5;
+    camera.position.z = 5;
 
-// 创建渲染器
-const renderer = new THREE.WebGLRenderer();
+    // 创建渲染器
+    const renderer = new THREE.WebGLRenderer();
 
-// 设置渲染器的尺寸和像素比例
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
+    // 设置渲染器的尺寸和像素比例
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
 
-// 将渲染器的输出添加到 HTML 页面中
-document.body.appendChild(renderer.domElement);
+    // 将渲染器的输出添加到 HTML 页面中
+    document.body.appendChild(renderer.domElement);
 
-// 将经纬度坐标转换为 Three.js 坐标系
-function lonLatToVector3(lon, lat) {
-  const x = (lon + 180) / 360 * 100;
-  const y = (lat + 90) / 180 * 100;
-  return new THREE.Vector3(x, y, 0);
-}
+    // 将经纬度坐标转换为 Three.js 坐标系
+    function lonLatToVector3(lon, lat) {
+      const x = (lon + 180) / 360 * 100;
+      const y = (lat + 90) / 180 * 100;
+      return new THREE.Vector3(x, y, 0);
+    }
 
 
     // init 网格
@@ -91,52 +87,52 @@ function lonLatToVector3(lon, lat) {
     gridHelper.position.x = -1;
     scene.add(gridHelper);
 
-// 创建材质
-const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    // 创建材质
+    const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
 
-let mockGeoJSON=map_data
-// 遍历 GeoJSON 数据中的每一个建筑物
-mockGeoJSON.features.forEach((feature,i) => {
-  // 获取建筑物的坐标数组
-  const coordinates = feature.geometry.coordinates[0];
+    const mockGeoJSON = map_data;
+    // 遍历 GeoJSON 数据中的每一个建筑物
+    mockGeoJSON.features.forEach((feature, i) => {
+      // 获取建筑物的坐标数组
+      const coordinates = feature.geometry.coordinates[0];
 
-  // 将坐标数组转换为 Three.js 中的 Vector3 数组
-  const vertices = coordinates.map(([lon, lat]) => lonLatToVector3(lon, lat));
-  debugger
+      // 将坐标数组转换为 Three.js 中的 Vector3 数组
+      const vertices = coordinates.map(([lon, lat]) => lonLatToVector3(lon, lat));
+      debugger;
 
-  const shape=genShape(vertices)
-  // 创建建筑物的形状
-//   const shape = new THREE.Shape()
-  
-//   if (i == 0) {
-//     shape.moveTo(elp.x, elp.y);
-//   } else {
-//     shape.lineTo(elp.x, elp.y);
-//   };
+      const shape = genShape(vertices);
+      // 创建建筑物的形状
+      //   const shape = new THREE.Shape()
 
-  // 创建建筑物的几何体
-  const geometry = new THREE.ExtrudeGeometry(shape, {
-    depth: 120, // 指定建筑物的高度
-  });
+      //   if (i == 0) {
+      //     shape.moveTo(elp.x, elp.y);
+      //   } else {
+      //     shape.lineTo(elp.x, elp.y);
+      //   };
 
-  // 创建建筑物的网格
-  const mesh = new THREE.Mesh(geometry, material);
+      // 创建建筑物的几何体
+      const geometry = new THREE.ExtrudeGeometry(shape, {
+        depth: 120, // 指定建筑物的高度
+      });
 
-  // 将建筑物的网格添加到场景中
-  scene.add(mesh);
-});
+      // 创建建筑物的网格
+      const mesh = new THREE.Mesh(geometry, material);
 
-// 将相机移动到一个合适的位置
+      // 将建筑物的网格添加到场景中
+      scene.add(mesh);
+    });
+
+    // 将相机移动到一个合适的位置
 
 
-// 创建渲染循环
-function animate() {
-  requestAnimationFrame(animate);
-  renderer.render(scene, camera);
-}
+    // 创建渲染循环
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
 
-// 启动渲染循环
-animate();
+    // 启动渲染循环
+    animate();
 
 
     //   requestAnimationFrame(animate);

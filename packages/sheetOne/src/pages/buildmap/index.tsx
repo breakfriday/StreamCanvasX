@@ -63,7 +63,9 @@ const draw = () => {
 
 const draw2 = () => {
   const app = new App();
+  app.init();
   app.render();
+  app.animate();
 };
 
 function ThreeScene() {

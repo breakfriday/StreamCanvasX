@@ -17,6 +17,8 @@ export function AddCube(size = 1, position: THREE.Vector3 = new THREE.Vector3(0,
         const cube = new THREE.Mesh(geometry, material);
         cube.position.set(2, 0, 0);
 
+        this.cube = cube;
+
         this.scene.add(cube);
       }
     };
