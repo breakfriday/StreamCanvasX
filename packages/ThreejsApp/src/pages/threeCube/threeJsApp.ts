@@ -29,6 +29,7 @@ class threeJsApp {
 
   init() {
     this.addController();
+    this.addCube(new THREE.Vector3(3, 0.5, 0));
   }
 
   render() {
