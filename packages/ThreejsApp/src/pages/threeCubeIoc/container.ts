@@ -5,11 +5,9 @@ import { AppClass } from './threeApp';
 
 
 const container = new Container();
-debugger;
 
-container.bind(ServiceA).toSelf();
-container.bind(AppClass).toSelf();
-debugger;
+ container.bind(ServiceA).toSelf();
+// container.bind(AppClass).toSelf();
 
 const app = container.resolve(AppClass);
 

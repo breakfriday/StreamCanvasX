@@ -9,7 +9,7 @@ export class AppClass {
 
   run() {
     // this.serviceA.logMessage('Hello, world!');
-    alert(2);
+    alert(this.age);
     this.serviceA.logMessage('test');
   }
 }
