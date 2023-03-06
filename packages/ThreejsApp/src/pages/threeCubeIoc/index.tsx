@@ -1,10 +1,9 @@
 import React, { useRef, useEffect } from 'react';
-import Threapp from './container';
+import { app } from './container';
 
 
 const draw = (ref) => {
-  Threapp.init();
-  Threapp.render();
+  app.run();
 };
 
 function ThreeScene() {

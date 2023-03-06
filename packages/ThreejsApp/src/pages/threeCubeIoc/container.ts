@@ -1,17 +1,17 @@
 import 'reflect-metadata';
 import { Container } from 'inversify';
-import { ThreeApp } from './threeApp';
-import { AddCubeService } from './shapes/addcube';
-import { SERVICE_IDENTIFIER } from './constants';
+import { ServiceA } from './SeviceA';
+import { AppClass } from './threeApp';
+
 
 const container = new Container();
-container.bind<ThreeApp>(ThreeApp).toSelf();
-container.bind<AddCubeService>(SERVICE_IDENTIFIER.AddCubeService).to(AddCubeService);
+debugger;
+
+container.bind(ServiceA).toSelf();
+container.bind(AppClass).toSelf();
+debugger;
+
+const app = container.resolve(AppClass);
 
 
-const threeApp = container.get<ThreeApp>(ThreeApp);
-// threeApp.init();
-// threeApp.render();
-
-
-export default threeApp;
+export { app };

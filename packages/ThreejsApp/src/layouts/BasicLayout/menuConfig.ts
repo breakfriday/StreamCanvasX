@@ -7,6 +7,12 @@ const asideMenuConfig = [
     path: '/threeCube',
     icon: 'smile',
   },
+  {
+    name: 'threeCubeIoc',
+    path: '/threeCubeIoc',
+    icon: 'smile',
+
+  },
 
   {
     name: 'buildmap',
