@@ -9,7 +9,9 @@
     "react-dom": "^17.0.2",
     "@alifd/theme-design-pro": "0.x",
     "three":"0.149.0",
-    "geolib":"3.3.3"
+    "geolib":"3.3.3",
+    "reflect-metadata":"^0.1.13",
+    "inversify":"^6.0.1"
   },
   "devDependencies": {
     "@iceworks/spec": "^1.0.0",
