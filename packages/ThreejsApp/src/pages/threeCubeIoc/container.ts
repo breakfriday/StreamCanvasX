@@ -8,6 +8,10 @@ const container = new Container();
 container.bind<ThreeApp>(ThreeApp).toSelf();
 container.bind<AddCubeService>(SERVICE_IDENTIFIER.AddCubeService).to(AddCubeService);
 
+
 const threeApp = container.get<ThreeApp>(ThreeApp);
-threeApp.init();
-threeApp.render();
+// threeApp.init();
+// threeApp.render();
+
+
+export default threeApp;
