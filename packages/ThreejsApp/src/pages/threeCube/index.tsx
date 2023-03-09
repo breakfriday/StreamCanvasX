@@ -19,7 +19,12 @@ function ThreeScene() {
     }
   }, []);
 
-  return <div ref={canvasRef} />;
+  return (
+    <>
+      <div>tesdddt</div>
+      <div ref={canvasRef} />;
+    </>
+  );
 }
 
 export default ThreeScene;

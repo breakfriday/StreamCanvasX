@@ -4,6 +4,5 @@ import { injectable } from 'inversify';
 export class ServiceA {
   logMessage(message: string) {
     alert(message);
-    alert(this.age);
   }
 }
