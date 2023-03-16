@@ -4,6 +4,7 @@ import BasicLayout from '@/layouts/BasicLayout';
 
 const ThreeCube = lazy(() => import('@/pages/threeCube'));
 const ThreeCubeIoc = lazy(() => import('@/pages/threeCubeIoc'));
+const BuildMap = lazy(() => import('@/pages/buildMap'));
 const routerConfig: IRouterConfig[] = [
   {
     path: '/',
@@ -23,6 +24,11 @@ const routerConfig: IRouterConfig[] = [
         path: '/threeCubeIoc',
         exact: true,
         component: ThreeCubeIoc,
+      },
+      {
+        path: '/buildMap',
+        exact: true,
+        component: BuildMap,
       },
     ],
   },
