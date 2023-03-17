@@ -101,7 +101,40 @@ class threeApp {
   }
 
   addBuilding(data, info, height = 1) {
+    height = height || 1;
 
+    let shape; let
+      geometry;
+    const holes = [];
+
+    for (let i = 0; i < data.length; i++) {
+      const el = data[i];
+
+      if (i == 0) {
+        shape = genShape(el, center);
+      } else {
+        holes.push(genShape(el, center));
+      }
+    }
+
+    for (let i = 0; i < holes.length; i++) {
+      shape.holes.push(holes[i]);
+    }
+
+    geometry = genGeometry(shape, { curveSegments: 1, depth: 0.05 * height, bevelEnabled: false });
+
+    geometry.rotateX(Math.PI / 2);
+    geometry.rotateZ(Math.PI);
+
+    geos_building.push(geometry);
+
+    const helper = genHelper(geometry);
+    if (helper) {
+      helper.name = info['name'] ? info['name'] : 'Building';
+      helper.info = info;
+      // this.iR.add(helper)
+      collider_building.push(helper);
+    }
   }
 
   add_change() {
