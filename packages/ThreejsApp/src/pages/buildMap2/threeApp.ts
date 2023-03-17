@@ -10,6 +10,48 @@ import { getDistance, getRhumbLineBearing } from 'geolib';
 
 import map_data from './map.json';
 
+const center = [-3.188822, 55.943686];
+
+function GPSRelativePosition(objPosi, centerPosi) {
+  // Get GPS distance
+  const dis = getDistance(objPosi, centerPosi);
+
+  // Get bearing angle
+  const bearing = getRhumbLineBearing(objPosi, centerPosi);
+
+  // Calculate X by centerPosi.x + distance * cos(rad)
+  const x = centerPosi[0] + (dis * Math.cos(bearing * Math.PI / 180));
+
+  // Calculate Y by centerPosi.y + distance * sin(rad)
+  const y = centerPosi[1] + (dis * Math.sin(bearing * Math.PI / 180));
+
+  // Reverse X (it work)
+  return [-x / 100, y / 100];
+}
+
+function genShape(points, center) {
+  const shape = new THREE.Shape();
+
+  for (let i = 0; i < points.length; i++) {
+    let elp = points[i];
+    elp = GPSRelativePosition(elp, center);
+
+    if (i == 0) {
+      shape.moveTo(elp[0], elp[1]);
+    } else {
+      shape.lineTo(elp[0], elp[1]);
+    }
+  }
+
+  return shape;
+}
+
+function genGeometry(shape, settings) {
+  const geometry = new THREE.ExtrudeBufferGeometry(shape, settings);
+  geometry.computeBoundingBox();
+
+  return geometry;
+}
 
 class threeApp {
   scene!: THREE.Scene;
@@ -135,9 +177,6 @@ class threeApp {
       // this.iR.add(helper)
       collider_building.push(helper);
     }
-  }
-  genShape(){
-    
   }
 
   add_change() {
