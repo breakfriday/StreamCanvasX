@@ -136,6 +136,9 @@ class threeApp {
       collider_building.push(helper);
     }
   }
+  genShape(){
+    
+  }
 
   add_change() {
 
