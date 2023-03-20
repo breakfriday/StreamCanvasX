@@ -35,3 +35,5 @@ class Processor {
   }
 }
 
+
+export default Processor
