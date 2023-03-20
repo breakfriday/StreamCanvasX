@@ -8,9 +8,8 @@
   ],
   "private": true,
   "scripts": {
-    "start": "yarn start:sheetOne",
-    "start:sheetOne": "yarn workspace sheetOne start",
-    "start:threejs": "yarn workspace ThreejsApp start"
+    "start": "yarn start:liveDemo",
+    "start:liveDemo": "cd example/steamLiveDemo&&npm run start "
   },
   "repository": "git@github.com:breakfriday/canvasTable.git",
   "author": "breakhappy <break_happy@163.com>",
