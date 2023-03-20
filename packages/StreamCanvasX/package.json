@@ -1,7 +1,7 @@
 {
-    "name": "sheetCore",
+    "name": "StreamCanvasX",
     "version": "0.1.0",
-    "description": "sheetCore",
+    "description": "StreamCanvasX",
     "dependencies": {
       "react": ">=18.0.0",
       "react-dom": ">=18.0.0",

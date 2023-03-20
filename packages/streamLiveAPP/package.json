@@ -1,7 +1,7 @@
 {
-  "name": "@alifd/scaffold-lite",
+  "name": "streamLiveApp",
   "version": "0.1.0",
-  "description": "轻量级模板，使用 TypeScript，仅包含基础的 Layout。",
+  "description": "streamLiveApp",
   "dependencies": {
     "@alifd/next": "^1.19.4",
     "moment": "^2.24.0",

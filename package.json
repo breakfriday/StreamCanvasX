@@ -7,8 +7,9 @@
   ],
   "private": true,
   "scripts": {
-    "start": "yarn start:liveDemo",
-    "start:liveDemo": "cd example/steamLiveDemo&&npm run start "
+    "start": "yarn start:streamLiveApp",
+    "start:liveDemo": "cd example/steamLiveDemo&&npm run start ",
+    "start:streamLiveApp":"yarn workspace streamLiveApp start"
   },
   "repository": "git@github.com:breakfriday/canvasTable.git",
   "author": "breakhappy <break_happy@163.com>",
