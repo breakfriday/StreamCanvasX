@@ -2,7 +2,7 @@ const headerMenuConfig = [];
 
 const asideMenuConfig = [
   {
-    name: 'Dashboard',
+    name: 'LiveDemo',
     path: '/',
     icon: 'smile',
   },
