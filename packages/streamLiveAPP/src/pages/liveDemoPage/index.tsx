@@ -11,7 +11,9 @@ const Dashboard = () => {
   useEffect(() => {
     if (vedio_ref) {
       const el = vedio_ref?.current;
-      player(el);
+      if (el) {
+        player(el);
+      }
 
       new canvasPlayer(canvas_ref?.current);
     }
