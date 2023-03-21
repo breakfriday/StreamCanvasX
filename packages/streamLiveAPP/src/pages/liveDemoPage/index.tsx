@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react';
 import { ResponsiveGrid } from '@alifd/next';
-import Guide from './components/Guide';
 import player from 'StreamCanvasX/player';
 import canvasPlayer from 'StreamCanvasX/canvasPlayer';
 
