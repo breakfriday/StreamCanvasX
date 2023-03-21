@@ -27,6 +27,7 @@ const Dashboard = () => {
           preload="none"
           data-playback-id="29302SySXJgsLjQmbGiGiRQvEgiRplfvU"
           data-poster-time="10"
+          loop={true}
         />
       </div>
 
