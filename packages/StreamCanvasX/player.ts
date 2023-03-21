@@ -21,21 +21,21 @@ const muxThumbnail = (playbackId, options = {}) =>
   )}`;
 
 
-const player = () => {
+const player = (el: HTMLVideoElement) => {
   if (Hls.isSupported()) {
-    const videos = document.querySelectorAll('video[data-playback-id]');
-    videos.forEach((video) => {
-      const playbackId = video.getAttribute('data-playback-id');
-      const posterTime = video.getAttribute('data-poster-time');
-      video.setAttribute(
-        'poster',
-        video.poster || muxThumbnail(playbackId, { time: posterTime }),
-      );
+    const video = el;
 
-      const hls = new Hls();
-      hls.loadSource(muxManifestUrl(playbackId));
-      hls.attachMedia(video);
-    });
+
+    const playbackId = video.getAttribute('data-playback-id');
+    const posterTime = video.getAttribute('data-poster-time');
+    video.setAttribute(
+      'poster',
+      video.poster || muxThumbnail(playbackId, { time: posterTime }),
+    );
+
+    const hls = new Hls();
+    hls.loadSource(muxManifestUrl(playbackId));
+    hls.attachMedia(video);
   }
 };
 

@@ -7,12 +7,13 @@ const { Cell } = ResponsiveGrid;
 
 const Dashboard = () => {
   const vedio_ref = useRef(null);
+  const canvas_ref = useRef(null);
   useEffect(() => {
     if (vedio_ref) {
       const el = vedio_ref?.current;
-      player();
+      player(el);
 
-      new canvasPlayer();
+      new canvasPlayer(canvas_ref?.current);
     }
   }, []);
   return (
@@ -27,14 +28,13 @@ const Dashboard = () => {
           preload="none"
           data-playback-id="29302SySXJgsLjQmbGiGiRQvEgiRplfvU"
           data-poster-time="10"
-          loop={true}
+          loop
         />
       </div>
 
 
-
       <div id="canvas-container">
-        <canvas id="canvas" width="800" height="800" />
+        <canvas ref={canvas_ref} id="canvas" width="800" height="800" />
       </div>
     </div>
   );
