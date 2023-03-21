@@ -34,7 +34,7 @@ const Dashboard = () => {
 
 
       <div id="canvas-container">
-        <canvas id="canvas" width="300" height="300" />
+        <canvas id="canvas" width="800" height="800" />
       </div>
     </div>
   );
