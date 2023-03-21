@@ -22,8 +22,8 @@ class Processor {
       this.video,
       0,
       0,
-      this.video.width,
-      this.video.height,
+      800,
+      800,
     );
 
     const {
@@ -36,4 +36,4 @@ class Processor {
 }
 
 
-export default Processor
+export default Processor;
