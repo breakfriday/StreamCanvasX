@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { ResponsiveGrid } from '@alifd/next';
 import player from 'StreamCanvasX/player';
-import canvasPlayer from 'StreamCanvasX/canvasPlayer';
+import CanvasPlayer from 'StreamCanvasX/canvasPlayer';
 
 const { Cell } = ResponsiveGrid;
 
@@ -15,7 +15,7 @@ const Dashboard = () => {
         player(el);
       }
 
-      new canvasPlayer(canvas_ref?.current);
+      const canvas_player = new CanvasPlayer({ canvas_el: canvas_ref?.current, vedio_el: vedio_ref?.current });
     }
   }, []);
   return (
