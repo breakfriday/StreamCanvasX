@@ -1,7 +1,7 @@
 class Processor {
-  constructor({ vedio_el: HTMLVideoElement, canvas_el: HTMLCanvasElement }) {
-    this.video = document.getElementById('video');
-    this.canvas = document.getElementById('canvas');
+  constructor(parmams: { vedio_el: HTMLVideoElement; canvas_el: HTMLCanvasElement }) {
+    this.video = parmams.vedio_el;
+    this.canvas = parmams.canvas_el;
     this.context = this.canvas.getContext('2d');
 
     this.video.addEventListener(
