@@ -6,6 +6,11 @@ const asideMenuConfig = [
     path: '/',
     icon: 'smile',
   },
+  {
+    name: 'WsmCanvas',
+    path: '/wsmCanvas',
+    icon: 'smile',
+  },
 ];
 
 export { headerMenuConfig, asideMenuConfig };
