@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { Button } from '@alifd/next';
 
 import main_player from './main';
 
@@ -12,17 +13,20 @@ const Wsm_Canvas = () => {
   return (
     <div>
       <div>
-        <button id="open">打开摄像头</button>
-        <button id="close">关闭摄像头</button>
+        <Button id="open">打开摄像头</Button>
+        <Button id="close">关闭摄像头</Button>
       </div>
       <div>
-        滤镜：
-        <button className="filter-button" filter="original">原始</button>
-        <button className="filter-button" filter="grayScale">灰度</button>
-        <button className="filter-button" filter="brighten">高亮</button>
-        <button className="filter-button" filter="invert">反色</button>
-        <button className="filter-button" filter="noise">噪点</button>
-        <button className="filter-button" filter="sobelFilter">边缘提取</button>
+        <div>
+          滤镜：调用wsm c++ 实现
+        </div>
+
+        <Button className="filter-button" filter="original">原始</Button>
+        <Button className="filter-button" filter="grayScale">灰度</Button>
+        <Button className="filter-button" filter="brighten">高亮</Button>
+        <Button className="filter-button" filter="invert">反色</Button>
+        <Button className="filter-button" filter="noise">噪点</Button>
+        <Button className="filter-button" filter="sobelFilter">边缘提取</Button>
       </div>
       <div>
         <canvas id="canvas" />
