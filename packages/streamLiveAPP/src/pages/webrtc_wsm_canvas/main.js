@@ -76,9 +76,7 @@ const main_player = () => {
 
   // 加载wasm
   loadWASM().then((module) => {
-    debugger
     wam = module;
-    debugger
     // 增加原始滤镜模块
     wam.original = function (pixels) {
       return pixels;
