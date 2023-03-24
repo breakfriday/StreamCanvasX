@@ -1,21 +1,21 @@
-var Module = {};
-var script;
-//to bind arguments in the right order
+const Module = {};
+let script;
+// to bind arguments in the right order
 function bindLastArgs(func, ...boundArgs) {
-  return function(...baseArgs) {
+  return function (...baseArgs) {
     return func(...baseArgs, ...boundArgs);
-  }
+  };
 }
 
 export default function loadWASM() {
   return new Promise((resolve, reject) => {
     self.fetch('./webdsp_c.wasm')
-      .then(response => response.arrayBuffer())
-      .then(buffer => {
+      .then((response) => response.arrayBuffer())
+      .then((buffer) => {
         Module.wasmBinary = buffer;
         // GLOBAL -- create custom event for complete glue script execution
         // Emscripten编译的函数如_grayScale，_malloc等会挂到全局环境下
-        var script = document.createElement('script');
+        const script = document.createElement('script');
         script.onload = buildWam;
         // END GLOBAL
         script.src = './webdsp_c.js';
@@ -27,7 +27,7 @@ export default function loadWASM() {
           const wam = {};
 
           // filters
-          wam['grayScale'] = function(pixelData) {
+          wam['grayScale'] = function (pixelData) {
             // 获取像素数组长度
             const len = pixelData.length;
             // 开辟一块内存，返回地址
@@ -42,7 +42,7 @@ export default function loadWASM() {
             _free(mem);
             return filtered;
           };
-          wam['brighten'] = function(pixelData, brightness = 25) {
+          wam['brighten'] = function (pixelData, brightness = 25) {
             const len = pixelData.length;
             const mem = _malloc(len);
             HEAPU8.set(pixelData, mem);
@@ -51,7 +51,7 @@ export default function loadWASM() {
             _free(mem);
             return filtered;
           };
-          wam['invert'] = function(pixelData) {
+          wam['invert'] = function (pixelData) {
             const len = pixelData.length;
             const mem = _malloc(len);
             HEAPU8.set(pixelData, mem);
@@ -60,7 +60,7 @@ export default function loadWASM() {
             _free(mem);
             return filtered;
           };
-          wam['noise'] = function(pixelData) {
+          wam['noise'] = function (pixelData) {
             const len = pixelData.length;
             const mem = _malloc(len * Float32Array.BYTES_PER_ELEMENT);
             HEAPF32.set(pixelData, mem / Float32Array.BYTES_PER_ELEMENT);
@@ -69,8 +69,8 @@ export default function loadWASM() {
             _free(mem);
             return filtered;
           };
-          //MultiFilter Family of Functions
-          wam['multiFilter'] = function(pixelData, width, filterType, mag, multiplier, adj) {
+          // MultiFilter Family of Functions
+          wam['multiFilter'] = function (pixelData, width, filterType, mag, multiplier, adj) {
             const len = pixelData.length;
             const mem = _malloc(len);
             HEAPU8.set(pixelData, mem);
@@ -79,7 +79,7 @@ export default function loadWASM() {
             _free(mem);
             return filtered;
           };
-          wam['multiFilterFloat'] = function(pixelData, width, filterType, mag, multiplier, adj) {
+          wam['multiFilterFloat'] = function (pixelData, width, filterType, mag, multiplier, adj) {
             const len = pixelData.length;
             const mem = _malloc(len * Float32Array.BYTES_PER_ELEMENT);
             HEAPF32.set(pixelData, mem / Float32Array.BYTES_PER_ELEMENT);
@@ -88,12 +88,12 @@ export default function loadWASM() {
             _free(mem);
             return filtered;
           };
-          //bindLastArgs is defined and hoisted from below the module load
-          let mag = 127,
-            mult = 2,
-            adj = 4;
-          let filt = wam['multiFilter'];
-          let filtFloat = wam['multiFilterFloat'];
+          // bindLastArgs is defined and hoisted from below the module load
+          const mag = 127;
+          const mult = 2;
+          const adj = 4;
+          const filt = wam['multiFilter'];
+          const filtFloat = wam['multiFilterFloat'];
           wam['sunset'] = bindLastArgs(filt, 4, mag, mult, adj);
           wam['analogTV'] = bindLastArgs(filt, 7, mag, mult, adj);
           wam['emboss'] = bindLastArgs(filt, 1, mag, mult, adj);
@@ -115,9 +115,9 @@ export default function loadWASM() {
           wam['twisted'] = bindLastArgs(filt, 1, 40, 2, 3);
           wam['security'] = bindLastArgs(filt, 1, 120, 1, 0);
           wam['robbery'] = bindLastArgs(filtFloat, 1, 120, 1, 0);
-          //end filters from multiFilter family
+          // end filters from multiFilter family
 
-          wam['sobelFilter'] = function(pixelData, width, height, invert = false) {
+          wam['sobelFilter'] = function (pixelData, width, height, invert = false) {
             const len = pixelData.length;
             const mem = _malloc(len);
             HEAPU8.set(pixelData, mem);
@@ -126,8 +126,8 @@ export default function loadWASM() {
             _free(mem);
             return filtered;
           };
-          //convFilter family of filters
-          wam['convFilter'] = function(pixelData, width, height, kernel, divisor, bias = 0, count = 1) {
+          // convFilter family of filters
+          wam['convFilter'] = function (pixelData, width, height, kernel, divisor, bias = 0, count = 1) {
             const arLen = pixelData.length;
             const memData = _malloc(arLen * Float32Array.BYTES_PER_ELEMENT);
             HEAPF32.set(pixelData, memData / Float32Array.BYTES_PER_ELEMENT);
@@ -142,13 +142,13 @@ export default function loadWASM() {
             _free(memData);
             _free(memKernel);
             return filtered;
-          }
-          //defining kernel and other parameters before each function definition
-          let kernel = [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
-            divisor = 9,
-            bias = 0,
-            count = 1;
-          let conv = wam['convFilter'];
+          };
+          // defining kernel and other parameters before each function definition
+          let kernel = [[1, 1, 1], [1, 1, 1], [1, 1, 1]];
+          let divisor = 9;
+          const bias = 0;
+          const count = 1;
+          const conv = wam['convFilter'];
           wam['blur'] = bindLastArgs(conv, kernel, divisor, bias, 3);
           kernel = [[-1, -1, -1], [-1, 8, -1], [-1, -1, -1]], divisor = 1;
           wam['strongSharpen'] = bindLastArgs(conv, kernel, divisor);
@@ -164,7 +164,7 @@ export default function loadWASM() {
           wam['dewdrops'] = bindLastArgs(conv, kernel, divisor);
           kernel = [[-1, -1, 4], [-1, 9, -1], [0, -1, 0]], divisor = 2;
           wam['destruction'] = bindLastArgs(conv, kernel, divisor);
-          //end convFilter family of filters
+          // end convFilter family of filters
           // for (let prop in wam) {
           //   wam[prop] = createFilter(returnsOnceMallocedFilter(prop));
           // }
