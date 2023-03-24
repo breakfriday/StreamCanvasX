@@ -1,16 +1,12 @@
 import React, { useRef, useEffect } from 'react';
 
 
-
 const liveDEMOh265 = () => {
-
-
-
   return (
     <div gap={20}>
       <div id="original-player">
         <video
-          ref={vedio_ref}
+         
           width="300"
           height="300"
           id="video"
