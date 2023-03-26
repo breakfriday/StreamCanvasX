@@ -23,6 +23,10 @@ const main_player = async () => {
       console.log(prediction.class);
       const [x, y, width, height] = prediction.bbox;
       context.strokeStyle = 'red';
+      context.fillStyle = 'red';
+
+      // 设置字体大小和字体类型
+      context.font = '18px Arial';
 
       context.fillText(prediction.class, x, y);
       context.strokeRect(x, y, width, height);
@@ -75,6 +79,7 @@ const main_player = async () => {
     // outlineStuff(predictions)
     // 将滤镜处理后pixels放回到canvas画布
     context.putImageData(pixels, 0, 0);
+    outlineStuff(predictions)
     // 继续绘制
     requestId = requestAnimationFrame(draw);
 
