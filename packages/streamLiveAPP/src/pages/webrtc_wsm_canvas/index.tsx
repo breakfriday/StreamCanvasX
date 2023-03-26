@@ -43,7 +43,9 @@ const Wsm_Canvas = () => {
 
           <Tab.Item title="内容交互 " key="3">
             <Box direction="row" spacing={20}  style={{ marginTop: '20px' }}>
-              <Button className="filter-button" type="secondary" filter="original">AI识别</Button>
+              <Button  type="secondary" onClick={()=>{
+                window.AiTest=1
+              }}>AI识别</Button>
             </Box>
           </Tab.Item>
 
