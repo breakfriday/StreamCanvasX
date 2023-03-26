@@ -4,6 +4,7 @@ import * as cocoSsd from "@tensorflow-models/coco-ssd";
 
 
 let model
+let Ai=false
 
 
 const main_player = async () => {
@@ -79,7 +80,10 @@ const main_player = async () => {
     // outlineStuff(predictions)
     // 将滤镜处理后pixels放回到canvas画布
     context.putImageData(pixels, 0, 0);
-    outlineStuff(predictions)
+    if(window.AiTest===1){
+      outlineStuff(predictions)
+
+    }
     // 继续绘制
     requestId = requestAnimationFrame(draw);
 
