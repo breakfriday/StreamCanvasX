@@ -9,9 +9,12 @@
   "scripts": {
     "start": "yarn start:streamLiveApp",
     "start:liveDemo": "cd example/steamLiveDemo&&npm run start ",
-    "start:streamLiveApp":"yarn workspace streamLiveApp start"
+    "start:streamLiveApp": "yarn workspace streamLiveApp start"
   },
   "repository": "git@github.com:breakfriday/canvasTable.git",
   "author": "breakhappy <break_happy@163.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@tensorflow-models/coco-ssd": "^2.2.2"
+  }
 }
