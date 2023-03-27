@@ -1,4 +1,4 @@
-class Processor {
+class CanvasAudioVisulizer_Processor {
   private video!: HTMLVideoElement;
   private audio!: HTMLAudioElement;
   private canvas!: HTMLCanvasElement;
@@ -10,17 +10,16 @@ class Processor {
     if (this.canvas) {
       this.context = this.canvas.getContext('2d')!;
     }
-    this.setAudio('');
-    this.audio.play();
   }
 
   setAudio(files_data) {
     const blob_url = URL.createObjectURL(files_data);
     this.audio.src = blob_url;
     this.audio.load();
+    this.audio.play();
   }
 }
 
 
-export default Processor;
+export default CanvasAudioVisulizer_Processor;
 
