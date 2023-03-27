@@ -1,10 +1,10 @@
 import loadWASM from './load_wasm.js';
 import * as tf from '@tensorflow/tfjs';
-import * as cocoSsd from "@tensorflow-models/coco-ssd";
+import * as cocoSsd from '@tensorflow-models/coco-ssd';
 
 
-let model
-let Ai=false
+let model;
+const Ai = false;
 
 
 const main_player = async () => {
@@ -18,9 +18,9 @@ const main_player = async () => {
   const context = canvas.getContext('2d');
   model = await cocoSsd.load();
 
- let outlineStuff=(predictions)=> {
-  let h=predictions
-    predictions.map(prediction => {
+  const outlineStuff = (predictions) => {
+    const h = predictions;
+    predictions.map((prediction) => {
       console.log(prediction.class);
       const [x, y, width, height] = prediction.bbox;
       context.strokeStyle = 'red';
@@ -33,7 +33,7 @@ const main_player = async () => {
       context.strokeRect(x, y, width, height);
       return prediction;
     });
-  }
+  };
 
   function openWebcam() {
     navigator.mediaDevices.getUserMedia({
@@ -62,7 +62,7 @@ const main_player = async () => {
 
   let lastCalledTime;
   let fps = 0;
-  async function  draw() {
+  async function draw() {
     if (video.paused) return false;
 
     // 绘制video当前画面
@@ -73,16 +73,15 @@ const main_player = async () => {
 
     const predictions = await model.detect(pixels);
 
-   
+
     // 将pixels.data设置为滤镜之后像素值
-     pixels.data.set(gFilter(pixels.data, canvas.width, canvas.height));
+    pixels.data.set(gFilter(pixels.data, canvas.width, canvas.height));
 
     // outlineStuff(predictions)
     // 将滤镜处理后pixels放回到canvas画布
     context.putImageData(pixels, 0, 0);
-    if(window.AiTest===1){
-      outlineStuff(predictions)
-
+    if (window.AiTest === 1) {
+      outlineStuff(predictions);
     }
     // 继续绘制
     requestId = requestAnimationFrame(draw);
