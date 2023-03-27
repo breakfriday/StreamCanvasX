@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { ResponsiveGrid, Divider } from '@alifd/next';
-import player from 'StreamCanvasX/player';
+import CanvasAudioVisulizer_Processor from 'StreamCanvasX/canvasAudioVisulizer';
 
 
 const { Cell } = ResponsiveGrid;
@@ -10,16 +10,6 @@ const AudioPage = () => {
   const canvas_ref = useRef(null);
 
 
-  const set_audio = (parm) => {
-    const { src } = parm;
-    if (audio_ref?.current) {
-      const audio_el = audio_ref.current;
-      audio_el.src = src;
-      audio.load();
-      audio.play();
-    }
-  };
-
   return (
     <div >
       <input
@@ -28,7 +18,8 @@ const AudioPage = () => {
         onChange={(event) => {
           const files_data = event.target?.files?.[0];
           if (files_data) {
-            set_audio({ src: URL.createObjectURL(files_data) });
+            const audio_process = new CanvasAudioVisulizer_Processor({ audio_el: audio_ref?.current, canvas_el: canvas_ref?.current });
+            audio_process.setAudio(files_data);
           }
         }}
       />
