@@ -11,6 +11,10 @@ const Wsm_Canvas = () => {
       main_player();
     }, 200);
   }, []);
+
+  const set_filiter = () => {
+
+  };
   return (
     <div>
       <Box direction="row" spacing={20}>
@@ -36,16 +40,20 @@ const Wsm_Canvas = () => {
           </Tab.Item>
 
           <Tab.Item title="canvas Api " key="2">
-            <Box direction="row" spacing={20}  style={{ marginTop: '20px' }}>
+            <Box direction="row" spacing={20} style={{ marginTop: '20px' }}>
               <Button className="filter-button" type="secondary" filter="original">图像翻转</Button>
             </Box>
           </Tab.Item>
 
           <Tab.Item title="内容交互 " key="3">
-            <Box direction="row" spacing={20}  style={{ marginTop: '20px' }}>
-              <Button  type="secondary" onClick={()=>{
-                window.AiTest=1
-              }}>AI识别</Button>
+            <Box direction="row" spacing={20} style={{ marginTop: '20px' }}>
+              <Button
+                type="secondary"
+                onClick={() => {
+                  window.AiTest = 1;
+                }}
+              >AI识别
+              </Button>
             </Box>
           </Tab.Item>
 
