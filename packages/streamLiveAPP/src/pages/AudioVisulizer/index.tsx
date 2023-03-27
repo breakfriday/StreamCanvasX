@@ -26,9 +26,10 @@ const AudioPage = () => {
         type="file"
         accept="audio/*"
         onChange={(event) => {
-          const files_data = event?.target?.files[0];
-
-          set_audio({ src: URL.createObjectURL(files_data) });
+          const files_data = event.target?.files?.[0];
+          if (files_data) {
+            set_audio({ src: URL.createObjectURL(files_data) });
+          }
         }}
       />
       <audio id="audio" controls ref={audio_ref} />
