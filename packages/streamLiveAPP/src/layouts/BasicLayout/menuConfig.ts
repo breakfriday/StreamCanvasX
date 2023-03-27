@@ -16,6 +16,11 @@ const asideMenuConfig = [
     path: '/flvDemo',
     icon: 'smile',
   },
+  {
+    name: 'audioVisulizerDemo',
+    path: '/audioVisulizer',
+    icon: 'smile',
+  },
 ];
 
 export { headerMenuConfig, asideMenuConfig };

@@ -5,8 +5,6 @@ import * as cocoSsd from '@tensorflow-models/coco-ssd';
 
 class Main_stream {
   constructor() {
-
-    console.log("222")
-
+    console.log('222');
   }
 }
