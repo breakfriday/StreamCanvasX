@@ -21,8 +21,13 @@ class CanvasAudioVisulizer_Processor {
     this.audio.src = blob_url;
     this.audio.load();
     this.audio.play();
+    this.analyser_channel();
 
 
+    this.visulizerDraw();
+  }
+
+  analyser_channel() {
     // 创建一个音频分析节点，它可以将音频数据转换为频域或时域数据，以便进行可视化
     this.analyserNode = this.audioContext.createAnalyser();
     // Must be a power of 2 between 2 5 and 2 15 , so one of: 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, and 32768. Defaults to 2048.
@@ -32,19 +37,10 @@ class CanvasAudioVisulizer_Processor {
     const elementSourceNode = this.audioContext.createMediaElementSource(this.audio);
     // AudioContext 的输出连接到 AnalyserNode 的输入，将 HTML5 Audio 元素与 AnalyserNode 的输入连接，以便在 AnalyserNode 中处理音频数据。
     elementSourceNode.connect(this.analyserNode);
-
     this.analyserNode.connect(this.audioContext.destination);
 
     this.bufferLength = this.analyserNode.frequencyBinCount;
     this.dataArray = new Uint8Array(this.bufferLength);
-
-    console.log('---------------');
-    // 是fftSize 的一半
-    console.info(this.bufferLength);
-    console.log('---------------');
-    console.info(this.dataArray);
-
-    this.visulizerDraw();
   }
 
   // 获取音频解析数据
