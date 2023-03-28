@@ -2,8 +2,9 @@ class CanvasAudioVisulizer_Processor {
   private audio!: HTMLAudioElement;
   private canvas!: HTMLCanvasElement;
   private audioContext!: AudioContext;
-  private context!: CanvasRenderingContext2D;
+  private canvas_context!: CanvasRenderingContext2D;
   private dataArray: any;
+  private bufferLength: any;
   private analyserNode: AnalyserNode;
 
   constructor(parmams: { audio_el: HTMLAudioElement; canvas_el: HTMLCanvasElement }) {
@@ -11,7 +12,7 @@ class CanvasAudioVisulizer_Processor {
     this.canvas = parmams.canvas_el;
     this.audioContext = new AudioContext();
     if (this.canvas) {
-      this.context = this.canvas.getContext('2d')!;
+      this.canvas_context = this.canvas.getContext('2d')!;
     }
   }
 
@@ -33,20 +34,45 @@ class CanvasAudioVisulizer_Processor {
     sourceNode.connect(this.analyserNode);
     this.analyserNode.connect(this.audioContext.destination);
 
-    const bufferLength = this.analyserNode.frequencyBinCount;
-    this.dataArray = new Uint8Array(bufferLength);
+    this.bufferLength = this.analyserNode.frequencyBinCount;
+    this.dataArray = new Uint8Array(this.bufferLength);
+
+    this.visulizerDraw()
   }
 
   visulizerDraw() {
-    const x = 0;
+    let x = 0;
+    const CANVAS_WIDTH = this.canvas.width;
+    const CANVAS_HEIGHT = this.canvas.height;
+    const barWidth = (CANVAS_WIDTH / this.bufferLength) * 2.5;
+    let barHeight;
     const requestAnimationFrame = () => {
+      x = 0;
+
       this.analyserNode.getByteFrequencyData(this.dataArray);
+
+      this.canvas_context.fillStyle = '#000';
+      this.canvas_context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+      for (let i = 0; i < this.bufferLength; i++) {
+        barHeight = this.dataArray[i];
+
+        const r = barHeight + (25 * (i / this.bufferLength));
+        const g = 250 * (i / this.bufferLength);
+        const b = 50;
+
+        this.canvas_context.fillStyle = `rgb(${r},${g},${b})`;
+        this.canvas_context.fillRect(x, CANVAS_HEIGHT - barHeight, barWidth, barHeight);
+
+        x += barWidth + 1;
+        this.analyserNode.getByteFrequencyData(this.dataArray);
+      }
+
+      requestAnimationFrame();
     };
 
-    requestAnimationFrame();
+    requestAnimationFrame()
   }
 }
 
-
 export default CanvasAudioVisulizer_Processor;
-
