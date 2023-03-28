@@ -23,7 +23,7 @@ const AudioPage = () => {
           }
         }}
       />
-      <audio id="audio" controls ref={audio_ref} />
+      <audio id="audio" controls ref={audio_ref} loop />
       <Divider />
       <canvas ref={canvas_ref} id="canvas" width="800" height="800" />
     </div>
