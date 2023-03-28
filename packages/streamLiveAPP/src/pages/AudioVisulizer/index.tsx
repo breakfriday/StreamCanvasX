@@ -25,7 +25,7 @@ const AudioPage = () => {
       />
       <audio id="audio" controls ref={audio_ref} />
       <Divider />
-      <canvas ref={canvas_ref} id="canvas" width="1800" height="800" />
+      <canvas ref={canvas_ref} id="canvas" width="800" height="800" />
     </div>
   );
 };
