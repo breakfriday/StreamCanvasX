@@ -38,6 +38,12 @@ class CanvasAudioVisulizer_Processor {
     this.bufferLength = this.analyserNode.frequencyBinCount;
     this.dataArray = new Uint8Array(this.bufferLength);
 
+    console.log('---------------');
+    // 是fftSize 的一半
+    console.info(this.bufferLength);
+    console.log('---------------');
+    console.info(this.dataArray);
+
     this.visulizerDraw();
   }
 
