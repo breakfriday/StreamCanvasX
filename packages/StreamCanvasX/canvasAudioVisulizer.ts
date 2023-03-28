@@ -1,15 +1,17 @@
 class CanvasAudioVisulizer_Processor {
   private audio!: HTMLAudioElement;
   private canvas!: HTMLCanvasElement;
+  private canvas1!: HTMLCanvasElement;
   private audioContext!: AudioContext;
   private canvas_context!: CanvasRenderingContext2D;
   private dataArray: any;
   private bufferLength: any;
   private analyserNode: AnalyserNode;
 
-  constructor(parmams: { audio_el: HTMLAudioElement; canvas_el: HTMLCanvasElement }) {
+  constructor(parmams: { audio_el: HTMLAudioElement; canvas_el: HTMLCanvasElement; canvas_el1: HTMLCanvasElement }) {
     this.audio = parmams.audio_el;
     this.canvas = parmams.canvas_el;
+    this.canvas1 = parmams.canvas_el1;
     this.audioContext = new AudioContext();
     if (this.canvas) {
       this.canvas_context = this.canvas.getContext('2d')!;
@@ -82,6 +84,17 @@ class CanvasAudioVisulizer_Processor {
       }
 
       requestAnimationFrame(AnimationFrame);
+    };
+
+    AnimationFrame();
+  }
+
+  visulizerDraw1() {
+    if (this.canvas1) {
+      const canvas_context = this.canvas1.getContext('2d')!;
+    }
+    const AnimationFrame = () => {
+
     };
 
     AnimationFrame();
