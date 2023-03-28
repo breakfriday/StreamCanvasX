@@ -37,8 +37,7 @@ class CanvasAudioVisulizer_Processor {
     this.bufferLength = this.analyserNode.frequencyBinCount;
     this.dataArray = new Uint8Array(this.bufferLength);
 
-    this.visulizerDraw()
-    debugger
+    this.visulizerDraw();
   }
 
   visulizerDraw() {
@@ -47,7 +46,7 @@ class CanvasAudioVisulizer_Processor {
     const CANVAS_HEIGHT = this.canvas.height;
     const barWidth = (CANVAS_WIDTH / this.bufferLength) * 2.5;
     let barHeight;
-    const requestAnimationFrame = () => {
+    const AnimationFrame = () => {
       x = 0;
 
       this.analyserNode.getByteFrequencyData(this.dataArray);
@@ -69,10 +68,10 @@ class CanvasAudioVisulizer_Processor {
         this.analyserNode.getByteFrequencyData(this.dataArray);
       }
 
-      requestAnimationFrame();
+      requestAnimationFrame(AnimationFrame);
     };
 
-     requestAnimationFrame()
+    AnimationFrame();
   }
 }
 
