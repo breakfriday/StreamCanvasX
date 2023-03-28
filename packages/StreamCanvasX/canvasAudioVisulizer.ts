@@ -35,8 +35,13 @@ class CanvasAudioVisulizer_Processor {
 
     //  创建了一个 MediaElementSourceNode 对象 .  关联HTMLMediaElement. 这可以用来播放和处理来自<video>或<audio> 元素的音频.
     const elementSourceNode = this.audioContext.createMediaElementSource(this.audio);
-    // AudioContext 的输出连接到 AnalyserNode 的输入，将 HTML5 Audio 元素与 AnalyserNode 的输入连接，以便在 AnalyserNode 中处理音频数据。
+
+
+    // 将 MediaElementSourceNode（音频元素）的输出连接到 AnalyserNode（音频分析器）的输入。(将 HTML5 Audio 元素与 AnalyserNode 的输入连接)
+    // 这样，音频数据就可以在 AnalyserNode 中进行处理
     elementSourceNode.connect(this.analyserNode);
+    // 将 AnalyserNode 的输出连接到 AudioContext 的输出（扬声器）。
+    // 这将使音频数据经过分析后再播放。
     this.analyserNode.connect(this.audioContext.destination);
 
     this.bufferLength = this.analyserNode.frequencyBinCount;
