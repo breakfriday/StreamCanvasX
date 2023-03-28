@@ -25,7 +25,7 @@ class CanvasAudioVisulizer_Processor {
 
     // 创建了一个新的 AnalyserNode 对象 ,这是一个 Web Audio API 中的节点，它可以将音频数据转换为频域或时域数据，以便进行可视化
     this.analyserNode = this.audioContext.createAnalyser();
-    this.analyserNode.fftSize = 2048;
+    this.analyserNode.fftSize = 256;
 
     //  创建了一个 MediaElementSourceNode 对象 .  关联HTMLMediaElement. 这可以用来播放和处理来自<video>或<audio> 元素的音频.
     const sourceNode = this.audioContext.createMediaElementSource(this.audio);
@@ -38,6 +38,7 @@ class CanvasAudioVisulizer_Processor {
     this.dataArray = new Uint8Array(this.bufferLength);
 
     this.visulizerDraw()
+    debugger
   }
 
   visulizerDraw() {
@@ -71,7 +72,7 @@ class CanvasAudioVisulizer_Processor {
       requestAnimationFrame();
     };
 
-    requestAnimationFrame()
+     requestAnimationFrame()
   }
 }
 
