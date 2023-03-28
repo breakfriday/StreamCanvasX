@@ -23,7 +23,7 @@ class CanvasAudioVisulizer_Processor {
     this.audio.play();
 
 
-    // 创建了一个新的 AnalyserNode 对象 ,这是一个 Web Audio API 中的节点，它可以将音频数据转换为频域或时域数据，以便进行可视化
+    // 创建一个音频分析节点，它可以将音频数据转换为频域或时域数据，以便进行可视化
     this.analyserNode = this.audioContext.createAnalyser();
     // Must be a power of 2 between 2 5 and 2 15 , so one of: 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, and 32768. Defaults to 2048.
     this.analyserNode.fftSize = 2048;
@@ -45,6 +45,11 @@ class CanvasAudioVisulizer_Processor {
     console.info(this.dataArray);
 
     this.visulizerDraw();
+  }
+
+  // 获取音频解析数据
+  getByteFrequencyData() {
+    this.dataArray = new Uint8Array(this.bufferLength);
   }
 
   visulizerDraw() {
