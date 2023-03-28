@@ -8,6 +8,7 @@ const { Cell } = ResponsiveGrid;
 const AudioPage = () => {
   const audio_ref = useRef(null);
   const canvas_ref = useRef(null);
+  const canvas_ref1 = useRef(null);
 
 
   return (
@@ -26,6 +27,7 @@ const AudioPage = () => {
       <audio id="audio" controls ref={audio_ref} loop />
       <Divider />
       <canvas ref={canvas_ref} id="canvas" width="800" height="800" />
+      <canvas ref={canvas_ref1} width="800" height="800" />
     </div>
   );
 };
