@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { ResponsiveGrid, Divider } from '@alifd/next';
 import player from 'StreamCanvasX/player';
 import CanvasPlayer from 'StreamCanvasX/canvasPlayer';
+import mpegts from 'mpegts.js';
 import Hls from 'hls.js';
 
 
@@ -18,7 +19,7 @@ const HlsDemo = () => {
     if (Hls.isSupported()) {
       const video = document.getElementById('video');
       const hls = new Hls();
-      const url = 'http://localhost:8080/live/livestream.m3u8';
+      const url = '//localhost:8080/live/livestream.m3u8';
       hls.loadSource(url);
       hls.attachMedia(video);
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -26,13 +27,25 @@ const HlsDemo = () => {
       });
     }
   };
+
+  const player2 = () => {
+    const video = document.getElementById('video');
+    const mpegts_player = mpegts.createPlayer({
+      type: 'mse', // could also be mpegts, m2ts, flv
+      isLive: true,
+      url: '//localhost:8080/live/livestream.flv',
+    });
+    mpegts_player.attachMediaElement(video);
+    mpegts_player.load();
+    mpegts_player.play();
+  };
   return (
     <div gap={20}>
       <div id="original-player">
         <video
 
-          width="900"
-          height="900"
+          width="300"
+          height="300"
           id="video"
           controls="true"
           preload="none"
@@ -41,7 +54,7 @@ const HlsDemo = () => {
 
         <div onClick={() => {
           alert(2);
-          play();
+          player2();
         }}
         >ss
         </div>
