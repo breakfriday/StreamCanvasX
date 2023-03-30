@@ -21,6 +21,11 @@ const asideMenuConfig = [
     path: '/audioVisulizer',
     icon: 'smile',
   },
+  {
+    name: 'HlsDemo',
+    path: '/HlsDemo',
+    icon: 'smile',
+  },
 ];
 
 export { headerMenuConfig, asideMenuConfig };

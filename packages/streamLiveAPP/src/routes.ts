@@ -5,6 +5,8 @@ const Dashboard = lazy(() => import('@/pages/liveDemoPage'));
 const WsmCanvas = lazy(() => import('@/pages/webrtc_wsm_canvas'));
 const FlvDemo = lazy(() => import('@/pages/FlvDemo'));
 const AudioVisulizer = lazy(() => import('@/pages/AudioVisulizer'));
+
+const HlsDemo = lazy(() => import('@/pages/HlsDemo'));
 const routerConfig: IRouterConfig[] = [
   {
     path: '/',
@@ -29,6 +31,11 @@ const routerConfig: IRouterConfig[] = [
         path: '/audioVisulizer',
         exact: true,
         component: AudioVisulizer,
+      },
+      {
+        path: '/HlsDemo',
+        exact: true,
+        component: HlsDemo,
       },
     ],
   },
