@@ -47,6 +47,8 @@ class CanvasAudioVisulizer_Processor {
     this.analyserNode.connect(this.audioContext.destination);
 
     this.bufferLength = this.analyserNode.frequencyBinCount;
+    // 创建  frequencyBinCount长度的Uint8Array (8 位无符号整型数组)数组，用于存放音频数据
+    // 为什么使用Uint8Array ，因为音频频的每个数据占用一个字节，当音频无数据时，array中的值均为0。每一个字节有8位，最大值为2的8次方，即256。
     this.dataArray = new Uint8Array(this.bufferLength);
   }
 
@@ -64,6 +66,7 @@ class CanvasAudioVisulizer_Processor {
     const AnimationFrame = () => {
       x = 0;
 
+      // 将音频数据填充到数组当中
       this.analyserNode.getByteFrequencyData(this.dataArray);
 
       this.canvas_context.fillStyle = '#000';
@@ -90,9 +93,17 @@ class CanvasAudioVisulizer_Processor {
   }
 
   visulizerDraw1() {
+    const x = 0;
+    let canvas_context;
+
     if (this.canvas1) {
-      const canvas_context = this.canvas1.getContext('2d')!;
+      canvas_context = this.canvas1.getContext('2d')!;
     }
+
+    const CANVAS_WIDTH = canvas_context.width;
+    const CANVAS_HEIGHT = canvas_context.height;
+
+
     const AnimationFrame = () => {
 
     };
