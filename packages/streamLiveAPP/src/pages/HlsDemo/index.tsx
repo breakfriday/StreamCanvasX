@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { ResponsiveGrid, Divider } from '@alifd/next';
+import { ResponsiveGrid, Divider, Box, Button } from '@alifd/next';
 import player from 'StreamCanvasX/player';
 import CanvasPlayer from 'StreamCanvasX/canvasPlayer';
 import mpegts from 'mpegts.js';
@@ -9,56 +9,97 @@ import Hls from 'hls.js';
 const { Cell } = ResponsiveGrid;
 
 const HlsDemo = () => {
-  const vedio_ref = useRef(null);
+  const vedio_hls_ref = useRef(null);
+  const veido_flv_ref = useRef(null);
   const canvas_ref = useRef(null);
 
   //   const url = 'https://localhost:8080/live/livestream.m3u8';
 
 
-  const play = () => {
+  const hls_play = () => {
     if (Hls.isSupported()) {
-      const video = document.getElementById('video');
-      const hls = new Hls();
-      const url = '//localhost:8080/live/livestream.m3u8';
-      hls.loadSource(url);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play();
-      });
+      if (vedio_hls_ref?.current) {
+        const vedio_el = vedio_hls_ref.current;
+        const video = document.getElementById('video');
+        const hls = new Hls();
+        const url = '//localhost:8080/live/livestream.m3u8';
+        hls.loadSource(url);
+        hls.attachMedia(vedio_el);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          vedio_el.play();
+        });
+      }
     }
   };
 
-  const player2 = () => {
-    const video = document.getElementById('video');
-    const mpegts_player = mpegts.createPlayer({
-      type: 'mse', // could also be mpegts, m2ts, flv
-      isLive: true,
-      url: '//localhost:8080/live/livestream.flv',
-    });
-    mpegts_player.attachMediaElement(video);
-    mpegts_player.load();
-    mpegts_player.play();
+  const flv_play = () => {
+    if (veido_flv_ref?.current) {
+      const video_el = veido_flv_ref.current;
+      const mpegts_player = mpegts.createPlayer({
+        type: 'mse', // could also be mpegts, m2ts, flv
+        isLive: true,
+        url: '//localhost:8080/live/livestream.flv',
+      });
+      mpegts_player.attachMediaElement(video_el);
+      mpegts_player.load();
+      mpegts_player.play();
+    }
   };
   return (
     <div gap={20}>
-      <div id="original-player">
-        <video
+      <Box direction="row" spacing={20}>
+  
+      </Box>
 
-          width="300"
-          height="300"
-          id="video"
-          controls="true"
-          preload="none"
+      <Box direction="row" spacing={20}>
+        <div id="original-player">
+          <video
+            ref={vedio_hls_ref}
+            width="300"
+            height="300"
+            controls="true"
+            preload="none"
+          />
+          <div>
+            <Button
+              type=""
+              onClick={() => {
+                hls_play();
+              }}
+            >hls 拉流
+            </Button>
 
-        />
+          </div>
 
-        <div onClick={() => {
-          alert(2);
-          player2();
-        }}
-        >ss
+          <div>"url:localhost:8080/live/livestream.flv"</div>
+
+
         </div>
-      </div>
+
+
+        <div id="original-player">
+          <video
+            ref={veido_flv_ref}
+            width="300"
+            height="300"
+            id="video2"
+            controls="true"
+            preload="none"
+          />
+
+          <div>
+            <Button
+              type=""
+              onClick={() => {
+                flv_play();
+              }}
+            >flv 拉流
+            </Button>
+
+          </div>
+
+        </div>
+      </Box>
 
 
       <div id="canvas-container">
