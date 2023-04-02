@@ -51,15 +51,20 @@ const HlsDemo = () => {
   };
   return (
     <div gap={20}>
-      <input type="file" id="file-input" accept="video/mp4" onChange={()=>{
-        const files_data = event.target?.files?.[0];
-        if(files_data){
-          let data_url = URL.createObjectURL(files_data);
-          let videoPlayer=veido_flv_ref?.current
-          videoPlayer.src =data_url;
-          videoPlayer.load();
-        }
-      }} />
+      <input
+        type="file"
+        id="file-input"
+        accept="audio/*,video/*"
+        onChange={() => {
+          const files_data = event.target?.files?.[0];
+          if (files_data) {
+            const data_url = URL.createObjectURL(files_data);
+            const videoPlayer = veido_flv_ref?.current;
+            videoPlayer.src = data_url;
+            videoPlayer.load();
+          }
+        }}
+      />
 
 
       <Box direction="row" spacing={20} />
