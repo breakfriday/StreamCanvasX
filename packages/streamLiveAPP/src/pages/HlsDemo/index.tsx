@@ -36,7 +36,7 @@ const HlsDemo = () => {
     if (veido_flv_ref?.current) {
       const video_el = veido_flv_ref.current;
       const mpegts_player = mpegts.createPlayer({
-        type: 'mse', // could also be mpegts, m2ts, flv
+        type: 'flv', // could also be mpegts, m2ts, flv
         isLive: true,
         url: '//localhost:8080/live/livestream.flv',
       });
@@ -47,9 +47,7 @@ const HlsDemo = () => {
   };
   return (
     <div gap={20}>
-      <Box direction="row" spacing={20}>
-  
-      </Box>
+      <Box direction="row" spacing={20} />
 
       <Box direction="row" spacing={20}>
         <div id="original-player">
@@ -70,8 +68,6 @@ const HlsDemo = () => {
             </Button>
 
           </div>
-
-          <div>"url:localhost:8080/live/livestream.flv"</div>
 
 
         </div>
@@ -98,8 +94,19 @@ const HlsDemo = () => {
 
           </div>
 
+
         </div>
       </Box>
+
+      <div>
+        <Button onClick={() => {
+          hls_play();
+          flv_play();
+        }}
+        >
+          all_start
+        </Button>
+      </div>
 
 
       <div id="canvas-container">
