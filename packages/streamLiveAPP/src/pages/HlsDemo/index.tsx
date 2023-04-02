@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { ResponsiveGrid, Divider, Box, Button } from '@alifd/next';
 import player from 'StreamCanvasX/player';
-import CanvasPlayer from 'StreamCanvasX/canvasPlayer';
+import CanvasPlayerByVideos from 'StreamCanvasX/canvasPlayerByVideo';
 import mpegts from 'mpegts.js';
 import Hls from 'hls.js';
 
@@ -12,6 +12,10 @@ const HlsDemo = () => {
   const vedio_hls_ref = useRef(null);
   const veido_flv_ref = useRef(null);
   const canvas_ref = useRef(null);
+
+  useEffect(() => {
+    const h = new CanvasPlayerByVideos({ vedio_el: veido_flv_ref?.current, canvas_el: canvas_ref?.current });
+  }, []);
 
   //   const url = 'https://localhost:8080/live/livestream.m3u8';
 
@@ -47,6 +51,17 @@ const HlsDemo = () => {
   };
   return (
     <div gap={20}>
+      <input type="file" id="file-input" accept="video/mp4" onChange={()=>{
+        const files_data = event.target?.files?.[0];
+        if(files_data){
+          let data_url = URL.createObjectURL(files_data);
+          let videoPlayer=veido_flv_ref?.current
+          videoPlayer.src =data_url;
+          videoPlayer.load();
+        }
+      }} />
+
+
       <Box direction="row" spacing={20} />
 
       <Box direction="row" spacing={20}>
