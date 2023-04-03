@@ -4,7 +4,7 @@ import player from 'StreamCanvasX/player';
 import CanvasPlayerByVideos from 'StreamCanvasX/canvasPlayerByVideo';
 import mpegts from 'mpegts.js';
 import Hls from 'hls.js';
-
+import CanvasAudioVisulizer_Processor from "StreamCanvasX/canvasAudioProcess"
 
 const { Cell } = ResponsiveGrid;
 
