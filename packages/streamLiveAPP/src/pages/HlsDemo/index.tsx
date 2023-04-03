@@ -19,6 +19,7 @@ const HlsDemo = () => {
 
   useEffect(() => {
     const h = new CanvasPlayerByVideos({ vedio_el: veido_flv_ref?.current, canvas_el: canvas_ref?.current });
+    loadMediaEvent();
   }, []);
 
   //   const url = 'https://localhost:8080/live/livestream.m3u8';
@@ -34,9 +35,18 @@ const HlsDemo = () => {
     if (video_el) {
       video_el.addEventListener('loadedmetadata', () => {
         // Video metadata is loaded
-
-        alert("load success")
+        console.log('loadMedia success');
+        get_audio_stream();
       });
+    }
+  };
+
+  const get_audio_stream = () => {
+    const video_el = veido_flv_ref?.current;
+    if (video_el) {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const elementSourceNode = audioCtx.createMediaElementSource(video_el);
+
     }
   };
 
