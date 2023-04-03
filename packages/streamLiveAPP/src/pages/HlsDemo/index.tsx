@@ -12,6 +12,8 @@ const HlsDemo = () => {
   const vedio_hls_ref = useRef(null);
   const veido_flv_ref = useRef(null);
   const canvas_ref = useRef(null);
+  const mediaSource = new MediaSource();
+
 
   useEffect(() => {
     const h = new CanvasPlayerByVideos({ vedio_el: veido_flv_ref?.current, canvas_el: canvas_ref?.current });
