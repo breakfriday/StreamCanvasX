@@ -87,7 +87,7 @@ const HlsDemo = () => {
         }
       };
 
-      draw_audio()
+      draw_audio();
     }
   };
 
@@ -108,6 +108,8 @@ const HlsDemo = () => {
     }
   };
 
+
+  // http://117.71.59.159:40012/live/luoxuan.live.flv
   const flv_play = () => {
     if (veido_flv_ref?.current) {
       const video_el = veido_flv_ref.current;
