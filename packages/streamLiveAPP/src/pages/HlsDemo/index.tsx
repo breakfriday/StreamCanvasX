@@ -4,7 +4,7 @@ import player from 'StreamCanvasX/player';
 import CanvasPlayerByVideos from 'StreamCanvasX/canvasPlayerByVideo';
 import mpegts from 'mpegts.js';
 import Hls from 'hls.js';
-import CanvasAudioVisulizer_Processor from "StreamCanvasX/canvasAudioProcess"
+import CanvasAudioVisulizer_Processor from 'StreamCanvasX/canvasAudioProcess';
 
 const { Cell } = ResponsiveGrid;
 
@@ -36,8 +36,11 @@ const HlsDemo = () => {
     if (video_el) {
       video_el.addEventListener('loadedmetadata', () => {
         // Video metadata is loaded
-        console.log('loadMedia success');
-        get_audio_stream();
+        // console.log('loadMedia success');
+        // get_audio_stream();
+
+        const audio_process = new CanvasAudioVisulizer_Processor({ media_el: veido_flv_ref.current!, canvas_el: canvas_audio_ref.current! });
+        audio_process.visulizerDraw()
       });
     }
   };
