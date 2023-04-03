@@ -40,7 +40,7 @@ const HlsDemo = () => {
         // get_audio_stream();
 
         const audio_process = new CanvasAudioVisulizer_Processor({ media_el: veido_flv_ref.current!, canvas_el: canvas_audio_ref.current! });
-        audio_process.visulizerDraw()
+        audio_process.visulizerDraw1()
       });
     }
   };

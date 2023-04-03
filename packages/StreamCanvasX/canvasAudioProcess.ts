@@ -75,22 +75,22 @@ class Audio_Process {
   visulizerDraw1() {
     const bufferLength = this.analyserNode.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
+
     const AnimationFrame = () => {
       requestAnimationFrame(AnimationFrame.bind(this));
-      // 获取音频数据,将音频数据填充到数组当中
+      // 将音频数据填充到数组当中
       this.analyserNode.getByteFrequencyData(dataArray);
 
       // 清除canvas
-      this.canvasContext.fillStyle = 'rgb(255, 255, 255)';
+      this.canvasContext.fillStyle = '#000';
       this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-      // 设置绘制音频数据的样式
       const barWidth = (this.canvas.width / bufferLength) * 2.5;
       let barHeight;
       let x = 0;
 
       for (let i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i] / 2;
+        barHeight = dataArray[i];
 
         const r = barHeight + (25 * (i / bufferLength));
         const g = 250 * (i / bufferLength);
@@ -102,6 +102,7 @@ class Audio_Process {
         x += barWidth + 1;
       }
     };
+
     AnimationFrame();
   }
 }
