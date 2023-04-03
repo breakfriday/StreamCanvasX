@@ -19,6 +19,7 @@ class Audio_Process {
 
   createAudioContext() {
     this.audioContext = new AudioContext();
+    this.analyserNode = this.audioContext.createAnalyser();
   }
 
   setCanvasDom(el: HTMLCanvasElement) {
@@ -37,7 +38,7 @@ class Audio_Process {
   }
 
   visulizerDraw() {
-    requestAnimationFrame(this.visulizerDraw);
+    requestAnimationFrame(this.visulizerDraw.bind(this));
     const bufferLength = this.analyserNode.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
