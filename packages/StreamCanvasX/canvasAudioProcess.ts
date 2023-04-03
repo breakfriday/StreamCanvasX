@@ -38,30 +38,33 @@ class Audio_Process {
   }
 
   visulizerDraw() {
-    requestAnimationFrame(this.visulizerDraw.bind(this));
     const bufferLength = this.analyserNode.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
+    const AnimationFrame = () => {
+      requestAnimationFrame(AnimationFrame.bind(this));
+      // 获取音频数据
+      this.analyserNode.getByteFrequencyData(dataArray);
 
-    // 获取音频数据
-    this.analyserNode.getByteFrequencyData(dataArray);
+      // 清除canvas
+      this.canvasContext.fillStyle = 'rgb(255, 255, 255)';
+      this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-    // 清除canvas
-    this.canvasContext.fillStyle = 'rgb(255, 255, 255)';
-    this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      // 设置绘制音频数据的样式
+      const barWidth = (this.canvas.width / bufferLength) * 2.5;
+      let barHeight;
+      let x = 0;
 
-    // 设置绘制音频数据的样式
-    const barWidth = (this.canvas.width / bufferLength) * 2.5;
-    let barHeight;
-    let x = 0;
+      for (let i = 0; i < bufferLength; i++) {
+        barHeight = dataArray[i] / 2;
 
-    for (let i = 0; i < bufferLength; i++) {
-      barHeight = dataArray[i] / 2;
+        this.canvasContext.fillStyle = 'rgb(0, 0, 0)';
+        this.canvasContext.fillRect(x, this.canvas.height - barHeight, barWidth, barHeight);
 
-      this.canvasContext.fillStyle = 'rgb(0, 0, 0)';
-      this.canvasContext.fillRect(x, this.canvas.height - barHeight, barWidth, barHeight);
-
-      x += barWidth + 1;
-    }
+        x += barWidth + 1;
+      }
+    };
+    AnimationFrame();
+ 
   }
 }
 
