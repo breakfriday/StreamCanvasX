@@ -12,9 +12,10 @@ const HlsDemo = () => {
   const vedio_hls_ref = useRef(null);
   const veido_flv_ref = useRef(null);
   const canvas_ref = useRef(null);
+  const canvas_audio_ref = useRef(null);
   const mediaSource = new MediaSource();
 
-  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  // const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
 
   useEffect(() => {
@@ -44,9 +45,49 @@ const HlsDemo = () => {
   const get_audio_stream = () => {
     const video_el = veido_flv_ref?.current;
     if (video_el) {
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const elementSourceNode = audioCtx.createMediaElementSource(video_el);
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
+      const elementSourceNode = audioContext.createMediaElementSource(video_el);
+      const analyserNode = audioContext.createAnalyser();
+
+
+      elementSourceNode.connect(analyserNode);
+      analyserNode.connect(audioContext.destination);
+
+      const bufferLength = analyserNode.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      console.info(dataArray);
+      const canvas_audio_el = canvas_audio_ref.current!;
+      const canvasContext = canvas_audio_el.getContext('2d');
+
+
+      const draw_audio = () => {
+        requestAnimationFrame(draw_audio);
+
+        // 获取音频数据
+        analyserNode.getByteFrequencyData(dataArray);
+
+        // 清除canvas
+        canvasContext.fillStyle = 'rgb(255, 255, 255)';
+        canvasContext.fillRect(0, 0, canvas_audio_el.width, canvas_audio_el.height);
+
+        // 设置绘制音频数据的样式
+        const barWidth = (canvas_audio_el.width / bufferLength) * 2.5;
+        let barHeight;
+        let x = 0;
+
+        for (let i = 0; i < bufferLength; i++) {
+          barHeight = dataArray[i] / 2;
+
+          canvasContext.fillStyle = 'rgb(0, 0, 0)';
+          canvasContext.fillRect(x, canvas_audio_el.height - barHeight, barWidth, barHeight);
+
+          x += barWidth + 1;
+        }
+      };
+
+      draw_audio()
     }
   };
 
@@ -162,6 +203,11 @@ const HlsDemo = () => {
 
       <div id="canvas-container">
         <canvas ref={canvas_ref} id="canvas" width="800" height="800" />
+      </div>
+
+
+      <div >
+        <canvas ref={canvas_audio_ref} id="canvas" width="800" height="800" />
       </div>
     </div>
   );
