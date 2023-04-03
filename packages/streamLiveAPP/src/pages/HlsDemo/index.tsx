@@ -14,12 +14,31 @@ const HlsDemo = () => {
   const canvas_ref = useRef(null);
   const mediaSource = new MediaSource();
 
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
 
   useEffect(() => {
     const h = new CanvasPlayerByVideos({ vedio_el: veido_flv_ref?.current, canvas_el: canvas_ref?.current });
   }, []);
 
   //   const url = 'https://localhost:8080/live/livestream.m3u8';
+
+  async function decodeAudio(arrayBuffer) {
+    const decodedAudioData = await audioContext.decodeAudioData(arrayBuffer);
+    return decodedAudioData;
+  }
+
+  // 视屏加载完成事件
+  const loadMediaEvent = () => {
+    const video_el = veido_flv_ref?.current;
+    if (video_el) {
+      video_el.addEventListener('loadedmetadata', () => {
+        // Video metadata is loaded
+
+        alert("load success")
+      });
+    }
+  };
 
 
   const hls_play = () => {
