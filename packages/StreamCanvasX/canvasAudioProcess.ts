@@ -57,6 +57,12 @@ class Audio_Process {
       for (let i = 0; i < bufferLength; i++) {
         barHeight = dataArray[i] / 2;
 
+        const r = barHeight + (25 * (i / bufferLength));
+        const g = 250 * (i / bufferLength);
+        const b = 50;
+
+        // this.canvasContext.fillStyle = 'rgb(0, 0, 0)';
+        // this.canvas_context.fillStyle = `rgb(${r},${g},${b})`;
         this.canvasContext.fillStyle = 'rgb(0, 0, 0)';
         this.canvasContext.fillRect(x, this.canvas.height - barHeight, barWidth, barHeight);
 
@@ -86,7 +92,11 @@ class Audio_Process {
       for (let i = 0; i < bufferLength; i++) {
         barHeight = dataArray[i] / 2;
 
-        this.canvasContext.fillStyle = 'rgb(0, 0, 0)';
+        const r = barHeight + (25 * (i / bufferLength));
+        const g = 250 * (i / bufferLength);
+        const b = 50;
+
+        this.canvasContext.fillStyle = `rgb(${r},${g},${b})`;
         this.canvasContext.fillRect(x, this.canvas.height - barHeight, barWidth, barHeight);
 
         x += barWidth + 1;
