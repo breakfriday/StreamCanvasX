@@ -105,6 +105,48 @@ class Audio_Process {
 
     AnimationFrame();
   }
+
+
+  // 时域
+  visulizerDraw2() {
+    const bufferLength = this.analyserNode.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    const AnimationFrame = () => {
+      requestAnimationFrame(AnimationFrame.bind(this));
+      // 获取音频数据
+      this.analyserNode.getByteFrequencyData(dataArray);
+
+
+      this.canvasContext.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      this.canvasContext.lineWidth = 2;
+      this.canvasContext.strokeStyle = 'rgb(0, 255, 0)';
+
+      this.canvasContext.beginPath();
+
+      const sliceWidth = this.canvas.width * 1.0 / bufferLength;
+      let x = 0;
+
+      for (let i = 0; i < bufferLength; i++) {
+        const v = dataArray[i] / 128.0;
+        const y = v * this.canvas.height / 2;
+
+        if (i === 0) {
+          this.canvasContext.moveTo(x, y);
+        } else {
+          this.canvasContext.lineTo(x, y);
+        }
+
+        x += sliceWidth;
+      }
+
+      this.canvasContext.lineTo(this.canvas.width, this.canvas.height / 2);
+      this.canvasContext.stroke();
+    };
+
+    AnimationFrame()
+  }
 }
 
 export default Audio_Process;
