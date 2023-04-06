@@ -160,7 +160,7 @@ class Audio_Process {
 
       // 设置波形图样式
       this.canvasContext.lineWidth = 2;
-      this.canvasContext.strokeStyle = '#2E9AFE';
+      this.canvasContext.strokeStyle = '#7f0';
 
 
       // 绘制波形图
