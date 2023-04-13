@@ -40,7 +40,7 @@ const HlsDemo = () => {
         // get_audio_stream();
 
         const audio_process = new CanvasAudioVisulizer_Processor({ media_el: veido_flv_ref.current!, canvas_el: canvas_audio_ref.current! });
-        audio_process.visulizerDraw3()
+        audio_process.visulizerDraw3();
       });
     }
   };
@@ -121,6 +121,12 @@ const HlsDemo = () => {
         isLive: true,
         url: '//localhost:8080/live/livestream.flv',
       });
+
+      mpegts_player.on(mpegts.Events.METADATA_ARRIVED, () => {
+        // const h = new CanvasPlayerByVideos({ vedio_el: veido_flv_ref?.current, canvas_el: canvas_ref?.current });
+        // loadMediaEvent();
+      });
+
       mpegts_player.attachMediaElement(video_el);
       mpegts_player.load();
       mpegts_player.play();
@@ -212,7 +218,7 @@ const HlsDemo = () => {
 
 
       <div >
-        <canvas ref={canvas_audio_ref} id="canvas" width="800" height="800" />
+        <canvas ref={canvas_audio_ref} id="canvas" width="300" height="300" />
       </div>
     </div>
   );
