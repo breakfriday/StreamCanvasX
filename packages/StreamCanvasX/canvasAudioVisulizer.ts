@@ -7,15 +7,21 @@ class CanvasAudioVisulizer_Processor {
   private dataArray: any;
   private bufferLength: any;
   private analyserNode: AnalyserNode;
+  private contentEl: HTMLElement;
+  private canvasContext: CanvasRenderingContext2D;
+  private loading: string;
+  private audioSourceNode: MediaElementAudioSourceNode;
+  private mediaSource_el: HTMLMediaElement;
 
-  constructor(parmams: { audio_el: HTMLAudioElement; canvas_el: HTMLCanvasElement; canvas_el1: HTMLCanvasElement }) {
-    this.audio = parmams.audio_el;
-    this.canvas = parmams.canvas_el;
-    this.canvas1 = parmams.canvas_el1;
-    this.audioContext = new AudioContext();
-    if (this.canvas) {
-      this.canvas_context = this.canvas.getContext('2d')!;
+  constructor(parmams: { media_el?: HTMLAudioElement; canvas_el?: HTMLCanvasElement; content_el: HTMLElement}) {
+    const { canvas_el, media_el, content_el } = parmams;
+    this.contentEl = content_el;
+    if (canvas_el) {
+      this.setCanvasDom(canvas_el);
     }
+    this.createAudioContext();
+    this.setMediaSource_el(media_el!);
+    this.audioContextConnect();
   }
 
   setAudio(files_data) {
@@ -28,6 +34,25 @@ class CanvasAudioVisulizer_Processor {
 
     this.visulizerDraw();
   }
+
+  createAudioContext() {
+    this.audioContext = new AudioContext();
+    this.analyserNode = this.audioContext.createAnalyser();
+  }
+
+  setCanvasDom(el) {
+    this.canvas = el;
+    this.canvasContext = this.canvas.getContext('2d')!;
+  }
+  setMediaSource_el(el) {
+    this.mediaSource_el = el;
+    this.audioSourceNode = this.audioContext.createMediaElementSource(this.mediaSource_el);
+  }
+  audioContextConnect() {
+    this.audioSourceNode.connect(this.analyserNode);
+    this.analyserNode.connect(this.audioContext.destination);
+  }
+
 
   analyser_channel() {
     // 创建一个音频分析节点，它可以将音频数据转换为频域或时域数据，以便进行可视化
@@ -109,6 +134,72 @@ class CanvasAudioVisulizer_Processor {
     };
 
     AnimationFrame();
+  }
+
+  drawLoading() {
+    const ctx = this.canvasContext;
+    const { canvas } = this;
+
+    // 定义圆的半径和线宽
+    const radius = 50;
+    const lineWidth = 10;
+
+    // 初始化弧形进度条的起始角度和结束角度
+    let startAngle = 0;
+    let endAngle = 0;
+
+    const drawAnimation = () => {
+      // 定义圆心的坐标
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      if (this.loading === 'false') {
+        return false;
+      }
+      // 清除画布内容，准备绘制新的帧
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 绘制背景圆圈
+      ctx.beginPath(); // 开始新路径
+      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI); // 画一个完整的圆
+      ctx.lineWidth = lineWidth; // 设置线宽
+      ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)'; // 设置线条颜色
+      ctx.stroke(); // 描边路径
+
+      // 绘制loading进度弧形
+      ctx.beginPath(); // 开始新路径
+      ctx.arc(centerX, centerY, radius, startAngle * Math.PI, endAngle * Math.PI); // 画一个弧形
+      ctx.lineWidth = lineWidth; // 设置线宽
+      ctx.strokeStyle = 'rgba(50, 150, 255, 1)'; // 设置线条颜色
+      ctx.stroke(); // 描边路径
+
+      // 更新弧形进度条的起始角度和结束角度，用于下一帧的绘制
+      startAngle += 0.01;
+      endAngle += 0.02;
+
+      // 当角度达到2π时，将其重置为0
+      if (startAngle >= 2) {
+        startAngle = 0;
+      }
+
+      if (endAngle >= 2) {
+        endAngle = 0;
+      }
+
+      // 使用requestAnimationFrame()函数递归调用drawLoading()，实现动画效果
+      requestAnimationFrame(drawAnimation);
+    };
+
+
+    drawAnimation();
+  }
+
+  setCanvasSize() {
+    const height = this.contentEl.clientHeight - 30;
+    const width = this.contentEl.clientWidth;
+
+
+    this.canvas.height = height;
+    this.canvas.width = width;
   }
 }
 
