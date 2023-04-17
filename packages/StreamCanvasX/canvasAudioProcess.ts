@@ -185,7 +185,44 @@ class Audio_Process {
       // 循环绘制
       requestAnimationFrame(AnimationFrame.bind(this));
     };
-    AnimationFrame()
+    AnimationFrame();
+  }
+
+  visulizerDraw4() {
+    const bufferLength = this.analyserNode.fftSize;
+    const dataArray = new Float32Array(bufferLength);
+    const AnimationFrame = () => {
+      requestAnimationFrame(AnimationFrame.bind(this));
+      this.analyserNode.getFloatTimeDomainData(dataArray);
+
+      this.canvasContext.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+      this.canvasContext.lineWidth = 2;
+      this.canvasContext.strokeStyle = 'rgb(0, 255, 0)';
+      this.canvasContext.beginPath();
+
+      const sliceWidth = this.canvas.width * 1.0 / bufferLength;
+      let x = 0;
+
+      for (let i = 0; i < bufferLength; i++) {
+        const v = dataArray[i] / 128.0;
+        const y = v * this.canvas.height / 2;
+
+        if (i === 0) {
+          this.canvasContext.moveTo(x, y);
+        } else {
+          this.canvasContext.lineTo(x, y);
+        }
+
+        x += sliceWidth;
+      }
+
+      this.canvasContext.lineTo(this.canvas.width, this.canvas.height / 2);
+      this.canvasContext.stroke();
+    };
+
+    AnimationFrame();
   }
 }
 
