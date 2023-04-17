@@ -218,7 +218,7 @@ const HlsDemo = () => {
 
 
       <div >
-        <canvas ref={canvas_audio_ref} id="canvas" width="300" height="300" />
+        <canvas style={{ background: 'black' }} ref={canvas_audio_ref} id="canvas" width="300" height="300" />
       </div>
     </div>
   );
