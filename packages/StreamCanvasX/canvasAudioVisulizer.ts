@@ -36,6 +36,7 @@ class CanvasAudioVisulizer_Processor {
   }
 
   createAudioContext() {
+    // 创建一个音频分析节点，它可以将音频数据转换为频域或时域数据，以便进行可视化
     this.audioContext = new AudioContext();
     this.analyserNode = this.audioContext.createAnalyser();
   }
@@ -111,7 +112,7 @@ class CanvasAudioVisulizer_Processor {
         this.analyserNode.getByteFrequencyData(this.dataArray);
       }
 
-      requestAnimationFrame(AnimationFrame);
+      requestAnimationFrame(AnimationFrame.bind(this));
     };
 
     AnimationFrame();
@@ -133,6 +134,90 @@ class CanvasAudioVisulizer_Processor {
 
     };
 
+    AnimationFrame();
+  }
+
+
+  // 音域
+  visulizerDraw2() {
+    const bufferLength = this.analyserNode.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    const AnimationFrame = () => {
+      requestAnimationFrame(AnimationFrame.bind(this));
+      // 获取音频数据
+      this.analyserNode.getByteFrequencyData(dataArray);
+
+
+      this.canvasContext.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      this.canvasContext.lineWidth = 2;
+      this.canvasContext.strokeStyle = 'rgb(0, 255, 0)';
+
+      this.canvasContext.beginPath();
+
+      const sliceWidth = this.canvas.width * 1.0 / bufferLength;
+      let x = 0;
+
+      for (let i = 0; i < bufferLength; i++) {
+        const v = dataArray[i] / 128.0;
+        const y = v * this.canvas.height / 2;
+
+        if (i === 0) {
+          this.canvasContext.moveTo(x, y);
+        } else {
+          this.canvasContext.lineTo(x, y);
+        }
+
+        x += sliceWidth;
+      }
+
+      this.canvasContext.lineTo(this.canvas.width, this.canvas.height / 2);
+      this.canvasContext.stroke();
+    };
+
+    AnimationFrame();
+  }
+
+  // 时域
+  visulizerDraw3() {
+    const bufferLength = this.analyserNode.fftSize;
+    const dataArray = new Float32Array(bufferLength);
+    this.loading = 'false';
+
+    const AnimationFrame = () => {
+      this.analyserNode.getFloatTimeDomainData(dataArray);
+
+      // 清除画布
+      this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+      // 设置波形图样式
+      this.canvasContext.lineWidth = 2;
+      this.canvasContext.strokeStyle = '#7f0';
+
+
+      // 绘制波形图
+      this.canvasContext.beginPath();
+      const sliceWidth = this.canvas.width / bufferLength;
+      let x = 0;
+      for (let i = 0; i < bufferLength; i++) {
+        const value = dataArray[i] * this.canvas.height / 2;
+        const y = this.canvas.height / 2 + value;
+
+        if (i === 0) {
+          this.canvasContext.moveTo(x, y);
+        } else {
+          this.canvasContext.lineTo(x, y);
+        }
+
+        x += sliceWidth;
+      }
+      this.canvasContext.lineTo(this.canvas.width, this.canvas.height / 2);
+      this.canvasContext.stroke();
+
+      // 循环绘制
+      requestAnimationFrame(AnimationFrame.bind(this));
+    };
     AnimationFrame();
   }
 
