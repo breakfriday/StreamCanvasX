@@ -11,11 +11,7 @@ const asideMenuConfig = [
     path: '/wsmCanvas',
     icon: 'smile',
   },
-  {
-    name: 'FlvDemo',
-    path: '/flvDemo',
-    icon: 'smile',
-  },
+
   {
     name: 'audioVisulizerDemo',
     path: '/audioVisulizer',
