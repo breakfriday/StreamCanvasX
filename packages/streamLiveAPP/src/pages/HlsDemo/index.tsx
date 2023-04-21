@@ -3,10 +3,10 @@ import { ResponsiveGrid, Divider, Box, Button } from '@alifd/next';
 import CanvasPlayerByVideos from 'StreamCanvasX/canvasPlayerByVideo';
 import mpegts from 'mpegts.js';
 import Hls from 'hls.js';
-import CanvasAudioVisulizer_Processor from 'StreamCanvasX/canvasAudioProcess';
-import fpget from 'lodash/fp/get';
+import CanvasAudioProcess from 'StreamCanvasX/canvasAudioProcess';
+// import fpget from 'lodash/fp/get';
 
-const { Cell } = ResponsiveGrid;
+// const { Cell } = ResponsiveGrid;
 
 const HlsDemo = () => {
   const vedio_hls_ref = useRef<HTMLMediaElement | null>(null);
@@ -25,10 +25,10 @@ const HlsDemo = () => {
 
   //   const url = 'https://localhost:8080/live/livestream.m3u8';
 
-  async function decodeAudio(arrayBuffer) {
-    const decodedAudioData = await audioContext.decodeAudioData(arrayBuffer);
-    return decodedAudioData;
-  }
+  // async function decodeAudio(arrayBuffer) {
+  //   const decodedAudioData = await audioContext.decodeAudioData(arrayBuffer);
+  //   return decodedAudioData;
+  // }
 
   // 视屏加载完成事件
   const loadMediaEvent = () => {
@@ -39,7 +39,7 @@ const HlsDemo = () => {
         // console.log('loadMedia success');
         // get_audio_stream();
 
-        const audio_process = new CanvasAudioVisulizer_Processor({ media_el: veido_flv_ref.current!, canvas_el: canvas_audio_ref.current! });
+        const audio_process = new CanvasAudioProcess({ media_el: veido_flv_ref.current!, canvas_el: canvas_audio_ref.current! });
         audio_process.visulizerDraw3();
       });
     }
@@ -89,7 +89,7 @@ const HlsDemo = () => {
         type="file"
         id="file-input"
         accept="audio/*,video/*"
-        onChange={() => {
+        onChange={(event) => {
           const files_data = event.target?.files?.[0];
           if (files_data) {
             const data_url = URL.createObjectURL(files_data);
