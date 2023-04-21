@@ -1,10 +1,24 @@
-class Audio_Process {
-  private mediaSource_el!: HTMLAudioElement|HTMLVideoElement;
-  private canvas!: HTMLCanvasElement;
-  private audioContext!: AudioContext;
-  private canvasContext!: CanvasRenderingContext2D;
-  private analyserNode: AnalyserNode;
-  private audioSourceNode: MediaElementAudioSourceNode;
+import { WaveDecorator } from './AudioWaveformVisualizerDecorator';
+
+// 定义一个绘图接口
+interface IDrawer {
+  mediaSource_el: HTMLAudioElement|HTMLVideoElement;
+  canvas: HTMLCanvasElement;
+  audioContext: AudioContext;
+  canvasContext: CanvasRenderingContext2D;
+  analyserNode: AnalyserNode;
+  audioSourceNode: MediaElementAudioSourceNode;
+}
+
+
+@WaveDecorator()
+class Audio_Process implements IDrawer {
+  mediaSource_el!: HTMLAudioElement|HTMLVideoElement;
+  canvas!: HTMLCanvasElement;
+  audioContext!: AudioContext;
+  canvasContext!: CanvasRenderingContext2D;
+  analyserNode: AnalyserNode;
+  audioSourceNode: MediaElementAudioSourceNode;
 
   constructor(parmams: { media_el?: HTMLAudioElement; canvas_el?: HTMLCanvasElement}) {
     const { canvas_el, media_el } = parmams;
