@@ -1,15 +1,5 @@
 import { WaveDecorator } from './AudioWaveformVisualizerDecorator';
 
-// 定义一个绘图接口
-interface IDrawer {
-  mediaSource_el: HTMLAudioElement|HTMLVideoElement;
-  canvas: HTMLCanvasElement;
-  audioContext: AudioContext;
-  canvasContext: CanvasRenderingContext2D;
-  analyserNode: AnalyserNode;
-  audioSourceNode: MediaElementAudioSourceNode;
-}
-
 
 @WaveDecorator()
 class Audio_Process implements IDrawer {
