@@ -4,6 +4,7 @@ import CanvasPlayerByVideos from 'StreamCanvasX/canvasPlayerByVideo';
 import mpegts from 'mpegts.js';
 import Hls from 'hls.js';
 import CanvasAudioProcess from 'StreamCanvasX/canvasAudioProcess';
+import { ICombinedDrawer } from 'StreamCanvasX';
 // import fpget from 'lodash/fp/get';
 
 // const { Cell } = ResponsiveGrid;

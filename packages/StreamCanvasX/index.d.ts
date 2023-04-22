@@ -11,8 +11,11 @@ interface IDrawer {
 // 这是音频可视化的 绘图接口
 interface IWaveDecorator{
   drawAudio1: () => void;
-  drawAudio2: () => void;
-  drawAudio3: () => void;
-  drawAudio4: () => void;
+
 
 }
+
+
+interface ICombinedDrawer extends IDrawer, IWaveDecorator {}
+
+export { ICombinedDrawer, IDrawer, IWaveDecorator };
