@@ -1,13 +1,3 @@
-// 定义一个绘图接口
-interface IDrawer {
-  mediaSource_el: HTMLAudioElement|HTMLVideoElement;
-  canvas: HTMLCanvasElement;
-  audioContext: AudioContext;
-  canvasContext: CanvasRenderingContext2D;
-  analyserNode: AnalyserNode;
-  audioSourceNode: MediaElementAudioSourceNode;
-}
-
 
 export function WaveDecorator() {
   return function <T extends { new (...args: any[]): IDrawer }>(targetClass: T, context: ClassDecoratorContext) {
