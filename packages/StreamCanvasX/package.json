@@ -2,6 +2,8 @@
     "name": "StreamCanvasX",
     "version": "0.1.0",
     "description": "StreamCanvasX",
+    "types": "index.d.ts",
+    "main": "build/index.js",
     "dependencies": {
       "react": ">=18.0.0",
       "react-dom": ">=18.0.0",
