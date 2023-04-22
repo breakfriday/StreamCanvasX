@@ -1,4 +1,4 @@
-
+import { IDrawer } from '.';
 export function WaveDecorator() {
   return function <T extends { new (...args: any[]): IDrawer }>(targetClass: T, context: ClassDecoratorContext) {
     return class extends targetClass {
