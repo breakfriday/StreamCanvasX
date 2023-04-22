@@ -1,5 +1,5 @@
 import { WaveDecorator } from './AudioWaveformVisualizerDecorator';
-
+import { IDrawer } from '.';
 
 @WaveDecorator()
 class Audio_Process implements IDrawer {
