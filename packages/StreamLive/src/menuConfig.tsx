@@ -7,12 +7,12 @@ const asideMenuConfig: MenuDataItem[] = [
     icon: <WarningOutlined />,
     children: [
       {
-        name: 'flv&hls',
-        path: '/success',
+        name: 'simplePage',
+        path: '/simpleDemoPage',
       },
       {
-        name: '404',
-        path: '/404',
+        name: 'flv&hls',
+        path: '/hlsDemo',
       },
     ],
   },
