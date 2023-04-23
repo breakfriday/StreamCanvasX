@@ -14,6 +14,10 @@ const asideMenuConfig: MenuDataItem[] = [
         name: 'flv&hls',
         path: '/hlsDemo',
       },
+      {
+        name: 'webrtc_wsam_canvas',
+        path: 'webrtc_wsam_canvas',
+      },
     ],
   },
   {
