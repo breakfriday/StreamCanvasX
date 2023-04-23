@@ -38,6 +38,10 @@ const Dashboard = () => {
       <div id="canvas-container">
         <canvas ref={canvas_ref} id="canvas" width="800" height="800" />
       </div>
+
+
+      <div onClick>this is the test</div>
+
     </div>
   );
 };
