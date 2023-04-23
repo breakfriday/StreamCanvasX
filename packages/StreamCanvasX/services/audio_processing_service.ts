@@ -1,14 +1,9 @@
 import { injectable, inject, Container } from 'inversify';
-import { IDrawer } from '..';
+import { IDrawer, IProcess } from '..';
 
 @injectable()
-class AudioProcessingService implements IDrawer {
-  mediaSource_el!: HTMLAudioElement|HTMLVideoElement;
-  canvas!: HTMLCanvasElement;
-  audioContext!: AudioContext;
-  canvasContext!: CanvasRenderingContext2D;
-  analyserNode: AnalyserNode;
-  audioSourceNode: MediaElementAudioSourceNode;
+class AudioProcessingService implements IProcess {
+  context: IProcess['context'];
 
   constructor(parmams: { media_el?: HTMLAudioElement; canvas_el?: HTMLCanvasElement}) {
     const { canvas_el, media_el } = parmams;
@@ -22,23 +17,23 @@ class AudioProcessingService implements IDrawer {
 
 
   createAudioContext() {
-    this.audioContext = new AudioContext();
-    this.analyserNode = this.audioContext.createAnalyser();
+    this.context.audioContext = new AudioContext();
+    this.context.analyserNode = this.context.audioContext.createAnalyser();
   }
 
   setCanvasDom(el: HTMLCanvasElement) {
-    this.canvas = el;
-    this.canvasContext = this.canvas.getContext('2d')!;
+    this.context.canvas = el;
+    this.context.canvasContext = this.context.canvas.getContext('2d')!;
   }
 
   setMediaSource_el(el) {
-    this.mediaSource_el = el;
-    this.audioSourceNode = this.audioContext.createMediaElementSource(el);
+    this.context.mediaSource_el = el;
+    this.context.audioSourceNode = this.context.audioContext.createMediaElementSource(el);
   }
 
   audioContextConnect() {
-    this.audioSourceNode.connect(this.analyserNode);
-    this.analyserNode.connect(this.audioContext.destination);
+    this.context.audioSourceNode.connect(this.context.analyserNode);
+    this.context.analyserNode.connect(this.context.audioContext.destination);
   }
 }
 
