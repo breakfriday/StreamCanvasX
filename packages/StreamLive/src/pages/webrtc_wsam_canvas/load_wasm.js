@@ -12,6 +12,7 @@ export default function loadWASM() {
     self.fetch('./webdsp_c.wasm')
       .then((response) => response.arrayBuffer())
       .then((buffer) => {
+        debugger
         Module.wasmBinary = buffer;
         // GLOBAL -- create custom event for complete glue script execution
         // Emscripten编译的函数如_grayScale，_malloc等会挂到全局环境下
