@@ -8,6 +8,10 @@ interface IDrawer {
   audioSourceNode: MediaElementAudioSourceNode;
 }
 
+interface IProcess {
+  context: IDrawer;
+}
+
 // 这是音频可视化的 绘图接口
 interface IWaveDecorator{
   drawAudio1: () => void;
@@ -18,4 +22,4 @@ interface IWaveDecorator{
 
 interface ICombinedDrawer extends IDrawer, IWaveDecorator {}
 
-export { ICombinedDrawer, IDrawer, IWaveDecorator };
+export { ICombinedDrawer, IDrawer, IWaveDecorator, IProcess };
