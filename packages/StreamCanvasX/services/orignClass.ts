@@ -5,7 +5,7 @@ import { ServiceA } from './ServiceA';
 export class AppClass {
   logger: ServiceA;
 
-  constructor(@inject(Logger) logger: ServiceA) {
+  constructor(@inject(ServiceA) logger: ServiceA) {
     this.logger = logger;
   }
 
