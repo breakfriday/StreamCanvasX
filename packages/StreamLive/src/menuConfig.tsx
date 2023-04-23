@@ -17,20 +17,20 @@ const asideMenuConfig: MenuDataItem[] = [
     ],
   },
   {
-    name: '工作台',
+    name: 'dashboard',
     path: '/',
     icon: <DashboardOutlined />,
   },
-  {
-    name: '表单',
-    path: '/form',
-    icon: <FormOutlined />,
-  },
-  {
-    name: '列表',
-    path: '/list',
-    icon: <TableOutlined />,
-  },
+  // {
+  //   name: '表单',
+  //   path: '/form',
+  //   icon: <FormOutlined />,
+  // },
+  // {
+  //   name: '列表',
+  //   path: '/list',
+  //   icon: <TableOutlined />,
+  // },
 
 ];
 

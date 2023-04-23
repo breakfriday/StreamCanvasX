@@ -7,14 +7,20 @@
   ],
   "private": true,
   "scripts": {
-    "start": "yarn start:streamLiveApp",
+    "start1": "yarn start:streamLiveApp",
+    "start2": "yarn start:streamLive",
     "start:liveDemo": "cd example/steamLiveDemo&&npm run start ",
-    "start:streamLiveApp": "yarn workspace streamLiveApp start"
+    "start:streamLiveApp": "yarn workspace streamLiveApp start",
+    "start:streamLive": "yarn workspace streamLive start"
   },
   "repository": "git@github.com:breakfriday/canvasTable.git",
   "author": "breakhappy <break_happy@163.com>",
   "license": "MIT",
-  "dependencies": {
-    "@tensorflow-models/coco-ssd": "^2.2.2"
+  "devDependencies": {
+    "@tensorflow-models/coco-ssd": "^2.2.2",
+    "@types/node": "^18.11.17",
+    "eslint": "^8.35.0",
+    "stylelint": "^15.2.0",
+    "typescript": "^4.9.5"
   }
 }
