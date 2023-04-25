@@ -2,7 +2,7 @@ import { injectable, inject, Container } from 'inversify';
 import { ServiceA } from './ServiceA';
 
 @injectable()
-export class AppClass {
+export class OriginSerivce implements IOriginSerivce {
   logger: ServiceA;
 
   constructor(@inject(ServiceA) logger: ServiceA) {
