@@ -130,28 +130,28 @@
     "@antv/util" "^2.0.9"
     react-content-loader "^5.0.4"
 
-"@ant-design/pro-card@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@ant-design/pro-card/-/pro-card-2.4.0.tgz#ddc2d4e69451d08f04b9ca4d0c4b118dea6ce43e"
-  integrity sha512-jZRefQoW89peOdjYQddaxY2mS+HF/hmm48wIIN4LeKTnLbC6fhcy+2PrOlw8orzCNjCdcgOJ8noO9F5MifnQjg==
+"@ant-design/pro-card@^2.4.2":
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/@ant-design/pro-card/-/pro-card-2.4.2.tgz#8a5bfadd4c0a3f3385835103ad0b8d811f1236ac"
+  integrity sha512-3vaXTki4aNX+DTdNi9rvnLH0CqO/TQEATo+YRSv/dGJrO4uRDVK34W6S6qR6uhninTLVlzTJ0790w72GTxCk0g==
   dependencies:
     "@ant-design/icons" "^5.0.0"
-    "@ant-design/pro-provider" "^2.8.0"
-    "@ant-design/pro-utils" "^2.8.0"
+    "@ant-design/pro-provider" "^2.8.2"
+    "@ant-design/pro-utils" "^2.8.2"
     "@babel/runtime" "^7.18.0"
     classnames "^2.2.6"
     omit.js "^2.0.2"
     rc-resize-observer "^1.0.0"
     rc-util "^5.4.0"
 
-"@ant-design/pro-field@^2.6.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@ant-design/pro-field/-/pro-field-2.6.0.tgz#dde16f1dbc258fefe2353ef8210b2a4de4ed3c4b"
-  integrity sha512-YPg/SHoEHz0fWMhizK/nqT7yRm4ALbNkTuCcCYmiaupmnXDOopKJMNpv+7cdBnb5meFRUCDcwgpUbMdr/7D3bw==
+"@ant-design/pro-field@^2.6.2":
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/@ant-design/pro-field/-/pro-field-2.6.2.tgz#d7973ce3984d2e31a56b6ba042045683878bd97d"
+  integrity sha512-080mhmJu1862usIn7TF7gtv3kmX2CHCC/X7ohzZ4o8chUb07VJO6bPiv1Ao/pDVLAFaifz/fJQXmsKXSxfHGcg==
   dependencies:
     "@ant-design/icons" "^5.0.0"
-    "@ant-design/pro-provider" "^2.8.0"
-    "@ant-design/pro-utils" "^2.8.0"
+    "@ant-design/pro-provider" "^2.8.2"
+    "@ant-design/pro-utils" "^2.8.2"
     "@babel/runtime" "^7.18.0"
     "@chenshuai2144/sketch-color" "^1.0.8"
     classnames "^2.2.6"
@@ -161,15 +161,15 @@
     rc-util "^5.4.0"
     swr "^2.0.0"
 
-"@ant-design/pro-form@^2.11.0", "@ant-design/pro-form@^2.2.8":
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/@ant-design/pro-form/-/pro-form-2.11.0.tgz#06fbe318f1cb21bd0ea51e45caf50baea1e1095c"
-  integrity sha512-L2q1DAtujC3qZweguC5gGj0nKNOZ0IzgYqw1ZTVq2G/c+icmJvN05r63wT8R9DEGcvYcDR6U0hTjPZ3S4/Rxaw==
+"@ant-design/pro-form@^2.11.2", "@ant-design/pro-form@^2.2.8":
+  version "2.11.2"
+  resolved "https://registry.yarnpkg.com/@ant-design/pro-form/-/pro-form-2.11.2.tgz#6cfa482e6091b3e2c3018c5fdf06da6599e0c82d"
+  integrity sha512-o7Fb7AabWQYXOYiC8EOE63QmeP6lhd/oikNcVQoKvQB2EqYSIDFrWaRx8OgKF61X6je+dM5+Y/qvlNm0hPMymA==
   dependencies:
     "@ant-design/icons" "^5.0.0"
-    "@ant-design/pro-field" "^2.6.0"
-    "@ant-design/pro-provider" "^2.8.0"
-    "@ant-design/pro-utils" "^2.8.0"
+    "@ant-design/pro-field" "^2.6.2"
+    "@ant-design/pro-provider" "^2.8.2"
+    "@ant-design/pro-utils" "^2.8.2"
     "@babel/runtime" "^7.18.0"
     "@chenshuai2144/sketch-color" "^1.0.7"
     "@umijs/use-params" "^1.0.9"
@@ -182,13 +182,13 @@
     use-media-antd-query "^1.1.0"
 
 "@ant-design/pro-layout@^7.1.6":
-  version "7.12.0"
-  resolved "https://registry.yarnpkg.com/@ant-design/pro-layout/-/pro-layout-7.12.0.tgz#9f934ce5b8242a90af652eb1afc4e0f0010babb3"
-  integrity sha512-GnCW7AGDc6G5Wb+rgcdIab81QmD8jsLEdZgEOF/AiiT1N89X5O6NxtI0IVlsgLoRBBK2U4FYCFM0cVoRT7VIiA==
+  version "7.12.2"
+  resolved "https://registry.yarnpkg.com/@ant-design/pro-layout/-/pro-layout-7.12.2.tgz#d56e71dcead92c9f5a98a117fb92d6499df7d889"
+  integrity sha512-b7TWeadTT1fFkVvmWKdr2VcXdsUJ13Vldzu87Saoi/yCnJMsNJpNTKLOPRxPk0u0fVqG+f06cQV2XH9SY1E4lQ==
   dependencies:
     "@ant-design/icons" "^5.0.0"
-    "@ant-design/pro-provider" "^2.8.0"
-    "@ant-design/pro-utils" "^2.8.0"
+    "@ant-design/pro-provider" "^2.8.2"
+    "@ant-design/pro-utils" "^2.8.2"
     "@babel/runtime" "^7.18.0"
     "@umijs/route-utils" "^4.0.0"
     "@umijs/use-params" "^1.0.9"
@@ -203,10 +203,10 @@
     use-media-antd-query "^1.1.0"
     warning "^4.0.3"
 
-"@ant-design/pro-provider@^2.8.0":
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/@ant-design/pro-provider/-/pro-provider-2.8.0.tgz#96505d466f056be14109d1f9034b4688a76db629"
-  integrity sha512-X7EOkfmX2PP4fRoxOHmC3cZcKJBTYXBkkBbu5Im3HDH36y1JiiW4ctcq3iCCxjYjqLMaeXOwdPKGV8q4zFuDNw==
+"@ant-design/pro-provider@^2.8.2":
+  version "2.8.2"
+  resolved "https://registry.yarnpkg.com/@ant-design/pro-provider/-/pro-provider-2.8.2.tgz#250fcc3f5fffa81cf19ecba8b8d3e1d826275219"
+  integrity sha512-dv6kCBlI903bO0X3k1vUNvTEEjaNgGRpxC59faGctRkFHiGu+1QBXexqOKz+JmV+pzbuYDN3Z4p6ZuYk83C49w==
   dependencies:
     "@ant-design/cssinjs" "^1.9.1"
     "@babel/runtime" "^7.18.0"
@@ -215,16 +215,16 @@
     swr "^2.0.0"
 
 "@ant-design/pro-table@^3.0.17":
-  version "3.6.2"
-  resolved "https://registry.yarnpkg.com/@ant-design/pro-table/-/pro-table-3.6.2.tgz#f07b2ec2e756dc462942e5b9268dfed59d84075b"
-  integrity sha512-xCrSJzvF2wLHKb8UR+sK5Q99EViiOMNrmpomAd0fXLPalTFNw2rsDMAro4HMfVi5dG/nAL2ylZYUcc/PhsBhNA==
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/@ant-design/pro-table/-/pro-table-3.6.4.tgz#92818b06d9497940b3c19372fa81bf79fd6e5634"
+  integrity sha512-nGbSxDey0jqMXot+/R3scRSW8zL7nVUluRzBj3+VLTo6QPzExbi975t0s6CI6SD+dO9V49AUwMRHwCJJYnaGtw==
   dependencies:
     "@ant-design/icons" "^5.0.0"
-    "@ant-design/pro-card" "^2.4.0"
-    "@ant-design/pro-field" "^2.6.0"
-    "@ant-design/pro-form" "^2.11.0"
-    "@ant-design/pro-provider" "^2.8.0"
-    "@ant-design/pro-utils" "^2.8.0"
+    "@ant-design/pro-card" "^2.4.2"
+    "@ant-design/pro-field" "^2.6.2"
+    "@ant-design/pro-form" "^2.11.2"
+    "@ant-design/pro-provider" "^2.8.2"
+    "@ant-design/pro-utils" "^2.8.2"
     "@babel/runtime" "^7.18.0"
     classnames "^2.2.6"
     dayjs "^1.11.4"
@@ -234,13 +234,13 @@
     react-sortable-hoc "^2.0.0"
     use-json-comparison "^1.0.5"
 
-"@ant-design/pro-utils@^2.8.0":
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/@ant-design/pro-utils/-/pro-utils-2.8.0.tgz#eba7e6ee8b91130964328ab46417c47339de580a"
-  integrity sha512-QOBJWkihoixz4mpaQtwbzlFIlGTueDeP6WZVIkbBXX8FM5DGrZ5wh/Ps8jGARavO99jBSxhnOxI54sSOFoBsQg==
+"@ant-design/pro-utils@^2.8.2":
+  version "2.8.2"
+  resolved "https://registry.yarnpkg.com/@ant-design/pro-utils/-/pro-utils-2.8.2.tgz#c3c947a4f54ec6908fa820c5fe5eb3a0cd2a952a"
+  integrity sha512-HD4R5O2i2ex8x3plLSmYKjSwnvWNsOb8XN9briKtSuFwpWQCd0VP6pnqO+WBX86mNropuEVxruUfRZcqnk+w0w==
   dependencies:
     "@ant-design/icons" "^5.0.0"
-    "@ant-design/pro-provider" "^2.8.0"
+    "@ant-design/pro-provider" "^2.8.2"
     "@babel/runtime" "^7.18.0"
     classnames "^2.2.6"
     dayjs "^1.11.4"
@@ -2186,9 +2186,9 @@
   integrity sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==
 
 "@types/react-dom@^18.0.0":
-  version "18.0.11"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.0.11.tgz#321351c1459bc9ca3d216aefc8a167beec334e33"
-  integrity sha512-O38bPbI2CWtgw/OoQoY+BRelw7uysmXbWvw3nLWO21H1HSh+GOlqPuXshJfjmpNlKiiSDG9cc1JZAaMmVdcTlw==
+  version "18.2.0"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.2.0.tgz#374f28074bb117f56f58c4f3f71753bebb545156"
+  integrity sha512-8yQrvS6sMpSwIovhPOwfyNf2Wz6v/B62LFSVYQ85+Rq3tLsBIG7rP5geMxaijTUxSkrO6RzN/IRuIAADYQsleA==
   dependencies:
     "@types/react" "*"
 
@@ -2203,9 +2203,9 @@
     redux "^4.0.0"
 
 "@types/react@*", "@types/react@^18.0.0":
-  version "18.0.38"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.38.tgz#02a23bef8848b360a0d1dceef4432c15c21c600c"
-  integrity sha512-ExsidLLSzYj4cvaQjGnQCk4HFfVT9+EZ9XZsQ8Hsrcn8QNgXtpZ3m9vSIC2MWtx7jHictK6wYhQgGh6ic58oOw==
+  version "18.2.0"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.0.tgz#15cda145354accfc09a18d2f2305f9fc099ada21"
+  integrity sha512-0FLj93y5USLHdnhIhABk83rm8XEGA7kH3cr+YUlvxoUGp1xNt/DINUMvqPxLyOQMzLmZe8i4RTHbvb8MC7NmrA==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
