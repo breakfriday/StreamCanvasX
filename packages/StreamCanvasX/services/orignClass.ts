@@ -10,6 +10,6 @@ export class AppClass {
   }
 
   doSomething(): void {
-    this.logger.logMessage('ss');
+    this.logger.logMessage('asdfasdf');
   }
 }
