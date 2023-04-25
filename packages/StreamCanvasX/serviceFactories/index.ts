@@ -1,4 +1,4 @@
-import createOriginServiceInstance from './create_test_origin_class';
+import createOriginServiceInstance from './createOriginServiceInstance';
 
 
 export { createOriginServiceInstance };
