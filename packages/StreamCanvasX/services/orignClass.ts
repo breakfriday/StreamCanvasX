@@ -3,7 +3,7 @@ import { ServiceA } from './ServiceA';
 import { TYPES } from '../serviceFactories/symbol';
 
 @injectable()
-export class OriginSerivce implements IOriginSerivce {
+export class OriginSerivce {
   logger: ServiceA;
 
   constructor(@inject(TYPES.IServiceA) logger: ServiceA) {
