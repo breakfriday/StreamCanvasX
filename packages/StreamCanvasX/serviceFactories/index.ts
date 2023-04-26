@@ -1,4 +1,4 @@
 import createOriginServiceInstance from './createOriginServiceInstance';
+import createAudioProcessingService from './createAudioProcessInstance';
 
-
-export { createOriginServiceInstance };
+export { createOriginServiceInstance, createAudioProcessingService };
