@@ -1,6 +1,7 @@
 import { container1 } from '../container';
 import AudioProcessingService from '../services/audioProcessingService';
 import { TYPES } from './symbol';
+import { IAudioProcessingService } from '../types/services';
 
 
 container1.bind<IAudioProcessingService>(TYPES.IAudioProcessingService).to(AudioProcessingService);
