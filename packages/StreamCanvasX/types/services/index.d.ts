@@ -1,4 +1,4 @@
-interface IDrawer {
+export interface IDrawer {
     mediaSource_el: HTMLAudioElement | HTMLVideoElement;
     canvas: HTMLCanvasElement;
     audioContext: AudioContext;
@@ -7,31 +7,31 @@ interface IDrawer {
     audioSourceNode: MediaElementAudioSourceNode;
   }
 
-  interface IProcess {
+  export interface IProcess {
     context: IDrawer;
   }
 
   // 这是音频可视化的 绘图接口
-  interface IWaveDecorator{
+  export interface IWaveDecorator{
     drawAudio1: () => void;
 
 
   }
 
 
-interface IOriginSerivce {
+export interface IOriginSerivce {
     logger: IServiceA;
 
 
     doSomething: () => void;
   }
 
-interface IServiceA {
+export interface IServiceA {
     logMessage: (message: string) => void;
   }
 
 
-interface IAudioProcessingService{
+export interface IAudioProcessingService{
   context: IProcess['context'];
 
 }
