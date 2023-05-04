@@ -26,6 +26,10 @@ export interface IOriginSerivce {
     doSomething: () => void;
   }
 
+export interface IOriginSerivceFactory{
+  (Name: string): IOriginSerivce;
+}
+
 export interface IServiceA {
     logMessage: (message: string) => void;
   }
