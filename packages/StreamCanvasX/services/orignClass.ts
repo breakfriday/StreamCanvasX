@@ -6,8 +6,12 @@ import { TYPES } from '../serviceFactories/symbol';
 export class OriginSerivce {
   logger: ServiceA;
 
-  constructor(@inject(TYPES.IServiceA) logger: ServiceA) {
+  constructor(
+   @inject(TYPES.IServiceA) logger: ServiceA,
+   name: string,
+   ) {
     this.logger = logger;
+    alert(name);
   }
 
   doSomething(): void {
