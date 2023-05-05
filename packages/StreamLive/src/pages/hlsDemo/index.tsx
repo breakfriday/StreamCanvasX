@@ -5,7 +5,7 @@ import CanvasPlayerByVideos from 'StreamCanvasX/canvasPlayerByVideo';
 import mpegts from 'mpegts.js';
 import Hls from 'hls.js';
 import CanvasAudioProcess from 'StreamCanvasX/canvasAudioProcess';
-// import { createAudioProcessingService } from 'StreamCanvasX/serviceFactories/index';
+import { createAudioProcessingServiceInstance } from 'StreamCanvasX/serviceFactories/index';
 import { ICombinedDrawer } from 'StreamCanvasX';
 
 
@@ -40,7 +40,8 @@ const HlsDemo = () => {
         // console.log('loadMedia success');
         // get_audio_stream();
 
-        const audio_process = new CanvasAudioProcess({ media_el: veido_flv_ref.current!, canvas_el: canvas_audio_ref.current! });
+       // const audio_process = new CanvasAudioProcess({ media_el: veido_flv_ref.current!, canvas_el: canvas_audio_ref.current! });
+        const audio_process = createAudioProcessingServiceInstance({ media_el: veido_flv_ref.current!, canvas_el: canvas_audio_ref.current! });
         audio_process.visulizerDraw3();
       });
     }
