@@ -1,10 +1,10 @@
 export interface IDrawer {
-    mediaSource_el: HTMLAudioElement | HTMLVideoElement;
-    canvas: HTMLCanvasElement;
-    audioContext: AudioContext;
-    canvasContext: CanvasRenderingContext2D;
-    analyserNode: AnalyserNode;
-    audioSourceNode: MediaElementAudioSourceNode;
+    mediaSource_el?: HTMLAudioElement | HTMLVideoElement;
+    canvas?: HTMLCanvasElement;
+    audioContext?: AudioContext;
+    canvasContext?: CanvasRenderingContext2D;
+    analyserNode?: AnalyserNode;
+    audioSourceNode?: MediaElementAudioSourceNode;
   }
 
   export interface IProcess {
