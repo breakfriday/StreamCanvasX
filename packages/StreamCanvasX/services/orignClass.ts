@@ -8,10 +8,10 @@ export class OriginSerivce {
 
   constructor(
    @inject(TYPES.IServiceA) logger: ServiceA,
-   name: string,
+   params,
+
    ) {
     this.logger = logger;
-    alert(name);
   }
 
   doSomething(): void {
