@@ -15,7 +15,7 @@ const SimplePage = () => {
         player(el);
       }
 
-      let h = createOriginServiceInstance();
+      let h = createOriginServiceInstance('geoio');
       h.doSomething();
       const canvas_player = new CanvasPlayer({ canvas_el: canvas_ref?.current, vedio_el: vedio_ref?.current });
     }
