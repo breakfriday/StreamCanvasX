@@ -39,10 +39,11 @@ const HlsDemo = () => {
       let { videoHeight, videoWidth } = video_el;
 
 
+      // 计算最大公约数 （数学上求最大公约数的方法是“辗转相除法”，就是用一个数除以另一个数（不需要知道大小），取余数，再用被除数除以余数再取余，再用新的被除数除以新的余数再取余，直到余数为0，最后的被除数就是最大公约数）
       function gcd(a, b) {
         return b === 0 ? a : gcd(b, a % b);
       }
-         // 计算最大公约数
+
      let greatestCommonDivisor = gcd(videoWidth, videoHeight);
 
   // 计算宽高比
@@ -52,7 +53,6 @@ const HlsDemo = () => {
    let ratio = `${aspectRatioWidth}:${aspectRatioHeight}`;
 
 
-       // const audio_process = new CanvasAudioProcess({ media_el: veido_flv_ref.current!, canvas_el: canvas_audio_ref.current! });
         const audio_process = createAudioProcessingServiceInstance({ media_el: veido_flv_ref.current!, canvas_el: canvas_audio_ref.current! });
         audio_process.visulizerDraw3();
       });
