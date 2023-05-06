@@ -10,8 +10,8 @@ import { ICombinedDrawer } from 'StreamCanvasX';
 
 
 const HlsDemo = () => {
-  const vedio_hls_ref = useRef<HTMLMediaElement | null>(null);
-  const veido_flv_ref = useRef<HTMLMediaElement | null>(null);
+  const vedio_hls_ref = useRef<HTMLVideoElement | null>(null);
+  const veido_flv_ref = useRef<HTMLVideoElement | null>(null);
   const canvas_ref = useRef<HTMLCanvasElement | null>(null);
   const canvas_audio_ref = useRef(null);
   const mediaSource = new MediaSource();
@@ -20,7 +20,7 @@ const HlsDemo = () => {
 
 
   useEffect(() => {
-    const h = new CanvasPlayerByVideos({ vedio_el: veido_flv_ref?.current, canvas_el: canvas_ref?.current });
+    const h = new CanvasPlayerByVideos({ vedio_el: veido_flv_ref?.current!, canvas_el: canvas_ref?.current! });
     loadMediaEvent();
   }, []);
 
@@ -36,9 +36,21 @@ const HlsDemo = () => {
     const video_el = veido_flv_ref?.current;
     if (video_el) {
       video_el.addEventListener('loadedmetadata', () => {
-        // Video metadata is loaded
-        // console.log('loadMedia success');
-        // get_audio_stream();
+      let { videoHeight, videoWidth } = video_el;
+
+
+      function gcd(a, b) {
+        return b === 0 ? a : gcd(b, a % b);
+      }
+         // 计算最大公约数
+     let greatestCommonDivisor = gcd(videoWidth, videoHeight);
+
+  // 计算宽高比
+   let aspectRatioWidth = videoWidth / greatestCommonDivisor;
+   let aspectRatioHeight = videoHeight / greatestCommonDivisor;
+
+   let ratio = `${aspectRatioWidth}:${aspectRatioHeight}`;
+
 
        // const audio_process = new CanvasAudioProcess({ media_el: veido_flv_ref.current!, canvas_el: canvas_audio_ref.current! });
         const audio_process = createAudioProcessingServiceInstance({ media_el: veido_flv_ref.current!, canvas_el: canvas_audio_ref.current! });
@@ -72,7 +84,7 @@ const HlsDemo = () => {
       const mpegts_player = mpegts.createPlayer({
         type: 'flv', // could also be mpegts, m2ts, flv
         isLive: true,
-        url: '//localhost:8080/live/livestream.flv',
+        url: 'http://localhost:8080/live/livestream.flv',
       });
 
       mpegts_player.on(mpegts.Events.METADATA_ARRIVED, () => {
