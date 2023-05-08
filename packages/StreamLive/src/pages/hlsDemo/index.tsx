@@ -5,8 +5,9 @@ import CanvasPlayerByVideos from 'StreamCanvasX/canvasPlayerByVideo';
 import mpegts from 'mpegts.js';
 import Hls from 'hls.js';
 import CanvasAudioProcess from 'StreamCanvasX/canvasAudioProcess';
-import { createAudioProcessingServiceInstance } from 'StreamCanvasX/serviceFactories/index';
+import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'StreamCanvasX/serviceFactories/index';
 import { ICombinedDrawer } from 'StreamCanvasX';
+import mainPlayerService from 'StreamCanvasX/services/mainCanvasPlayer';
 
 
 const HlsDemo = () => {
@@ -14,13 +15,15 @@ const HlsDemo = () => {
   const veido_flv_ref = useRef<HTMLVideoElement | null>(null);
   const canvas_ref = useRef<HTMLCanvasElement | null>(null);
   const canvas_audio_ref = useRef(null);
+  let streamPlayerRef = useRef<mainPlayerService | null>(null);
   const mediaSource = new MediaSource();
 
   // const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
 
   useEffect(() => {
-    const h = new CanvasPlayerByVideos({ vedio_el: veido_flv_ref?.current!, canvas_el: canvas_ref?.current! });
+    const streamPlayer = createMainPlayerInstance({ vedio_el: veido_flv_ref?.current!, canvas_el: canvas_ref?.current! });
+    streamPlayerRef.current = streamPlayer;
     loadMediaEvent();
   }, []);
 
@@ -104,14 +107,16 @@ const HlsDemo = () => {
         id="file-input"
         accept="audio/*,video/*"
         onChange={(event) => {
-          const files_data = event.target?.files?.[0];
+          const streamPlayer = streamPlayerRef.current;
+          const files_data = event.target?.files?.[0]; // 返回file对象， 继承自blob对象。
           if (files_data) {
-            const data_url = URL.createObjectURL(files_data);
-            const videoPlayer = veido_flv_ref?.current;
-            if (videoPlayer) {
-              videoPlayer.src = data_url;
-              videoPlayer.load();
-            }
+            streamPlayer?.set_blob_url(files_data);
+            // const data_url = URL.createObjectURL(files_data); // 转成blob url
+            // const videoPlayer = veido_flv_ref?.current;
+            // if (videoPlayer) {
+            //   videoPlayer.src = data_url;
+            //   videoPlayer.load();
+            // }
           }
         }}
       />
