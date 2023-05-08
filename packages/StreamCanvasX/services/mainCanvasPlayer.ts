@@ -1,4 +1,6 @@
 import { injectable } from 'inversify';
+import mpegts from 'mpegts.js';
+import { ImainPlayerService } from '../types/services/index';
 
 @injectable()
 class mainPlayerService {
@@ -20,6 +22,27 @@ class mainPlayerService {
         },
         false,
       );
+    }
+    createFlvPlayer(parms: Parameters<ImainPlayerService['createFlvPlayer']>[0]) {
+      let { type, isLive, url } = parms;
+      let videoEl = this.video;
+
+      if (videoEl) {
+        const mpegtsPlayer = mpegts.createPlayer({
+          type: type!, // could also be mpegts, m2ts, flv
+          isLive: isLive,
+          url: url,
+        });
+
+        // mpegts_player.on(mpegts.Events.METADATA_ARRIVED, () => {
+        //   // const h = new CanvasPlayerByVideos({ vedio_el: veido_flv_ref?.current, canvas_el: canvas_ref?.current });
+        //   // loadMediaEvent();
+        // });
+
+        mpegtsPlayer.attachMediaElement(videoEl);
+        mpegtsPlayer.load();
+        mpegtsPlayer.play();
+      }
     }
 
     set_blob_url(filedata: File) {

@@ -82,24 +82,30 @@ const HlsDemo = () => {
 
   // http://117.71.59.159:40012/live/luoxuan.live.flv
   const flv_play = () => {
-    if (veido_flv_ref?.current) {
-      const video_el = veido_flv_ref.current;
-      const mpegts_player = mpegts.createPlayer({
-        type: 'flv', // could also be mpegts, m2ts, flv
-        isLive: true,
-        url: 'http://localhost:8080/live/livestream.flv',
-      });
+    let streamPlayer = streamPlayerRef.current;
+    streamPlayer?.createFlvPlayer({
+       type: 'flv', // could also be mpegts, m2ts, flv
+      isLive: true,
+      url: 'http://localhost:8080/live/livestream.flv',
+  });
+    // if (veido_flv_ref?.current) {
+    //   const video_el = veido_flv_ref.current;
+    //   const mpegts_player = mpegts.createPlayer({
+    //     type: 'flv', // could also be mpegts, m2ts, flv
+    //     isLive: true,
+    //     url: 'http://localhost:8080/live/livestream.flv',
+    //   });
 
-      mpegts_player.on(mpegts.Events.METADATA_ARRIVED, () => {
-        // const h = new CanvasPlayerByVideos({ vedio_el: veido_flv_ref?.current, canvas_el: canvas_ref?.current });
-        // loadMediaEvent();
-      });
+    //   mpegts_player.on(mpegts.Events.METADATA_ARRIVED, () => {
+    //     // const h = new CanvasPlayerByVideos({ vedio_el: veido_flv_ref?.current, canvas_el: canvas_ref?.current });
+    //     // loadMediaEvent();
+    //   });
 
-      mpegts_player.attachMediaElement(video_el);
-      mpegts_player.load();
-      mpegts_player.play();
-    }
-  };
+    //   mpegts_player.attachMediaElement(video_el);
+    //   mpegts_player.load();
+    //   mpegts_player.play();
+    };
+
   return (
     <div>
       <input
@@ -107,17 +113,9 @@ const HlsDemo = () => {
         id="file-input"
         accept="audio/*,video/*"
         onChange={(event) => {
-          const streamPlayer = streamPlayerRef.current;
+          const streamPlayer = streamPlayerRef.current!;
           const files_data = event.target?.files?.[0]; // 返回file对象， 继承自blob对象。
-          if (files_data) {
-            streamPlayer?.set_blob_url(files_data);
-            // const data_url = URL.createObjectURL(files_data); // 转成blob url
-            // const videoPlayer = veido_flv_ref?.current;
-            // if (videoPlayer) {
-            //   videoPlayer.src = data_url;
-            //   videoPlayer.load();
-            // }
-          }
+          files_data ? streamPlayer.set_blob_url(files_data) : '';
         }}
       />
 

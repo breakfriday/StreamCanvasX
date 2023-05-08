@@ -1,6 +1,6 @@
 // 定义一个播放器 process接口
 interface IDrawer {
-  mediaSource_el: HTMLAudioElement|HTMLVideoElement;
+  mediaSource_el: HTMLAudioElement | HTMLVideoElement;
   canvas: HTMLCanvasElement;
   audioContext: AudioContext;
   canvasContext: CanvasRenderingContext2D;
