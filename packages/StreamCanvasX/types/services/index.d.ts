@@ -39,3 +39,16 @@ export interface IAudioProcessingService{
   context: IProcess['context'];
 
 }
+
+
+ interface playerParms{
+  type: string; isLive: boolean; url: string;
+}
+
+
+export interface ImainPlayerService{
+ createFlvPlayer: (parms: Partial<playerParms>) => void;
+ set_blob_url: (filedata: File) => void;
+ analyzeCanvas: () => void;
+
+}
