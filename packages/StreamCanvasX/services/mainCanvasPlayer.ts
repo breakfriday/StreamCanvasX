@@ -22,6 +22,11 @@ class mainPlayerService {
       );
     }
 
+    set_blob_url(filedata: File) {
+      let blobUrl = URL.createObjectURL(filedata);
+      this.video.src = blobUrl;
+      this.video.load();
+    }
 
     analyzeCanvas() {
       if (this.video.ended || this.video.paused) {
