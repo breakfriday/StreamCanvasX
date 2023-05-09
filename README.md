@@ -1,7 +1,9 @@
 ## ✨ Quick Start
 
 ```
-yarn start
+yarn
+
+npm run start2
 ```
 
 <!-- http://localhost:3333/#/racingGame  : car_game
