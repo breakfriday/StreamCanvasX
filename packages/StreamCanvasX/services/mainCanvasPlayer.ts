@@ -32,17 +32,26 @@ class mainPlayerService {
           type: type!, // could also be mpegts, m2ts, flv
           isLive: isLive,
           url: url,
+          hasAudio: false,
         });
-
-        // mpegts_player.on(mpegts.Events.METADATA_ARRIVED, () => {
-        //   // const h = new CanvasPlayerByVideos({ vedio_el: veido_flv_ref?.current, canvas_el: canvas_ref?.current });
-        //   // loadMediaEvent();
-        // });
-
         mpegtsPlayer.attachMediaElement(videoEl);
         mpegtsPlayer.load();
         mpegtsPlayer.play();
       }
+    }
+
+    setConfig() {
+
+    }
+
+    load() {
+      this.video.load();
+    }
+    play() {
+      this.video.play();
+    }
+    paused() {
+      this.video.pause();
     }
 
     set_blob_url(filedata: File) {

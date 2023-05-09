@@ -84,26 +84,10 @@ const HlsDemo = () => {
   const flv_play = () => {
     let streamPlayer = streamPlayerRef.current;
     streamPlayer?.createFlvPlayer({
-       type: 'flv', // could also be mpegts, m2ts, flv
+      type: 'flv', // could also be mpegts, m2ts, flv
       isLive: true,
-      url: 'http://localhost:8080/live/livestream.flv',
+      url: 'http://120.26.38.129:42021/rtp/7F06AB01.live.flv',
   });
-    // if (veido_flv_ref?.current) {
-    //   const video_el = veido_flv_ref.current;
-    //   const mpegts_player = mpegts.createPlayer({
-    //     type: 'flv', // could also be mpegts, m2ts, flv
-    //     isLive: true,
-    //     url: 'http://localhost:8080/live/livestream.flv',
-    //   });
-
-    //   mpegts_player.on(mpegts.Events.METADATA_ARRIVED, () => {
-    //     // const h = new CanvasPlayerByVideos({ vedio_el: veido_flv_ref?.current, canvas_el: canvas_ref?.current });
-    //     // loadMediaEvent();
-    //   });
-
-    //   mpegts_player.attachMediaElement(video_el);
-    //   mpegts_player.load();
-    //   mpegts_player.play();
     };
 
   return (
