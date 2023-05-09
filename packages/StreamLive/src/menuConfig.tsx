@@ -15,6 +15,10 @@ const asideMenuConfig: MenuDataItem[] = [
         path: '/hlsDemo',
       },
       {
+        name: 'customerPlayers',
+        path: '/customerPlayers',
+      },
+      {
         name: 'webrtc_wsam_canvas',
         path: 'webrtc_wsam_canvas',
       },
