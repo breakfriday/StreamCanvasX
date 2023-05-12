@@ -86,7 +86,7 @@ const HlsDemo = () => {
     streamPlayer?.createFlvPlayer({
       type: 'flv', // could also be mpegts, m2ts, flv
       isLive: true,
-      url: 'http://120.26.38.129:42021/rtp/7F06AB01.live.flv',
+      url: 'http://localhost:8080/live/livestream.flv',
   });
     };
 
@@ -145,6 +145,13 @@ const HlsDemo = () => {
                 flv_play();
               }}
             >flv 拉流
+            </Button>
+
+            <Button
+              onClick={() => {
+               streamPlayerRef.current?.reoload();
+              }}
+            >reload
             </Button>
 
           </div>
