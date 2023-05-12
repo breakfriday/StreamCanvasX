@@ -29,9 +29,22 @@ class AudioProcessingService {
     this.context.audioSourceNode = this.context.audioContext!.createMediaElementSource(el);
   }
 
+  resetAudioContextConnec() {
+    this.context.audioSourceNode?.disconnect();
+    this.audioContextConnect();
+  }
+
   audioContextConnect() {
     this.context.audioSourceNode!.connect(this.context.analyserNode!);
     this.context.analyserNode!.connect(this.context.audioContext!.destination);
+  }
+
+  mute(parm) {
+    if (parm === true) {
+      this.context.analyserNode!.disconnect(this.context.audioContext!.destination);
+    } else {
+      this.context.analyserNode!.connect(this.context.audioContext!.destination);
+    }
   }
 
   visulizerDraw() {
