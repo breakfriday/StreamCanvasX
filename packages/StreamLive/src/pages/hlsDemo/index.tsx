@@ -56,7 +56,7 @@ const HlsDemo = () => {
    let ratio = `${aspectRatioWidth}:${aspectRatioHeight}`;
 
 
-        const audio_process = createAudioProcessingServiceInstance({ media_el: veido_flv_ref.current!, canvas_el: canvas_audio_ref.current! });
+        const audio_process = new CanvasAudioProcess({ media_el: veido_flv_ref.current!, canvas_el: canvas_audio_ref.current! });
         audio_process.visulizerDraw3();
       });
     }
