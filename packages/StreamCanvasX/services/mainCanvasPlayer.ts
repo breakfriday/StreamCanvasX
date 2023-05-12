@@ -34,14 +34,21 @@ class mainPlayerService {
           type: type!, // could also be mpegts, m2ts, flv
           isLive: isLive,
           url: url,
-          hasAudio: false,
+          hasAudio: true,
         });
         this.mpegtsPlayer.attachMediaElement(videoEl);
         this.mpegtsPlayer.load();
         this.mpegtsPlayer.play();
 
         this.mpegtsPlayer.on(mpegts.Events.ERROR, (error, detailError) => {
-          this.reoload();
+          if (error === mpegts.ErrorTypes.NETWORK_ERROR) {
+            if (detailError === mpegts.ErrorDetails.NETWORK_UNRECOVERABLE_EARLY_EOF) {
+              this.reoload();
+            }
+            if (detailError === mpegts.ErrorDetails.NETWORK_TIMEOUT) {
+              return false;
+            }
+          }
         });
       }
     }
