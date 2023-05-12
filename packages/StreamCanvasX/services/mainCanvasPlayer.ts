@@ -1,12 +1,14 @@
 import { injectable } from 'inversify';
 import mpegts from 'mpegts.js';
 import { ImainPlayerService } from '../types/services/index';
+import Mpegts from 'mpegts.js';
 
 @injectable()
 class mainPlayerService {
     private video!: HTMLVideoElement;
     private canvas!: HTMLCanvasElement;
     private context!: CanvasRenderingContext2D;
+    private mpegtsPlayer: Mpegts.Player;
 
     constructor(parmams: { vedio_el: HTMLVideoElement; canvas_el: HTMLCanvasElement }) {
       this.video = parmams.vedio_el;
@@ -28,15 +30,19 @@ class mainPlayerService {
       let videoEl = this.video;
 
       if (videoEl) {
-        const mpegtsPlayer = mpegts.createPlayer({
+        this.mpegtsPlayer = mpegts.createPlayer({
           type: type!, // could also be mpegts, m2ts, flv
           isLive: isLive,
           url: url,
           hasAudio: false,
         });
-        mpegtsPlayer.attachMediaElement(videoEl);
-        mpegtsPlayer.load();
-        mpegtsPlayer.play();
+        this.mpegtsPlayer.attachMediaElement(videoEl);
+        this.mpegtsPlayer.load();
+        this.mpegtsPlayer.play();
+
+        this.mpegtsPlayer.on(mpegts.Events.ERROR, (error, detailError) => {
+          this.reoload();
+        });
       }
     }
 
@@ -45,13 +51,21 @@ class mainPlayerService {
     }
 
     load() {
-      this.video.load();
+      this.mpegtsPlayer.load();
     }
     play() {
-      this.video.play();
+      this.mpegtsPlayer.play();
     }
     paused() {
-      this.video.pause();
+      this.mpegtsPlayer.pause();
+    }
+
+    reoload() {
+       this.mpegtsPlayer.unload();
+       this.mpegtsPlayer.detachMediaElement();
+       this.mpegtsPlayer.attachMediaElement(this.video);
+      this.mpegtsPlayer.load();
+      this.mpegtsPlayer.play();
     }
 
     set_blob_url(filedata: File) {
