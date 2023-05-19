@@ -1,6 +1,10 @@
 import { IProcess } from '../types/services';
 class AudioProcessingService {
   context: IProcess['context'];
+  dataArray: Float32Array;
+  bufferLength: number;
+  bufferData: Float32Array; // 时域 缓存
+  bufferDataLength: number;
 
   constructor(parmams: { media_el?: HTMLAudioElement; canvas_el?: HTMLCanvasElement}) {
     const { canvas_el, media_el } = parmams;
@@ -17,6 +21,32 @@ class AudioProcessingService {
   createAudioContext() {
     this.context.audioContext = new AudioContext();
     this.context.analyserNode = this.context.audioContext.createAnalyser();
+
+    this.bufferLength = this.context.analyserNode!.fftSize;
+    this.dataArray = new Float32Array(this.bufferLength);
+    this.setBufferData();
+  }
+
+  setBufferData() {
+       // 根据 AudioContext 的采样率、所需的缓存时间和 FFT 大小来设置缓存区大小
+       this.bufferDataLength = Math.ceil(5 * this.context.audioContext.sampleRate / this.dataArray.length) * this.dataArray.length;
+       this.bufferData = new Float32Array(this.bufferDataLength);
+  }
+
+  updateBufferData() {
+    let { dataArray, bufferData } = this;
+    let { bufferDataLength } = this;
+      // 将旧的数据向前移动
+    bufferData.copyWithin(0, dataArray.length);
+    this.context.analyserNode?.getFloatTimeDomainData(dataArray);
+    // 将新的数据添加到缓存的末尾
+    bufferData.set(dataArray, bufferDataLength - dataArray.length);
+    // 每帧都更新缓存
+    requestAnimationFrame(this.updateBufferData.bind(this));
+  }
+
+  drawWithBufferData() {
+
   }
 
   setCanvasDom(el: HTMLCanvasElement) {
@@ -159,8 +189,8 @@ class AudioProcessingService {
   }
 
   visulizerDraw3() {
-    const bufferLength = this.context.analyserNode!.fftSize;
-    const dataArray = new Float32Array(bufferLength);
+    const { bufferLength } = this;
+    const { dataArray } = this;
 
     const AnimationFrame = () => {
       this.context.analyserNode!.getFloatTimeDomainData(dataArray);
