@@ -46,7 +46,40 @@ class AudioProcessingService {
   }
 
   drawWithBufferData() {
+    let dataArray = this.bufferData;
+    let bufferLength = this.bufferDataLength;
+    const AnimationFrame = () => {
+      // 清除画布
+      this.context.canvasContext!.clearRect(0, 0, this.context.canvas!.width, this.context.canvas!.height);
 
+      // 设置波形图样式
+      this.context.canvasContext!.lineWidth = 2;
+      this.context.canvasContext!.strokeStyle = '#7f0';
+
+
+      // 绘制波形图
+      this.context.canvasContext!.beginPath();
+      const sliceWidth = this.context.canvas!.width / bufferLength;
+      let x = 0;
+      for (let i = 0; i < bufferLength; i++) {
+        const value = dataArray[i] * this.context.canvas!.height / 2;
+        const y = this.context.canvas!.height / 2 + value;
+
+        if (i === 0) {
+          this.context.canvasContext!.moveTo(x, y);
+        } else {
+          this.context.canvasContext!.lineTo(x, y);
+        }
+
+        x += sliceWidth;
+      }
+      this.context.canvasContext!.lineTo(this.context.canvas!.width, this.context.canvas!.height / 2);
+      this.context.canvasContext!.stroke();
+
+      // 循环绘制
+      requestAnimationFrame(AnimationFrame.bind(this));
+    };
+    AnimationFrame();
   }
 
   setCanvasDom(el: HTMLCanvasElement) {
