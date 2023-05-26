@@ -13,8 +13,8 @@
           "tagsPath": "/tags",
           "isLast": true,
           "routePriority": -1,
-          "contentPath": "/home/break_happy/project/stream8/packages/pkg1/docs",
-          "contentPathLocalized": "/home/break_happy/project/stream8/packages/pkg1/i18n/zh-Hans/docusaurus-plugin-content-docs/current",
+          "contentPath": "/home/break_happy/project/stream8/packages/StreamCanvasX/docs",
+          "contentPathLocalized": "/home/break_happy/project/stream8/packages/StreamCanvasX/i18n/zh-Hans/docusaurus-plugin-content-docs/current",
           "docs": [
             {
               "unversionedId": "index",
