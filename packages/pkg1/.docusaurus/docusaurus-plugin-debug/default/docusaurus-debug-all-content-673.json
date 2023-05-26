@@ -1,0 +1,72 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "loadedVersions": [
+        {
+          "versionName": "current",
+          "label": "Next",
+          "banner": null,
+          "badge": false,
+          "noIndex": false,
+          "className": "docs-version-current",
+          "path": "/",
+          "tagsPath": "/tags",
+          "isLast": true,
+          "routePriority": -1,
+          "contentPath": "/home/break_happy/project/stream8/packages/pkg1/docs",
+          "contentPathLocalized": "/home/break_happy/project/stream8/packages/pkg1/i18n/zh-Hans/docusaurus-plugin-content-docs/current",
+          "docs": [
+            {
+              "unversionedId": "index",
+              "id": "index",
+              "title": "index",
+              "description": "",
+              "source": "@site/docs/index.md",
+              "sourceDirName": ".",
+              "slug": "/",
+              "permalink": "/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 0,
+              "frontMatter": {
+                "sidebar_label": "首页",
+                "sidebar_position": 0
+              },
+              "sidebar": "defaultSidebar"
+            }
+          ],
+          "drafts": [],
+          "sidebars": {
+            "defaultSidebar": [
+              {
+                "type": "doc",
+                "id": "index",
+                "label": "首页"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "docusaurus-plugin-content-blog": {
+    "default": {
+      "blogSidebarTitle": "Recent posts",
+      "blogPosts": [],
+      "blogListPaginated": [],
+      "blogTags": {},
+      "blogTagsListPath": "/blog/tags",
+      "blogTagsPaginated": []
+    }
+  },
+  "docusaurus-plugin-content-pages": {
+    "demo-pages": null,
+    "default": null
+  },
+  "docusaurus-plugin-debug": {},
+  "docusaurus-theme-classic": {},
+  "icepkg:docusaurus-plugin": {},
+  "docusaurus-bootstrap-plugin": {},
+  "docusaurus-mdx-fallback-plugin": {}
+}
