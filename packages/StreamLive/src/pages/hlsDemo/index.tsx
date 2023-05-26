@@ -57,7 +57,10 @@ const HlsDemo = () => {
 
 
         const audio_process = createAudioProcessingServiceInstance({ media_el: veido_flv_ref.current!, canvas_el: canvas_audio_ref.current! });
-        audio_process.visulizerDraw3();
+
+        audio_process.updateBufferData();
+        audio_process.drawWithBufferData();
+        // audio_process.visulizerDraw3();
       });
     }
   };
@@ -177,7 +180,7 @@ const HlsDemo = () => {
 
 
       <div >
-        <canvas style={{ background: 'black' }} ref={canvas_audio_ref} id="canvas" width="300" height="300" />
+        <canvas style={{ background: 'black' }} ref={canvas_audio_ref} id="canvas" width="900" height="300" />
       </div>
     </div>
   );
