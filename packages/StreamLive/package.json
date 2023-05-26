@@ -13,8 +13,11 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "@tensorflow/tfjs":"^4.2.0",
+    "@tensorflow-models/coco-ssd": "^2.2.2",
     "flv.js":"^1.6.2",
-    "mpegts.js":"^1.7.2"
+    "mpegts.js":"^1.7.2",
+    "hls.js":"1.3.5",
+    "StreamCanvasX": "workspace:^0.1.0"
   },
   "devDependencies": {
     "@applint/spec": "^1.2.3",

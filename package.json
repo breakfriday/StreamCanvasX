@@ -17,7 +17,6 @@
   "author": "breakhappy <break_happy@163.com>",
   "license": "MIT",
   "devDependencies": {
-    "@tensorflow-models/coco-ssd": "^2.2.2",
     "@types/node": "^18.11.17",
     "eslint": "^8.35.0",
     "stylelint": "^15.2.0",
