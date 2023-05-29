@@ -19,7 +19,7 @@
             {
               "unversionedId": "guild",
               "id": "guild",
-              "title": "Guild",
+              "title": "新手指南",
               "description": "",
               "source": "@site/docs/guild.md",
               "sourceDirName": ".",
@@ -30,8 +30,8 @@
               "version": "current",
               "sidebarPosition": 2,
               "frontMatter": {
-                "title": "Guild",
-                "sidebar_label": "Guild",
+                "title": "新手指南",
+                "sidebar_label": "guild",
                 "sidebar_position": 2
               },
               "sidebar": "defaultSidebar",
@@ -64,7 +64,7 @@
                 "permalink": "/inxtro"
               },
               "next": {
-                "title": "Guild",
+                "title": "guild",
                 "permalink": "/guild"
               }
             },
@@ -109,7 +109,7 @@
               {
                 "type": "doc",
                 "id": "guild",
-                "label": "Guild"
+                "label": "guild"
               }
             ]
           }
@@ -128,7 +128,13 @@
     }
   },
   "docusaurus-plugin-content-pages": {
-    "demo-pages": null,
+    "demo-pages": [
+      {
+        "type": "jsx",
+        "permalink": "/demos/IcePkgDemo_192418",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_192418.jsx"
+      }
+    ],
     "default": null
   },
   "docusaurus-plugin-debug": {},

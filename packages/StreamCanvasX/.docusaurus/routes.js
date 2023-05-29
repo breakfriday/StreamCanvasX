@@ -38,6 +38,11 @@ export default [
     exact: true
   },
   {
+    path: '/demos/IcePkgDemo_192418',
+    component: ComponentCreator('/demos/IcePkgDemo_192418', 'c0c'),
+    exact: true
+  },
+  {
     path: '/',
     component: ComponentCreator('/', 'e89'),
     routes: [
