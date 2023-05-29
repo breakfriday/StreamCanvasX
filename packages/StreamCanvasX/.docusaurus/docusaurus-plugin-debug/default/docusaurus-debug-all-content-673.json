@@ -131,8 +131,68 @@
     "demo-pages": [
       {
         "type": "jsx",
+        "permalink": "/demos/IcePkgDemo_10b2c8",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_10b2c8.jsx"
+      },
+      {
+        "type": "jsx",
+        "permalink": "/demos/IcePkgDemo_1472c8",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_1472c8.jsx"
+      },
+      {
+        "type": "jsx",
+        "permalink": "/demos/IcePkgDemo_14b5b3",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_14b5b3.jsx"
+      },
+      {
+        "type": "jsx",
         "permalink": "/demos/IcePkgDemo_192418",
         "source": "@site/.docusaurus/demo-pages/IcePkgDemo_192418.jsx"
+      },
+      {
+        "type": "jsx",
+        "permalink": "/demos/IcePkgDemo_242d1b",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_242d1b.jsx"
+      },
+      {
+        "type": "jsx",
+        "permalink": "/demos/IcePkgDemo_4a1e9b",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_4a1e9b.jsx"
+      },
+      {
+        "type": "jsx",
+        "permalink": "/demos/IcePkgDemo_4b9fd9",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_4b9fd9.jsx"
+      },
+      {
+        "type": "jsx",
+        "permalink": "/demos/IcePkgDemo_68ceb5",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_68ceb5.jsx"
+      },
+      {
+        "type": "jsx",
+        "permalink": "/demos/IcePkgDemo_7504b3",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_7504b3.jsx"
+      },
+      {
+        "type": "jsx",
+        "permalink": "/demos/IcePkgDemo_aa008c",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_aa008c.jsx"
+      },
+      {
+        "type": "jsx",
+        "permalink": "/demos/IcePkgDemo_bc79fa",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_bc79fa.jsx"
+      },
+      {
+        "type": "jsx",
+        "permalink": "/demos/IcePkgDemo_d571d4",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_d571d4.jsx"
+      },
+      {
+        "type": "jsx",
+        "permalink": "/demos/IcePkgDemo_f9757b",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_f9757b.jsx"
       }
     ],
     "default": null
