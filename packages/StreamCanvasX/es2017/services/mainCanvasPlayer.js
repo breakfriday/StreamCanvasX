@@ -31,7 +31,9 @@ let mainPlayerService = class mainPlayerService {
             });
         }
     }
-    setConfig() {}
+    setConfig(params) {
+        this.config = Object.assign({}, this.config, params);
+    }
     load() {
         this.mpegtsPlayer.load();
     }
@@ -91,8 +93,9 @@ let mainPlayerService = class mainPlayerService {
             return;
         }
         this.context.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height / this.aspectRatio);
+        // 背景色域渐变
         const { data: [r, g, b]  } = this.context.getImageData(0, 0, 1, 1);
-        document.body.style.cssText = `background: rgb(${r}, ${g}, ${b});`;
+        // document.body.style.cssText = `background: rgb(${r}, ${g}, ${b});`;
         requestAnimationFrame(this.analyzeCanvas.bind(this));
     }
     constructor(parmams){
@@ -102,11 +105,13 @@ let mainPlayerService = class mainPlayerService {
         _define_property(this, "mpegtsPlayer", void 0);
         _define_property(this, "root_el", void 0);
         _define_property(this, "aspectRatio", void 0);
+        _define_property(this, "config", void 0);
         // this.video = parmams.vedio_el;
         this.video = document.createElement('video');
         this.video.controls = true;
         this.canvas = parmams.canvas_el;
         this.root_el = parmams.root_el;
+        this.config = parmams.config || {};
         if (this.canvas) {
             this.context = this.canvas.getContext('2d');
         }

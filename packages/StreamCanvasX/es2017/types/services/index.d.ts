@@ -45,10 +45,25 @@ export interface IAudioProcessingService{
   type: string; isLive: boolean; url: string;
 }
 
+interface Iconfig{
+  useCanvas: boolean;
+  cutCanvas: boolean;
+  useWebGpu: boolean;
+
+}
+
+interface IfactoryParms{
+  config: Partial<Iconfig>;
+  root_el: HTMLElement;
+  canvas_el: HTMLCanvasElement;
+}
+
 
 export interface ImainPlayerService{
  createFlvPlayer: (parms: Partial<playerParms>) => void;
  set_blob_url: (filedata: File) => void;
  analyzeCanvas: () => void;
+ setConfig: (parms: Partial<Iconfig>) => void;
+ factory: (parms: Partial<IfactoryParms>) => void;
 
 }

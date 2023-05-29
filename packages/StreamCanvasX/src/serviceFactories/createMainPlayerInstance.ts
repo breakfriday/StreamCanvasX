@@ -4,11 +4,12 @@ import mainPlayerService from '../services/mainCanvasPlayer';
 import { TYPES } from './symbol';
 import { IAudioProcessingService } from '../types/services';
 import { interfaces } from 'inversify';
+import { ImainPlayerService } from '../types/services';
 
 
 container1.bind<interfaces.Factory<mainPlayerService>>(TYPES.IMainPlayerService)
 .toFactory<mainPlayerService>((context) => {
-    return (parmams: { vedio_el: HTMLVideoElement; canvas_el: HTMLCanvasElement; root_el: HTMLElement}) => {
+    return (parmams: { vedio_el: HTMLVideoElement; canvas_el: HTMLCanvasElement; root_el: HTMLElement; config: any}) => {
         let instance = new mainPlayerService(parmams);
         return instance;
     };

@@ -1,11 +1,3 @@
----
-title: 新手指南
-sidebar_label: guild
-sidebar_position: 2
----
-
-##  本地文件播放
-```tsx  preview
 import * as React from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
 import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'StreamCanvasX/es2017/serviceFactories/index';
@@ -48,4 +40,3 @@ const SimpleDemo = () => {
 }
 
 export default SimpleDemo;
-```

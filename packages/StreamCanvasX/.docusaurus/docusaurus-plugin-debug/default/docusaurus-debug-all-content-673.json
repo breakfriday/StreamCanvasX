@@ -20,7 +20,7 @@
               "unversionedId": "guild",
               "id": "guild",
               "title": "新手指南",
-              "description": "",
+              "description": "本地文件播放",
               "source": "@site/docs/guild.md",
               "sourceDirName": ".",
               "slug": "/guild",
@@ -131,43 +131,43 @@
     "demo-pages": [
       {
         "type": "jsx",
-        "permalink": "/demos/IcePkgDemo_10b2c8",
-        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_10b2c8.jsx"
+        "permalink": "/demos/IcePkgDemo_004f02",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_004f02.jsx"
       },
       {
         "type": "jsx",
-        "permalink": "/demos/IcePkgDemo_1472c8",
-        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_1472c8.jsx"
+        "permalink": "/demos/IcePkgDemo_02d384",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_02d384.jsx"
       },
       {
         "type": "jsx",
-        "permalink": "/demos/IcePkgDemo_14b5b3",
-        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_14b5b3.jsx"
+        "permalink": "/demos/IcePkgDemo_240080",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_240080.jsx"
       },
       {
         "type": "jsx",
-        "permalink": "/demos/IcePkgDemo_192418",
-        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_192418.jsx"
+        "permalink": "/demos/IcePkgDemo_2df806",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_2df806.jsx"
       },
       {
         "type": "jsx",
-        "permalink": "/demos/IcePkgDemo_242d1b",
-        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_242d1b.jsx"
+        "permalink": "/demos/IcePkgDemo_40326d",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_40326d.jsx"
       },
       {
         "type": "jsx",
-        "permalink": "/demos/IcePkgDemo_4a1e9b",
-        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_4a1e9b.jsx"
+        "permalink": "/demos/IcePkgDemo_4e20a3",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_4e20a3.jsx"
       },
       {
         "type": "jsx",
-        "permalink": "/demos/IcePkgDemo_4b9fd9",
-        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_4b9fd9.jsx"
+        "permalink": "/demos/IcePkgDemo_667699",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_667699.jsx"
       },
       {
         "type": "jsx",
-        "permalink": "/demos/IcePkgDemo_68ceb5",
-        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_68ceb5.jsx"
+        "permalink": "/demos/IcePkgDemo_6702b4",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_6702b4.jsx"
       },
       {
         "type": "jsx",
@@ -176,23 +176,13 @@
       },
       {
         "type": "jsx",
-        "permalink": "/demos/IcePkgDemo_aa008c",
-        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_aa008c.jsx"
+        "permalink": "/demos/IcePkgDemo_ca97ee",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_ca97ee.jsx"
       },
       {
         "type": "jsx",
-        "permalink": "/demos/IcePkgDemo_bc79fa",
-        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_bc79fa.jsx"
-      },
-      {
-        "type": "jsx",
-        "permalink": "/demos/IcePkgDemo_d571d4",
-        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_d571d4.jsx"
-      },
-      {
-        "type": "jsx",
-        "permalink": "/demos/IcePkgDemo_f9757b",
-        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_f9757b.jsx"
+        "permalink": "/demos/IcePkgDemo_e837e3",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_e837e3.jsx"
       }
     ],
     "default": null

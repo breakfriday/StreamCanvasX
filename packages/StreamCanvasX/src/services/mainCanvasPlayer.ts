@@ -12,12 +12,15 @@ class mainPlayerService {
     private root_el: HTMLElement;
     private aspectRatio: number;
 
-    constructor(parmams: { canvas_el: HTMLCanvasElement; root_el: HTMLElement}) {
+    private config: Parameters<ImainPlayerService['setConfig']>[0];
+
+    constructor(parmams: Parameters<ImainPlayerService['factory']>[0]) {
       // this.video = parmams.vedio_el;
       this.video = document.createElement('video');
       this.video.controls = true;
       this.canvas = parmams.canvas_el;
       this.root_el = parmams.root_el;
+      this.config = parmams.config || {};
       if (this.canvas) {
         this.context = this.canvas.getContext('2d')!;
       }
@@ -61,8 +64,8 @@ class mainPlayerService {
       }
     }
 
-    setConfig() {
-
+    setConfig(params: Parameters<ImainPlayerService['setConfig']>[0]) {
+      this.config = Object.assign({}, this.config, params);
     }
 
     load() {
@@ -152,11 +155,12 @@ class mainPlayerService {
         this.canvas.height / this.aspectRatio,
       );
 
+      // 背景色域渐变
       const {
         data: [r, g, b],
       } = this.context.getImageData(0, 0, 1, 1);
 
-      document.body.style.cssText = `background: rgb(${r}, ${g}, ${b});`;
+      // document.body.style.cssText = `background: rgb(${r}, ${g}, ${b});`;
       requestAnimationFrame(this.analyzeCanvas.bind(this));
     }
   }
