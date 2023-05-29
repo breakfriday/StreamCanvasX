@@ -21,7 +21,7 @@
             "defaultSidebar": {
               "link": {
                 "path": "/",
-                "label": "首页"
+                "label": "Getting Started"
               }
             }
           }

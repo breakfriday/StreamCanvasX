@@ -4,7 +4,7 @@ const extractCode = require('@ice/pkg-plugin-docusaurus/remark/extractCode');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'ICE PKG',
+  title: 'StreamCanvasX',
   tagline: 'ICE Component Cool',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
