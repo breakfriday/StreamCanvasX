@@ -33,7 +33,7 @@
     "guild": {
       "id": "guild",
       "title": "新手指南",
-      "description": "",
+      "description": "本地文件播放",
       "sidebar": "defaultSidebar"
     },
     "index": {

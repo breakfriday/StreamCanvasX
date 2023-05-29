@@ -4,7 +4,7 @@ export default () => {
   return (
     <BrowserOnly>
       {() => {
-        const Demo = require('/home/break_happy/project/stream8/packages/StreamCanvasX/.docusaurus/demos/IcePkgDemo_10b2c8.tsx').default;
+        const Demo = require('/home/break_happy/project/stream8/packages/StreamCanvasX/.docusaurus/demos/IcePkgDemo_004f02.tsx').default;
         return <Demo />
       }}
     </BrowserOnly>

@@ -38,43 +38,43 @@ export default [
     exact: true
   },
   {
-    path: '/demos/IcePkgDemo_10b2c8',
-    component: ComponentCreator('/demos/IcePkgDemo_10b2c8', '5ce'),
+    path: '/demos/IcePkgDemo_004f02',
+    component: ComponentCreator('/demos/IcePkgDemo_004f02', 'f08'),
     exact: true
   },
   {
-    path: '/demos/IcePkgDemo_1472c8',
-    component: ComponentCreator('/demos/IcePkgDemo_1472c8', '8c0'),
+    path: '/demos/IcePkgDemo_02d384',
+    component: ComponentCreator('/demos/IcePkgDemo_02d384', '043'),
     exact: true
   },
   {
-    path: '/demos/IcePkgDemo_14b5b3',
-    component: ComponentCreator('/demos/IcePkgDemo_14b5b3', '4a4'),
+    path: '/demos/IcePkgDemo_240080',
+    component: ComponentCreator('/demos/IcePkgDemo_240080', 'b22'),
     exact: true
   },
   {
-    path: '/demos/IcePkgDemo_192418',
-    component: ComponentCreator('/demos/IcePkgDemo_192418', 'c0c'),
+    path: '/demos/IcePkgDemo_2df806',
+    component: ComponentCreator('/demos/IcePkgDemo_2df806', '3c1'),
     exact: true
   },
   {
-    path: '/demos/IcePkgDemo_242d1b',
-    component: ComponentCreator('/demos/IcePkgDemo_242d1b', '847'),
+    path: '/demos/IcePkgDemo_40326d',
+    component: ComponentCreator('/demos/IcePkgDemo_40326d', '41a'),
     exact: true
   },
   {
-    path: '/demos/IcePkgDemo_4a1e9b',
-    component: ComponentCreator('/demos/IcePkgDemo_4a1e9b', '8be'),
+    path: '/demos/IcePkgDemo_4e20a3',
+    component: ComponentCreator('/demos/IcePkgDemo_4e20a3', '0f8'),
     exact: true
   },
   {
-    path: '/demos/IcePkgDemo_4b9fd9',
-    component: ComponentCreator('/demos/IcePkgDemo_4b9fd9', '320'),
+    path: '/demos/IcePkgDemo_667699',
+    component: ComponentCreator('/demos/IcePkgDemo_667699', 'b5d'),
     exact: true
   },
   {
-    path: '/demos/IcePkgDemo_68ceb5',
-    component: ComponentCreator('/demos/IcePkgDemo_68ceb5', '6e4'),
+    path: '/demos/IcePkgDemo_6702b4',
+    component: ComponentCreator('/demos/IcePkgDemo_6702b4', 'b31'),
     exact: true
   },
   {
@@ -83,23 +83,13 @@ export default [
     exact: true
   },
   {
-    path: '/demos/IcePkgDemo_aa008c',
-    component: ComponentCreator('/demos/IcePkgDemo_aa008c', '75e'),
+    path: '/demos/IcePkgDemo_ca97ee',
+    component: ComponentCreator('/demos/IcePkgDemo_ca97ee', '554'),
     exact: true
   },
   {
-    path: '/demos/IcePkgDemo_bc79fa',
-    component: ComponentCreator('/demos/IcePkgDemo_bc79fa', 'afb'),
-    exact: true
-  },
-  {
-    path: '/demos/IcePkgDemo_d571d4',
-    component: ComponentCreator('/demos/IcePkgDemo_d571d4', 'bf3'),
-    exact: true
-  },
-  {
-    path: '/demos/IcePkgDemo_f9757b',
-    component: ComponentCreator('/demos/IcePkgDemo_f9757b', '657'),
+    path: '/demos/IcePkgDemo_e837e3',
+    component: ComponentCreator('/demos/IcePkgDemo_e837e3', '95e'),
     exact: true
   },
   {
