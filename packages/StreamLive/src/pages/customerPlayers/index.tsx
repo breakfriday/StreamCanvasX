@@ -15,13 +15,11 @@ const boxs = [1, 2, 3, 4, 5, 6, 7];
 let streamPlayers: any = [];
 
 const HlsDemo = () => {
-  const vedio_hls_ref = useRef<HTMLVideoElement | null>(null);
-  const veido_flv_ref = useRef<HTMLVideoElement | null>(null);
   const canvas_ref = useRef<HTMLCanvasElement | null>(null);
 
 
   const video_flv_refs = useRef([]);
-  const streamPlayerRefs = useRef([]);
+
   const canvas_refs = useRef([]);
 
 
@@ -29,7 +27,7 @@ const HlsDemo = () => {
 
 
   let streamPlayerRef = useRef<mainPlayerService | null>(null);
-  const mediaSource = new MediaSource();
+
 
   // const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
