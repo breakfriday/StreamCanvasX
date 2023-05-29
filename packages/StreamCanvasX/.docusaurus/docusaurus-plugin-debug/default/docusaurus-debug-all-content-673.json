@@ -19,7 +19,7 @@
             {
               "unversionedId": "index",
               "id": "index",
-              "title": "index",
+              "title": "Getting Started",
               "description": "",
               "source": "@site/docs/index.md",
               "sourceDirName": ".",
@@ -30,7 +30,8 @@
               "version": "current",
               "sidebarPosition": 0,
               "frontMatter": {
-                "sidebar_label": "首页",
+                "title": "Getting Started",
+                "sidebar_label": "Getting Started",
                 "sidebar_position": 0
               },
               "sidebar": "defaultSidebar"
@@ -42,7 +43,7 @@
               {
                 "type": "doc",
                 "id": "index",
-                "label": "首页"
+                "label": "Getting Started"
               }
             ]
           }

@@ -4,7 +4,7 @@
  * Modify the docusaurus.config.js file at your site's root instead.
  */
 export default {
-  "title": "ICE PKG",
+  "title": "StreamCanvasX",
   "tagline": "ICE Component Cool",
   "url": "https://your-docusaurus-test-site.com",
   "baseUrl": "/",
