@@ -9,21 +9,26 @@ class mainPlayerService {
     private canvas!: HTMLCanvasElement;
     private context!: CanvasRenderingContext2D;
     private mpegtsPlayer: Mpegts.Player;
+    private root_el: HTMLElement;
+    private aspectRatio: number;
 
-    constructor(parmams: { vedio_el: HTMLVideoElement; canvas_el: HTMLCanvasElement }) {
-      this.video = parmams.vedio_el;
+    constructor(parmams: { canvas_el: HTMLCanvasElement; root_el: HTMLElement}) {
+      // this.video = parmams.vedio_el;
+      this.video = document.createElement('video');
+      this.video.controls = true;
       this.canvas = parmams.canvas_el;
+      this.root_el = parmams.root_el;
       if (this.canvas) {
         this.context = this.canvas.getContext('2d')!;
       }
 
-      this.video.addEventListener(
-        'play',
-        () => {
-          requestAnimationFrame(this.analyzeCanvas.bind(this));
-        },
-        false,
-      );
+
+      this.root_el.innerHTML = '';
+
+      this.root_el.appendChild(this.video);
+
+      this.setVideoSize();
+      this.vedioEvents();
     }
     createFlvPlayer(parms: Parameters<ImainPlayerService['createFlvPlayer']>[0]) {
       let { type, isLive, url } = parms;
@@ -81,6 +86,56 @@ class mainPlayerService {
       this.video.load();
     }
 
+    vedioEvents() {
+      this.loadMediaEvent();
+
+      this.video.addEventListener(
+        'play',
+        () => {
+          requestAnimationFrame(this.analyzeCanvas.bind(this));
+        },
+        false,
+      );
+    }
+
+    loadMediaEvent() {
+      const video_el = this.video;
+      if (video_el) {
+        video_el.addEventListener('loadedmetadata', () => {
+        let { videoHeight, videoWidth } = video_el;
+
+
+        // 计算最大公约数 （数学上求最大公约数的方法是“辗转相除法”，就是用一个数除以另一个数（不需要知道大小），取余数，再用被除数除以余数再取余，再用新的被除数除以新的余数再取余，直到余数为0，最后的被除数就是最大公约数）
+          function gcd(a, b) {
+              return b === 0 ? a : gcd(b, a % b);
+          }
+
+          let greatestCommonDivisor = gcd(videoWidth, videoHeight);
+
+          // 计算宽高比
+          let aspectRatioWidth = videoWidth / greatestCommonDivisor;
+          let aspectRatioHeight = videoHeight / greatestCommonDivisor;
+
+          let ratio = `${aspectRatioWidth}:${aspectRatioHeight}`;
+
+           this.aspectRatio = aspectRatioWidth / aspectRatioHeight;
+
+
+          console.log('------------------------');
+          console.log(ratio);
+          console.log('------------------------');
+        });
+      }
+    }
+
+    setVideoSize() {
+      let height = this.root_el.clientHeight;
+      let width = this.root_el.clientWidth;
+
+      this.video.height = height;
+      this.video.width = width;
+    }
+
     analyzeCanvas() {
       if (this.video.ended || this.video.paused) {
         return;
@@ -90,8 +145,8 @@ class mainPlayerService {
         this.video,
         0,
         0,
-        800,
-        800,
+        this.canvas.width,
+        this.canvas.height / this.aspectRatio,
       );
 
       const {

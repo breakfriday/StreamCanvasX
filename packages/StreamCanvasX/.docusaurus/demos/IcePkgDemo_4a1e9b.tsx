@@ -1,10 +1,3 @@
----
-title: 新手指南
-sidebar_label: guild
-sidebar_position: 2
----
-
-```tsx  preview
 import * as React from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
 import mainPlayerService from 'StreamCanvasX/es2017/services/mainCanvasPlayer';
@@ -15,15 +8,20 @@ const SimpleDemo = () => {
   const vedio_hls_ref = React.useRef<HTMLVideoElement | null>(null);
   const veido_flv_ref = React.useRef<HTMLVideoElement | null>(null);
   const canvas_ref = React.useRef<HTMLCanvasElement | null>(null);
+  const video_flv_refs = useRef([]);
+  const streamPlayerRefs = useRef([]);
+  const canvas_refs = useRef([]);
 
 
   return (
     <>
     <div>
-               <div  >
+               <div key={inx} >
                 <video
+                  ref={el => (video_flv_refs.current[inx] = el)}
                   width="300"
                   height="300"
+                  id="video2"
                   controls
                   preload="none"
                 />
@@ -31,7 +29,7 @@ const SimpleDemo = () => {
                   name="basic"
                   autoComplete="off"
                   onFinish={(values) => {
-                   
+                    flv_play_by_index({ url: values.url, inx });
               }}
                 >
                   <Form.Item
@@ -52,7 +50,7 @@ const SimpleDemo = () => {
                   </Form.Item>
                 </Form>
                 <div>
-                
+                  <canvas ref={el => (canvas_refs.current[inx] = el)} id="canvas" width="300" height="300" />
                 </div>
 
               </div>
@@ -62,4 +60,3 @@ const SimpleDemo = () => {
 }
 
 export default SimpleDemo;
-```

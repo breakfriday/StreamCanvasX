@@ -1,10 +1,3 @@
----
-title: 新手指南
-sidebar_label: guild
-sidebar_position: 2
----
-
-```tsx  preview
 import * as React from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
 import mainPlayerService from 'StreamCanvasX/es2017/services/mainCanvasPlayer';
@@ -62,4 +55,3 @@ const SimpleDemo = () => {
 }
 
 export default SimpleDemo;
-```

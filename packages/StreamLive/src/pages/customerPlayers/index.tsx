@@ -25,6 +25,9 @@ const HlsDemo = () => {
   const canvas_refs = useRef([]);
 
 
+  const video_box = useRef<HTMLElement>();
+
+
   let streamPlayerRef = useRef<mainPlayerService | null>(null);
   const mediaSource = new MediaSource();
 
@@ -32,13 +35,13 @@ const HlsDemo = () => {
 
 
   useEffect(() => {
-    const streamPlayer = createMainPlayerInstance({ vedio_el: veido_flv_ref?.current!, canvas_el: canvas_ref?.current! });
-    streamPlayerRef.current = streamPlayer;
+    const streamPlayer = createMainPlayerInstance({ canvas_el: canvas_ref?.current!, root_el: video_box.current! });
+     streamPlayerRef.current = streamPlayer;
 
      streamPlayers = boxs.map((item, inx) => {
         let vedio_el = video_flv_refs.current[inx];
         let canvas_el = canvas_refs.current[inx];
-        const streamPlayer = createMainPlayerInstance({ vedio_el, canvas_el });
+        const streamPlayer = createMainPlayerInstance({ root_el: vedio_el, canvas_el });
         return streamPlayer;
     });
 
@@ -51,59 +54,6 @@ const HlsDemo = () => {
   //   const decodedAudioData = await audioContext.decodeAudioData(arrayBuffer);
   //   return decodedAudioData;
   // }
-
-  // 视屏加载完成事件
-  const loadMediaEvent = () => {
-    const video_el = veido_flv_ref?.current;
-    if (video_el) {
-      video_el.addEventListener('loadedmetadata', () => {
-      let { videoHeight, videoWidth } = video_el;
-
-
-      // 计算最大公约数 （数学上求最大公约数的方法是“辗转相除法”，就是用一个数除以另一个数（不需要知道大小），取余数，再用被除数除以余数再取余，再用新的被除数除以新的余数再取余，直到余数为0，最后的被除数就是最大公约数）
-        function gcd(a, b) {
-            return b === 0 ? a : gcd(b, a % b);
-        }
-
-        let greatestCommonDivisor = gcd(videoWidth, videoHeight);
-
-        // 计算宽高比
-        let aspectRatioWidth = videoWidth / greatestCommonDivisor;
-        let aspectRatioHeight = videoHeight / greatestCommonDivisor;
-
-        let ratio = `${aspectRatioWidth}:${aspectRatioHeight}`;
-      });
-    }
-  };
-
-
-  const hls_play = () => {
-    if (Hls.isSupported()) {
-      if (vedio_hls_ref?.current) {
-        const vedio_el = vedio_hls_ref.current;
-        const video = document.getElementById('video');
-        const hls = new Hls();
-        const url = '//localhost:8080/live/livestream.m3u8';
-        hls.loadSource(url);
-        hls.attachMedia(vedio_el);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          vedio_el.play();
-        });
-      }
-    }
-  };
-
-
-  // http://117.71.59.159:40012/live/luoxuan.live.flv
-  const flv_play = (params) => {
-    let { url } = params;
-    let streamPlayer = streamPlayerRef.current;
-    streamPlayer?.createFlvPlayer({
-      type: 'flv', // could also be mpegts, m2ts, flv
-      isLive: true,
-      url: url,
-  });
-    };
 
 
       // http://117.71.59.159:40012/live/luoxuan.live.flv
@@ -125,6 +75,7 @@ const HlsDemo = () => {
         accept="audio/*,video/*"
         onChange={(event) => {
           const streamPlayer = streamPlayerRef.current!;
+
           const files_data = event.target?.files?.[0]; // 返回file对象， 继承自blob对象。
           files_data ? streamPlayer.set_blob_url(files_data) : '';
         }}
@@ -134,15 +85,8 @@ const HlsDemo = () => {
       <Space direction="horizontal" />
 
       <Space direction="horizontal" >
-        <div id="original-player">
-          <video
-            ref={veido_flv_ref}
-            width="300"
-            height="300"
-            id="video2"
-            controls
-            preload="none"
-          />
+        <div ref={video_box} style={{ width: '300px', height: '300px' }}>
+
 
           <div />
 
@@ -151,13 +95,9 @@ const HlsDemo = () => {
         {boxs.map((item, inx) => {
             return (
               <div key={inx} >
-                <video
+                <div
                   ref={el => (video_flv_refs.current[inx] = el)}
-                  width="300"
-                  height="300"
-                  id="video2"
-                  controls
-                  preload="none"
+                  style={{ width: '300px', height: '300px' }}
                 />
                 <Form
                   name="basic"
@@ -191,15 +131,6 @@ const HlsDemo = () => {
             );
         })}
 
-
-        <div
-          onClick={() => {
-            let h = video_flv_refs;
-
-            debugger;
-        }}
-
-        >asdf</div>
 
       </Space>
 

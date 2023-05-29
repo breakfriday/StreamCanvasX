@@ -8,16 +8,16 @@ import { interfaces } from 'inversify';
 
 container1.bind<interfaces.Factory<mainPlayerService>>(TYPES.IMainPlayerService)
 .toFactory<mainPlayerService>((context) => {
-    return (parmams: { vedio_el: HTMLVideoElement; canvas_el: HTMLCanvasElement}) => {
+    return (parmams: { vedio_el: HTMLVideoElement; canvas_el: HTMLCanvasElement; root_el: HTMLElement}) => {
         let instance = new mainPlayerService(parmams);
         return instance;
     };
 });
 
 
-function createMainPlayerInstance(parmams: { vedio_el: HTMLVideoElement; canvas_el: HTMLCanvasElement}) {
+function createMainPlayerInstance(parmams: { canvas_el: HTMLCanvasElement; root_el: HTMLElement}) {
 //    const MainPlayer=
-  const MainPlayerFactory: (parmams: { vedio_el: HTMLVideoElement; canvas_el: HTMLCanvasElement}) => mainPlayerService = container1.get<interfaces.Factory<mainPlayerService>>(TYPES.IMainPlayerService);
+  const MainPlayerFactory: (parmams: { canvas_el: HTMLCanvasElement; root_el: HTMLElement}) => mainPlayerService = container1.get<interfaces.Factory<mainPlayerService>>(TYPES.IMainPlayerService);
   let instance = MainPlayerFactory(parmams);
   return instance;
 }
