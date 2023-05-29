@@ -4,9 +4,11 @@ declare class mainPlayerService {
     private canvas;
     private context;
     private mpegtsPlayer;
+    private root_el;
+    private aspectRatio;
     constructor(parmams: {
-        vedio_el: HTMLVideoElement;
         canvas_el: HTMLCanvasElement;
+        root_el: HTMLElement;
     });
     createFlvPlayer(parms: Parameters<ImainPlayerService['createFlvPlayer']>[0]): void;
     setConfig(): void;
@@ -15,6 +17,9 @@ declare class mainPlayerService {
     paused(): void;
     reoload(): void;
     set_blob_url(filedata: File): void;
+    vedioEvents(): void;
+    loadMediaEvent(): void;
+    setVideoSize(): void;
     analyzeCanvas(): void;
 }
 export default mainPlayerService;

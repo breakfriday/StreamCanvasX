@@ -8,20 +8,25 @@ import mpegts from "mpegts.js";
 var mainPlayerService = /*#__PURE__*/ function() {
     "use strict";
     function mainPlayerService(parmams) {
-        var _this = this;
         _class_call_check(this, mainPlayerService);
         _define_property(this, "video", void 0);
         _define_property(this, "canvas", void 0);
         _define_property(this, "context", void 0);
         _define_property(this, "mpegtsPlayer", void 0);
-        this.video = parmams.vedio_el;
+        _define_property(this, "root_el", void 0);
+        _define_property(this, "aspectRatio", void 0);
+        // this.video = parmams.vedio_el;
+        this.video = document.createElement("video");
+        this.video.controls = true;
         this.canvas = parmams.canvas_el;
+        this.root_el = parmams.root_el;
         if (this.canvas) {
             this.context = this.canvas.getContext("2d");
         }
-        this.video.addEventListener("play", function() {
-            requestAnimationFrame(_this.analyzeCanvas.bind(_this));
-        }, false);
+        this.root_el.innerHTML = "";
+        this.root_el.appendChild(this.video);
+        this.setVideoSize();
+        this.vedioEvents();
     }
     _create_class(mainPlayerService, [
         {
@@ -94,12 +99,56 @@ var mainPlayerService = /*#__PURE__*/ function() {
             }
         },
         {
+            key: "vedioEvents",
+            value: function vedioEvents() {
+                var _this = this;
+                this.loadMediaEvent();
+                this.video.addEventListener("play", function() {
+                    requestAnimationFrame(_this.analyzeCanvas.bind(_this));
+                }, false);
+            }
+        },
+        {
+            key: "loadMediaEvent",
+            value: function loadMediaEvent() {
+                var _this = this;
+                var video_el = this.video;
+                if (video_el) {
+                    video_el.addEventListener("loadedmetadata", function() {
+                        var videoHeight = video_el.videoHeight, videoWidth = video_el.videoWidth;
+                        // 计算最大公约数 （数学上求最大公约数的方法是“辗转相除法”，就是用一个数除以另一个数（不需要知道大小），取余数，再用被除数除以余数再取余，再用新的被除数除以新的余数再取余，直到余数为0，最后的被除数就是最大公约数）
+                        function gcd(a, b) {
+                            return b === 0 ? a : gcd(b, a % b);
+                        }
+                        var greatestCommonDivisor = gcd(videoWidth, videoHeight);
+                        // 计算宽高比
+                        var aspectRatioWidth = videoWidth / greatestCommonDivisor;
+                        var aspectRatioHeight = videoHeight / greatestCommonDivisor;
+                        var ratio = "".concat(aspectRatioWidth, ":").concat(aspectRatioHeight);
+                        _this.aspectRatio = aspectRatioWidth / aspectRatioHeight;
+                        console.log("------------------------");
+                        console.log(ratio);
+                        console.log("------------------------");
+                    });
+                }
+            }
+        },
+        {
+            key: "setVideoSize",
+            value: function setVideoSize() {
+                var height = this.root_el.clientHeight;
+                var width = this.root_el.clientWidth;
+                this.video.height = height;
+                this.video.width = width;
+            }
+        },
+        {
             key: "analyzeCanvas",
             value: function analyzeCanvas() {
                 if (this.video.ended || this.video.paused) {
                     return;
                 }
-                this.context.drawImage(this.video, 0, 0, 800, 800);
+                this.context.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height / this.aspectRatio);
                 var _this_context_getImageData = this.context.getImageData(0, 0, 1, 1), _this_context_getImageData_data = _sliced_to_array(_this_context_getImageData.data, 3), r = _this_context_getImageData_data[0], g = _this_context_getImageData_data[1], b = _this_context_getImageData_data[2];
                 document.body.style.cssText = "background: rgb(".concat(r, ", ").concat(g, ", ").concat(b, ");");
                 requestAnimationFrame(this.analyzeCanvas.bind(this));
