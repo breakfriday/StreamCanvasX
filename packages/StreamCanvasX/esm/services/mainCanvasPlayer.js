@@ -30,6 +30,12 @@ var mainPlayerService = /*#__PURE__*/ function() {
     }
     _create_class(mainPlayerService, [
         {
+            key: "_vedio",
+            get: function get() {
+                return this.video;
+            }
+        },
+        {
             key: "createFlvPlayer",
             value: function createFlvPlayer(parms) {
                 var _this = this;

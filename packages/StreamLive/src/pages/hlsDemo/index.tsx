@@ -22,8 +22,11 @@ const HlsDemo = () => {
 
 
   useEffect(() => {
-    const streamPlayer = createMainPlayerInstance({ vedio_el: veido_flv_ref?.current!, canvas_el: canvas_ref?.current! });
+    const streamPlayer = createMainPlayerInstance({ root_el: veido_flv_ref?.current!, canvas_el: canvas_ref?.current! });
     streamPlayerRef.current = streamPlayer;
+
+    debugger;
+
     loadMediaEvent();
   }, []);
 
@@ -36,27 +39,11 @@ const HlsDemo = () => {
 
   // 视屏加载完成事件
   const loadMediaEvent = () => {
-    const video_el = veido_flv_ref?.current;
+    const video_el = streamPlayerRef.current?._vedio;
     if (video_el) {
       video_el.addEventListener('play', () => {
-      let { videoHeight, videoWidth } = video_el;
+        const audio_process = createAudioProcessingServiceInstance({ media_el: video_el, canvas_el: canvas_audio_ref.current! });
 
-
-      // 计算最大公约数 （数学上求最大公约数的方法是“辗转相除法”，就是用一个数除以另一个数（不需要知道大小），取余数，再用被除数除以余数再取余，再用新的被除数除以新的余数再取余，直到余数为0，最后的被除数就是最大公约数）
-      function gcd(a, b) {
-        return b === 0 ? a : gcd(b, a % b);
-      }
-
-     let greatestCommonDivisor = gcd(videoWidth, videoHeight);
-
-  // 计算宽高比
-   let aspectRatioWidth = videoWidth / greatestCommonDivisor;
-   let aspectRatioHeight = videoHeight / greatestCommonDivisor;
-
-   let ratio = `${aspectRatioWidth}:${aspectRatioHeight}`;
-
-
-        const audio_process = createAudioProcessingServiceInstance({ media_el: veido_flv_ref.current!, canvas_el: canvas_audio_ref.current! });
 
         audio_process.updateBufferData();
         audio_process.drawWithBufferData();
@@ -133,13 +120,9 @@ const HlsDemo = () => {
 
 
         <div id="original-player">
-          <video
+          <div
             ref={veido_flv_ref}
-            width="300"
-            height="300"
-            id="video2"
-            controls
-            preload="none"
+            style={{ width: '300px', height: '300px' }}
           />
 
           <div>

@@ -30,6 +30,9 @@ class mainPlayerService {
       this.setVideoSize();
       this.vedioEvents();
     }
+    get _vedio() {
+      return this.video;
+    }
     createFlvPlayer(parms: Parameters<ImainPlayerService['createFlvPlayer']>[0]) {
       let { type, isLive, url } = parms;
       let videoEl = this.video;
