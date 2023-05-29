@@ -11,8 +11,18 @@
           "mainDocId": "index",
           "docs": [
             {
+              "id": "guild",
+              "path": "/guild",
+              "sidebar": "defaultSidebar"
+            },
+            {
               "id": "index",
               "path": "/",
+              "sidebar": "defaultSidebar"
+            },
+            {
+              "id": "inxtro",
+              "path": "/inxtro",
               "sidebar": "defaultSidebar"
             }
           ],
@@ -20,8 +30,8 @@
           "sidebars": {
             "defaultSidebar": {
               "link": {
-                "path": "/",
-                "label": "Getting Started"
+                "path": "/inxtro",
+                "label": "Introduction"
               }
             }
           }

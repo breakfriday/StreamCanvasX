@@ -10,11 +10,19 @@
   "draft": false,
   "tags": [],
   "version": "current",
-  "sidebarPosition": 0,
+  "sidebarPosition": 1,
   "frontMatter": {
     "title": "Getting Started",
     "sidebar_label": "Getting Started",
-    "sidebar_position": 0
+    "sidebar_position": 1
   },
-  "sidebar": "defaultSidebar"
+  "sidebar": "defaultSidebar",
+  "previous": {
+    "title": "Introduction",
+    "permalink": "/inxtro"
+  },
+  "next": {
+    "title": "Guild",
+    "permalink": "/guild"
+  }
 }
