@@ -11,7 +11,7 @@
     "defaultSidebar": [
       {
         "type": "link",
-        "label": "首页",
+        "label": "Getting Started",
         "href": "/",
         "docId": "index"
       }
@@ -20,7 +20,7 @@
   "docs": {
     "index": {
       "id": "index",
-      "title": "index",
+      "title": "Getting Started",
       "description": "",
       "sidebar": "defaultSidebar"
     }

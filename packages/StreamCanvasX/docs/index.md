@@ -1,5 +1,6 @@
 ---
-sidebar_label: 首页
+title: Getting Started
+sidebar_label: Getting Started
 sidebar_position: 0
 ---
 
