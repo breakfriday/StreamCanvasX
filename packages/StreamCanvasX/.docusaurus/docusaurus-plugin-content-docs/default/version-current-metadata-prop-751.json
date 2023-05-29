@@ -11,16 +11,40 @@
     "defaultSidebar": [
       {
         "type": "link",
+        "label": "Introduction",
+        "href": "/inxtro",
+        "docId": "inxtro"
+      },
+      {
+        "type": "link",
         "label": "Getting Started",
         "href": "/",
         "docId": "index"
+      },
+      {
+        "type": "link",
+        "label": "Guild",
+        "href": "/guild",
+        "docId": "guild"
       }
     ]
   },
   "docs": {
+    "guild": {
+      "id": "guild",
+      "title": "Guild",
+      "description": "",
+      "sidebar": "defaultSidebar"
+    },
     "index": {
       "id": "index",
       "title": "Getting Started",
+      "description": "",
+      "sidebar": "defaultSidebar"
+    },
+    "inxtro": {
+      "id": "inxtro",
+      "title": "Introduction",
       "description": "",
       "sidebar": "defaultSidebar"
     }
