@@ -39,11 +39,23 @@ export default [
   },
   {
     path: '/',
-    component: ComponentCreator('/', 'c39'),
+    component: ComponentCreator('/', 'e89'),
     routes: [
       {
         path: '/',
         component: ComponentCreator('/', 'd65'),
+        exact: true,
+        sidebar: "defaultSidebar"
+      },
+      {
+        path: '/guild',
+        component: ComponentCreator('/guild', '000'),
+        exact: true,
+        sidebar: "defaultSidebar"
+      },
+      {
+        path: '/inxtro',
+        component: ComponentCreator('/inxtro', '44f'),
         exact: true,
         sidebar: "defaultSidebar"
       }

@@ -42,7 +42,8 @@ export default {
                 "mobilePreview": false,
                 "baseUrl": "/"
               }
-            ]
+            ],
+            null
           ],
           "exclude": [
             "**/_*.{js,jsx,ts,tsx,md,mdx}",

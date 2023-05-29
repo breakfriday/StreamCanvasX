@@ -1,0 +1,24 @@
+{
+  "unversionedId": "guild",
+  "id": "guild",
+  "title": "Guild",
+  "description": "",
+  "source": "@site/docs/guild.md",
+  "sourceDirName": ".",
+  "slug": "/guild",
+  "permalink": "/guild",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Guild",
+    "sidebar_label": "Guild",
+    "sidebar_position": 2
+  },
+  "sidebar": "defaultSidebar",
+  "previous": {
+    "title": "Getting Started",
+    "permalink": "/"
+  }
+}
