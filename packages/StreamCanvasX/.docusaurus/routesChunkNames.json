@@ -42,6 +42,13 @@
       "plugin": "plugin---docusaurus-debug-042-9d4"
     }
   },
+  "/demos/IcePkgDemo_192418-c0c": {
+    "__comp": "__comp---site-docusaurus-demo-pages-ice-pkg-demo-192418-jsxca-6-7ab",
+    "__context": {
+      "plugin": "plugin---demos-ice-pkg-demo-192418-da-5-d9a"
+    },
+    "config": "config---demos-ice-pkg-demo-1924185-e-9-738"
+  },
   "/-e89": {
     "__comp": "__comp---theme-doc-page-1-be-9be",
     "__context": {

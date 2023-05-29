@@ -23,7 +23,7 @@
       },
       {
         "type": "link",
-        "label": "Guild",
+        "label": "guild",
         "href": "/guild",
         "docId": "guild"
       }
@@ -32,7 +32,7 @@
   "docs": {
     "guild": {
       "id": "guild",
-      "title": "Guild",
+      "title": "新手指南",
       "description": "",
       "sidebar": "defaultSidebar"
     },

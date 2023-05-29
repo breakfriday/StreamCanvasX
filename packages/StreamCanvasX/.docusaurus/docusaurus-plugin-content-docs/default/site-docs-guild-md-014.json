@@ -1,7 +1,7 @@
 {
   "unversionedId": "guild",
   "id": "guild",
-  "title": "Guild",
+  "title": "新手指南",
   "description": "",
   "source": "@site/docs/guild.md",
   "sourceDirName": ".",
@@ -12,8 +12,8 @@
   "version": "current",
   "sidebarPosition": 2,
   "frontMatter": {
-    "title": "Guild",
-    "sidebar_label": "Guild",
+    "title": "新手指南",
+    "sidebar_label": "guild",
     "sidebar_position": 2
   },
   "sidebar": "defaultSidebar",

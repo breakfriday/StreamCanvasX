@@ -1,6 +1,6 @@
 ---
-title: Guild
-sidebar_label: Guild
+title: 新手指南
+sidebar_label: guild
 sidebar_position: 2
 ---
 
