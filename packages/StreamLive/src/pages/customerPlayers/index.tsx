@@ -1,13 +1,13 @@
 
 import React, { useRef, useEffect } from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
-import CanvasPlayerByVideos from 'StreamCanvasX/canvasPlayerByVideo';
+// import CanvasPlayerByVideos from 'StreamCanvasX/canvasPlayerByVideo';
 import mpegts from 'mpegts.js';
 import Hls from 'hls.js';
-import CanvasAudioProcess from 'StreamCanvasX/canvasAudioProcess';
-import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'StreamCanvasX/serviceFactories/index';
-import { ICombinedDrawer } from 'StreamCanvasX';
-import mainPlayerService from 'StreamCanvasX/services/mainCanvasPlayer';
+// import CanvasAudioProcess from 'StreamCanvasX/canvasAudioProcess';
+import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'StreamCanvasX/es2017/serviceFactories/index';
+// import { ICombinedDrawer } from 'StreamCanvasX';
+import mainPlayerService from 'StreamCanvasX/es2017/services/mainCanvasPlayer';
 import { any } from '@tensorflow/tfjs';
 
 const boxs = [1, 2, 3, 4, 5, 6, 7];
