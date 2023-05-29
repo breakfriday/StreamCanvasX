@@ -2,7 +2,7 @@
   "unversionedId": "guild",
   "id": "guild",
   "title": "新手指南",
-  "description": "",
+  "description": "本地文件播放",
   "source": "@site/docs/guild.md",
   "sourceDirName": ".",
   "slug": "/guild",

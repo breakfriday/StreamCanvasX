@@ -15,11 +15,13 @@ var mainPlayerService = /*#__PURE__*/ function() {
         _define_property(this, "mpegtsPlayer", void 0);
         _define_property(this, "root_el", void 0);
         _define_property(this, "aspectRatio", void 0);
+        _define_property(this, "config", void 0);
         // this.video = parmams.vedio_el;
         this.video = document.createElement("video");
         this.video.controls = true;
         this.canvas = parmams.canvas_el;
         this.root_el = parmams.root_el;
+        this.config = parmams.config || {};
         if (this.canvas) {
             this.context = this.canvas.getContext("2d");
         }
@@ -66,7 +68,9 @@ var mainPlayerService = /*#__PURE__*/ function() {
         },
         {
             key: "setConfig",
-            value: function setConfig() {}
+            value: function setConfig(params) {
+                this.config = Object.assign({}, this.config, params);
+            }
         },
         {
             key: "load",
@@ -155,8 +159,9 @@ var mainPlayerService = /*#__PURE__*/ function() {
                     return;
                 }
                 this.context.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height / this.aspectRatio);
+                // 背景色域渐变
                 var _this_context_getImageData = this.context.getImageData(0, 0, 1, 1), _this_context_getImageData_data = _sliced_to_array(_this_context_getImageData.data, 3), r = _this_context_getImageData_data[0], g = _this_context_getImageData_data[1], b = _this_context_getImageData_data[2];
-                document.body.style.cssText = "background: rgb(".concat(r, ", ").concat(g, ", ").concat(b, ");");
+                // document.body.style.cssText = `background: rgb(${r}, ${g}, ${b});`;
                 requestAnimationFrame(this.analyzeCanvas.bind(this));
             }
         }

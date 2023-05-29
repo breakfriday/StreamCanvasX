@@ -6,13 +6,11 @@ declare class mainPlayerService {
     private mpegtsPlayer;
     private root_el;
     private aspectRatio;
-    constructor(parmams: {
-        canvas_el: HTMLCanvasElement;
-        root_el: HTMLElement;
-    });
+    private config;
+    constructor(parmams: Parameters<ImainPlayerService['factory']>[0]);
     get _vedio(): HTMLVideoElement;
     createFlvPlayer(parms: Parameters<ImainPlayerService['createFlvPlayer']>[0]): void;
-    setConfig(): void;
+    setConfig(params: Parameters<ImainPlayerService['setConfig']>[0]): void;
     load(): void;
     play(): void;
     paused(): void;

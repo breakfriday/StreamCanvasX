@@ -1,8 +1,7 @@
 import * as React from 'react';
-import mainPlayerService from 'StreamCanvasX/es2017/services/mainCanvasPlayer';
+import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
+import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'StreamCanvasX/es2017/serviceFactories/index';
 const {useRef}=React
-
-
 
 
 const SimpleDemo = () => {
@@ -13,9 +12,8 @@ const SimpleDemo = () => {
 
   return (
     <>
-   <div onClick={()=>{
-    alert(22)
-    }}>222</div>
+    <div>
+    </div>
     </>
   )
 }
