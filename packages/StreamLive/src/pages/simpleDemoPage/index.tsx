@@ -1,24 +1,24 @@
 import React, { useRef, useEffect } from 'react';
-import player from 'StreamCanvasX/player';
-import CanvasPlayer from 'StreamCanvasX/canvasPlayer';
+// import player from 'StreamCanvasX/player';
+// import CanvasPlayer from 'StreamCanvasX/canvasPlayer';
 
-import { createOriginServiceInstance } from 'StreamCanvasX/serviceFactories/index';
+// import { createOriginServiceInstance } from 'StreamCanvasX/serviceFactories/index';
 
 
 const SimplePage = () => {
   const vedio_ref = useRef(null);
   const canvas_ref = useRef(null);
   useEffect(() => {
-    if (vedio_ref) {
-      const el = vedio_ref?.current;
-      if (el) {
-        player(el);
-      }
+    // if (vedio_ref) {
+    //   const el = vedio_ref?.current;
+    //   if (el) {
+    //     player(el);
+    //   }
 
-      let h = createOriginServiceInstance('geoio');
-      h.doSomething();
-      const canvas_player = new CanvasPlayer({ canvas_el: canvas_ref?.current, vedio_el: vedio_ref?.current });
-    }
+    //   let h = createOriginServiceInstance('geoio');
+    //   h.doSomething();
+    //   const canvas_player = new CanvasPlayer({ canvas_el: canvas_ref?.current, vedio_el: vedio_ref?.current });
+    // }
   }, []);
   return (
     <div gap={20}>
