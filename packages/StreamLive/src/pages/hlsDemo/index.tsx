@@ -25,8 +25,6 @@ const HlsDemo = () => {
     const streamPlayer = createMainPlayerInstance({ root_el: veido_flv_ref?.current!, canvas_el: canvas_ref?.current! });
     streamPlayerRef.current = streamPlayer;
 
-    debugger;
-
     loadMediaEvent();
   }, []);
 
@@ -158,12 +156,12 @@ const HlsDemo = () => {
 
 
       <div id="canvas-container">
-        <canvas ref={canvas_ref} id="canvas" width="800" height="800" />
+        <canvas ref={canvas_ref} id="canvas" width="400" height="400" />
       </div>
 
 
       <div >
-        <canvas style={{ background: 'black' }} ref={canvas_audio_ref} id="canvas" width="900" height="300" />
+        <canvas style={{ background: 'black' }} ref={canvas_audio_ref} id="canvas" width="400" height="400" />
       </div>
     </div>
   );
