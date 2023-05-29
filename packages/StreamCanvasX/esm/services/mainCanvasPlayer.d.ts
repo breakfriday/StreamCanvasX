@@ -10,6 +10,7 @@ declare class mainPlayerService {
         canvas_el: HTMLCanvasElement;
         root_el: HTMLElement;
     });
+    get _vedio(): HTMLVideoElement;
     createFlvPlayer(parms: Parameters<ImainPlayerService['createFlvPlayer']>[0]): void;
     setConfig(): void;
     load(): void;

@@ -3,6 +3,9 @@ import { _ as _ts_decorate } from "@swc/helpers/_/_ts_decorate";
 import { injectable } from 'inversify';
 import mpegts from 'mpegts.js';
 let mainPlayerService = class mainPlayerService {
+    get _vedio() {
+        return this.video;
+    }
     createFlvPlayer(parms) {
         let { type , isLive , url  } = parms;
         let videoEl = this.video;
