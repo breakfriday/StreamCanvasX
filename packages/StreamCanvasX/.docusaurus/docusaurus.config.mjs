@@ -65,7 +65,7 @@ export default {
   ],
   "themeConfig": {
     "navbar": {
-      "title": "ICE PKG",
+      "title": "StreamCanvasX",
       "logo": {
         "src": "https://img.alicdn.com/imgextra/i1/O1CN01lZTSIX1j7xpjIQ3fJ_!!6000000004502-2-tps-160-160.png"
       },
