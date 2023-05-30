@@ -84,6 +84,13 @@
     },
     "config": "config---demos-ice-pkg-demo-0-a-1-f-415-e-9-5dc"
   },
+  "/demos/IcePkgDemo_aff3dc-ac1": {
+    "__comp": "__comp---site-docusaurus-demo-pages-ice-pkg-demo-aff-3-dc-jsxfd-5-4d6",
+    "__context": {
+      "plugin": "plugin---demos-ice-pkg-demo-0-a-1-f-41-da-5-09f"
+    },
+    "config": "config---demos-ice-pkg-demo-0-a-1-f-415-e-9-5dc"
+  },
   "/demos/IcePkgDemo_c236dd-a14": {
     "__comp": "__comp---site-docusaurus-demo-pages-ice-pkg-demo-c-236-dd-jsxcbd-e43",
     "__context": {

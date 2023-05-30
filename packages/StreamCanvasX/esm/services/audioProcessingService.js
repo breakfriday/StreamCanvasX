@@ -35,7 +35,7 @@ var AudioProcessingService = /*#__PURE__*/ function() {
             key: "setBufferData",
             value: function setBufferData() {
                 // 根据 AudioContext 的采样率、所需的缓存时间和 FFT 大小来设置缓存区大小
-                this.bufferDataLength = Math.ceil(5 * this.context.audioContext.sampleRate / this.dataArray.length) * this.dataArray.length;
+                this.bufferDataLength = Math.ceil(1 * this.context.audioContext.sampleRate / this.dataArray.length) * this.dataArray.length;
                 this.bufferData = new Float32Array(this.bufferDataLength);
             }
         },
