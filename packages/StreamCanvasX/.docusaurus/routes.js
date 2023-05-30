@@ -68,6 +68,11 @@ export default [
     exact: true
   },
   {
+    path: '/demos/IcePkgDemo_aff3dc',
+    component: ComponentCreator('/demos/IcePkgDemo_aff3dc', 'ac1'),
+    exact: true
+  },
+  {
     path: '/demos/IcePkgDemo_c236dd',
     component: ComponentCreator('/demos/IcePkgDemo_c236dd', 'a14'),
     exact: true

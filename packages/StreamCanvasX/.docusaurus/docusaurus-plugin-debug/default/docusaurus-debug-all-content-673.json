@@ -194,6 +194,11 @@
       },
       {
         "type": "jsx",
+        "permalink": "/demos/IcePkgDemo_aff3dc",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_aff3dc.jsx"
+      },
+      {
+        "type": "jsx",
         "permalink": "/demos/IcePkgDemo_c236dd",
         "source": "@site/.docusaurus/demo-pages/IcePkgDemo_c236dd.jsx"
       },
