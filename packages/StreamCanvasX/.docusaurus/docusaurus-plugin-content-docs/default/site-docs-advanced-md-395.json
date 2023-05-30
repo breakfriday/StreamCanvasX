@@ -2,7 +2,7 @@
   "unversionedId": "advanced",
   "id": "advanced",
   "title": "进阶",
-  "description": "",
+  "description": "websocket  流",
   "source": "@site/docs/advanced.md",
   "sourceDirName": ".",
   "slug": "/advanced",

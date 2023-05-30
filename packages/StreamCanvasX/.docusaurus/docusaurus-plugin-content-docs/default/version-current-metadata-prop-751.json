@@ -39,7 +39,7 @@
     "advanced": {
       "id": "advanced",
       "title": "进阶",
-      "description": "",
+      "description": "websocket  流",
       "sidebar": "defaultSidebar"
     },
     "guild": {
