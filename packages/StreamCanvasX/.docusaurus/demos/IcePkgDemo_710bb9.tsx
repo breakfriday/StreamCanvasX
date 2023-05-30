@@ -32,8 +32,32 @@ const SimpleDemo = () => {
             ref={veido_flv_ref}
             style={{ width: '300px', height: '300px' }}
           />
+               <Form
+                  name="basic"
+                  autoComplete="off"
+                  onFinish={(values) => {
+                    flv_play_by_index({ url: values.url, inx });
+              }}
+                >
+                  <Form.Item
+                    label="url"
+                    name="url"
+                  >
+                    <Input />
+                  </Form.Item>
 
-           <canvas ref={canvas_ref} id="canvas" width="400" height="400" />
+
+                  <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                    >
+                      flv_play
+                    </Button>
+                  </Form.Item>
+                </Form>
+
+           <canvas ref={canvas_ref}  width="300" height="300" />
     </div>
     </>
   )

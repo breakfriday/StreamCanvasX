@@ -5,9 +5,9 @@ const {useRef,useEffect}=React
 
 
 const SimpleDemo = () => {
-  const vedio_hls_ref = React.useRef<HTMLVideoElement | null>(null);
   const veido_flv_ref = React.useRef<HTMLVideoElement | null>(null);
   const canvas_ref = React.useRef<HTMLCanvasElement | null>(null);
+   let streamPlayerRef = useRef<mainPlayerService | null>(null);
 
   useEffect(() => {
     const streamPlayer = createMainPlayerInstance({ root_el: veido_flv_ref?.current!, canvas_el: canvas_ref?.current! });
@@ -28,10 +28,15 @@ const SimpleDemo = () => {
             files_data ? streamPlayer.set_blob_url(files_data) : '';
             }}
         />
-          <div
+        <div style={{"display":"flex","flexDirection":"row"}}>
+           <div
             ref={veido_flv_ref}
             style={{ width: '300px', height: '300px' }}
           />
+
+           <canvas ref={canvas_ref}  width="300" height="300" style={{"marginLeft":"15px"}} />
+        </div>
+    
     </div>
     </>
   )

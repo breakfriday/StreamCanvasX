@@ -58,11 +58,11 @@ const HlsDemo = () => {
   const flv_play_by_index = (params) => {
     let { url, inx } = params;
     let streamPlayer = streamPlayers[inx];
-    streamPlayer?.createFlvPlayer({
-      type: 'flv', // could also be mpegts, m2ts, flv
-      isLive: true,
-      url: url,
-  });
+        streamPlayer?.createFlvPlayer({
+          type: 'flv', // could also be mpegts, m2ts, flv
+          isLive: true,
+          url: url,
+      });
     };
 
   return (

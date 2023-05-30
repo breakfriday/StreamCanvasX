@@ -26,10 +26,22 @@
         "label": "guild",
         "href": "/guild",
         "docId": "guild"
+      },
+      {
+        "type": "link",
+        "label": "advance",
+        "href": "/advanced",
+        "docId": "advanced"
       }
     ]
   },
   "docs": {
+    "advanced": {
+      "id": "advanced",
+      "title": "进阶",
+      "description": "",
+      "sidebar": "defaultSidebar"
+    },
     "guild": {
       "id": "guild",
       "title": "新手指南",

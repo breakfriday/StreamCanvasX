@@ -1,0 +1,24 @@
+{
+  "unversionedId": "advanced",
+  "id": "advanced",
+  "title": "进阶",
+  "description": "",
+  "source": "@site/docs/advanced.md",
+  "sourceDirName": ".",
+  "slug": "/advanced",
+  "permalink": "/advanced",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "进阶",
+    "sidebar_label": "advance",
+    "sidebar_position": 3
+  },
+  "sidebar": "defaultSidebar",
+  "previous": {
+    "title": "guild",
+    "permalink": "/guild"
+  }
+}

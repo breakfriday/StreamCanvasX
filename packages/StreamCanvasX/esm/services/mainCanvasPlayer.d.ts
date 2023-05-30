@@ -6,6 +6,7 @@ declare class mainPlayerService {
     private mpegtsPlayer;
     private root_el;
     private aspectRatio;
+    private metadata;
     private config;
     constructor(parmams: Parameters<ImainPlayerService['factory']>[0]);
     get _vedio(): HTMLVideoElement;
@@ -17,8 +18,10 @@ declare class mainPlayerService {
     reoload(): void;
     set_blob_url(filedata: File): void;
     vedioEvents(): void;
+    getVideoSize(): void;
     loadMediaEvent(): void;
     setVideoSize(): void;
+    renderByWebGpu(): Promise<void>;
     analyzeCanvas(): void;
 }
 export default mainPlayerService;

@@ -1,30 +1,43 @@
 import * as React from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
-import mainPlayerService from 'StreamCanvasX/es2017/services/mainCanvasPlayer';
-const {useRef}=React
+import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'StreamCanvasX/es2017/serviceFactories/index';
+const {useRef,useEffect}=React
 
 
 const SimpleDemo = () => {
-  const vedio_hls_ref = React.useRef<HTMLVideoElement | null>(null);
   const veido_flv_ref = React.useRef<HTMLVideoElement | null>(null);
   const canvas_ref = React.useRef<HTMLCanvasElement | null>(null);
+   let streamPlayerRef = useRef<mainPlayerService | null>(null);
 
+  useEffect(() => {
+    const streamPlayer = createMainPlayerInstance({ root_el: veido_flv_ref?.current!, canvas_el: canvas_ref?.current! });
+    streamPlayerRef.current = streamPlayer;
+
+  }, []);
+
+    const flv_play_by_index = (params) => {
+    let { url, inx } = params;
+    let streamPlayer = streamPlayers[inx];
+        streamPlayer?.createFlvPlayer({
+          type: 'flv', // could also be mpegts, m2ts, flv
+          isLive: true,
+          url: url,
+      });
+    };
 
   return (
     <>
     <div>
-               <div  >
-                <video
-                  width="300"
-                  height="300"
-                  controls
-                  preload="none"
-                />
-                <Form
+  
+          <div
+            ref={veido_flv_ref}
+            style={{ width: '300px', height: '300px' }}
+          />
+               <Form
                   name="basic"
                   autoComplete="off"
                   onFinish={(values) => {
-                   
+                    flv_play_by_index({ url: values.url });
               }}
                 >
                   <Form.Item
@@ -44,11 +57,8 @@ const SimpleDemo = () => {
                     </Button>
                   </Form.Item>
                 </Form>
-                <div>
-                
-                </div>
 
-              </div>
+           <canvas ref={canvas_ref}  width="300" height="300" />
     </div>
     </>
   )
