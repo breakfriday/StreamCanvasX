@@ -205,7 +205,7 @@ const SimpleDemo = () => {
 
         // audio_process.updateBufferData();
         // audio_process.drawWithBufferData();
-         audio_process.visulizerDraw3();
+          audio_process.visulizerDraw3();
       });
     }
   };
