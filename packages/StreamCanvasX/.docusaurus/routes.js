@@ -38,11 +38,6 @@ export default [
     exact: true
   },
   {
-    path: '/demos/IcePkgDemo_0a1f41',
-    component: ComponentCreator('/demos/IcePkgDemo_0a1f41', 'ea4'),
-    exact: true
-  },
-  {
     path: '/demos/IcePkgDemo_40326d',
     component: ComponentCreator('/demos/IcePkgDemo_40326d', '41a'),
     exact: true
@@ -58,28 +53,8 @@ export default [
     exact: true
   },
   {
-    path: '/demos/IcePkgDemo_971139',
-    component: ComponentCreator('/demos/IcePkgDemo_971139', '6a0'),
-    exact: true
-  },
-  {
-    path: '/demos/IcePkgDemo_af484d',
-    component: ComponentCreator('/demos/IcePkgDemo_af484d', '2cc'),
-    exact: true
-  },
-  {
     path: '/demos/IcePkgDemo_aff3dc',
     component: ComponentCreator('/demos/IcePkgDemo_aff3dc', 'ac1'),
-    exact: true
-  },
-  {
-    path: '/demos/IcePkgDemo_c236dd',
-    component: ComponentCreator('/demos/IcePkgDemo_c236dd', 'a14'),
-    exact: true
-  },
-  {
-    path: '/demos/IcePkgDemo_cf168f',
-    component: ComponentCreator('/demos/IcePkgDemo_cf168f', 'b7b'),
     exact: true
   },
   {
