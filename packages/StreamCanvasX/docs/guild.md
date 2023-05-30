@@ -203,9 +203,9 @@ const SimpleDemo = () => {
         const audio_process = createAudioProcessingServiceInstance({ media_el: video_el, canvas_el: canvas_audio_ref.current! });
 
 
-        // audio_process.updateBufferData();
-        // audio_process.drawWithBufferData();
-          audio_process.visulizerDraw3();
+         audio_process.updateBufferData();
+         audio_process.drawWithBufferData();
+        // audio_process.visulizerDraw3();
       });
     }
   };
