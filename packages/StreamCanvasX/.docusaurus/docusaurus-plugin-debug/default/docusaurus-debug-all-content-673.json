@@ -164,11 +164,6 @@
     "demo-pages": [
       {
         "type": "jsx",
-        "permalink": "/demos/IcePkgDemo_0a1f41",
-        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_0a1f41.jsx"
-      },
-      {
-        "type": "jsx",
         "permalink": "/demos/IcePkgDemo_40326d",
         "source": "@site/.docusaurus/demo-pages/IcePkgDemo_40326d.jsx"
       },
@@ -184,28 +179,8 @@
       },
       {
         "type": "jsx",
-        "permalink": "/demos/IcePkgDemo_971139",
-        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_971139.jsx"
-      },
-      {
-        "type": "jsx",
-        "permalink": "/demos/IcePkgDemo_af484d",
-        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_af484d.jsx"
-      },
-      {
-        "type": "jsx",
         "permalink": "/demos/IcePkgDemo_aff3dc",
         "source": "@site/.docusaurus/demo-pages/IcePkgDemo_aff3dc.jsx"
-      },
-      {
-        "type": "jsx",
-        "permalink": "/demos/IcePkgDemo_c236dd",
-        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_c236dd.jsx"
-      },
-      {
-        "type": "jsx",
-        "permalink": "/demos/IcePkgDemo_cf168f",
-        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_cf168f.jsx"
       }
     ],
     "default": null
