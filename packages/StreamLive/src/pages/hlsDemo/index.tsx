@@ -22,7 +22,14 @@ const HlsDemo = () => {
 
 
   useEffect(() => {
-    const streamPlayer = createMainPlayerInstance({ root_el: veido_flv_ref?.current!, canvas_el: canvas_ref?.current! });
+    const streamPlayer = createMainPlayerInstance({
+      root_el: veido_flv_ref?.current!,
+      canvas_el: canvas_ref?.current!,
+      config: {
+            useCanvas: true,
+            cutCanvas: true,
+          },
+  });
     streamPlayerRef.current = streamPlayer;
 
     loadMediaEvent();
@@ -43,9 +50,9 @@ const HlsDemo = () => {
         const audio_process = createAudioProcessingServiceInstance({ media_el: video_el, canvas_el: canvas_audio_ref.current! });
 
 
-        audio_process.updateBufferData();
-        audio_process.drawWithBufferData();
-        // audio_process.visulizerDraw3();
+        // audio_process.updateBufferData();
+        // audio_process.drawWithBufferData();
+         audio_process.visulizerDraw3();
       });
     }
   };
