@@ -23,7 +23,7 @@
       },
       {
         "type": "link",
-        "label": "guild",
+        "label": "Guild",
         "href": "/guild",
         "docId": "guild"
       },

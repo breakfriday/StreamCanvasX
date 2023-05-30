@@ -36,7 +36,7 @@
               },
               "sidebar": "defaultSidebar",
               "previous": {
-                "title": "guild",
+                "title": "Guild",
                 "permalink": "/guild"
               }
             },
@@ -55,7 +55,7 @@
               "sidebarPosition": 2,
               "frontMatter": {
                 "title": "新手指南",
-                "sidebar_label": "guild",
+                "sidebar_label": "Guild",
                 "sidebar_position": 2
               },
               "sidebar": "defaultSidebar",
@@ -92,7 +92,7 @@
                 "permalink": "/inxtro"
               },
               "next": {
-                "title": "guild",
+                "title": "Guild",
                 "permalink": "/guild"
               }
             },
@@ -137,7 +137,7 @@
               {
                 "type": "doc",
                 "id": "guild",
-                "label": "guild"
+                "label": "Guild"
               },
               {
                 "type": "doc",
