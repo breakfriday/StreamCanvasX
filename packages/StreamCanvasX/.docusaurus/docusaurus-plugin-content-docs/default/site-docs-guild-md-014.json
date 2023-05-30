@@ -20,5 +20,9 @@
   "previous": {
     "title": "Getting Started",
     "permalink": "/"
+  },
+  "next": {
+    "title": "advance",
+    "permalink": "/advanced"
   }
 }

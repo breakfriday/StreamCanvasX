@@ -17,8 +17,20 @@ let mainPlayerService = class mainPlayerService {
                 hasAudio: true
             });
             this.mpegtsPlayer.attachMediaElement(videoEl);
+            this.getVideoSize();
             this.mpegtsPlayer.load();
-            this.mpegtsPlayer.play();
+            this.mpegtsPlayer.on(mpegts.Events.MEDIA_INFO, (parm)=>{
+                let video_width = parm.metadata.width;
+                let video_height = parm.metadata.height;
+                this.metadata = {
+                    video_height,
+                    video_width
+                };
+                this.getVideoSize();
+            });
+            this.mpegtsPlayer.on(mpegts.Events.METADATA_ARRIVED, (parm)=>{
+                this.mpegtsPlayer.play();
+            });
             this.mpegtsPlayer.on(mpegts.Events.ERROR, (error, detailError)=>{
                 if (error === mpegts.ErrorTypes.NETWORK_ERROR) {
                     if (detailError === mpegts.ErrorDetails.NETWORK_UNRECOVERABLE_EARLY_EOF) {
@@ -58,27 +70,52 @@ let mainPlayerService = class mainPlayerService {
     vedioEvents() {
         this.loadMediaEvent();
         this.video.addEventListener('play', ()=>{
-            requestAnimationFrame(this.analyzeCanvas.bind(this));
+            this.analyzeCanvas.call(this);
+        // requestAnimationFrame(this.analyzeCanvas.bind(this));
         }, false);
+    }
+    getVideoSize() {
+        let { videoHeight =0 , videoWidth =0  } = {};
+        if (this.metadata) {
+            videoWidth = this.metadata.video_width;
+            videoHeight = this.metadata.video_height;
+        } else {
+            videoHeight = this.video.videoHeight;
+            videoWidth = this.video.videoWidth;
+        }
+        // 计算最大公约数 （数学上求最大公约数的方法是“辗转相除法”，就是用一个数除以另一个数（不需要知道大小），取余数，再用被除数除以余数再取余，再用新的被除数除以新的余数再取余，直到余数为0，最后的被除数就是最大公约数）
+        function gcd(a, b) {
+            return b === 0 ? a : gcd(b, a % b);
+        }
+        let greatestCommonDivisor = gcd(videoWidth, videoHeight);
+        // 计算宽高比
+        let aspectRatioWidth = videoWidth / greatestCommonDivisor;
+        let aspectRatioHeight = videoHeight / greatestCommonDivisor;
+        let ratio = `${aspectRatioWidth}:${aspectRatioHeight}`;
+        this.aspectRatio = aspectRatioWidth / aspectRatioHeight;
+        console.log('------------------------');
+        console.log(ratio);
+        console.log('------------------------');
     }
     loadMediaEvent() {
         const video_el = this.video;
         if (video_el) {
             video_el.addEventListener('loadedmetadata', ()=>{
-                let { videoHeight , videoWidth  } = video_el;
-                // 计算最大公约数 （数学上求最大公约数的方法是“辗转相除法”，就是用一个数除以另一个数（不需要知道大小），取余数，再用被除数除以余数再取余，再用新的被除数除以新的余数再取余，直到余数为0，最后的被除数就是最大公约数）
-                function gcd(a, b) {
-                    return b === 0 ? a : gcd(b, a % b);
-                }
-                let greatestCommonDivisor = gcd(videoWidth, videoHeight);
-                // 计算宽高比
-                let aspectRatioWidth = videoWidth / greatestCommonDivisor;
-                let aspectRatioHeight = videoHeight / greatestCommonDivisor;
-                let ratio = `${aspectRatioWidth}:${aspectRatioHeight}`;
-                this.aspectRatio = aspectRatioWidth / aspectRatioHeight;
-                console.log('------------------------');
-                console.log(ratio);
-                console.log('------------------------');
+                this.getVideoSize();
+            // let { videoHeight, videoWidth } = video_el;
+            // // 计算最大公约数 （数学上求最大公约数的方法是“辗转相除法”，就是用一个数除以另一个数（不需要知道大小），取余数，再用被除数除以余数再取余，再用新的被除数除以新的余数再取余，直到余数为0，最后的被除数就是最大公约数）
+            //   function gcd(a, b) {
+            //       return b === 0 ? a : gcd(b, a % b);
+            //   }
+            //   let greatestCommonDivisor = gcd(videoWidth, videoHeight);
+            //   // 计算宽高比
+            //   let aspectRatioWidth = videoWidth / greatestCommonDivisor;
+            //   let aspectRatioHeight = videoHeight / greatestCommonDivisor;
+            //   let ratio = `${aspectRatioWidth}:${aspectRatioHeight}`;
+            //    this.aspectRatio = aspectRatioWidth / aspectRatioHeight;
+            //   console.log('------------------------');
+            //   console.log(ratio);
+            //   console.log('------------------------');
             });
         }
     }
@@ -88,15 +125,50 @@ let mainPlayerService = class mainPlayerService {
         this.video.height = height;
         this.video.width = width;
     }
+    async renderByWebGpu() {
+        const adapter = await navigator.gpu.requestAdapter();
+        const device = await adapter.requestDevice();
+        // 创建一个GPU纹理来保存视频帧
+        const videoTexture = device.createTexture({
+            size: {
+                width: this.video.videoWidth,
+                height: this.video.videoHeight,
+                depth: 1
+            },
+            format: 'rgba8unorm',
+            usage: window.GPUTextureUsage.COPY_DST | window.GPUTextureUsage.RENDER_ATTACHMENT
+        });
+        const renderFrame = ()=>{
+            // 将视频帧复制到纹理
+            device.queue.copyExternalImageToTexture({
+                source: this.video
+            }, {
+                texture: videoTexture
+            }, [
+                this.video.videoWidth,
+                this.video.videoHeight,
+                1
+            ]);
+            // TODO: 在这里使用纹理进行渲染
+            // 在下一帧继续
+            requestAnimationFrame(renderFrame.bind(this));
+        };
+        renderFrame.call(this);
+    }
     analyzeCanvas() {
-        if (this.video.ended || this.video.paused) {
-            return;
-        }
-        this.context.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height / this.aspectRatio);
+        let { width  } = this.canvas;
+        let height = this.canvas.height / this.aspectRatio;
+        let loopRender = ()=>{
+            if (this.video.ended || this.video.paused) {
+                return;
+            }
+            this.context.drawImage(this.video, 0, 0, width, height);
+            requestAnimationFrame(loopRender.bind(this));
+        };
         // 背景色域渐变
         const { data: [r, g, b]  } = this.context.getImageData(0, 0, 1, 1);
         // document.body.style.cssText = `background: rgb(${r}, ${g}, ${b});`;
-        requestAnimationFrame(this.analyzeCanvas.bind(this));
+        loopRender();
     }
     constructor(parmams){
         _define_property(this, "video", void 0);
@@ -105,6 +177,7 @@ let mainPlayerService = class mainPlayerService {
         _define_property(this, "mpegtsPlayer", void 0);
         _define_property(this, "root_el", void 0);
         _define_property(this, "aspectRatio", void 0);
+        _define_property(this, "metadata", void 0);
         _define_property(this, "config", void 0);
         // this.video = parmams.vedio_el;
         this.video = document.createElement('video');

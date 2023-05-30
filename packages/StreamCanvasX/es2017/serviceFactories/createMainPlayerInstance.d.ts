@@ -1,6 +1,4 @@
 import mainPlayerService from '../services/mainCanvasPlayer';
-declare function createMainPlayerInstance(parmams: {
-    canvas_el: HTMLCanvasElement;
-    root_el: HTMLElement;
-}): mainPlayerService;
+import { ImainPlayerService } from '../types/services';
+declare function createMainPlayerInstance(parmams: Parameters<ImainPlayerService['factory']>[0]): mainPlayerService;
 export { createMainPlayerInstance };

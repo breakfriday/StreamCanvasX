@@ -11,6 +11,11 @@
           "mainDocId": "index",
           "docs": [
             {
+              "id": "advanced",
+              "path": "/advanced",
+              "sidebar": "defaultSidebar"
+            },
+            {
               "id": "guild",
               "path": "/guild",
               "sidebar": "defaultSidebar"
