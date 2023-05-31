@@ -20,5 +20,9 @@
   "previous": {
     "title": "Guild",
     "permalink": "/guild"
+  },
+  "next": {
+    "title": "API",
+    "permalink": "/API"
   }
 }

@@ -38,6 +38,34 @@
               "previous": {
                 "title": "Guild",
                 "permalink": "/guild"
+              },
+              "next": {
+                "title": "API",
+                "permalink": "/API"
+              }
+            },
+            {
+              "unversionedId": "API",
+              "id": "API",
+              "title": "API",
+              "description": "",
+              "source": "@site/docs/API.md",
+              "sourceDirName": ".",
+              "slug": "/API",
+              "permalink": "/API",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 4,
+              "frontMatter": {
+                "title": "API",
+                "sidebar_label": "API",
+                "sidebar_position": 4
+              },
+              "sidebar": "defaultSidebar",
+              "previous": {
+                "title": "advance",
+                "permalink": "/advanced"
               }
             },
             {
@@ -143,6 +171,11 @@
                 "type": "doc",
                 "id": "advanced",
                 "label": "advance"
+              },
+              {
+                "type": "doc",
+                "id": "API",
+                "label": "API"
               }
             ]
           }
