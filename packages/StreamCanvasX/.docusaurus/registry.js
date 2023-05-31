@@ -14,6 +14,7 @@ export default {
   'allContent---docusaurus-debug-content-246-9aa': [() => import(/* webpackChunkName: 'allContent---docusaurus-debug-content-246-9aa' */ '~debug/default/docusaurus-debug-all-content-673.json'), '~debug/default/docusaurus-debug-all-content-673.json', require.resolveWeak('~debug/default/docusaurus-debug-all-content-673.json')],
   'config---demos-ice-pkg-demo-40326-d-5-e-9-f6d': [() => import(/* webpackChunkName: 'config---demos-ice-pkg-demo-40326-d-5-e-9-f6d' */ '@generated/docusaurus.config'), '@generated/docusaurus.config', require.resolveWeak('@generated/docusaurus.config')],
   'content---advanced-395-78a': [() => import(/* webpackChunkName: 'content---advanced-395-78a' */ '@site/docs/advanced.md'), '@site/docs/advanced.md', require.resolveWeak('@site/docs/advanced.md')],
+  'content---ap-ic-82-10b': [() => import(/* webpackChunkName: 'content---ap-ic-82-10b' */ '@site/docs/API.md'), '@site/docs/API.md', require.resolveWeak('@site/docs/API.md')],
   'content---c-37-d02': [() => import(/* webpackChunkName: 'content---c-37-d02' */ '@site/docs/index.md'), '@site/docs/index.md', require.resolveWeak('@site/docs/index.md')],
   'content---guild-014-2c0': [() => import(/* webpackChunkName: 'content---guild-014-2c0' */ '@site/docs/guild.md'), '@site/docs/guild.md', require.resolveWeak('@site/docs/guild.md')],
   'content---inxtrofca-fc7': [() => import(/* webpackChunkName: 'content---inxtrofca-fc7' */ '@site/docs/inxtro.md'), '@site/docs/inxtro.md', require.resolveWeak('@site/docs/inxtro.md')],

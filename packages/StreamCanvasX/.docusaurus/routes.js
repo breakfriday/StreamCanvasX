@@ -59,7 +59,7 @@ export default [
   },
   {
     path: '/',
-    component: ComponentCreator('/', 'c38'),
+    component: ComponentCreator('/', 'a72'),
     routes: [
       {
         path: '/',
@@ -70,6 +70,12 @@ export default [
       {
         path: '/advanced',
         component: ComponentCreator('/advanced', 'bef'),
+        exact: true,
+        sidebar: "defaultSidebar"
+      },
+      {
+        path: '/API',
+        component: ComponentCreator('/API', 'faf'),
         exact: true,
         sidebar: "defaultSidebar"
       },
