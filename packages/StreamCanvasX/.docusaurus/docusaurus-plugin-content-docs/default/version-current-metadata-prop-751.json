@@ -32,6 +32,12 @@
         "label": "advance",
         "href": "/advanced",
         "docId": "advanced"
+      },
+      {
+        "type": "link",
+        "label": "API",
+        "href": "/API",
+        "docId": "API"
       }
     ]
   },
@@ -40,6 +46,12 @@
       "id": "advanced",
       "title": "进阶",
       "description": "websocket  流",
+      "sidebar": "defaultSidebar"
+    },
+    "API": {
+      "id": "API",
+      "title": "API",
+      "description": "",
       "sidebar": "defaultSidebar"
     },
     "guild": {

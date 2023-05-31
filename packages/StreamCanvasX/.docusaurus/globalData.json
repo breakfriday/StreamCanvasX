@@ -16,6 +16,11 @@
               "sidebar": "defaultSidebar"
             },
             {
+              "id": "API",
+              "path": "/API",
+              "sidebar": "defaultSidebar"
+            },
+            {
               "id": "guild",
               "path": "/guild",
               "sidebar": "defaultSidebar"
