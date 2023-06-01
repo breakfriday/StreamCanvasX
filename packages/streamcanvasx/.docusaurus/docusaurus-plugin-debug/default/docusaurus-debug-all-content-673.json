@@ -1,0 +1,206 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "loadedVersions": [
+        {
+          "versionName": "current",
+          "label": "Next",
+          "banner": null,
+          "badge": false,
+          "noIndex": false,
+          "className": "docs-version-current",
+          "path": "/",
+          "tagsPath": "/tags",
+          "isLast": true,
+          "routePriority": -1,
+          "contentPath": "/home/break_happy/project/stream8/packages/streamcanvasx/docs",
+          "contentPathLocalized": "/home/break_happy/project/stream8/packages/streamcanvasx/i18n/zh-Hans/docusaurus-plugin-content-docs/current",
+          "docs": [
+            {
+              "unversionedId": "advanced",
+              "id": "advanced",
+              "title": "进阶",
+              "description": "websocket  流",
+              "source": "@site/docs/advanced.md",
+              "sourceDirName": ".",
+              "slug": "/advanced",
+              "permalink": "/advanced",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 3,
+              "frontMatter": {
+                "title": "进阶",
+                "sidebar_label": "advance",
+                "sidebar_position": 3
+              },
+              "sidebar": "defaultSidebar",
+              "previous": {
+                "title": "Guild",
+                "permalink": "/guild"
+              },
+              "next": {
+                "title": "API",
+                "permalink": "/API"
+              }
+            },
+            {
+              "unversionedId": "API",
+              "id": "API",
+              "title": "API",
+              "description": "",
+              "source": "@site/docs/API.md",
+              "sourceDirName": ".",
+              "slug": "/API",
+              "permalink": "/API",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 4,
+              "frontMatter": {
+                "title": "API",
+                "sidebar_label": "API",
+                "sidebar_position": 4
+              },
+              "sidebar": "defaultSidebar",
+              "previous": {
+                "title": "advance",
+                "permalink": "/advanced"
+              }
+            },
+            {
+              "unversionedId": "guild",
+              "id": "guild",
+              "title": "新手指南",
+              "description": "本地文件播放",
+              "source": "@site/docs/guild.md",
+              "sourceDirName": ".",
+              "slug": "/guild",
+              "permalink": "/guild",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 2,
+              "frontMatter": {
+                "title": "新手指南",
+                "sidebar_label": "Guild",
+                "sidebar_position": 2
+              },
+              "sidebar": "defaultSidebar",
+              "previous": {
+                "title": "Getting Started",
+                "permalink": "/"
+              },
+              "next": {
+                "title": "advance",
+                "permalink": "/advanced"
+              }
+            },
+            {
+              "unversionedId": "index",
+              "id": "index",
+              "title": "Getting Started",
+              "description": "",
+              "source": "@site/docs/index.md",
+              "sourceDirName": ".",
+              "slug": "/",
+              "permalink": "/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "title": "Getting Started",
+                "sidebar_label": "Getting Started",
+                "sidebar_position": 1
+              },
+              "sidebar": "defaultSidebar",
+              "previous": {
+                "title": "Introduction",
+                "permalink": "/inxtro"
+              },
+              "next": {
+                "title": "Guild",
+                "permalink": "/guild"
+              }
+            },
+            {
+              "unversionedId": "inxtro",
+              "id": "inxtro",
+              "title": "Introduction",
+              "description": "",
+              "source": "@site/docs/inxtro.md",
+              "sourceDirName": ".",
+              "slug": "/inxtro",
+              "permalink": "/inxtro",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 0,
+              "frontMatter": {
+                "title": "Introduction",
+                "sidebar_label": "Introduction",
+                "sidebar_position": 0
+              },
+              "sidebar": "defaultSidebar",
+              "next": {
+                "title": "Getting Started",
+                "permalink": "/"
+              }
+            }
+          ],
+          "drafts": [],
+          "sidebars": {
+            "defaultSidebar": [
+              {
+                "type": "doc",
+                "id": "inxtro",
+                "label": "Introduction"
+              },
+              {
+                "type": "doc",
+                "id": "index",
+                "label": "Getting Started"
+              },
+              {
+                "type": "doc",
+                "id": "guild",
+                "label": "Guild"
+              },
+              {
+                "type": "doc",
+                "id": "advanced",
+                "label": "advance"
+              },
+              {
+                "type": "doc",
+                "id": "API",
+                "label": "API"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "docusaurus-plugin-content-blog": {
+    "default": {
+      "blogSidebarTitle": "Recent posts",
+      "blogPosts": [],
+      "blogListPaginated": [],
+      "blogTags": {},
+      "blogTagsListPath": "/blog/tags",
+      "blogTagsPaginated": []
+    }
+  },
+  "docusaurus-plugin-content-pages": {
+    "demo-pages": null,
+    "default": null
+  },
+  "docusaurus-plugin-debug": {},
+  "docusaurus-theme-classic": {},
+  "icepkg:docusaurus-plugin": {},
+  "docusaurus-theme-live-codeblock": {},
+  "docusaurus-bootstrap-plugin": {},
+  "docusaurus-mdx-fallback-plugin": {}
+}

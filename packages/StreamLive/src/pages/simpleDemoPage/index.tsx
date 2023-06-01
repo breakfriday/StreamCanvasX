@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from 'react';
-// import player from 'StreamCanvasX/player';
-// import CanvasPlayer from 'StreamCanvasX/canvasPlayer';
+// import player from 'streamcanvasx/player';
+// import CanvasPlayer from 'streamcanvasx/canvasPlayer';
 
-// import { createOriginServiceInstance } from 'StreamCanvasX/serviceFactories/index';
+// import { createOriginServiceInstance } from 'streamcanvasx/serviceFactories/index';
 
 
 const SimplePage = () => {

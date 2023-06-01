@@ -3,7 +3,7 @@ import type { MenuDataItem } from '@ant-design/pro-layout';
 
 const asideMenuConfig: MenuDataItem[] = [
   {
-    name: 'StreamCanvasX',
+    name: 'streamcanvasx',
     icon: <WarningOutlined />,
     children: [
       {
