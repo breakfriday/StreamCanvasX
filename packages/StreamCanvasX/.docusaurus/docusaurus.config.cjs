@@ -25,7 +25,7 @@ const config = {
         routeBasePath: '/pages',
       }
     ],
-    
+    require.resolve('@docusaurus/theme-live-codeblock'),
   ],
 
   presets: [
@@ -37,7 +37,6 @@ const config = {
           path: 'docs',
           remarkPlugins: [
             [extractCode, { mobilePreview: false, baseUrl: '/' }],
-            require('@ice/remark-react-docgen-docusaurus'),
           ],
           exclude: [
             '**/_*.{js,jsx,ts,tsx,md,mdx}',

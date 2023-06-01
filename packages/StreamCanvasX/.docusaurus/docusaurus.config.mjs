@@ -27,7 +27,8 @@ export default {
         "path": "pages",
         "routeBasePath": "/pages"
       }
-    ]
+    ],
+    "/home/break_happy/project/stream8/node_modules/.pnpm/@docusaurus+theme-live-codeblock@2.4.1_3cuz37cpupvxy2oj3ncfox3l6e/node_modules/@docusaurus/theme-live-codeblock/lib/index.js"
   ],
   "presets": [
     [
@@ -42,8 +43,7 @@ export default {
                 "mobilePreview": false,
                 "baseUrl": "/"
               }
-            ],
-            null
+            ]
           ],
           "exclude": [
             "**/_*.{js,jsx,ts,tsx,md,mdx}",
@@ -293,6 +293,9 @@ export default {
     "tableOfContents": {
       "minHeadingLevel": 2,
       "maxHeadingLevel": 3
+    },
+    "liveCodeBlock": {
+      "playgroundPosition": "bottom"
     }
   },
   "baseUrlIssueBanner": true,
