@@ -3,7 +3,7 @@
 ```
 pnpm install 
 
-pnpm run docs:StreamCanvasX"
+pnpm run docs:streamcanvasx"
 
 pnpm start
 ```

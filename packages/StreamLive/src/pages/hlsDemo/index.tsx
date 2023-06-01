@@ -1,13 +1,13 @@
 
 import React, { useRef, useEffect } from 'react';
 import { Divider, Space, Button } from 'antd';
-// import CanvasPlayerByVideos from 'StreamCanvasX/canvasPlayerByVideo';
+// import CanvasPlayerByVideos from 'streamcanvasx/canvasPlayerByVideo';
 import mpegts from 'mpegts.js';
 import Hls from 'hls.js';
-// import CanvasAudioProcess from 'StreamCanvasX/canvasAudioProcess';
-import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'StreamCanvasX/es2017/serviceFactories/index';
-// import { ICombinedDrawer } from 'StreamCanvasX';
-import mainPlayerService from 'StreamCanvasX/es2017/services/mainCanvasPlayer';
+// import CanvasAudioProcess from 'streamcanvasx/canvasAudioProcess';
+import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
+// import { ICombinedDrawer } from 'streamcanvasx';
+import mainPlayerService from 'streamcanvasx/es2017/services/mainCanvasPlayer';
 
 
 const HlsDemo = () => {

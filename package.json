@@ -9,9 +9,9 @@
   "scripts": {
     "start": "pnpm -r --filter=./packages/StreamLive run start",
     "start:streamLive": "pnpm -r --filter=./packages/streamLive run start",
-    "docs:StreamCanvasX": "pnpm -r --filter=./packages/StreamCanvasX run start",
-    "buildDocs:StreamCanvasX": "pnpm -r --filter=./packages/StreamCanvasX run build",
-    "build:StreamCanvasX":"pnpm -r --filter=./packages/pkg1 run start"
+    "docs:streamcanvasx": "pnpm -r --filter=./packages/streamcanvasx run start",
+    "buildDocs:streamcanvasx": "pnpm -r --filter=./packages/streamcanvasx run build",
+    "build:streamcanvasx":"pnpm -r --filter=./packages/pkg1 run start"
   },
   "repository": "git@github.com:breakfriday/canvasTable.git",
   "author": "breakhappy <break_happy@163.com>",
