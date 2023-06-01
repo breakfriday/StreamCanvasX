@@ -5,8 +5,8 @@ export default defineConfig({
   plugins: [
     [
       '@ice/pkg-plugin-docusaurus', {
-        title: 'StreamCanvasX',
-        navBarTitle: 'StreamCanvasX',
+        title: 'streamcanvasx',
+        navBarTitle: 'streamcanvasx',
         // remarkPlugins: [
         //   "require('@ice/remark-react-docgen-docusaurus')",
         // ],

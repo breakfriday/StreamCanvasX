@@ -6,13 +6,13 @@ sidebar_position: 2
 
 ##  本地文件播放
 ```tsx
-import { createMainPlayerInstance } from 'StreamCanvasX/es2017/serviceFactories/index';
+import { createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 streamPlayer.set_blob_url(files_data)
 ```
 ```tsx  preview
 import * as React from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
-import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'StreamCanvasX/es2017/serviceFactories/index';
+import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 const {useRef,useEffect}=React
 
 
@@ -60,7 +60,7 @@ export default SimpleDemo;
 ##  flv直播流播放
 
 ```tsx
-import {  createMainPlayerInstance } from 'StreamCanvasX/es2017/serviceFactories/index';
+import {  createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 
 const streamPlayer = createMainPlayerInstance({ root_el: veido_flv_ref?.current!, canvas_el: canvas_ref?.current! });
 
@@ -74,7 +74,7 @@ streamPlayer?.createFlvPlayer({
 ```tsx  preview
 import * as React from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
-import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'StreamCanvasX/es2017/serviceFactories/index';
+import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 const {useRef,useEffect}=React
 
 
@@ -147,7 +147,7 @@ export default SimpleDemo;
 ```tsx  preview
 import * as React from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
-import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'StreamCanvasX/es2017/serviceFactories/index';
+import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 const {useRef,useEffect}=React
 
 
@@ -191,7 +191,7 @@ export default SimpleDemo;
 
 ##  音频可视化
 ```tsx  
-import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'StreamCanvasX/es2017/serviceFactories/index';
+import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 
 const audio_process = createAudioProcessingServiceInstance({ media_el: video_el, canvas_el: canvas_audio_ref.current! });
 
@@ -202,7 +202,7 @@ audio_process.drawWithBufferData();
 ```tsx  preview
 import * as React from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
-import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'StreamCanvasX/es2017/serviceFactories/index';
+import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 const {useRef,useEffect}=React
 
 

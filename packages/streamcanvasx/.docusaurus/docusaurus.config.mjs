@@ -4,7 +4,7 @@
  * Modify the docusaurus.config.js file at your site's root instead.
  */
 export default {
-  "title": "StreamCanvasX",
+  "title": "streamcanvasx",
   "tagline": "ICE Component Cool",
   "url": "https://your-docusaurus-test-site.com",
   "baseUrl": "/",
@@ -66,7 +66,7 @@ export default {
   ],
   "themeConfig": {
     "navbar": {
-      "title": "StreamCanvasX",
+      "title": "streamcanvasx",
       "logo": {
         "src": "https://img.alicdn.com/imgextra/i1/O1CN01lZTSIX1j7xpjIQ3fJ_!!6000000004502-2-tps-160-160.png"
       },

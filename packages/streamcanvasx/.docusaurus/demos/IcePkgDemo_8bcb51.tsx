@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
-import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'StreamCanvasX/es2017/serviceFactories/index';
+import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 const {useRef,useEffect}=React
 
 
@@ -28,12 +28,15 @@ const SimpleDemo = () => {
             files_data ? streamPlayer.set_blob_url(files_data) : '';
             }}
         />
-          <div
+        <div style={{"display":"flex","flexDirection":"row"}}>
+           <div
             ref={veido_flv_ref}
             style={{ width: '300px', height: '300px' }}
           />
 
-           <canvas ref={canvas_ref}  width="300" height="300" />
+           <canvas ref={canvas_ref}  width="300" height="300" style={{"marginLeft":"15px"}} />
+        </div>
+    
     </div>
     </>
   )

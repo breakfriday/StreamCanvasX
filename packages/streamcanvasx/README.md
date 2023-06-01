@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-$ npm i StreamCanvasX --save
+$ npm i streamcanvasx --save
 ```
 
 ## Usage
@@ -13,7 +13,7 @@ $ npm i StreamCanvasX --save
 
 
 ```js
-import { createMainPlayerInstance } from 'StreamCanvasX/es2017/serviceFactories/index';
+import { createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 
 const streamPlayer = createMainPlayerInstance({ canvas_el: canvas_ref?.current!, root_el: video_box.current! });
 
@@ -30,7 +30,7 @@ streamPlayer?.createFlvPlayer({
 
 ```js
 
-import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'StreamCanvasX/es2017/serviceFactories/index';
+import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 
 const streamPlayer = createMainPlayerInstance({ vedio_el, canvas_el });
 
