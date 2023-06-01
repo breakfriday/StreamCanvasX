@@ -7,7 +7,7 @@ export default {
   "title": "streamcanvasx",
   "tagline": "ICE Component Cool",
   "url": "https://your-docusaurus-test-site.com",
-  "baseUrl": "/",
+  "baseUrl": "/StreamCanvasX/",
   "i18n": {
     "defaultLocale": "zh-Hans",
     "locales": [
@@ -41,7 +41,7 @@ export default {
               null,
               {
                 "mobilePreview": false,
-                "baseUrl": "/"
+                "baseUrl": "StreamCanvasX"
               }
             ]
           ],

@@ -6,7 +6,7 @@
   "source": "@site/docs/index.md",
   "sourceDirName": ".",
   "slug": "/",
-  "permalink": "/",
+  "permalink": "/StreamCanvasX/",
   "draft": false,
   "tags": [],
   "version": "current",
@@ -19,10 +19,10 @@
   "sidebar": "defaultSidebar",
   "previous": {
     "title": "Introduction",
-    "permalink": "/inxtro"
+    "permalink": "/StreamCanvasX/inxtro"
   },
   "next": {
     "title": "Guild",
-    "permalink": "/guild"
+    "permalink": "/StreamCanvasX/guild"
   }
 }

@@ -6,7 +6,7 @@
   "source": "@site/docs/inxtro.md",
   "sourceDirName": ".",
   "slug": "/inxtro",
-  "permalink": "/inxtro",
+  "permalink": "/StreamCanvasX/inxtro",
   "draft": false,
   "tags": [],
   "version": "current",
@@ -19,6 +19,6 @@
   "sidebar": "defaultSidebar",
   "next": {
     "title": "Getting Started",
-    "permalink": "/"
+    "permalink": "/StreamCanvasX/"
   }
 }
