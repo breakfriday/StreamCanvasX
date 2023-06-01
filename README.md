@@ -14,7 +14,7 @@ build
 pnpm publish --filter streamcanvasx
 ```
 
-
+https://www.npmjs.com/package/streamcanvasx
 
 ## Screenshot
 
