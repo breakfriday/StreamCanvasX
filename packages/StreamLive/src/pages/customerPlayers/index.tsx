@@ -7,7 +7,7 @@ import Hls from 'hls.js';
 // import CanvasAudioProcess from 'streamcanvasx/canvasAudioProcess';
 import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 // import { ICombinedDrawer } from 'streamcanvasx';
-import mainPlayerService from 'streamcanvasx/serviceFactories/index';
+import mainPlayerService from 'streamcanvasx/es2017/serviceFactories/index';
 import { any } from '@tensorflow/tfjs';
 
 const boxs = [1, 2, 3, 4, 5, 6, 7];
