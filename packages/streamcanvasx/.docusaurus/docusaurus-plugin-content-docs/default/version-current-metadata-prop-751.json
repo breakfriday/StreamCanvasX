@@ -12,31 +12,31 @@
       {
         "type": "link",
         "label": "Introduction",
-        "href": "/inxtro",
+        "href": "/StreamCanvasX/inxtro",
         "docId": "inxtro"
       },
       {
         "type": "link",
         "label": "Getting Started",
-        "href": "/",
+        "href": "/StreamCanvasX/",
         "docId": "index"
       },
       {
         "type": "link",
         "label": "Guild",
-        "href": "/guild",
+        "href": "/StreamCanvasX/guild",
         "docId": "guild"
       },
       {
         "type": "link",
         "label": "advance",
-        "href": "/advanced",
+        "href": "/StreamCanvasX/advanced",
         "docId": "advanced"
       },
       {
         "type": "link",
         "label": "API",
-        "href": "/API",
+        "href": "/StreamCanvasX/API",
         "docId": "API"
       }
     ]
