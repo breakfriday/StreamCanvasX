@@ -7,7 +7,7 @@ const config = {
   title: 'streamcanvasx',
   tagline: 'ICE Component Cool',
   url: 'https://your-docusaurus-test-site.com',
-  baseUrl: '/',
+  baseUrl: 'StreamCanvasX',
   i18n: {
     defaultLocale: 'zh-Hans',
     locales: ['zh-Hans',],
@@ -36,7 +36,7 @@ const config = {
         docs: {
           path: 'docs',
           remarkPlugins: [
-            [extractCode, { mobilePreview: false, baseUrl: '/' }],
+            [extractCode, { mobilePreview: false, baseUrl: 'StreamCanvasX' }],
           ],
           exclude: [
             '**/_*.{js,jsx,ts,tsx,md,mdx}',
