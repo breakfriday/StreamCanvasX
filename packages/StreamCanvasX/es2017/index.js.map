@@ -1,1 +1,0 @@
-{"version":3,"sources":["./src/index.ts"],"sourcesContent":["export function foo(options: any) {\n  console.log('options');\n  alert(334443);\n  return true;\n}\n"],"names":["foo","options","console","log","alert"],"mappings":"AAAA,OAAO,SAASA,IAAIC,OAAY,EAAE;IAChCC,QAAQC,GAAG,CAAC;IACZC,MAAM;IACN,OAAO,IAAI;AACb,CAAC"}

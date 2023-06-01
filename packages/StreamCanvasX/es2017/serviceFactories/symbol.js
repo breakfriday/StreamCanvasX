@@ -5,5 +5,3 @@ const TYPES = {
     IMainPlayerService: Symbol.for('IMainPlayerService')
 };
 export { TYPES };
-
- //# sourceMappingURL=symbol.js.map
