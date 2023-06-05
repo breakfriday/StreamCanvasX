@@ -6,10 +6,12 @@ import React, { useRef, useState } from 'react';
 
 const ImageDecoder: React.FC = () => {
     const [imgUrlState, setImgUrlState] = useState('//localhost:3000/nichijo0.gif');
+    const gifRef = useRef<HTMLImageElement>();
   return (
     <>
 
       <Image
+        ref={gifRef}
         width={500}
         src={imgUrlState}
       />
