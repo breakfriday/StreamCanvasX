@@ -1,55 +1,40 @@
 import { definePageConfig } from 'ice';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
-import React, { useRef } from 'react';
+import { Button, Select, Image } from 'antd';
+import React, { useRef, useState } from 'react';
 
-
-const columns: Array<ProColumns<GithubRepoItem>> = [
-  {
-    title: 'id',
-    dataIndex: 'id',
-    ellipsis: true,
-    width: 80,
-  },
-  {
-    title: '名称',
-    dataIndex: 'name',
-    width: 200,
-  },
-  {
-    title: 'Stars',
-    dataIndex: 'star',
-    width: 200,
-  },
-  {
-    title: '描述',
-    dataIndex: 'description',
-  },
-  {
-    title: '操作',
-    valueType: 'option',
-    key: 'option',
-    width: 200,
-    render: (text, record, _, action) => [
-      <a
-        key="editable"
-        onClick={() => {
-          action?.startEditable?.(record.id);
-        }}
-      >
-        编辑
-      </a>,
-      <a href={record.url} target="_blank" rel="noopener noreferrer" key="view">
-        查看
-      </a>,
-    ],
-  },
-];
 
 const ImageDecoder: React.FC = () => {
+    const [imgUrlState, setImgUrlState] = useState('//localhost:3000/nichijo0.gif');
   return (
+    <>
 
-    <div>this is the test</div>
+      <Image
+        width={500}
+        src={imgUrlState}
+      />
+
+      <Select
+        defaultValue="img1"
+        style={{ width: 120 }}
+        onChange={(val) => {
+            setImgUrlState(val);
+        }}
+        options={[
+        { value: '//localhost:3000/nichijo0.gif', label: 'img0' },
+        { value: '//localhost:3000/nichijo1.gif', label: 'img1' },
+        { value: '//localhost:3000/nichijo2.gif', label: 'img2' },
+        { value: '//localhost:3000/nichijo3.gif', label: 'img3' },
+        { value: '//localhost:3000/nichijo4.gif', label: 'img4' },
+        { value: '//localhost:3000/nichijo5.gif', label: 'img5' },
+        { value: '//localhost:3000/nichijo6.gif', label: 'img6' },
+        { value: '//localhost:3000/nichijo7.gif', label: 'img7' },
+        { value: '//localhost:3000/nichijo8.gif', label: 'img8' },
+
+      ]}
+      />
+    </>
+
 
   );
 };
