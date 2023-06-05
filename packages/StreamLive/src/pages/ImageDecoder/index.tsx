@@ -2,6 +2,7 @@ import { definePageConfig } from 'ice';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Select, Image } from 'antd';
 import React, { useRef, useState } from 'react';
+import { ImageDecoderService } from 'streamcanvasx/es2017/services/image_decode_webm_writer_service';
 
 
 const ImageDecoder: React.FC = () => {
@@ -35,6 +36,8 @@ const ImageDecoder: React.FC = () => {
 
       ]}
       />
+
+
     </>
 
 
