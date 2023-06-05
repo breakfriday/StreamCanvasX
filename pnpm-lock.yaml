@@ -84,6 +84,7 @@ importers:
       '@ice/pkg-plugin-docusaurus': ^1.0.0
       '@ice/remark-react-docgen-docusaurus': ^1.0.1
       '@swc/helpers': ^0.5.1
+      '@types/dom-webcodecs': ^0.1.7
       '@types/node': ^18.11.17
       '@webgpu/types': ^0.1.32
       antd: ^4.24.0
@@ -96,11 +97,13 @@ importers:
       react-dom: ^18.2.0
       reflect-metadata: ^0.1.13
       stylelint: ^15.0.0
+      webm-writer: ^1.0.0
     dependencies:
       '@docusaurus/theme-live-codeblock': 2.4.1_3cuz37cpupvxy2oj3ncfox3l6e
       '@ice/jsx-runtime': 0.2.1_react@18.2.0
       '@ice/remark-react-docgen-docusaurus': 1.0.1
       '@swc/helpers': 0.5.1
+      '@types/dom-webcodecs': 0.1.7
       '@webgpu/types': 0.1.32
       hls.js: 1.3.5
       inversify: 6.0.1
@@ -109,6 +112,7 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       reflect-metadata: 0.1.13
+      webm-writer: 1.0.0
     devDependencies:
       '@applint/spec': 1.2.3_c47qjscozc5nunauwx6pyvxgey
       '@ice/pkg': 1.5.8_@swc+helpers@0.5.1
@@ -5362,6 +5366,10 @@ packages:
     dependencies:
       '@types/ms': 0.7.31
     dev: true
+
+  /@types/dom-webcodecs/0.1.7:
+    resolution: {integrity: sha512-1euwRyJ7rQrddOa24d5ZcoDRMp68xEIwyb7PKb3Wpc2OullUxHQ4a63WPa5V8R+KtCWISKjgS+f83HCUVhXS/w==}
+    dev: false
 
   /@types/eslint-scope/3.7.4:
     resolution: {integrity: sha512-9K4zoImiZc3HlIp6AVUDE4CWYx22a+lhSZMYNpbjW04+YF0KWj4pJXnEMjdnFTiQibFFmElcsasJXDbdI/EPhA==}
@@ -15315,6 +15323,10 @@ packages:
 
   /webidl-conversions/3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
+
+  /webm-writer/1.0.0:
+    resolution: {integrity: sha512-xafP4mzUqht03HBXP0Ov2YGsxfD08uncad9fQeshYwQXrcP6Z/4uxd1IUaGKqKigFPAgaD9xb6JEKA8SXLQMLA==}
+    dev: false
 
   /webpack-bundle-analyzer/4.8.0:
     resolution: {integrity: sha512-ZzoSBePshOKhr+hd8u6oCkZVwpVaXgpw23ScGLFpR6SjYI7+7iIWYarjN6OEYOfRt8o7ZyZZQk0DuMizJ+LEIg==}
