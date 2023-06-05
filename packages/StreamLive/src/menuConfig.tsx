@@ -22,6 +22,10 @@ const asideMenuConfig: MenuDataItem[] = [
         name: 'webrtc_wsam_canvas',
         path: 'webrtc_wsam_canvas',
       },
+      {
+        name: 'ImageDecoder',
+        path: 'ImageDecoder',
+      },
     ],
   },
   {
