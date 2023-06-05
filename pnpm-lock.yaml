@@ -97,6 +97,7 @@ importers:
       react-dom: ^18.2.0
       reflect-metadata: ^0.1.13
       stylelint: ^15.0.0
+      webm-muxer: ^3.1.1
       webm-writer: ^1.0.0
     dependencies:
       '@docusaurus/theme-live-codeblock': 2.4.1_3cuz37cpupvxy2oj3ncfox3l6e
@@ -112,6 +113,7 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       reflect-metadata: 0.1.13
+      webm-muxer: 3.1.1
       webm-writer: 1.0.0
     devDependencies:
       '@applint/spec': 1.2.3_c47qjscozc5nunauwx6pyvxgey
@@ -5635,6 +5637,10 @@ packages:
 
   /@types/webgl-ext/0.0.30:
     resolution: {integrity: sha512-LKVgNmBxN0BbljJrVUwkxwRYqzsAEPcZOe6S2T6ZaBDIrFp0qu4FNlpc5sM1tGbXUYFgdVQIoeLk1Y1UoblyEg==}
+    dev: false
+
+  /@types/wicg-file-system-access/2020.9.6:
+    resolution: {integrity: sha512-6hogE75Hl2Ov/jgp8ZhDaGmIF/q3J07GtXf8nCJCwKTHq7971po5+DId7grft09zG7plBwpF6ZU0yx9Du4/e1A==}
     dev: false
 
   /@types/ws/8.5.4:
@@ -15323,6 +15329,13 @@ packages:
 
   /webidl-conversions/3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
+
+  /webm-muxer/3.1.1:
+    resolution: {integrity: sha512-ZdSRwpbS/UU6K6SPjnyyj3XBLOf0H/b5vjBcdequcBTA16oE5rjrTCn802xZvsyL01Sjjpzam1uUPvZcSlZssg==}
+    dependencies:
+      '@types/dom-webcodecs': 0.1.7
+      '@types/wicg-file-system-access': 2020.9.6
+    dev: false
 
   /webm-writer/1.0.0:
     resolution: {integrity: sha512-xafP4mzUqht03HBXP0Ov2YGsxfD08uncad9fQeshYwQXrcP6Z/4uxd1IUaGKqKigFPAgaD9xb6JEKA8SXLQMLA==}
