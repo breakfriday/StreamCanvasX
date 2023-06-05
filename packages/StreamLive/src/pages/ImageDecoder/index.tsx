@@ -1,13 +1,20 @@
 import { definePageConfig } from 'ice';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Select, Image } from 'antd';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { ImageDecoderService } from 'streamcanvasx/es2017/services/image_decode_webm_writer_service';
 
 
 const ImageDecoder: React.FC = () => {
     const [imgUrlState, setImgUrlState] = useState('//localhost:3000/nichijo0.gif');
     const gifRef = useRef<HTMLImageElement>();
+    const [videoUrl, setVideoUrl] = useState<string>('');
+
+    const videoRef = useRef<HTMLVideoElement>();
+    let Decoder_instance: ImageDecoderService;
+    useEffect(() => {
+        Decoder_instance = new ImageDecoderService();
+    }, []);
   return (
     <>
 
@@ -36,6 +43,21 @@ const ImageDecoder: React.FC = () => {
 
       ]}
       />
+
+      <Button onClick={() => {
+        let set_url = async () => {
+            let blob_url = await Decoder_instance.transcode({ imgUrl: imgUrlState });
+
+
+            videoRef.current!.src = blob_url;
+             videoRef.current!.load();
+        };
+
+        set_url();
+      }}
+      >hello</Button>
+
+      <video ref={videoRef} width={300} controls />
 
 
     </>
