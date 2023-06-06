@@ -11,9 +11,11 @@ const ImageDecoder: React.FC = () => {
     const [videoUrl, setVideoUrl] = useState<string>('');
 
     const videoRef = useRef<HTMLVideoElement>();
-    let Decoder_instance: ImageDecoderService;
+    let DecoderRef = useRef<ImageDecoderService>();
+
     useEffect(() => {
-        Decoder_instance = new ImageDecoderService();
+      let Decoder_instance: ImageDecoderService = new ImageDecoderService();
+      DecoderRef.current = Decoder_instance;
     }, []);
   return (
     <>
@@ -48,10 +50,11 @@ const ImageDecoder: React.FC = () => {
           type="primary"
           onClick={() => {
         let set_url = async () => {
-            let blob_url = await Decoder_instance.transcode({ imgUrl: imgUrlState });
+            let Decoder_instance = DecoderRef.current;
+            let blob_url = await Decoder_instance?.transcode({ imgUrl: imgUrlState });
 
 
-            videoRef.current!.src = blob_url;
+            videoRef.current!.src = blob_url!;
              videoRef.current!.load();
         };
 
