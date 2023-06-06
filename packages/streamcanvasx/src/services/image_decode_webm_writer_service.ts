@@ -1,6 +1,7 @@
 import WebMWriter from 'webm-writer';
 
 class ImageDecoderService {
+  private imageDecoderProcess: ImageDecoder;
    constructor() {
     console.log('--');
    }
@@ -13,6 +14,8 @@ class ImageDecoderService {
 
     await imageDecoder.tracks.ready;
     await imageDecoder.completed;
+
+    this.imageDecoderProcess = imageDecoder;
 
     return imageDecoder;
     }
@@ -84,6 +87,25 @@ class ImageDecoderService {
         console.log(`转码用时${duration_time} 秒`);
 
         return videoBlobURL;
+    }
+
+    async getImageDecoderResultByFrameIndex(options: ImageDecodeOptions): Promise<ImageDecodeResult> {
+        let { frameIndex } = options;
+        const result = await this.imageDecoderProcess.decode({ frameIndex });
+        return result;
+    }
+
+    async renderCanvas(options: {
+        imgUrl: string;
+    }) {
+        const { imgUrl } = options;
+        const imageByteStream = await this.fetchImageByteStream(imgUrl);
+        const imageDecoder = await this.createImageDecoder(imageByteStream);
+
+
+        const { frameCount } = imageDecoder.tracks.selectedTrack!;
+        const { image: headFrame } = await imageDecoder.decode({ frameIndex: 0 });
+        const frameDuration = headFrame.duration! / 1000;
     }
 }
 
