@@ -20,6 +20,13 @@ class ImageDecoderService {
     return imageDecoder;
     }
 
+    // 除了使用 FileReader 的 readAsArrayBuffer 方法外，
+    // 如果你正在处理 Blob（File 对象就是一个 Blob 对象），你还可以使用 Blob.arrayBuffer() 方法来获得一个 Promise，该 Promise 解析为表示 Blob 数据的 ArrayBuffer。
+    async blobToArrayBuffer(file: Blob) {
+        const arraybuffer = await file.arrayBuffer();
+        return arraybuffer;
+    }
+
     async fetchImageByteStream(gifURL: string) {
         const response = await fetch(gifURL);
         return response.body!;
