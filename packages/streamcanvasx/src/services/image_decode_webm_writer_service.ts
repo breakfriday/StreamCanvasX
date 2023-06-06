@@ -87,23 +87,6 @@ class ImageDecoderService {
         return URL.createObjectURL(webMBlob);
     }
 
-    async transcode(options: {
-        imgUrl: string;
-    }) {
-        const { imgUrl } = options;
-
-        const imageByteStream = await this.fetchImageByteStream(imgUrl);
-        const startTime = new Date();
-        const imageDecoder = await this.createImageDecoder(imageByteStream);
-        const videoBlobURL = await this.decodeGifToWebM(imageDecoder);
-        const endTime = new Date();
-
-        const duration_time = (endTime.getTime() - startTime.getTime()) / 1000;
-
-        console.log(`转码用时${duration_time} 秒`);
-
-        return videoBlobURL;
-    }
 
     async getImageDataByByUrl(options: {
         imgUrl: string;
@@ -133,14 +116,10 @@ class ImageDecoderService {
     async compose1(options: {
         imgUrl: string;
     }) {
-        let { imgUrl } = options;
         let imgData = await this.getImageDataByByUrl(options);
         const startTime = new Date();
         let imageDecoder = await this.createImageDecoder(imgData);
-
-
         const videoBlobURL = await this.decodeGifToWebM(imageDecoder);
-
         const endTime = new Date();
         const duration_time = (endTime.getTime() - startTime.getTime()) / 1000;
 
