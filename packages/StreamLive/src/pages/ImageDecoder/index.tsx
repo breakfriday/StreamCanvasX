@@ -49,7 +49,7 @@ const ImageDecoder: React.FC = () => {
           onClick={() => {
         let set_url = async () => {
             let Decoder_instance = DecoderRef.current;
-            let blob_url = await Decoder_instance?.transcode({ imgUrl: imgUrlState });
+            let blob_url = await Decoder_instance?.compose1({ imgUrl: imgUrlState });
 
 
             videoRef.current!.src = blob_url!;
