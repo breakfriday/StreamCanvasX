@@ -5,7 +5,11 @@ class ImageDecoderService {
    constructor() {
     console.log('--');
    }
-   async createImageDecoder(imageByteStream: ReadableStream<Uint8Array>) {
+   async createImageDecoder(imageByteStream: ImageBufferSource): Promise<ImageDecoder> {
+  /*
+  ImageDecoder 是一个Web API，它提供了更多对解码图像过程的控制。
+  可以使用它将图像数据（如 ArrayBuffer 或 Blob）解码成可以绘制到 Canvas 上的格式。
+  */
     const imageDecoder = new ImageDecoder({
         data: imageByteStream,
         type: 'image/gif',
@@ -20,8 +24,13 @@ class ImageDecoderService {
     return imageDecoder;
     }
 
-    // 除了使用 FileReader 的 readAsArrayBuffer 方法外，
-    // 如果你正在处理 Blob（File 对象就是一个 Blob 对象），你还可以使用 Blob.arrayBuffer() 方法来获得一个 Promise，该 Promise 解析为表示 Blob 数据的 ArrayBuffer。
+    /*
+
+    除了使用 FileReader 的 readAsArrayBuffer 方法外，
+    还可以使用 Blob.arrayBuffer() (File 对象就是一个 Blob 对象) 方法来获得一个 Promise，
+    该 Promise 解析为表示 Blob 数据的 ArrayBuffer。
+
+    */
     async blobToArrayBuffer(file: Blob) {
         const arraybuffer = await file.arrayBuffer();
         return arraybuffer;
@@ -96,10 +105,47 @@ class ImageDecoderService {
         return videoBlobURL;
     }
 
-    async getImageDecoderResultByFrameIndex(options: ImageDecodeOptions): Promise<ImageDecodeResult> {
+    async getImageDataByByUrl(options: {
+        imgUrl: string;
+    }) {
+        const { imgUrl } = options;
+        const imageData = await this.fetchImageByteStream(imgUrl);
+        return imageData;
+    }
+
+    async getImageDataByFile(file: Blob) {
+        let data = this.blobToArrayBuffer(file);
+        return data;
+    }
+
+    async decoderByData(data: ImageBufferSource) {
+        const startTime = performance.now();
+        const imageDecoder = await this.createImageDecoder(data);
+    }
+
+
+    async getFrameResultByFrameIndex(options: ImageDecodeOptions, imageDecoderPorocss: ImageDecoder): Promise<ImageDecodeResult> {
         let { frameIndex } = options;
-        const result = await this.imageDecoderProcess.decode({ frameIndex });
+        const result = await imageDecoderPorocss.decode({ frameIndex });
         return result;
+    }
+
+    async compose1(options: {
+        imgUrl: string;
+    }) {
+        let { imgUrl } = options;
+        let imgData = await this.getImageDataByByUrl(options);
+        const startTime = new Date();
+        let imageDecoder = await this.createImageDecoder(imgData);
+
+
+        const videoBlobURL = await this.decodeGifToWebM(imageDecoder);
+
+        const endTime = new Date();
+        const duration_time = (endTime.getTime() - startTime.getTime()) / 1000;
+
+        console.log(`转码用时${duration_time} 秒`);
+        return videoBlobURL;
     }
 
     async renderCanvas(options: {
