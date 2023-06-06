@@ -26,10 +26,12 @@ class ImageDecoderService {
         const { image: headFrame } = await imageDecoder.decode({ frameIndex: 0 });
         const frameDuration = headFrame.duration! / 1000;
 
+        console.log('--输出帧日志--');
         console.log({ headFrame, frameCount, frameDuration });
 
 
         const canvas = document.createElement('canvas');
+        // codedWidth ，codedHeight代表视频帧的编码高度和宽度，这是帧原始的像素维度。
         canvas.width = headFrame.codedWidth;
         canvas.height = headFrame.codedHeight;
         const canvasContext = canvas.getContext('2d')!;
@@ -70,10 +72,16 @@ class ImageDecoderService {
         imgUrl: string;
     }) {
         const { imgUrl } = options;
-        const startTime = new Date();
+
         const imageByteStream = await this.fetchImageByteStream(imgUrl);
+        const startTime = new Date();
         const imageDecoder = await this.createImageDecoder(imageByteStream);
         const videoBlobURL = await this.decodeGifToWebM(imageDecoder);
+        const endTime = new Date();
+
+        const duration_time = (endTime.getTime() - startTime.getTime()) / 1000;
+
+        console.log(`转码用时${duration_time} 秒`);
 
         return videoBlobURL;
     }

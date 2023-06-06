@@ -7,8 +7,7 @@ import { ImageDecoderService } from 'streamcanvasx/es2017/services/image_decode_
 
 const ImageDecoder: React.FC = () => {
     const [imgUrlState, setImgUrlState] = useState('//localhost:3000/nichijo0.gif');
-    const gifRef = useRef<HTMLImageElement>();
-    const [videoUrl, setVideoUrl] = useState<string>('');
+
 
     const videoRef = useRef<HTMLVideoElement>();
     let DecoderRef = useRef<ImageDecoderService>();
@@ -23,7 +22,6 @@ const ImageDecoder: React.FC = () => {
 
       <Space wrap>
         <Image
-          ref={gifRef}
           width={500}
           src={imgUrlState}
         />
