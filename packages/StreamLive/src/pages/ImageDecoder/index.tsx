@@ -1,6 +1,6 @@
 import { definePageConfig } from 'ice';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Select, Image } from 'antd';
+import { Button, Select, Image, Space } from 'antd';
 import React, { useRef, useState, useEffect } from 'react';
 import { ImageDecoderService } from 'streamcanvasx/es2017/services/image_decode_webm_writer_service';
 
@@ -18,19 +18,20 @@ const ImageDecoder: React.FC = () => {
   return (
     <>
 
-      <Image
-        ref={gifRef}
-        width={500}
-        src={imgUrlState}
-      />
 
-      <Select
-        defaultValue="img1"
-        style={{ width: 120 }}
-        onChange={(val) => {
+      <Space wrap>
+        <Image
+          ref={gifRef}
+          width={500}
+          src={imgUrlState}
+        />
+        <Select
+          defaultValue="img1"
+          style={{ width: 120 }}
+          onChange={(val) => {
             setImgUrlState(val);
         }}
-        options={[
+          options={[
         { value: '//localhost:3000/nichijo0.gif', label: 'img0' },
         { value: '//localhost:3000/nichijo1.gif', label: 'img1' },
         { value: '//localhost:3000/nichijo2.gif', label: 'img2' },
@@ -42,9 +43,10 @@ const ImageDecoder: React.FC = () => {
         { value: '//localhost:3000/nichijo8.gif', label: 'img8' },
 
       ]}
-      />
-
-      <Button onClick={() => {
+        />
+        <Button
+          type="primary"
+          onClick={() => {
         let set_url = async () => {
             let blob_url = await Decoder_instance.transcode({ imgUrl: imgUrlState });
 
@@ -55,7 +57,8 @@ const ImageDecoder: React.FC = () => {
 
         set_url();
       }}
-      >hello</Button>
+        >decoder Image to Video</Button>
+      </Space>
 
       <video ref={videoRef} width={300} controls />
 
