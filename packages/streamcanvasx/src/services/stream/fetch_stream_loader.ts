@@ -1,7 +1,9 @@
 class httpFlvStreamLoader {
     private _requestAbort: boolean;
+    private _abortController: AbortController;
     constructor() {
         this.requestAbort = false;
+        this._abortController = new AbortController();
     }
     static isSupported() {
         if (window.fetch && window.ReadableStream) {
@@ -17,6 +19,9 @@ class httpFlvStreamLoader {
     set requestAbort(value: boolean) {
         this._requestAbort = value;
     }
+    get abortController() {
+        return this._abortController;
+    }
 
 
     async fetchStream(url: string): Promise<void> {
@@ -29,6 +34,7 @@ class httpFlvStreamLoader {
             headers: headers,
             cache: 'default',
             referrerPolicy: 'no-referrer-when-downgrade',
+            signal: this.abortController.signal,
 
         };
 
@@ -48,11 +54,16 @@ class httpFlvStreamLoader {
         }
     }
 
+    abortFetch(): void {
+        this.abortController.abort();
+    }
+
 
     async processStream(reader: ReadableStreamDefaultReader): Promise<void> {
         while (true) {
             try {
                 const { done, value } = await reader.read();
+                let chunk = value.value.buffer;
                 if (done) {
                     console.log('Stream complete');
                     return;
