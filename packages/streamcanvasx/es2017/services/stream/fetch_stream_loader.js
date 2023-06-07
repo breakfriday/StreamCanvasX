@@ -55,6 +55,7 @@ class httpFlvStreamLoader {
             }
         }
     }
+    processFlvChunk(chunk) {}
     abort() {}
     constructor(){
         _define_property(this, "_requestAbort", void 0);

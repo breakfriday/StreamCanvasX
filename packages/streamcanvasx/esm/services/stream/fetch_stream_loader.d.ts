@@ -6,5 +6,6 @@ declare class httpFlvStreamLoader {
     set requestAbort(value: boolean);
     fetchStream(url: string): Promise<void>;
     processStream(reader: ReadableStreamDefaultReader): Promise<void>;
+    processFlvChunk(chunk: Uint8Array): void;
     abort(): void;
 }

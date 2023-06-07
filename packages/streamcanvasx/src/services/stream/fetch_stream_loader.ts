@@ -68,6 +68,11 @@ class httpFlvStreamLoader {
         }
     }
 
+    processFlvChunk(chunk: Uint8Array): void {
+
+
+    }
+
     abort() {
 
     }

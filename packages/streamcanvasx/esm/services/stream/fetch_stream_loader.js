@@ -148,6 +148,10 @@ var httpFlvStreamLoader = /*#__PURE__*/ function() {
             }
         },
         {
+            key: "processFlvChunk",
+            value: function processFlvChunk(chunk) {}
+        },
+        {
             key: "abort",
             value: function abort() {}
         }
