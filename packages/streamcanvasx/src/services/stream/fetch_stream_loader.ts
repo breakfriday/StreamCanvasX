@@ -19,7 +19,8 @@ class FetchStreamLoader {
     }
 
 
-    async fetchStream(url: string) {
+    async fetchStream(url: string): Promise<void> {
+        let sourceUrl = url;
         let headers = new Headers();
         let params: RequestInit = {
             method: 'GET',
@@ -30,14 +31,40 @@ class FetchStreamLoader {
             referrerPolicy: 'no-referrer-when-downgrade',
 
         };
-        fetch(url, params).then(response => {
-
-          });
 
         try {
-            let res = await fetch(url, params);
+            const response: Response = await fetch(url, params);
+            if (this.requestAbort === true) {
+                response.body.cancel();
+                return;
+            }
+
+            const reader = response.body?.getReader();
+            if (reader) {
+                await this.processStream(reader);
+            }
         } catch (e) {
 
+        }
+    }
+
+
+    async processStream(reader: ReadableStreamDefaultReader): Promise<void> {
+        while (true) {
+            try {
+                const { done, value } = await reader.read();
+                if (done) {
+                    console.log('Stream complete');
+                    return;
+                }
+
+                // Your process goes here, where you can handle each chunk of FLV data
+                // For example:
+                // this.processFlvChunk(value);
+            } catch (e) {
+                console.error('Error reading stream', e);
+                return;
+            }
         }
     }
 
