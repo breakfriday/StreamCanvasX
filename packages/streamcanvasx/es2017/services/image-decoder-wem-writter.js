@@ -67,5 +67,3 @@ export function setupImageDecodeWriteWebm(options) {
     };
     options.button.addEventListener('click', startTranscode, false);
 }
-
- //# sourceMappingURL=image-decoder-wem-writter.js.map

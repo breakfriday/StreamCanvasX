@@ -23,5 +23,3 @@ class DecodeVide {
     async startDeconding() {}
     constructor(){}
 }
-
- //# sourceMappingURL=webcodecsPlayer.js.map

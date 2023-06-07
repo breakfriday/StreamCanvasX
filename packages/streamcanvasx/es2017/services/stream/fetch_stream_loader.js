@@ -72,5 +72,3 @@ class HttpFlvStreamLoader {
     }
 }
 export { HttpFlvStreamLoader };
-
- //# sourceMappingURL=fetch_stream_loader.js.map

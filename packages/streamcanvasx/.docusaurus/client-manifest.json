@@ -1,0 +1,331 @@
+{
+  "entrypoints": [
+    "main"
+  ],
+  "origins": {
+    "77": [
+      77
+    ],
+    "795": [
+      8,
+      532,
+      590,
+      592,
+      842,
+      997,
+      795
+    ],
+    "842": [
+      8,
+      532,
+      592,
+      795,
+      918,
+      997,
+      842
+    ],
+    "997": [
+      8,
+      532,
+      592,
+      795,
+      842,
+      997
+    ],
+    "17896441": [
+      532,
+      592,
+      842,
+      918
+    ],
+    "main": [
+      303,
+      532,
+      179
+    ],
+    "runtime~main": [
+      179,
+      532,
+      303
+    ],
+    "0147c47f": [
+      532,
+      592,
+      795,
+      842,
+      997,
+      8
+    ],
+    "059d51c2": [
+      324
+    ],
+    "1be78505": [
+      532,
+      77
+    ],
+    "1e8c4b5f": [
+      312
+    ],
+    "395f47e2": [
+      592,
+      801
+    ],
+    "7e3242a8": [
+      592,
+      795,
+      590
+    ],
+    "935f2afb": [
+      53
+    ],
+    "b32d88cf": [
+      592,
+      212
+    ],
+    "c36a78b8": [
+      592,
+      465
+    ],
+    "c377a04b": [
+      592,
+      971
+    ],
+    "c8229a80": [
+      592,
+      298
+    ],
+    "fcaac3de": [
+      592,
+      182
+    ],
+    "fdccd7e9": [
+      592,
+      71
+    ],
+    "styles": [
+      8,
+      179,
+      303,
+      514,
+      592,
+      795,
+      842,
+      918,
+      997,
+      532
+    ],
+    "common": [
+      8,
+      71,
+      182,
+      212,
+      298,
+      465,
+      532,
+      590,
+      795,
+      801,
+      842,
+      918,
+      971,
+      997,
+      592
+    ]
+  },
+  "assets": {
+    "8": {
+      "js": [
+        {
+          "file": "assets/js/0147c47f.ef1bb92f.js",
+          "hash": "a6feb84c19ecdf29",
+          "publicPath": "/StreamCanvasX/assets/js/0147c47f.ef1bb92f.js"
+        }
+      ]
+    },
+    "53": {
+      "js": [
+        {
+          "file": "assets/js/935f2afb.098d869a.js",
+          "hash": "ad363524fd2ae22d",
+          "publicPath": "/StreamCanvasX/assets/js/935f2afb.098d869a.js"
+        }
+      ]
+    },
+    "71": {
+      "js": [
+        {
+          "file": "assets/js/fdccd7e9.9fd1e95a.js",
+          "hash": "d64b28aef6db348d",
+          "publicPath": "/StreamCanvasX/assets/js/fdccd7e9.9fd1e95a.js"
+        }
+      ]
+    },
+    "77": {
+      "js": [
+        {
+          "file": "assets/js/77.33f5ca43.js",
+          "hash": "51912d09a51ac298",
+          "publicPath": "/StreamCanvasX/assets/js/77.33f5ca43.js"
+        },
+        {
+          "file": "assets/js/1be78505.e51ef033.js",
+          "hash": "f4a0fe4b70926fe8",
+          "publicPath": "/StreamCanvasX/assets/js/1be78505.e51ef033.js"
+        }
+      ]
+    },
+    "179": {
+      "js": [
+        {
+          "file": "assets/js/main.efb3d27e.js",
+          "hash": "347e8ef8ae4cfe90",
+          "publicPath": "/StreamCanvasX/assets/js/main.efb3d27e.js"
+        }
+      ]
+    },
+    "182": {
+      "js": [
+        {
+          "file": "assets/js/fcaac3de.9f5dd8ec.js",
+          "hash": "bad62b7fd0e10569",
+          "publicPath": "/StreamCanvasX/assets/js/fcaac3de.9f5dd8ec.js"
+        }
+      ]
+    },
+    "212": {
+      "js": [
+        {
+          "file": "assets/js/b32d88cf.43d05be4.js",
+          "hash": "c6d5cdd508a74f69",
+          "publicPath": "/StreamCanvasX/assets/js/b32d88cf.43d05be4.js"
+        }
+      ]
+    },
+    "298": {
+      "js": [
+        {
+          "file": "assets/js/c8229a80.751fdd43.js",
+          "hash": "84d927209026c3a0",
+          "publicPath": "/StreamCanvasX/assets/js/c8229a80.751fdd43.js"
+        }
+      ]
+    },
+    "303": {
+      "js": [
+        {
+          "file": "assets/js/runtime~main.1d709a50.js",
+          "hash": "61db7c0d1fa511b4",
+          "publicPath": "/StreamCanvasX/assets/js/runtime~main.1d709a50.js"
+        }
+      ]
+    },
+    "312": {
+      "js": [
+        {
+          "file": "assets/js/1e8c4b5f.dba23616.js",
+          "hash": "0a8a85bad58ce17a",
+          "publicPath": "/StreamCanvasX/assets/js/1e8c4b5f.dba23616.js"
+        }
+      ]
+    },
+    "324": {
+      "js": [
+        {
+          "file": "assets/js/059d51c2.34d7072a.js",
+          "hash": "a7b95b91b1b6d41e",
+          "publicPath": "/StreamCanvasX/assets/js/059d51c2.34d7072a.js"
+        }
+      ]
+    },
+    "465": {
+      "js": [
+        {
+          "file": "assets/js/c36a78b8.4a702bb1.js",
+          "hash": "792f9c00d2790278",
+          "publicPath": "/StreamCanvasX/assets/js/c36a78b8.4a702bb1.js"
+        }
+      ]
+    },
+    "532": {
+      "css": [
+        {
+          "file": "assets/css/styles.0c08c033.css",
+          "hash": "91301d43266029eb",
+          "publicPath": "/StreamCanvasX/assets/css/styles.0c08c033.css"
+        }
+      ]
+    },
+    "590": {
+      "js": [
+        {
+          "file": "assets/js/7e3242a8.4a0642a1.js",
+          "hash": "d13a26ed2f2af183",
+          "publicPath": "/StreamCanvasX/assets/js/7e3242a8.4a0642a1.js"
+        }
+      ]
+    },
+    "592": {
+      "js": [
+        {
+          "file": "assets/js/common.a6a92a1a.js",
+          "hash": "617ac449aef09860",
+          "publicPath": "/StreamCanvasX/assets/js/common.a6a92a1a.js"
+        }
+      ]
+    },
+    "795": {
+      "js": [
+        {
+          "file": "assets/js/795.691da2b9.js",
+          "hash": "df853bf60c730a77",
+          "publicPath": "/StreamCanvasX/assets/js/795.691da2b9.js"
+        }
+      ]
+    },
+    "801": {
+      "js": [
+        {
+          "file": "assets/js/395f47e2.4c7cd717.js",
+          "hash": "71353f46c7095c81",
+          "publicPath": "/StreamCanvasX/assets/js/395f47e2.4c7cd717.js"
+        }
+      ]
+    },
+    "842": {
+      "js": [
+        {
+          "file": "assets/js/842.1522c3a6.js",
+          "hash": "8a1d26548b2fc65a",
+          "publicPath": "/StreamCanvasX/assets/js/842.1522c3a6.js"
+        }
+      ]
+    },
+    "918": {
+      "js": [
+        {
+          "file": "assets/js/17896441.6959ec7a.js",
+          "hash": "9a5bb5afc256b12d",
+          "publicPath": "/StreamCanvasX/assets/js/17896441.6959ec7a.js"
+        }
+      ]
+    },
+    "971": {
+      "js": [
+        {
+          "file": "assets/js/c377a04b.cc428c3e.js",
+          "hash": "69c174bbf6d68737",
+          "publicPath": "/StreamCanvasX/assets/js/c377a04b.cc428c3e.js"
+        }
+      ]
+    },
+    "997": {
+      "js": [
+        {
+          "file": "assets/js/997.cf3bec52.js",
+          "hash": "be25901b30775212",
+          "publicPath": "/StreamCanvasX/assets/js/997.cf3bec52.js"
+        }
+      ]
+    }
+  }
+}

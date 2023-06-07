@@ -54,5 +54,3 @@ var WebGPURenderer = /*#__PURE__*/ function() {
     ]);
     return WebGPURenderer;
 }();
-
- //# sourceMappingURL=WebGpuRenderService.js.map

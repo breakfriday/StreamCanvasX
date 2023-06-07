@@ -130,5 +130,3 @@ class WebcodecsDecoder extends Emitter {
     }
 }
 export { WebcodecsDecoder as default };
-
- //# sourceMappingURL=webcodecs.js.map
