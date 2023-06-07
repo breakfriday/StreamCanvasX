@@ -64,3 +64,5 @@ var DecodeVide = /*#__PURE__*/ function() {
     ]);
     return DecodeVide;
 }();
+
+ //# sourceMappingURL=webcodecsPlayer.js.map
