@@ -1,4 +1,8 @@
 class FetchStreamLoader {
+    private _requestAbort: boolean;
+    constructor() {
+        this.requestAbort = false;
+    }
     static isSupported() {
         if (window.fetch && window.ReadableStream) {
              return true;
@@ -7,15 +11,24 @@ class FetchStreamLoader {
             return false;
         }
     }
+    get requestAbort(): boolean {
+        return this._requestAbort;
+    }
+    set requestAbort(value: boolean) {
+        this._requestAbort = value;
+    }
+
 
     async fetchStream(url: string) {
         let headers = new Headers();
-        let params = {
+        let params: RequestInit = {
             method: 'GET',
+            mode: 'cors', // cors is enabled by default
+            credentials: 'same-origin', // withCredentials is disabled by default
             headers: headers,
-            mode: 'cors',
-            credentials: 'include',
             cache: 'default',
+            referrerPolicy: 'no-referrer-when-downgrade',
+
         };
         fetch(url, params).then(response => {
 
