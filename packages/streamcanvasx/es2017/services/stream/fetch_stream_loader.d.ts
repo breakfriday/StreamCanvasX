@@ -1,4 +1,4 @@
-declare class httpFlvStreamLoader {
+declare class HttpFlvStreamLoader {
     private _requestAbort;
     private _abortController;
     constructor();
@@ -10,5 +10,5 @@ declare class httpFlvStreamLoader {
     abortFetch(): void;
     processStream(reader: ReadableStreamDefaultReader): Promise<void>;
     processFlvChunk(chunk: Uint8Array): void;
-    abort(): void;
 }
+export { HttpFlvStreamLoader };

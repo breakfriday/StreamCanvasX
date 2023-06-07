@@ -3,16 +3,16 @@ import { _ as _class_call_check } from "@swc/helpers/_/_class_call_check";
 import { _ as _create_class } from "@swc/helpers/_/_create_class";
 import { _ as _define_property } from "@swc/helpers/_/_define_property";
 import { _ as _ts_generator } from "@swc/helpers/_/_ts_generator";
-var httpFlvStreamLoader = /*#__PURE__*/ function() {
+var HttpFlvStreamLoader = /*#__PURE__*/ function() {
     "use strict";
-    function httpFlvStreamLoader() {
-        _class_call_check(this, httpFlvStreamLoader);
+    function HttpFlvStreamLoader() {
+        _class_call_check(this, HttpFlvStreamLoader);
         _define_property(this, "_requestAbort", void 0);
         _define_property(this, "_abortController", void 0);
         this.requestAbort = false;
         this._abortController = new AbortController();
     }
-    _create_class(httpFlvStreamLoader, [
+    _create_class(HttpFlvStreamLoader, [
         {
             key: "requestAbort",
             get: function get() {
@@ -166,10 +166,6 @@ var httpFlvStreamLoader = /*#__PURE__*/ function() {
         {
             key: "processFlvChunk",
             value: function processFlvChunk(chunk) {}
-        },
-        {
-            key: "abort",
-            value: function abort() {}
         }
     ], [
         {
@@ -184,7 +180,8 @@ var httpFlvStreamLoader = /*#__PURE__*/ function() {
             }
         }
     ]);
-    return httpFlvStreamLoader;
+    return HttpFlvStreamLoader;
 }();
+export { HttpFlvStreamLoader };
 
  //# sourceMappingURL=fetch_stream_loader.js.map
