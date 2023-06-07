@@ -14,6 +14,9 @@ class httpFlvStreamLoader {
     set requestAbort(value) {
         this._requestAbort = value;
     }
+    get abortController() {
+        return this._abortController;
+    }
     async fetchStream(url) {
         let sourceUrl = url;
         let headers = new Headers();
@@ -23,7 +26,8 @@ class httpFlvStreamLoader {
             credentials: 'same-origin',
             headers: headers,
             cache: 'default',
-            referrerPolicy: 'no-referrer-when-downgrade'
+            referrerPolicy: 'no-referrer-when-downgrade',
+            signal: this.abortController.signal
         };
         try {
             var _response_body;
@@ -38,10 +42,14 @@ class httpFlvStreamLoader {
             }
         } catch (e) {}
     }
+    abortFetch() {
+        this.abortController.abort();
+    }
     async processStream(reader) {
         while(true){
             try {
                 const { done , value  } = await reader.read();
+                let chunk = value.value.buffer;
                 if (done) {
                     console.log('Stream complete');
                     return;
@@ -59,7 +67,9 @@ class httpFlvStreamLoader {
     abort() {}
     constructor(){
         _define_property(this, "_requestAbort", void 0);
+        _define_property(this, "_abortController", void 0);
         this.requestAbort = false;
+        this._abortController = new AbortController();
     }
 }
 

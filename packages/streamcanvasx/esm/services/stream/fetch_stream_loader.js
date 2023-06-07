@@ -8,7 +8,9 @@ var httpFlvStreamLoader = /*#__PURE__*/ function() {
     function httpFlvStreamLoader() {
         _class_call_check(this, httpFlvStreamLoader);
         _define_property(this, "_requestAbort", void 0);
+        _define_property(this, "_abortController", void 0);
         this.requestAbort = false;
+        this._abortController = new AbortController();
     }
     _create_class(httpFlvStreamLoader, [
         {
@@ -18,6 +20,12 @@ var httpFlvStreamLoader = /*#__PURE__*/ function() {
             },
             set: function set(value) {
                 this._requestAbort = value;
+            }
+        },
+        {
+            key: "abortController",
+            get: function get() {
+                return this._abortController;
             }
         },
         {
@@ -37,7 +45,8 @@ var httpFlvStreamLoader = /*#__PURE__*/ function() {
                                     credentials: "same-origin",
                                     headers: headers,
                                     cache: "default",
-                                    referrerPolicy: "no-referrer-when-downgrade"
+                                    referrerPolicy: "no-referrer-when-downgrade",
+                                    signal: _this.abortController.signal
                                 };
                                 _state.label = 1;
                             case 1:
@@ -92,10 +101,16 @@ var httpFlvStreamLoader = /*#__PURE__*/ function() {
             }
         },
         {
+            key: "abortFetch",
+            value: function abortFetch() {
+                this.abortController.abort();
+            }
+        },
+        {
             key: "processStream",
             value: function processStream(reader) {
                 return _async_to_generator(function() {
-                    var _ref, done, value, e;
+                    var _ref, done, value, chunk, e;
                     return _ts_generator(this, function(_state) {
                         switch(_state.label){
                             case 0:
@@ -117,6 +132,7 @@ var httpFlvStreamLoader = /*#__PURE__*/ function() {
                                 ];
                             case 2:
                                 _ref = _state.sent(), done = _ref.done, value = _ref.value;
+                                chunk = value.value.buffer;
                                 if (done) {
                                     console.log("Stream complete");
                                     return [
