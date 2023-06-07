@@ -1,0 +1,1 @@
+{"version":3,"sources":["./src/services/canvaRenderService.ts"],"sourcesContent":["import { injectable } from 'inversify';\nimport mpegts from 'mpegts.js';\n\n\n@injectable()\nclass canvasRenderService {\n    setSize() {\n\n    }\n}"],"names":["injectable","canvasRenderService","setSize"],"mappings":";AAAA,SAASA,UAAU,QAAQ,YAAY;IAKjCC,sBADN;IAEIC,UAAU,CAEV;AACJ;AAJMD;IADLD;GACKC"}
