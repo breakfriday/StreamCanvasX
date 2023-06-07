@@ -161,5 +161,3 @@ var WebcodecsDecoder = /*#__PURE__*/ function(Emitter) {
     return WebcodecsDecoder;
 }(Emitter);
 export { WebcodecsDecoder as default };
-
- //# sourceMappingURL=webcodecs.js.map

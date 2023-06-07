@@ -6,5 +6,3 @@ const container1 = new Container();
 // container.bind<Logger>(Logger).toSelf();
 // container.bind<orignClass>(orignClass).toSelf();
 export { container1, Container };
-
- //# sourceMappingURL=container.js.map

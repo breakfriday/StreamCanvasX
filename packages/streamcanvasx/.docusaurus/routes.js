@@ -3,38 +3,23 @@ import ComponentCreator from '@docusaurus/ComponentCreator';
 
 export default [
   {
-    path: '/StreamCanvasX/__docusaurus/debug',
-    component: ComponentCreator('/StreamCanvasX/__docusaurus/debug', 'b88'),
+    path: '/StreamCanvasX/demos/IcePkgDemo_2ac6eb',
+    component: ComponentCreator('/StreamCanvasX/demos/IcePkgDemo_2ac6eb', '953'),
     exact: true
   },
   {
-    path: '/StreamCanvasX/__docusaurus/debug/config',
-    component: ComponentCreator('/StreamCanvasX/__docusaurus/debug/config', '667'),
+    path: '/StreamCanvasX/demos/IcePkgDemo_75e193',
+    component: ComponentCreator('/StreamCanvasX/demos/IcePkgDemo_75e193', '545'),
     exact: true
   },
   {
-    path: '/StreamCanvasX/__docusaurus/debug/content',
-    component: ComponentCreator('/StreamCanvasX/__docusaurus/debug/content', 'f39'),
+    path: '/StreamCanvasX/demos/IcePkgDemo_8bcb51',
+    component: ComponentCreator('/StreamCanvasX/demos/IcePkgDemo_8bcb51', 'a00'),
     exact: true
   },
   {
-    path: '/StreamCanvasX/__docusaurus/debug/globalData',
-    component: ComponentCreator('/StreamCanvasX/__docusaurus/debug/globalData', '445'),
-    exact: true
-  },
-  {
-    path: '/StreamCanvasX/__docusaurus/debug/metadata',
-    component: ComponentCreator('/StreamCanvasX/__docusaurus/debug/metadata', 'f35'),
-    exact: true
-  },
-  {
-    path: '/StreamCanvasX/__docusaurus/debug/registry',
-    component: ComponentCreator('/StreamCanvasX/__docusaurus/debug/registry', 'cee'),
-    exact: true
-  },
-  {
-    path: '/StreamCanvasX/__docusaurus/debug/routes',
-    component: ComponentCreator('/StreamCanvasX/__docusaurus/debug/routes', '2f7'),
+    path: '/StreamCanvasX/demos/IcePkgDemo_bb32fb',
+    component: ComponentCreator('/StreamCanvasX/demos/IcePkgDemo_bb32fb', 'd19'),
     exact: true
   },
   {

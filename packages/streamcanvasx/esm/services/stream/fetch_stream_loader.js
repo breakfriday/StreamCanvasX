@@ -183,5 +183,3 @@ var HttpFlvStreamLoader = /*#__PURE__*/ function() {
     return HttpFlvStreamLoader;
 }();
 export { HttpFlvStreamLoader };
-
- //# sourceMappingURL=fetch_stream_loader.js.map

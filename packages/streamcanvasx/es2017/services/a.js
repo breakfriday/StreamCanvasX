@@ -124,5 +124,3 @@ function AVCDecoderConfigurationRecord(track) {
         track.pps.length
     ]).concat(pps));
 }
-
- //# sourceMappingURL=a.js.map
