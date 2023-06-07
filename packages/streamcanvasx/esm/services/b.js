@@ -168,3 +168,5 @@ var renderGif = function renderGif1(data, options) {
     });
     return objReturn;
 };
+
+ //# sourceMappingURL=b.js.map

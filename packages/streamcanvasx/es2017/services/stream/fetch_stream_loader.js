@@ -20,6 +20,7 @@ class HttpFlvStreamLoader {
     async fetchStream(url) {
         let sourceUrl = url;
         let headers = new Headers();
+        this._abortController = new AbortController();
         let params = {
             method: 'GET',
             mode: 'cors',
@@ -45,11 +46,15 @@ class HttpFlvStreamLoader {
     abortFetch() {
         this.abortController.abort();
     }
+    signal() {
+        this.abortController.signal;
+    }
     async processStream(reader) {
         while(true){
             try {
                 const { done , value  } = await reader.read();
-                let chunk = value.value.buffer;
+                const chunk = value === null || value === void 0 ? void 0 : value.buffer;
+                console.log(chunk);
                 if (done) {
                     console.log('Stream complete');
                     return;
@@ -68,7 +73,8 @@ class HttpFlvStreamLoader {
         _define_property(this, "_requestAbort", void 0);
         _define_property(this, "_abortController", void 0);
         this.requestAbort = false;
-        this._abortController = new AbortController();
     }
 }
 export { HttpFlvStreamLoader };
+
+ //# sourceMappingURL=fetch_stream_loader.js.map

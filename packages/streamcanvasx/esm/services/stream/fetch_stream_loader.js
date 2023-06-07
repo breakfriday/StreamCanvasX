@@ -10,7 +10,6 @@ var HttpFlvStreamLoader = /*#__PURE__*/ function() {
         _define_property(this, "_requestAbort", void 0);
         _define_property(this, "_abortController", void 0);
         this.requestAbort = false;
-        this._abortController = new AbortController();
     }
     _create_class(HttpFlvStreamLoader, [
         {
@@ -39,6 +38,7 @@ var HttpFlvStreamLoader = /*#__PURE__*/ function() {
                             case 0:
                                 sourceUrl = url;
                                 headers = new Headers();
+                                _this._abortController = new AbortController();
                                 params = {
                                     method: "GET",
                                     mode: "cors",
@@ -107,6 +107,12 @@ var HttpFlvStreamLoader = /*#__PURE__*/ function() {
             }
         },
         {
+            key: "signal",
+            value: function signal() {
+                this.abortController.signal;
+            }
+        },
+        {
             key: "processStream",
             value: function processStream(reader) {
                 return _async_to_generator(function() {
@@ -132,7 +138,8 @@ var HttpFlvStreamLoader = /*#__PURE__*/ function() {
                                 ];
                             case 2:
                                 _ref = _state.sent(), done = _ref.done, value = _ref.value;
-                                chunk = value.value.buffer;
+                                chunk = value === null || value === void 0 ? void 0 : value.buffer;
+                                console.log(chunk);
                                 if (done) {
                                     console.log("Stream complete");
                                     return [
@@ -183,3 +190,5 @@ var HttpFlvStreamLoader = /*#__PURE__*/ function() {
     return HttpFlvStreamLoader;
 }();
 export { HttpFlvStreamLoader };
+
+ //# sourceMappingURL=fetch_stream_loader.js.map
