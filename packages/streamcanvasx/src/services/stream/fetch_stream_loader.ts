@@ -1,4 +1,4 @@
-class FetchStreamLoader {
+class httpFlvStreamLoader {
     private _requestAbort: boolean;
     constructor() {
         this.requestAbort = false;
