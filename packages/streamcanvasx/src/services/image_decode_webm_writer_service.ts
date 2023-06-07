@@ -127,6 +127,16 @@ class ImageDecoderService {
         return videoBlobURL;
     }
 
+    async compose2(options: {
+        imgUrl: string;
+    }) {
+        let imgData = await this.getImageDataByByUrl(options);
+        const startTime = new Date();
+        let imageDecoder = await this.createImageDecoder(imgData);
+
+        let result = this.getFrameResultByFrameIndex({ frameIndex: 0 }, imageDecoder);
+    }
+
     async renderCanvas(options: {
         imgUrl: string;
     }) {
