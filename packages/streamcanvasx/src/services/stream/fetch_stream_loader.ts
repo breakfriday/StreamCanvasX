@@ -1,4 +1,4 @@
-class httpFlvStreamLoader {
+class HttpFlvStreamLoader {
     private _requestAbort: boolean;
     private _abortController: AbortController;
     constructor() {
@@ -83,8 +83,6 @@ class httpFlvStreamLoader {
 
 
     }
-
-    abort() {
-
-    }
 }
+
+export { HttpFlvStreamLoader };

@@ -1,5 +1,5 @@
 import { _ as _define_property } from "@swc/helpers/_/_define_property";
-class httpFlvStreamLoader {
+class HttpFlvStreamLoader {
     static isSupported() {
         if (window.fetch && window.ReadableStream) {
             return true;
@@ -64,7 +64,6 @@ class httpFlvStreamLoader {
         }
     }
     processFlvChunk(chunk) {}
-    abort() {}
     constructor(){
         _define_property(this, "_requestAbort", void 0);
         _define_property(this, "_abortController", void 0);
@@ -72,5 +71,6 @@ class httpFlvStreamLoader {
         this._abortController = new AbortController();
     }
 }
+export { HttpFlvStreamLoader };
 
  //# sourceMappingURL=fetch_stream_loader.js.map
