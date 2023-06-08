@@ -1,4 +1,7 @@
 
+import Emitter from '../../utils/emitter';
+import { Idemux } from '../../types/services/index';
+import BaseDemux from './baseDemux';
 const MEDIA_TYPE = {
     audio: 1,
     video: 2,
@@ -8,27 +11,6 @@ const FLV_MEDIA_TYPE = {
     audio: 8,
     video: 9,
 };
-
-const WORKER_CMD_TYPE = {
-    init: 'init',
-    initVideo: 'initVideo',
-    render: 'render',
-    playAudio: 'playAudio',
-    initAudio: 'initAudio',
-    kBps: 'kBps',
-    decode: 'decode',
-    audioCode: 'audioCode',
-    videoCode: 'videoCode',
-    wasmError: 'wasmError',
-};
-
-interface IData {
-    ts: number;
-    cts?: number;
-    payload: Uint8Array;
-    type: number;
-    isIFrame?: boolean;
-  }
 
 
   interface IPlayer {
@@ -40,63 +22,37 @@ interface IData {
   }
 
 
-class fLVDemux {
-    private player: IPlayer;
-    private stopId: any;
-    private firstTimestamp: number | null;
-    private startTimestamp: number | null;
-    private delay: number;
-    private bufferList: IData[];
-    private dropping: boolean;
+class fLVDemux extends BaseDemux {
     private flvDemux: (data: ArrayBuffer) => void;
     private input: Generator<number>;
-    constructor() {
-        super();
-        this.player = player;
-
-        this.stopId = null;
-        this.firstTimestamp = null;
-        this.startTimestamp = null;
-        this.delay = -1;
-        this.bufferList = [];
-        this.dropping = false;
+    constructor(player: any) {
+        super(player);
+        this.input = this._inputFlv();
         this.flvDemux = this.dispatchFlvData(this.input);
-
-        this.player.debug.log('FlvDemux', 'init');
+        player.debug.log('FlvDemux', 'init');
     }
 
-    // 负责将提取的音频或视频负载数据解码。
-    _doDecode(data: IData) {
-       let { payload, type, ts, isIFrame, cts } = data;
-        const { player } = this;
-        let options = {
-            ts: ts,
-            cts: cts,
-            type: type,
-            isIFrame: false,
+    dispatchFlvData(input: Generator<number>) {
+        let need = input.next();
+        let buffer: Uint8Array = null;
+        return (value: ArrayBuffer) => {
+            let data = new Uint8Array(value);
+            if (buffer) {
+                let combine = new Uint8Array(buffer.length + data.length);
+                combine.set(buffer);
+                combine.set(data, buffer.length);
+                data = combine;
+                buffer = null;
+            }
+            while (data.length >= need.value) {
+                let remain = data.slice(need.value);
+                need = input.next(data.slice(0, need.value));
+                data = remain;
+            }
+            if (data.length > 0) {
+                buffer = data;
+            }
         };
-        // use offscreen
-        if (player._opt.useWCS && !player._opt.useOffscreen) {
-            if (type === MEDIA_TYPE.video) {
-                options.isIFrame = isIFrame;
-            }
-            this.pushBuffer(payload, options);
-        } else if (player._opt.useMSE) {
-            // use mse
-            if (type === MEDIA_TYPE.video) {
-                options.isIFrame = isIFrame;
-            }
-            this.pushBuffer(payload, options);
-        } else {
-            //
-            if (type === MEDIA_TYPE.video) {
-                player.decoderWorker && player.decoderWorker.decodeVideo(payload, ts, isIFrame);
-            } else if (type === MEDIA_TYPE.audio) {
-                if (player._opt.hasAudio) {
-                    player.decoderWorker && player.decoderWorker.decodeAudio(payload, ts);
-                }
-            }
-        }
     }
 
 
@@ -169,26 +125,6 @@ class fLVDemux {
                     }
                     break;
             }
-        }
-    }
-
-    // 用于向缓冲队列中添加音频或视频数据。
-    pushBuffer(payload: any, options: any) {
-        // 音频
-        if (options.type === MEDIA_TYPE.audio) {
-            this.bufferList.push({
-                ts: options.ts,
-                payload: payload,
-                type: MEDIA_TYPE.audio,
-            });
-        } else if (options.type === MEDIA_TYPE.video) {
-            this.bufferList.push({
-                ts: options.ts,
-                cts: options.cts,
-                payload: payload,
-                type: MEDIA_TYPE.video,
-                isIFrame: options.isIFrame,
-            });
         }
     }
 }
