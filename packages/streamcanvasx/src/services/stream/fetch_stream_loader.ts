@@ -1,8 +1,9 @@
 class HttpFlvStreamLoader {
     private _requestAbort: boolean;
     private _abortController: AbortController;
-    constructor() {
+    constructor(player) {
         this.requestAbort = false;
+        this.player = player;
     }
     static isSupported() {
         if (window.fetch && window.ReadableStream) {

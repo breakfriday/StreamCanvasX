@@ -66,10 +66,11 @@ class HttpFlvStreamLoader {
         }
     }
     processFlvChunk(chunk) {}
-    constructor(){
+    constructor(player){
         _define_property(this, "_requestAbort", void 0);
         _define_property(this, "_abortController", void 0);
         this.requestAbort = false;
+        this.player = player;
     }
 }
 export { HttpFlvStreamLoader };
