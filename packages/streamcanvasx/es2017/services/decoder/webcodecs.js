@@ -122,6 +122,10 @@ class WebcodecsDecoder extends Emitter {
     }
     handleDecode(videoFrame) {
         if (!this.isInitInfo) {
+            let videoInfo = {
+                width: videoFrame.codedWidth,
+                height: videoFrame.codedHeight
+            };
             this.player.video.updateVideoInfo({
                 width: videoFrame.codedWidth,
                 height: videoFrame.codedHeight
@@ -148,6 +152,7 @@ class WebcodecsDecoder extends Emitter {
     }
     decodeVideo(payload, ts, isIframe) {
         // this.player.debug.log('Webcodecs decoder', 'decodeVideo', ts, isIframe);
+        // eslint-disable-next-line no-negated-condition
         if (!this.hasInit) {
             if (isIframe && payload[1] === 0) {
                 const videoCodec = payload[0] & 0x0F;
@@ -224,7 +229,6 @@ class WebcodecsDecoder extends Emitter {
         this.isInitInfo = false;
         this.decoder = null;
         this.initDecoder();
-        player.debug.log('Webcodecs', 'init');
     }
 }
 export { WebcodecsDecoder as default };
