@@ -7,6 +7,7 @@ const MEDIA_TYPE = {
     video: 2,
 };
 
+
 const FLV_MEDIA_TYPE = {
     audio: 8,
     video: 9,
