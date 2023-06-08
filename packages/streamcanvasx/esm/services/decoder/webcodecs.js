@@ -119,7 +119,6 @@ var WebcodecsDecoder = /*#__PURE__*/ function(Emitter) {
         _this.isInitInfo = false;
         _this.decoder = null;
         _this.initDecoder();
-        player.debug.log("Webcodecs", "init");
         return _this;
     }
     _create_class(WebcodecsDecoder, [
@@ -157,6 +156,10 @@ var WebcodecsDecoder = /*#__PURE__*/ function(Emitter) {
             key: "handleDecode",
             value: function handleDecode(videoFrame) {
                 if (!this.isInitInfo) {
+                    var videoInfo = {
+                        width: videoFrame.codedWidth,
+                        height: videoFrame.codedHeight
+                    };
                     this.player.video.updateVideoInfo({
                         width: videoFrame.codedWidth,
                         height: videoFrame.codedHeight
@@ -189,6 +192,7 @@ var WebcodecsDecoder = /*#__PURE__*/ function(Emitter) {
             key: "decodeVideo",
             value: function decodeVideo(payload, ts, isIframe) {
                 // this.player.debug.log('Webcodecs decoder', 'decodeVideo', ts, isIframe);
+                // eslint-disable-next-line no-negated-condition
                 if (!this.hasInit) {
                     if (isIframe && payload[1] === 0) {
                         var videoCodec = payload[0] & 0x0F;
