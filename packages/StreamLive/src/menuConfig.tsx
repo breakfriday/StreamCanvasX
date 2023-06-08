@@ -26,6 +26,10 @@ const asideMenuConfig: MenuDataItem[] = [
         name: 'ImageDecoder',
         path: 'ImageDecoder',
       },
+      {
+        name: 'flvDemux',
+        path: 'flvDemux',
+      },
     ],
   },
   {

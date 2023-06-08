@@ -6,6 +6,8 @@ import WebcodecsDecoder from '../services/decoder/webcodecs';
 
 import Emitter from '../utils/emitter';
 
+import { DEFAULT_PLAYER_OPTIONS } from '../constant/index';
+
 
 class Player extends Emitter {
     HttpFlvStreamLoader: HttpFlvStreamLoader;
@@ -15,7 +17,7 @@ class Player extends Emitter {
     constructor() {
         super();
         this.HttpFlvStreamLoader = new HttpFlvStreamLoader();
-        this.fLVDemux = new fLVDemux();
+        this.fLVDemux = new fLVDemux(this);
     }
 
     play() {
