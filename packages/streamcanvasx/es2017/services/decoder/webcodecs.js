@@ -1,6 +1,5 @@
 import { _ as _define_property } from "@swc/helpers/_/_define_property";
 import Emitter from '../../utils/emitter';
-import { parseAVCDecoderConfigurationRecord } from '../utils/h264';
 function now() {
     return new Date().getTime();
 }
@@ -173,16 +172,16 @@ class WebcodecsDecoder extends Emitter {
             }
         } else {
             // check width or height change
-            if (isIframe && payload[1] === 0) {
-                let data = payload.slice(5);
-                const config = parseAVCDecoderConfigurationRecord(data);
-                const { videoInfo  } = this.player.video;
-                if (config.codecWidth !== videoInfo.width || config.codecHeight !== videoInfo.height) {
-                    this.player.debug.log('Webcodecs', `width or height is update, width ${videoInfo.width}-> ${config.codecWidth}, height ${videoInfo.height}-> ${config.codecHeight}`);
-                    this.player.emit(EVENTS_ERROR.webcodecsWidthOrHeightChange);
-                    return;
-                }
-            }
+            // if (isIframe && payload[1] === 0) {
+            //     let data = payload.slice(5);
+            //     const config = parseAVCDecoderConfigurationRecord(data);
+            //     const { videoInfo } = this.player.video;
+            //     if (config.codecWidth !== videoInfo.width || config.codecHeight !== videoInfo.height) {
+            //         this.player.debug.log('Webcodecs', `width or height is update, width ${videoInfo.width}-> ${config.codecWidth}, height ${videoInfo.height}-> ${config.codecHeight}`);
+            //         this.player.emit(EVENTS_ERROR.webcodecsWidthOrHeightChange);
+            //         return;
+            //     }
+            // }
             // fix : Uncaught DOMException: Failed to execute 'decode' on 'VideoDecoder': A key frame is required after configure() or flush().
             if (!this.isDecodeFirstIIframe && isIframe) {
                 this.isDecodeFirstIIframe = true;

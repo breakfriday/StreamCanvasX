@@ -67,3 +67,15 @@ export interface ImainPlayerService{
  factory: (parms: Partial<IfactoryParms>) => void;
 
 }
+
+
+export interface Idemux{
+  isIFrame: boolean;
+  IData: {
+    ts: number;
+    cts?: number;
+    payload: Uint8Array;
+    type: number;
+    isIFrame?: boolean;
+  };
+}

@@ -5,7 +5,6 @@ import { _ as _define_property } from "@swc/helpers/_/_define_property";
 import { _ as _inherits } from "@swc/helpers/_/_inherits";
 import { _ as _create_super } from "@swc/helpers/_/_create_super";
 import Emitter from "../../utils/emitter";
-import { parseAVCDecoderConfigurationRecord } from "../utils/h264";
 function now() {
     return new Date().getTime();
 }
@@ -213,16 +212,16 @@ var WebcodecsDecoder = /*#__PURE__*/ function(Emitter) {
                     }
                 } else {
                     // check width or height change
-                    if (isIframe && payload[1] === 0) {
-                        var data = payload.slice(5);
-                        var config1 = parseAVCDecoderConfigurationRecord(data);
-                        var videoInfo = this.player.video.videoInfo;
-                        if (config1.codecWidth !== videoInfo.width || config1.codecHeight !== videoInfo.height) {
-                            this.player.debug.log("Webcodecs", "width or height is update, width ".concat(videoInfo.width, "-> ").concat(config1.codecWidth, ", height ").concat(videoInfo.height, "-> ").concat(config1.codecHeight));
-                            this.player.emit(EVENTS_ERROR.webcodecsWidthOrHeightChange);
-                            return;
-                        }
-                    }
+                    // if (isIframe && payload[1] === 0) {
+                    //     let data = payload.slice(5);
+                    //     const config = parseAVCDecoderConfigurationRecord(data);
+                    //     const { videoInfo } = this.player.video;
+                    //     if (config.codecWidth !== videoInfo.width || config.codecHeight !== videoInfo.height) {
+                    //         this.player.debug.log('Webcodecs', `width or height is update, width ${videoInfo.width}-> ${config.codecWidth}, height ${videoInfo.height}-> ${config.codecHeight}`);
+                    //         this.player.emit(EVENTS_ERROR.webcodecsWidthOrHeightChange);
+                    //         return;
+                    //     }
+                    // }
                     // fix : Uncaught DOMException: Failed to execute 'decode' on 'VideoDecoder': A key frame is required after configure() or flush().
                     if (!this.isDecodeFirstIIframe && isIframe) {
                         this.isDecodeFirstIIframe = true;
