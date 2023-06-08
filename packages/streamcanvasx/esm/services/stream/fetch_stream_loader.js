@@ -107,12 +107,6 @@ var HttpFlvStreamLoader = /*#__PURE__*/ function() {
             }
         },
         {
-            key: "signal",
-            value: function signal() {
-                this.abortController.signal;
-            }
-        },
-        {
             key: "processStream",
             value: function processStream(reader) {
                 return _async_to_generator(function() {

@@ -1,11 +1,105 @@
+import { _ as _assert_this_initialized } from "@swc/helpers/_/_assert_this_initialized";
 import { _ as _class_call_check } from "@swc/helpers/_/_class_call_check";
 import { _ as _create_class } from "@swc/helpers/_/_create_class";
+import { _ as _define_property } from "@swc/helpers/_/_define_property";
 import { _ as _inherits } from "@swc/helpers/_/_inherits";
 import { _ as _create_super } from "@swc/helpers/_/_create_super";
-import { formatVideoDecoderConfigure, now } from "../utils";
-import Emitter from "../utils/emitter";
-import { ENCODED_VIDEO_TYPE, EVENTS, EVENTS_ERROR, VIDEO_ENC_CODE, WCS_ERROR } from "../../constant";
+import Emitter from "../../utils/emitter";
 import { parseAVCDecoderConfigurationRecord } from "../utils/h264";
+function now() {
+    return new Date().getTime();
+}
+var formatVideoDecoderConfigure = function(avcC) {
+    var codecArray = avcC.subarray(1, 4);
+    var codecString = "avc1.";
+    for(var j = 0; j < 3; j++){
+        var h = codecArray[j].toString(16);
+        if (h.length < 2) {
+            h = "0".concat(h);
+        }
+        codecString += h;
+    }
+    return {
+        codec: codecString,
+        description: avcC
+    };
+};
+var ENCODED_VIDEO_TYPE = {
+    key: "key",
+    delta: "delta"
+};
+var EVENTS = {
+    fullscreen: "fullscreen$2",
+    webFullscreen: "webFullscreen",
+    decoderWorkerInit: "decoderWorkerInit",
+    play: "play",
+    playing: "playing",
+    pause: "pause",
+    mute: "mute",
+    load: "load",
+    loading: "loading",
+    videoInfo: "videoInfo",
+    timeUpdate: "timeUpdate",
+    audioInfo: "audioInfo",
+    log: "log",
+    error: "error",
+    kBps: "kBps",
+    timeout: "timeout",
+    delayTimeout: "delayTimeout",
+    loadingTimeout: "loadingTimeout",
+    stats: "stats",
+    performance: "performance",
+    record: "record",
+    recording: "recording",
+    recordingTimestamp: "recordingTimestamp",
+    recordStart: "recordStart",
+    recordEnd: "recordEnd",
+    recordCreateError: "recordCreateError",
+    buffer: "buffer",
+    videoFrame: "videoFrame",
+    start: "start",
+    metadata: "metadata",
+    resize: "resize",
+    streamEnd: "streamEnd",
+    streamSuccess: "streamSuccess",
+    streamMessage: "streamMessage",
+    streamError: "streamError",
+    volumechange: "volumechange",
+    destroy: "destroy",
+    mseSourceOpen: "mseSourceOpen",
+    mseSourceClose: "mseSourceClose",
+    mseSourceBufferError: "mseSourceBufferError",
+    mseSourceBufferBusy: "mseSourceBufferBusy",
+    mseSourceBufferFull: "mseSourceBufferFull",
+    videoWaiting: "videoWaiting",
+    videoTimeUpdate: "videoTimeUpdate",
+    videoSyncAudio: "videoSyncAudio",
+    playToRenderTimes: "playToRenderTimes"
+};
+var EVENTS_ERROR = {
+    playError: "playIsNotPauseOrUrlIsNull",
+    fetchError: "fetchError",
+    websocketError: "websocketError",
+    webcodecsH265NotSupport: "webcodecsH265NotSupport",
+    webcodecsDecodeError: "webcodecsDecodeError",
+    webcodecsWidthOrHeightChange: "webcodecsWidthOrHeightChange",
+    mediaSourceH265NotSupport: "mediaSourceH265NotSupport",
+    mediaSourceFull: EVENTS.mseSourceBufferFull,
+    mseSourceBufferError: EVENTS.mseSourceBufferError,
+    mediaSourceAppendBufferError: "mediaSourceAppendBufferError",
+    mediaSourceBufferListLarge: "mediaSourceBufferListLarge",
+    mediaSourceAppendBufferEndTimeout: "mediaSourceAppendBufferEndTimeout",
+    wasmDecodeError: "wasmDecodeError",
+    webglAlignmentError: "webglAlignmentError"
+};
+var VIDEO_ENC_CODE = {
+    h264: 7,
+    h265: 12
+};
+var WCS_ERROR = {
+    keyframeIsRequiredError: "A key frame is required after configure() or flush()",
+    canNotDecodeClosedCodec: "Cannot call 'decode' on a closed codec"
+};
 var WebcodecsDecoder = /*#__PURE__*/ function(Emitter) {
     "use strict";
     _inherits(WebcodecsDecoder, Emitter);
@@ -14,6 +108,11 @@ var WebcodecsDecoder = /*#__PURE__*/ function(Emitter) {
         _class_call_check(this, WebcodecsDecoder);
         var _this;
         _this = _super.call(this);
+        _define_property(_assert_this_initialized(_this), "player", void 0);
+        _define_property(_assert_this_initialized(_this), "hasInit", void 0);
+        _define_property(_assert_this_initialized(_this), "isDecodeFirstIIframe", void 0);
+        _define_property(_assert_this_initialized(_this), "isInitInfo", void 0);
+        _define_property(_assert_this_initialized(_this), "decoder", void 0);
         _this.player = player;
         _this.hasInit = false;
         _this.isDecodeFirstIIframe = false;

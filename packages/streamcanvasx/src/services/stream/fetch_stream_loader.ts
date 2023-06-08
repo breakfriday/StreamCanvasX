@@ -57,9 +57,6 @@ class HttpFlvStreamLoader {
     abortFetch(): void {
         this.abortController.abort();
     }
-    signal() {
-        this.abortController.signal;
-    }
 
 
     async processStream(reader: ReadableStreamDefaultReader): Promise<void> {
