@@ -8,7 +8,6 @@ declare class HttpFlvStreamLoader {
     get abortController(): AbortController;
     fetchStream(url: string): Promise<void>;
     abortFetch(): void;
-    signal(): void;
     processStream(reader: ReadableStreamDefaultReader): Promise<void>;
     processFlvChunk(chunk: Uint8Array): void;
 }

@@ -1,5 +1,10 @@
-import Emitter from '../utils/emitter';
+import Emitter from '../../utils/emitter';
 export default class WebcodecsDecoder extends Emitter {
+    private player;
+    private hasInit;
+    private isDecodeFirstIIframe;
+    private isInitInfo;
+    private decoder;
     constructor(player: any);
     destroy(): void;
     initDecoder(): void;

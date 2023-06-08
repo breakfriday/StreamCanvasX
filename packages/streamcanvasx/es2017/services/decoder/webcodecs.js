@@ -1,7 +1,100 @@
-import { formatVideoDecoderConfigure, now } from '../utils';
-import Emitter from '../utils/emitter';
-import { ENCODED_VIDEO_TYPE, EVENTS, EVENTS_ERROR, VIDEO_ENC_CODE, WCS_ERROR } from '../../constant';
+import { _ as _define_property } from "@swc/helpers/_/_define_property";
+import Emitter from '../../utils/emitter';
 import { parseAVCDecoderConfigurationRecord } from '../utils/h264';
+function now() {
+    return new Date().getTime();
+}
+const formatVideoDecoderConfigure = (avcC)=>{
+    let codecArray = avcC.subarray(1, 4);
+    let codecString = 'avc1.';
+    for(let j = 0; j < 3; j++){
+        let h = codecArray[j].toString(16);
+        if (h.length < 2) {
+            h = `0${h}`;
+        }
+        codecString += h;
+    }
+    return {
+        codec: codecString,
+        description: avcC
+    };
+};
+const ENCODED_VIDEO_TYPE = {
+    key: 'key',
+    delta: 'delta'
+};
+const EVENTS = {
+    fullscreen: 'fullscreen$2',
+    webFullscreen: 'webFullscreen',
+    decoderWorkerInit: 'decoderWorkerInit',
+    play: 'play',
+    playing: 'playing',
+    pause: 'pause',
+    mute: 'mute',
+    load: 'load',
+    loading: 'loading',
+    videoInfo: 'videoInfo',
+    timeUpdate: 'timeUpdate',
+    audioInfo: 'audioInfo',
+    log: 'log',
+    error: 'error',
+    kBps: 'kBps',
+    timeout: 'timeout',
+    delayTimeout: 'delayTimeout',
+    loadingTimeout: 'loadingTimeout',
+    stats: 'stats',
+    performance: 'performance',
+    record: 'record',
+    recording: 'recording',
+    recordingTimestamp: 'recordingTimestamp',
+    recordStart: 'recordStart',
+    recordEnd: 'recordEnd',
+    recordCreateError: 'recordCreateError',
+    buffer: 'buffer',
+    videoFrame: 'videoFrame',
+    start: 'start',
+    metadata: 'metadata',
+    resize: 'resize',
+    streamEnd: 'streamEnd',
+    streamSuccess: 'streamSuccess',
+    streamMessage: 'streamMessage',
+    streamError: 'streamError',
+    volumechange: 'volumechange',
+    destroy: 'destroy',
+    mseSourceOpen: 'mseSourceOpen',
+    mseSourceClose: 'mseSourceClose',
+    mseSourceBufferError: 'mseSourceBufferError',
+    mseSourceBufferBusy: 'mseSourceBufferBusy',
+    mseSourceBufferFull: 'mseSourceBufferFull',
+    videoWaiting: 'videoWaiting',
+    videoTimeUpdate: 'videoTimeUpdate',
+    videoSyncAudio: 'videoSyncAudio',
+    playToRenderTimes: 'playToRenderTimes'
+};
+const EVENTS_ERROR = {
+    playError: 'playIsNotPauseOrUrlIsNull',
+    fetchError: 'fetchError',
+    websocketError: 'websocketError',
+    webcodecsH265NotSupport: 'webcodecsH265NotSupport',
+    webcodecsDecodeError: 'webcodecsDecodeError',
+    webcodecsWidthOrHeightChange: 'webcodecsWidthOrHeightChange',
+    mediaSourceH265NotSupport: 'mediaSourceH265NotSupport',
+    mediaSourceFull: EVENTS.mseSourceBufferFull,
+    mseSourceBufferError: EVENTS.mseSourceBufferError,
+    mediaSourceAppendBufferError: 'mediaSourceAppendBufferError',
+    mediaSourceBufferListLarge: 'mediaSourceBufferListLarge',
+    mediaSourceAppendBufferEndTimeout: 'mediaSourceAppendBufferEndTimeout',
+    wasmDecodeError: 'wasmDecodeError',
+    webglAlignmentError: 'webglAlignmentError'
+};
+const VIDEO_ENC_CODE = {
+    h264: 7,
+    h265: 12
+};
+const WCS_ERROR = {
+    keyframeIsRequiredError: 'A key frame is required after configure() or flush()',
+    canNotDecodeClosedCodec: "Cannot call 'decode' on a closed codec"
+};
 class WebcodecsDecoder extends Emitter {
     destroy() {
         if (this.decoder) {
@@ -120,6 +213,11 @@ class WebcodecsDecoder extends Emitter {
     }
     constructor(player){
         super();
+        _define_property(this, "player", void 0);
+        _define_property(this, "hasInit", void 0);
+        _define_property(this, "isDecodeFirstIIframe", void 0);
+        _define_property(this, "isInitInfo", void 0);
+        _define_property(this, "decoder", void 0);
         this.player = player;
         this.hasInit = false;
         this.isDecodeFirstIIframe = false;
