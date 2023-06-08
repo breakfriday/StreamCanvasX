@@ -5,11 +5,12 @@ import { _ as _define_property } from "@swc/helpers/_/_define_property";
 import { _ as _ts_generator } from "@swc/helpers/_/_ts_generator";
 var HttpFlvStreamLoader = /*#__PURE__*/ function() {
     "use strict";
-    function HttpFlvStreamLoader() {
+    function HttpFlvStreamLoader(player) {
         _class_call_check(this, HttpFlvStreamLoader);
         _define_property(this, "_requestAbort", void 0);
         _define_property(this, "_abortController", void 0);
         this.requestAbort = false;
+        this.player = player;
     }
     _create_class(HttpFlvStreamLoader, [
         {

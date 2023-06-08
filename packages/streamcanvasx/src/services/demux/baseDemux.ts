@@ -35,9 +35,10 @@ export default class BaseDemux extends Emitter {
         this.delay = -1;
         this.bufferList = [];
         this.dropping = false;
-        this.initInterval();
+        // this.initInterval();
     }
 
+    // 清理和重置各种数据和状态，并且停止调度。
     destroy() {
         if (this.stopId) {
             clearInterval(this.stopId);
@@ -82,15 +83,26 @@ export default class BaseDemux extends Emitter {
         this.dropping = false;
     }
 
-    //
+    /*
+     这个函数的主要作用是根据延迟来处理缓存的音频和视频数据操作buffer缓存池，
+     如果延迟过大，会开启丢帧模式，丢弃一些数据以减小延迟。
+    */
     initInterval() {
-        this.player.debug.log('common dumex', 'init Interval');
+        console.log('common dumex', 'init Interval');
         let _loop = () => {
             let data;
-
+            /*
+            从player._opt对象中获取videoBuffer和videoBufferDelay两个参数。
+            videoBuffer可最大时长，videoBufferDelay是额外的延迟阈值
+            */
             const { videoBuffer } = this.player._opt;
             const { videoBufferDelay } = this.player._opt;
+
+            /*
+              bufferList是一个存储音频和视频数据的数组
+             */
             if (this.bufferList.length) {
+                // 判断是否处于丢帧模式
                 if (this.dropping) {
                     // this.player.debug.log('common dumex', `is dropping`);
                     data = this.bufferList.shift();
@@ -135,7 +147,7 @@ export default class BaseDemux extends Emitter {
         this.stopId = setInterval(_loop, 10);
     }
 
-    //    // 负责将提取的音频或视频负载数据解码。
+    //    负责将提取的音频或视频负载数据解码。
     _doDecode(data: Idemux['IData']) {
         let { payload, type, ts, isIFrame, cts } = data;
 
@@ -162,8 +174,8 @@ export default class BaseDemux extends Emitter {
         }
     }
 
-    pushBuffer(payload, options) {
-        // 音频
+    pushBuffer(payload: Idemux['IData']['payload'], options: { ts: number; cts?: number; type: number; isIFrame?: boolean }) {
+        //  bufferList是一个存储音频和视频数据的数组
         if (options.type === MEDIA_TYPE.audio) {
             this.bufferList.push({
                 ts: options.ts,
