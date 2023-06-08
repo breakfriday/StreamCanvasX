@@ -192,3 +192,6 @@ class fLVDemux {
         }
     }
 }
+
+
+export { fLVDemux };
