@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 // import player from 'streamcanvasx/player';
 // import CanvasPlayer from 'streamcanvasx/canvasPlayer';
 
-// import { createOriginServiceInstance } from 'streamcanvasx/serviceFactories/index';
+ import { createOriginServiceInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 
 
 const SimplePage = () => {
@@ -15,8 +15,8 @@ const SimplePage = () => {
     //     player(el);
     //   }
 
-    //   let h = createOriginServiceInstance('geoio');
-    //   h.doSomething();
+      let h = createOriginServiceInstance('geoio');
+      h.doSomething();
     //   const canvas_player = new CanvasPlayer({ canvas_el: canvas_ref?.current, vedio_el: vedio_ref?.current });
     // }
   }, []);

@@ -1,72 +1,72 @@
 {
-  "/__docusaurus/debug-b1e": {
+  "/StreamCanvasX/__docusaurus/debug-655": {
     "__comp": "__comp---theme-debug-config-23-a-2ff",
     "__context": {
-      "plugin": "plugin---docusaurus-debug-027-ca0"
+      "plugin": "plugin---stream-canvas-x-docusaurus-debugc-61-cc7"
     }
   },
-  "/__docusaurus/debug/config-8bc": {
+  "/StreamCanvasX/__docusaurus/debug/config-0e0": {
     "__comp": "__comp---theme-debug-config-23-a-2ff",
     "__context": {
-      "plugin": "plugin---docusaurus-debug-027-ca0"
+      "plugin": "plugin---stream-canvas-x-docusaurus-debugc-61-cc7"
     }
   },
-  "/__docusaurus/debug/content-1d5": {
+  "/StreamCanvasX/__docusaurus/debug/content-228": {
     "__comp": "__comp---theme-debug-contentba-8-ce7",
     "__context": {
-      "plugin": "plugin---docusaurus-debug-027-ca0"
+      "plugin": "plugin---stream-canvas-x-docusaurus-debugc-61-cc7"
     },
-    "allContent": "allContent---docusaurus-debug-content-246-9aa"
+    "allContent": "allContent---stream-canvas-x-docusaurus-debug-content-246-b4d"
   },
-  "/__docusaurus/debug/globalData-2a3": {
+  "/StreamCanvasX/__docusaurus/debug/globalData-e57": {
     "__comp": "__comp---theme-debug-global-dataede-0fa",
     "__context": {
-      "plugin": "plugin---docusaurus-debug-027-ca0"
+      "plugin": "plugin---stream-canvas-x-docusaurus-debugc-61-cc7"
     }
   },
-  "/__docusaurus/debug/metadata-764": {
+  "/StreamCanvasX/__docusaurus/debug/metadata-49b": {
     "__comp": "__comp---theme-debug-site-metadata-68-e-3d4",
     "__context": {
-      "plugin": "plugin---docusaurus-debug-027-ca0"
+      "plugin": "plugin---stream-canvas-x-docusaurus-debugc-61-cc7"
     }
   },
-  "/__docusaurus/debug/registry-32c": {
+  "/StreamCanvasX/__docusaurus/debug/registry-5a7": {
     "__comp": "__comp---theme-debug-registry-679-501",
     "__context": {
-      "plugin": "plugin---docusaurus-debug-027-ca0"
+      "plugin": "plugin---stream-canvas-x-docusaurus-debugc-61-cc7"
     }
   },
-  "/__docusaurus/debug/routes-019": {
+  "/StreamCanvasX/__docusaurus/debug/routes-577": {
     "__comp": "__comp---theme-debug-routes-946-699",
     "__context": {
-      "plugin": "plugin---docusaurus-debug-027-ca0"
+      "plugin": "plugin---stream-canvas-x-docusaurus-debugc-61-cc7"
     }
   },
-  "/-9ea": {
+  "/StreamCanvasX/-9fc": {
     "__comp": "__comp---theme-doc-page-1-be-9be",
     "__context": {
-      "plugin": "plugin---059-803"
+      "plugin": "plugin---stream-canvas-x-376-058"
     },
-    "versionMetadata": "versionMetadata---935-fcf"
+    "versionMetadata": "versionMetadata---stream-canvas-x-935-3d5"
   },
-  "/-d65": {
+  "/StreamCanvasX/-242": {
     "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---c-37-d02"
+    "content": "content---stream-canvas-x-c-37-fe0"
   },
-  "/advanced-bef": {
+  "/StreamCanvasX/advanced-021": {
     "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---advanced-395-78a"
+    "content": "content---stream-canvas-x-advanced-395-05d"
   },
-  "/API-faf": {
+  "/StreamCanvasX/API-a19": {
     "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---ap-ic-82-10b"
+    "content": "content---stream-canvas-x-ap-ic-82-643"
   },
-  "/guild-000": {
+  "/StreamCanvasX/guild-094": {
     "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---guild-014-2c0"
+    "content": "content---stream-canvas-x-guild-014-f34"
   },
-  "/inxtro-44f": {
+  "/StreamCanvasX/inxtro-97a": {
     "__comp": "__comp---theme-doc-item-178-a40",
-    "content": "content---inxtrofca-fc7"
+    "content": "content---stream-canvas-x-inxtrofca-b0e"
   }
 }
