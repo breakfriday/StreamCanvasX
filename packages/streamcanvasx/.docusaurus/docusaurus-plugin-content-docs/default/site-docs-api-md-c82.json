@@ -6,7 +6,7 @@
   "source": "@site/docs/API.md",
   "sourceDirName": ".",
   "slug": "/API",
-  "permalink": "/API",
+  "permalink": "/StreamCanvasX/API",
   "draft": false,
   "tags": [],
   "version": "current",
@@ -19,6 +19,6 @@
   "sidebar": "defaultSidebar",
   "previous": {
     "title": "advance",
-    "permalink": "/advanced"
+    "permalink": "/StreamCanvasX/advanced"
   }
 }

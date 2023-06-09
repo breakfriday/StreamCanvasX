@@ -6,7 +6,7 @@
   "source": "@site/docs/guild.md",
   "sourceDirName": ".",
   "slug": "/guild",
-  "permalink": "/guild",
+  "permalink": "/StreamCanvasX/guild",
   "draft": false,
   "tags": [],
   "version": "current",
@@ -19,10 +19,10 @@
   "sidebar": "defaultSidebar",
   "previous": {
     "title": "Getting Started",
-    "permalink": "/"
+    "permalink": "/StreamCanvasX/"
   },
   "next": {
     "title": "advance",
-    "permalink": "/advanced"
+    "permalink": "/StreamCanvasX/advanced"
   }
 }
