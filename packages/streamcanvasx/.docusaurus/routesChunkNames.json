@@ -1,51 +1,51 @@
 {
-  "/StreamCanvasX/__docusaurus/debug-b88": {
+  "/StreamCanvasX/__docusaurus/debug-67a": {
     "__comp": "__comp---theme-debug-config-23-a-2ff",
     "__context": {
-      "plugin": "plugin---stream-canvas-x-docusaurus-debug-027-219"
+      "plugin": "plugin---stream-canvas-x-docusaurus-debugcaf-2c0"
     }
   },
-  "/StreamCanvasX/__docusaurus/debug/config-667": {
+  "/StreamCanvasX/__docusaurus/debug/config-589": {
     "__comp": "__comp---theme-debug-config-23-a-2ff",
     "__context": {
-      "plugin": "plugin---stream-canvas-x-docusaurus-debug-027-219"
+      "plugin": "plugin---stream-canvas-x-docusaurus-debugcaf-2c0"
     }
   },
-  "/StreamCanvasX/__docusaurus/debug/content-f39": {
+  "/StreamCanvasX/__docusaurus/debug/content-2eb": {
     "__comp": "__comp---theme-debug-contentba-8-ce7",
     "__context": {
-      "plugin": "plugin---stream-canvas-x-docusaurus-debug-027-219"
+      "plugin": "plugin---stream-canvas-x-docusaurus-debugcaf-2c0"
     },
     "allContent": "allContent---stream-canvas-x-docusaurus-debug-content-246-b4d"
   },
-  "/StreamCanvasX/__docusaurus/debug/globalData-445": {
+  "/StreamCanvasX/__docusaurus/debug/globalData-852": {
     "__comp": "__comp---theme-debug-global-dataede-0fa",
     "__context": {
-      "plugin": "plugin---stream-canvas-x-docusaurus-debug-027-219"
+      "plugin": "plugin---stream-canvas-x-docusaurus-debugcaf-2c0"
     }
   },
-  "/StreamCanvasX/__docusaurus/debug/metadata-f35": {
+  "/StreamCanvasX/__docusaurus/debug/metadata-0f7": {
     "__comp": "__comp---theme-debug-site-metadata-68-e-3d4",
     "__context": {
-      "plugin": "plugin---stream-canvas-x-docusaurus-debug-027-219"
+      "plugin": "plugin---stream-canvas-x-docusaurus-debugcaf-2c0"
     }
   },
-  "/StreamCanvasX/__docusaurus/debug/registry-cee": {
+  "/StreamCanvasX/__docusaurus/debug/registry-2d7": {
     "__comp": "__comp---theme-debug-registry-679-501",
     "__context": {
-      "plugin": "plugin---stream-canvas-x-docusaurus-debug-027-219"
+      "plugin": "plugin---stream-canvas-x-docusaurus-debugcaf-2c0"
     }
   },
-  "/StreamCanvasX/__docusaurus/debug/routes-2f7": {
+  "/StreamCanvasX/__docusaurus/debug/routes-089": {
     "__comp": "__comp---theme-debug-routes-946-699",
     "__context": {
-      "plugin": "plugin---stream-canvas-x-docusaurus-debug-027-219"
+      "plugin": "plugin---stream-canvas-x-docusaurus-debugcaf-2c0"
     }
   },
-  "/StreamCanvasX/-d96": {
+  "/StreamCanvasX/-937": {
     "__comp": "__comp---theme-doc-page-1-be-9be",
     "__context": {
-      "plugin": "plugin---stream-canvas-x-059-766"
+      "plugin": "plugin---stream-canvas-x-4-e-6-e01"
     },
     "versionMetadata": "versionMetadata---stream-canvas-x-935-3d5"
   },
