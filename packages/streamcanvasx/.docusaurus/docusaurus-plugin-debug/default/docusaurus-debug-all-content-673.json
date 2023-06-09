@@ -9,12 +9,12 @@
           "badge": false,
           "noIndex": false,
           "className": "docs-version-current",
-          "path": "/",
-          "tagsPath": "/tags",
+          "path": "/StreamCanvasX/",
+          "tagsPath": "/StreamCanvasX/tags",
           "isLast": true,
           "routePriority": -1,
-          "contentPath": "/home/break_happy/project/stream8/packages/streamcanvasx/docs",
-          "contentPathLocalized": "/home/break_happy/project/stream8/packages/streamcanvasx/i18n/zh-Hans/docusaurus-plugin-content-docs/current",
+          "contentPath": "/home/break_happy/project/stream10/packages/streamcanvasx/docs",
+          "contentPathLocalized": "/home/break_happy/project/stream10/packages/streamcanvasx/i18n/zh-Hans/docusaurus-plugin-content-docs/current",
           "docs": [
             {
               "unversionedId": "advanced",
@@ -24,7 +24,7 @@
               "source": "@site/docs/advanced.md",
               "sourceDirName": ".",
               "slug": "/advanced",
-              "permalink": "/advanced",
+              "permalink": "/StreamCanvasX/advanced",
               "draft": false,
               "tags": [],
               "version": "current",
@@ -37,11 +37,11 @@
               "sidebar": "defaultSidebar",
               "previous": {
                 "title": "Guild",
-                "permalink": "/guild"
+                "permalink": "/StreamCanvasX/guild"
               },
               "next": {
                 "title": "API",
-                "permalink": "/API"
+                "permalink": "/StreamCanvasX/API"
               }
             },
             {
@@ -52,7 +52,7 @@
               "source": "@site/docs/API.md",
               "sourceDirName": ".",
               "slug": "/API",
-              "permalink": "/API",
+              "permalink": "/StreamCanvasX/API",
               "draft": false,
               "tags": [],
               "version": "current",
@@ -65,7 +65,7 @@
               "sidebar": "defaultSidebar",
               "previous": {
                 "title": "advance",
-                "permalink": "/advanced"
+                "permalink": "/StreamCanvasX/advanced"
               }
             },
             {
@@ -76,7 +76,7 @@
               "source": "@site/docs/guild.md",
               "sourceDirName": ".",
               "slug": "/guild",
-              "permalink": "/guild",
+              "permalink": "/StreamCanvasX/guild",
               "draft": false,
               "tags": [],
               "version": "current",
@@ -89,11 +89,11 @@
               "sidebar": "defaultSidebar",
               "previous": {
                 "title": "Getting Started",
-                "permalink": "/"
+                "permalink": "/StreamCanvasX/"
               },
               "next": {
                 "title": "advance",
-                "permalink": "/advanced"
+                "permalink": "/StreamCanvasX/advanced"
               }
             },
             {
@@ -104,7 +104,7 @@
               "source": "@site/docs/index.md",
               "sourceDirName": ".",
               "slug": "/",
-              "permalink": "/",
+              "permalink": "/StreamCanvasX/",
               "draft": false,
               "tags": [],
               "version": "current",
@@ -117,11 +117,11 @@
               "sidebar": "defaultSidebar",
               "previous": {
                 "title": "Introduction",
-                "permalink": "/inxtro"
+                "permalink": "/StreamCanvasX/inxtro"
               },
               "next": {
                 "title": "Guild",
-                "permalink": "/guild"
+                "permalink": "/StreamCanvasX/guild"
               }
             },
             {
@@ -132,7 +132,7 @@
               "source": "@site/docs/inxtro.md",
               "sourceDirName": ".",
               "slug": "/inxtro",
-              "permalink": "/inxtro",
+              "permalink": "/StreamCanvasX/inxtro",
               "draft": false,
               "tags": [],
               "version": "current",
@@ -145,7 +145,7 @@
               "sidebar": "defaultSidebar",
               "next": {
                 "title": "Getting Started",
-                "permalink": "/"
+                "permalink": "/StreamCanvasX/"
               }
             }
           ],
@@ -189,7 +189,7 @@
       "blogPosts": [],
       "blogListPaginated": [],
       "blogTags": {},
-      "blogTagsListPath": "/blog/tags",
+      "blogTagsListPath": "/StreamCanvasX/blog/tags",
       "blogTagsPaginated": []
     }
   },

@@ -7,7 +7,7 @@ const config = {
   title: 'streamcanvasx',
   tagline: 'ICE Component Cool',
   url: 'https://your-docusaurus-test-site.com',
-  baseUrl: '/',
+  baseUrl: 'StreamCanvasX',
   i18n: {
     defaultLocale: 'zh-Hans',
     locales: ['zh-Hans',],
@@ -19,7 +19,7 @@ const config = {
   plugins: [
     require.resolve('@ice/pkg-plugin-docusaurus/plugin.js'),
     [
-      '/home/break_happy/project/stream8/node_modules/.pnpm/@docusaurus+plugin-content-pages@2.4.1_3cuz37cpupvxy2oj3ncfox3l6e/node_modules/@docusaurus/plugin-content-pages/lib/index.js',
+      '/home/break_happy/project/stream10/node_modules/.pnpm/@docusaurus+plugin-content-pages@2.4.1_3cuz37cpupvxy2oj3ncfox3l6e/node_modules/@docusaurus/plugin-content-pages/lib/index.js',
       {
         path: 'pages',
         routeBasePath: '/pages',
@@ -30,13 +30,13 @@ const config = {
 
   presets: [
     [
-      '/home/break_happy/project/stream8/node_modules/.pnpm/@docusaurus+preset-classic@2.4.1_3cuz37cpupvxy2oj3ncfox3l6e/node_modules/@docusaurus/preset-classic/lib/index.js',
+      '/home/break_happy/project/stream10/node_modules/.pnpm/@docusaurus+preset-classic@2.4.1_3cuz37cpupvxy2oj3ncfox3l6e/node_modules/@docusaurus/preset-classic/lib/index.js',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
           path: 'docs',
           remarkPlugins: [
-            [extractCode, { mobilePreview: false, baseUrl: '/' }],
+            [extractCode, { mobilePreview: false, baseUrl: 'StreamCanvasX' }],
           ],
           exclude: [
             '**/_*.{js,jsx,ts,tsx,md,mdx}',
@@ -71,8 +71,8 @@ const config = {
         },
       },
       prism: {
-        theme: require('/home/break_happy/project/stream8/node_modules/.pnpm/prism-react-renderer@1.3.5_react@18.2.0/node_modules/prism-react-renderer/themes/github'),
-        darkTheme: require('/home/break_happy/project/stream8/node_modules/.pnpm/prism-react-renderer@1.3.5_react@18.2.0/node_modules/prism-react-renderer/themes/dracula'),
+        theme: require('/home/break_happy/project/stream10/node_modules/.pnpm/prism-react-renderer@1.3.5_react@18.2.0/node_modules/prism-react-renderer/themes/github'),
+        darkTheme: require('/home/break_happy/project/stream10/node_modules/.pnpm/prism-react-renderer@1.3.5_react@18.2.0/node_modules/prism-react-renderer/themes/dracula'),
       },
       docs: {
         sidebar: {
