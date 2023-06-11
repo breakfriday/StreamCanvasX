@@ -71,6 +71,7 @@ let HttpFlvStreamLoader = class HttpFlvStreamLoader {
     constructor(){
         _define_property(this, "_requestAbort", void 0);
         _define_property(this, "_abortController", void 0);
+        _define_property(this, "playerService", void 0);
         this.requestAbort = false;
     }
 };
