@@ -5,7 +5,7 @@ import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
 import mpegts from 'mpegts.js';
 import Hls from 'hls.js';
 // import CanvasAudioProcess from 'streamcanvasx/canvasAudioProcess';
-import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
+import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/src/serviceFactories/index';
 // import { ICombinedDrawer } from 'streamcanvasx';
 import mainPlayerService from 'streamcanvasx/es2017/serviceFactories/index';
 import { any } from '@tensorflow/tfjs';

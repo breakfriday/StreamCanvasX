@@ -2,7 +2,7 @@ import { definePageConfig } from 'ice';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Select, Image, Space } from 'antd';
 import React, { useRef, useState, useEffect } from 'react';
-import { ImageDecoderService } from 'streamcanvasx/es2017/services/image_decode_webm_writer_service';
+import { ImageDecoderService } from 'streamcanvasx/src/services/image_decode_webm_writer_service';
 
 
 const ImageDecoder: React.FC = () => {

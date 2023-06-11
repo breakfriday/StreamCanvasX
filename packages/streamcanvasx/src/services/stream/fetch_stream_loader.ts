@@ -1,10 +1,19 @@
-import { injectable, inject, Container } from 'inversify';
+import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
+import PlayerService from '../player';
+import { TYPES } from '../../serviceFactories/symbol';
 @injectable()
 class HttpFlvStreamLoader {
     private _requestAbort: boolean;
     private _abortController: AbortController;
-    constructor() {
+    private playerService: PlayerService;
+    constructor(
+        // @inject(new LazyServiceIdentifer(() => TYPES.IPlayerService)) playerService: PlayerService,
+
+        @inject(new LazyServiceIdentifer(() => TYPES.IPlayerService)) playerService: PlayerService,
+
+    ) {
         this.requestAbort = false;
+        this.playerService = playerService;
     }
     static isSupported() {
         if (window.fetch && window.ReadableStream) {
