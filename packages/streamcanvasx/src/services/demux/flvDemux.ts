@@ -1,7 +1,9 @@
 
+import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import Emitter from '../../utils/emitter';
 import { Idemux } from '../../types/services/index';
 import BaseDemux from './baseDemux';
+import PlayerService from '../player';
 const MEDIA_TYPE = {
     audio: 1,
     video: 2,
@@ -23,16 +25,19 @@ const FLV_MEDIA_TYPE = {
   }
 
 
+  @injectable()
 class fLVDemux extends BaseDemux {
     private flvDemux: (data: ArrayBuffer) => void;
     private input: Generator<number>;
-    constructor(player: any) {
-        super(player);
+    private Player: PlayerService;
+    constructor() {
+        super();
         this.input = this._inputFlv();
         this.flvDemux = this.dispatchFlvData(this.input);
-        player.debug.log('FlvDemux', 'init');
     }
-
+    init(playerService: any) {
+        this.player = playerService;
+    }
     dispatchFlvData(input: Generator<number>) {
         let need = input.next();
         let buffer: Uint8Array = null;
@@ -131,4 +136,4 @@ class fLVDemux extends BaseDemux {
 }
 
 
-export { fLVDemux };
+export default fLVDemux;
