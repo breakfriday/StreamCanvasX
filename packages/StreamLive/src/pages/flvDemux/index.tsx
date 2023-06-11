@@ -14,13 +14,14 @@ const FlvDemux = () => {
           onClick={() => {
             let url = 'http://localhost:8080/live/livestream.flv';
             // fetchflv.fetchStream(url);
+           h.httpFlvStreamService.fetchStream(url);
       }}
         >
           fetch flv httpdd
         </Button>
 
         <Button onClick={() => {
-            // fetchflv.abortFetch();
+           h.httpFlvStreamService.abortFetch();
         }}
         >abort</Button>
       </>
