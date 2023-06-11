@@ -1,6 +1,7 @@
 declare class HttpFlvStreamLoader {
     private _requestAbort;
     private _abortController;
+    private playerService;
     constructor();
     static isSupported(): boolean;
     get requestAbort(): boolean;
