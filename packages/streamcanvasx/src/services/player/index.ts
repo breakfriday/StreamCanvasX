@@ -18,6 +18,7 @@ class PlayerService extends Emitter {
         ) {
         super();
         this.httpFlvStreamService = httpFlvStreamService;
+        this.flvVDemuxService = flvVDemuxService;
         this.init();
     }
 
@@ -28,6 +29,10 @@ class PlayerService extends Emitter {
         alert(22);
     }
     fetchstrean(url: string) {
+        this.httpFlvStreamService.fetchStream(url);
+    }
+
+    play(url: string) {
         this.httpFlvStreamService.fetchStream(url);
     }
 }
