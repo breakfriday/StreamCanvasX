@@ -1,4 +1,7 @@
-export default class Emitter {
+
+import { injectable, inject, Container } from 'inversify';
+@injectable()
+class Emitter {
     on(name, fn, ctx) {
         const e = this.e || (this.e = {});
         (e[name] || (e[name] = [])).push({ fn, ctx });
@@ -51,3 +54,5 @@ export default class Emitter {
         return this;
     }
 }
+
+export default Emitter;

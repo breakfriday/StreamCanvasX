@@ -1,9 +1,10 @@
+import { injectable, inject, Container } from 'inversify';
+@injectable()
 class HttpFlvStreamLoader {
     private _requestAbort: boolean;
     private _abortController: AbortController;
-    constructor(player) {
+    constructor() {
         this.requestAbort = false;
-        this.player = player;
     }
     static isSupported() {
         if (window.fetch && window.ReadableStream) {
@@ -88,4 +89,4 @@ class HttpFlvStreamLoader {
     }
 }
 
-export { HttpFlvStreamLoader };
+export default HttpFlvStreamLoader;

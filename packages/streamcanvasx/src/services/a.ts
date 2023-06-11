@@ -17,6 +17,7 @@ async function main() {
     "https://test-streams.mux.dev/x36xhzz/url_4/url_718/193039199_mp4_h264_aac_7.ts"
   );
   const movie = new Uint8Array(await response.arrayBuffer());
+  
 
   // demux
   const tsDemuxer = new TsDemuxer();

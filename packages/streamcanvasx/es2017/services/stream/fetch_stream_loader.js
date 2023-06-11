@@ -1,5 +1,7 @@
 import { _ as _define_property } from "@swc/helpers/_/_define_property";
-class HttpFlvStreamLoader {
+import { _ as _ts_decorate } from "@swc/helpers/_/_ts_decorate";
+import { injectable } from 'inversify';
+let HttpFlvStreamLoader = class HttpFlvStreamLoader {
     static isSupported() {
         if (window.fetch && window.ReadableStream) {
             return true;
@@ -66,13 +68,15 @@ class HttpFlvStreamLoader {
         }
     }
     processFlvChunk(chunk) {}
-    constructor(player){
+    constructor(){
         _define_property(this, "_requestAbort", void 0);
         _define_property(this, "_abortController", void 0);
         this.requestAbort = false;
-        this.player = player;
     }
-}
-export { HttpFlvStreamLoader };
+};
+HttpFlvStreamLoader = _ts_decorate([
+    injectable()
+], HttpFlvStreamLoader);
+export default HttpFlvStreamLoader;
 
  //# sourceMappingURL=fetch_stream_loader.js.map
