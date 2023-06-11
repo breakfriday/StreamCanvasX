@@ -9,11 +9,11 @@ class HttpFlvStreamLoader {
     constructor(
         // @inject(new LazyServiceIdentifer(() => TYPES.IPlayerService)) playerService: PlayerService,
 
-        @inject(new LazyServiceIdentifer(() => TYPES.IPlayerService)) playerService: PlayerService,
+        // @inject(new LazyServiceIdentifer(() => TYPES.IPlayerService)) playerService: PlayerService,
 
     ) {
         this.requestAbort = false;
-        this.playerService = playerService;
+        // this.playerService = playerService;
     }
     static isSupported() {
         if (window.fetch && window.ReadableStream) {
@@ -33,6 +33,9 @@ class HttpFlvStreamLoader {
         return this._abortController;
     }
 
+    init(playerService: PlayerService) {
+        this.playerService = playerService;
+    }
 
     async fetchStream(url: string): Promise<void> {
         let sourceUrl = url;

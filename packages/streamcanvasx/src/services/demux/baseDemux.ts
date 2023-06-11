@@ -1,5 +1,6 @@
+import { injectable } from 'inversify';
 import Emitter from '../../utils/emitter';
-import IPlayer from '../../player/index';
+
 import { Idemux } from '../../types/services/index';
 const MEDIA_TYPE = {
     audio: 1,
@@ -15,27 +16,30 @@ interface IData {
   }
 
 
-export default class BaseDemux extends Emitter {
+@injectable()
+ class BaseDemux extends Emitter {
      firstTimestamp: number | null;
      startTimestamp: number | null;
      stopId: NodeJS.Timer | null;
      delay: number;
      bufferList: IData[];
      dropping: boolean;
-     player: IPlayer;
+     player: any;
 
-    constructor(player: IPlayer) {
+    constructor() {
         super();
-        this.player = player;
 
 
-        this.stopId = null;
-        this.firstTimestamp = null;
-        this.startTimestamp = null;
-        this.delay = -1;
-        this.bufferList = [];
-        this.dropping = false;
+        // this.stopId = null;
+        // this.firstTimestamp = null;
+        // this.startTimestamp = null;
+        // this.delay = -1;
+        // this.bufferList = [];
+        // this.dropping = false;
         // this.initInterval();
+    }
+    init(playerService: any) {
+        this.player = playerService;
     }
 
     // 清理和重置各种数据和状态，并且停止调度。
@@ -50,10 +54,9 @@ export default class BaseDemux extends Emitter {
         this.bufferList = [];
         this.dropping = false;
         this.off();
-        this.player.debug.log('CommonDemux', 'destroy');
     }
 
-    getDelay(timestamp) {
+    getDelay(timestamp: any) {
         if (!timestamp) {
             return -1;
         }
@@ -197,3 +200,6 @@ export default class BaseDemux extends Emitter {
 
     }
 }
+
+
+export default BaseDemux;

@@ -7,9 +7,13 @@ import { IOriginSerivce, IServiceA } from '../types/services';
 import { interfaces } from 'inversify';
 import PlayerService from '../services/player';
 
+import FLVDemuxService from '../services/demux/flvDemux';
+
 
 container1.bind<PlayerService>(TYPES.IPlayerService).to(PlayerService);
 container1.bind<HttpFlvStreamLoader>(TYPES.IHttpFlvStreamLoader).to(HttpFlvStreamLoader);
+
+container1.bind<FLVDemuxService>(TYPES.IFLVDemuxService).to(FLVDemuxService);
 
  function createPlayerServiceInstance(): PlayerService {
    return container1.get<PlayerService>(TYPES.IPlayerService);
