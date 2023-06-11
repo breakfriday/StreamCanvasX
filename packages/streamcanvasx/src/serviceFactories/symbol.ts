@@ -3,6 +3,8 @@ const TYPES = {
     IServiceA: Symbol.for('IServiceA'),
     IAudioProcessingService: Symbol.for('IAudioProcessingService'),
     IMainPlayerService: Symbol.for('IMainPlayerService'),
+    IPlayerService: Symbol.for('IPlayerService'),
+    IHttpFlvStreamLoader: Symbol.for('IHttpFlvStreamLoader'),
 
   };
 

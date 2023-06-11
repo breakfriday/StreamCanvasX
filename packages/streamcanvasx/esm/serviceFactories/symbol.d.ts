@@ -3,5 +3,7 @@ declare const TYPES: {
     IServiceA: symbol;
     IAudioProcessingService: symbol;
     IMainPlayerService: symbol;
+    IPlayerService: symbol;
+    IHttpFlvStreamLoader: symbol;
 };
 export { TYPES };
