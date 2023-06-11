@@ -5,6 +5,7 @@ const TYPES = {
     IMainPlayerService: Symbol.for('IMainPlayerService'),
     IPlayerService: Symbol.for('IPlayerService'),
     IHttpFlvStreamLoader: Symbol.for('IHttpFlvStreamLoader'),
+    IFLVDemuxService: Symbol.for(' IFLVDemuxService'),
 
   };
 
