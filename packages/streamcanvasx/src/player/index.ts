@@ -17,11 +17,29 @@ class Player extends Emitter {
     stream: HttpFlvStreamLoader;
     webcodecsDecoder: WebcodecsDecoder;
     _opt: I_DEFAULT_PLAYER_OPTIONS;
+    _times: any;
     constructor(options: any) {
         super();
         this.HttpFlvStreamLoader = new HttpFlvStreamLoader();
         this.fLVDemux = new fLVDemux(this);
         this._opt = Object.assign({}, DEFAULT_PLAYER_OPTIONS, options);
+
+        this._times = {
+            playInitStart: '', // 1
+            playStart: '', // 2
+            streamStart: '', // 3
+            streamResponse: '', // 4
+            demuxStart: '', // 5
+            decodeStart: '', // 6
+            videoStart: '', // 7
+            playTimestamp: '', // playStart- playInitStart
+            streamTimestamp: '', // streamStart - playStart
+            streamResponseTimestamp: '', // streamResponse - streamStart
+            demuxTimestamp: '', // demuxStart - streamResponse
+            decodeTimestamp: '', // decodeStart - demuxStart
+            videoTimestamp: '', // videoStart - decodeStart
+            allTimestamp: '', // videoStart - playInitStart
+        };
     }
 
     play() {
