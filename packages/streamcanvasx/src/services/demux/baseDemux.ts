@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 import Emitter from '../../utils/emitter';
-
+import PlayerService from '../player';
 import { Idemux } from '../../types/services/index';
 const MEDIA_TYPE = {
     audio: 1,
@@ -38,10 +38,13 @@ interface IData {
         this.dropping = false;
         // this.initInterval();
     }
-    init(playerService: any) {
+    // init(playerService: any) {
+    //     this.player = playerService;
+    // }
+
+    init(playerService: PlayerService) {
         this.player = playerService;
     }
-
     // 清理和重置各种数据和状态，并且停止调度。
     destroy() {
         if (this.stopId) {

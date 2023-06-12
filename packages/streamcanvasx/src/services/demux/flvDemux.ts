@@ -34,9 +34,9 @@ class fLVDemux extends BaseDemux {
         this.input = this._inputFlv();
         this.flvDemux = this.dispatchFlvData(this.input);
     }
-    init(playerService: PlayerService) {
-        this.player = playerService;
-    }
+    // init(playerService: PlayerService) {
+    //     this.player = playerService;
+    // }
     dispatchFlvData(input: Generator<number>) {
         let need = input.next();
         let buffer: Uint8Array = null;
