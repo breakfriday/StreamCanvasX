@@ -1,5 +1,6 @@
-
+import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import Emitter from '../../utils/emitter';
+import PlayerService from '../player';
 
 
 function now(): number {
@@ -117,20 +118,24 @@ interface VideoInfo {
   }
 
 
-export default class WebcodecsDecoder extends Emitter {
-    private player: Player;
+  @injectable()
+ class WebcodecsDecoder extends Emitter {
+    private player: PlayerService;
     private hasInit: boolean;
     private isDecodeFirstIIframe: boolean;
     private isInitInfo: boolean;
     private decoder: any | null;
-    constructor(player) {
+    constructor() {
         super();
-        this.player = player;
+
         this.hasInit = false;
         this.isDecodeFirstIIframe = false;
         this.isInitInfo = false;
         this.decoder = null;
         this.initDecoder();
+    }
+    init(playerService: PlayerService) {
+        this.player = playerService;
     }
 
     destroy() {
@@ -264,3 +269,5 @@ export default class WebcodecsDecoder extends Emitter {
         return this.decoder.state === 'closed';
     }
 }
+
+export default WebcodecsDecoder;
