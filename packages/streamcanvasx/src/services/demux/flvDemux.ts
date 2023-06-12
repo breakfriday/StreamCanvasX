@@ -88,9 +88,9 @@ class fLVDemux extends BaseDemux {
                 tmp8[3] = t[11];
                 ts = tmp32[0];
             }
-            const payload: any = yield length;
+            const payload: Uint8Array = yield length;
 
-            debugger
+            debugger;
             switch (type) {
                 case FLV_MEDIA_TYPE.audio:
                     // player._opt.hasAudio 参数判断有没有音频
@@ -100,34 +100,36 @@ class fLVDemux extends BaseDemux {
                         // });
                         if (payload.byteLength > 0) {
                             console.log('Audio payload:', payload); // 打印音频包内容
-                            this._doDecode(payload, MEDIA_TYPE.audio, ts);
+
+
+                          this._doDecode({ payload, type: MEDIA_TYPE.audio, ts });
                         }
                     }
                     break;
-                case FLV_MEDIA_TYPE.video:
-                    if (!player._times.demuxStart) {
-                        // player._times.demuxStart = now();
-                    }
-                    if (player._opt.hasVideo) {
-                        // player.updateStats({
-                        //     vbps: payload.byteLength,
-                        // });
-                        const isIFrame = payload[0] >> 4 === 1;
-                        if (payload.byteLength > 0) {
-                            const tmp32 = new Uint32Array(payload.buffer, 2, 1);
-                            let cts = tmp32[0];
-
-
-                            console.log('Video payload:', payload); // 打印视频包内容
-
-                            this._doDecode(payload, MEDIA_TYPE.video, ts, isIFrame, cts);
+                    case FLV_MEDIA_TYPE.video:
+                        if (!player._times.demuxStart) {
+                            // player._times.demuxStart = now();
                         }
-                    }
-                    break;
+                        if (player._opt.hasVideo) {
+                            player.updateStats({
+                                vbps: payload.byteLength,
+                            });
+                            const isIFrame = payload[0] >> 4 === 1;
+                            if (payload.byteLength > 0) {
+                                tmp32[0] = payload[4];
+                                tmp32[1] = payload[3];
+                                tmp32[2] = payload[2];
+                                tmp32[3] = 0;
+                                let cts = tmp32[0];
+
+                                this._doDecode({ payload, type: MEDIA_TYPE.video, ts, isIFrame, cts });
+                            }
+                        }
+                        break;
+                }
             }
         }
     }
-}
 
 
 export default fLVDemux;
