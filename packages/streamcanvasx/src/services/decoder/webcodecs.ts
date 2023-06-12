@@ -137,6 +137,20 @@ interface VideoInfo {
     init(playerService: PlayerService) {
         this.player = playerService;
     }
+    destroy() {
+        if (this.decoder) {
+            if (this.decoder.state !== 'closed') {
+                this.decoder.close();
+            }
+            this.decoder = null;
+        }
+
+        this.hasInit = false;
+        this.isInitInfo = false;
+        this.isDecodeFirstIIframe = false;
+        this.off();
+    }
+
     initDecoder() {
         const _this = this;
         this.decoder = new VideoDecoder({
@@ -151,15 +165,19 @@ interface VideoInfo {
 
     handleDecode(videoFrame: VideoFrame) {
         if (!this.isInitInfo) {
-            this.player.video.updateVideoInfo({
-                width: videoFrame.codedWidth,
-                height: videoFrame.codedHeight,
-            });
+            // this.player.video.updateVideoInfo({
+            //     width: videoFrame.codedWidth,
+            //     height: videoFrame.codedHeight,
+            // });
             // this.player.video.initCanvasViewSize();
 
-            debugger;
+
             this.isInitInfo = true;
         }
+
+
+        let hhh = videoFrame;
+        debugger;
 
         // if (!this.player._times.videoStart) {
         //     this.player._times.videoStart = now();
@@ -204,6 +222,7 @@ interface VideoInfo {
 
                 const config = formatVideoDecoderConfigure(payload.slice(5));
                 this.decoder.configure(config);
+                debugger;
                 this.hasInit = true;
             }
         } else {

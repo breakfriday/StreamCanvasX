@@ -72,6 +72,7 @@ class PlayerService extends Emitter {
     init() {
         this.httpFlvStreamService.init(this);
         this.flvVDemuxService.init(this);
+        this.webcodecsDecoderService.init(this);
     }
     log() {
         alert(22);
