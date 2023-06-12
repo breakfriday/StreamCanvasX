@@ -107,9 +107,11 @@ class fLVDemux extends BaseDemux {
                     }
                     break;
                     case FLV_MEDIA_TYPE.video:
-                        if (!player._times.demuxStart) {
-                            // player._times.demuxStart = now();
-                        }
+                        // if (!player._times.demuxStart) {
+                        //     // player._times.demuxStart = now();
+                        // }
+
+                        // player._opt.hasVide
                         if (player._opt.hasVideo) {
                             player.updateStats({
                                 vbps: payload.byteLength,
