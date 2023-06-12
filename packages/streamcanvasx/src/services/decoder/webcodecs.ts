@@ -151,6 +151,7 @@ interface VideoInfo {
         this.off();
     }
 
+    // 用于初始化解码器
     initDecoder() {
         const _this = this;
         this.decoder = new VideoDecoder({
@@ -163,6 +164,7 @@ interface VideoInfo {
         });
     }
 
+    // 处理解码后的视频帧
     handleDecode(videoFrame: VideoFrame) {
         if (!this.isInitInfo) {
             // this.player.video.updateVideoInfo({
@@ -175,9 +177,6 @@ interface VideoInfo {
             this.isInitInfo = true;
         }
 
-
-        let hhh = videoFrame;
-        debugger;
 
         // if (!this.player._times.videoStart) {
         //     this.player._times.videoStart = now();
@@ -192,15 +191,17 @@ interface VideoInfo {
         // this.player.updateStats({ fps: true, ts: 0, buf: this.player.demux.delay });
     }
 
+    // 处理解码过程中的错误
     handleError(error: Error) {
-        console.log(error);
+        console.error(error);
         // this.player.debug.error('Webcodecs', 'VideoDecoder handleError', error);
     }
 
+    // 对视频数据进行解码
     decodeVideo(payload: Uint8Array, ts: number, isIframe: boolean): void {
         // this.player.debug.log('Webcodecs decoder', 'decodeVideo', ts, isIframe);
 
-// eslint-disable-next-line no-negated-condition
+        // eslint-disable-next-line no-negated-condition
         if (!this.hasInit) {
             if (isIframe && payload[1] === 0) { // 是关键帧且payload的第2个字节为0
                 // 更新视频信息
