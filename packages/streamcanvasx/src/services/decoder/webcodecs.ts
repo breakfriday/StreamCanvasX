@@ -167,29 +167,36 @@ interface VideoInfo {
 
     handleDecode(videoFrame: VideoFrame) {
         if (!this.isInitInfo) {
+
+            debugger
+
+            let h=videoFrame
+            
             let videoInfo = {
                 width: videoFrame.codedWidth,
                 height: videoFrame.codedHeight,
             };
-            this.player.video.updateVideoInfo({
-                width: videoFrame.codedWidth,
-                height: videoFrame.codedHeight,
-            });
-            this.player.video.initCanvasViewSize();
-            this.isInitInfo = true;
-        }
 
-        if (!this.player._times.videoStart) {
-            this.player._times.videoStart = now();
-            this.player.handlePlayToRenderTimes();
-        }
+            debugger
+        //     this.player.video.updateVideoInfo({
+        //         width: videoFrame.codedWidth,
+        //         height: videoFrame.codedHeight,
+        //     });
+        //     this.player.video.initCanvasViewSize();
+        //     this.isInitInfo = true;
+        // }
 
-        this.player.handleRender();
-        this.player.video.render({
-            videoFrame,
-        });
+        // if (!this.player._times.videoStart) {
+        //     this.player._times.videoStart = now();
+        //     this.player.handlePlayToRenderTimes();
+        // }
 
-        this.player.updateStats({ fps: true, ts: 0, buf: this.player.demux.delay });
+        // this.player.handleRender();
+        // this.player.video.render({
+        //     videoFrame,
+        // });
+
+        // this.player.updateStats({ fps: true, ts: 0, buf: this.player.demux.delay });
     }
 
     handleError(error: Error) {
