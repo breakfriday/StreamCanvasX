@@ -6,6 +6,7 @@ import { TYPES } from '../../serviceFactories/symbol';
 import HttpFlvStreamService from '../stream/fetch_stream_loader';
 import FlvDemuxService from '../demux/flvDemux';
 import { DEFAULT_PLAYER_OPTIONS } from '../../constant';
+import WebcodecsDecoderService from '../decoder/webcodecs';
 
 
 function now() {
