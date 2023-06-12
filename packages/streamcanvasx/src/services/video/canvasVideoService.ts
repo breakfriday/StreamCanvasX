@@ -7,11 +7,22 @@ class CanvasVideoService {
     context2D: CanvasRenderingContext2D;
     playerService: PlayerService;
     constructor() {
-
+        this.canvas_el = document.createElement('canvas');
+        this.init();
     }
 
     init() {
+        this._initContext2D();
+    }
 
+    getTarget() {
+        return this.canvas_el;
+    }
+
+
+    setCanvasSize() {
+        this.canvas_el.width = 400;
+        this.canvas_el.height = 400;
     }
 
     _initContext2D() {
