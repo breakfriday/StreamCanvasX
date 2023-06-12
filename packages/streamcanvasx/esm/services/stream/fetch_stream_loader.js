@@ -31,6 +31,12 @@ var HttpFlvStreamLoader = /*#__PURE__*/ function() {
             }
         },
         {
+            key: "init",
+            value: function init(playerService) {
+                this.playerService = playerService;
+            }
+        },
+        {
             key: "fetchStream",
             value: function fetchStream(url) {
                 var _this = this;
@@ -112,6 +118,7 @@ var HttpFlvStreamLoader = /*#__PURE__*/ function() {
         {
             key: "processStream",
             value: function processStream(reader) {
+                var _this = this;
                 return _async_to_generator(function() {
                     var _ref, done, value, chunk, e;
                     return _ts_generator(this, function(_state) {
@@ -143,6 +150,7 @@ var HttpFlvStreamLoader = /*#__PURE__*/ function() {
                                         2
                                     ];
                                 }
+                                _this.playerService.flvVDemuxService.dispatch(value);
                                 return [
                                     3,
                                     4

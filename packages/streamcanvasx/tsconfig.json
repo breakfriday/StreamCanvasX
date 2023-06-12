@@ -6,6 +6,7 @@
     "target": "ESNext",
     "jsx": "react",
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "lib": ["ES2017", "DOM", "DOM.Iterable"],
     "typeRoots": [ "./node_modules/@webgpu/types", "./node_modules/@types"],
     "allowJs": true,

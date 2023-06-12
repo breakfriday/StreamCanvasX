@@ -5,5 +5,6 @@ declare const TYPES: {
     IMainPlayerService: symbol;
     IPlayerService: symbol;
     IHttpFlvStreamLoader: symbol;
+    IFLVDemuxService: symbol;
 };
 export { TYPES };

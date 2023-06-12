@@ -19,6 +19,9 @@ let HttpFlvStreamLoader = class HttpFlvStreamLoader {
     get abortController() {
         return this._abortController;
     }
+    init(playerService) {
+        this.playerService = playerService;
+    }
     async fetchStream(url) {
         let sourceUrl = url;
         let headers = new Headers();
@@ -58,6 +61,7 @@ let HttpFlvStreamLoader = class HttpFlvStreamLoader {
                     console.log('Stream complete');
                     return;
                 }
+                this.playerService.flvVDemuxService.dispatch(value);
             // Your process goes here, where you can handle each chunk of FLV data
             // For example:
             // this.processFlvChunk(value);
@@ -73,6 +77,7 @@ let HttpFlvStreamLoader = class HttpFlvStreamLoader {
         _define_property(this, "_abortController", void 0);
         _define_property(this, "playerService", void 0);
         this.requestAbort = false;
+    // this.playerService = playerService;
     }
 };
 HttpFlvStreamLoader = _ts_decorate([

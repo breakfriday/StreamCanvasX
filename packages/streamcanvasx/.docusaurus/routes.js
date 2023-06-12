@@ -38,6 +38,31 @@ export default [
     exact: true
   },
   {
+    path: '/StreamCanvasX/demos/IcePkgDemo_2ac6eb',
+    component: ComponentCreator('/StreamCanvasX/demos/IcePkgDemo_2ac6eb', '6c5'),
+    exact: true
+  },
+  {
+    path: '/StreamCanvasX/demos/IcePkgDemo_3d1c42',
+    component: ComponentCreator('/StreamCanvasX/demos/IcePkgDemo_3d1c42', 'b14'),
+    exact: true
+  },
+  {
+    path: '/StreamCanvasX/demos/IcePkgDemo_75e193',
+    component: ComponentCreator('/StreamCanvasX/demos/IcePkgDemo_75e193', '492'),
+    exact: true
+  },
+  {
+    path: '/StreamCanvasX/demos/IcePkgDemo_8bcb51',
+    component: ComponentCreator('/StreamCanvasX/demos/IcePkgDemo_8bcb51', 'd28'),
+    exact: true
+  },
+  {
+    path: '/StreamCanvasX/demos/IcePkgDemo_bb32fb',
+    component: ComponentCreator('/StreamCanvasX/demos/IcePkgDemo_bb32fb', '944'),
+    exact: true
+  },
+  {
     path: '/StreamCanvasX/',
     component: ComponentCreator('/StreamCanvasX/', '937'),
     routes: [

@@ -112,10 +112,10 @@ class fLVDemux extends BaseDemux {
                         // }
 
                         // player._opt.hasVide
-                        if (player._opt.hasVideo) {
-                            player.updateStats({
-                                vbps: payload.byteLength,
-                            });
+                        if (player._opt.hasVideo = true) {
+                            // player.updateStats({
+                            //     vbps: payload.byteLength,
+                            // });
                             const isIFrame = payload[0] >> 4 === 1;
                             if (payload.byteLength > 0) {
                                 tmp32[0] = payload[4];
