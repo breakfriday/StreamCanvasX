@@ -36,7 +36,6 @@ interface IData {
         this.delay = -1;
         this.bufferList = [];
         this.dropping = false;
-        // this.initInterval();
     }
     // init(playerService: any) {
     //     this.player = playerService;
@@ -44,6 +43,7 @@ interface IData {
 
     init(playerService: PlayerService) {
         this.player = playerService;
+        this.initInterval();
     }
     // 清理和重置各种数据和状态，并且停止调度。
     destroy() {
@@ -185,10 +185,10 @@ interface IData {
     或者根据不同的设置使用 webcodecsDecoder 或 mseDecoder 进行解码。 */
     _doDecoderDecode(data: Idemux['IData']) {
         const { player } = this;
-        const { webcodecsDecoder } = player;
+        const { webcodecsDecoderService } = player;
 
        if (data.type === MEDIA_TYPE.video) {
-           webcodecsDecoder.decodeVideo(data.payload, data.ts, data.isIFrame);
+        webcodecsDecoderService.decodeVideo(data.payload, data.ts, data.isIFrame);
         }
     }
 
