@@ -137,22 +137,6 @@ interface VideoInfo {
     init(playerService: PlayerService) {
         this.player = playerService;
     }
-
-    destroy() {
-        if (this.decoder) {
-            if (this.decoder.state !== 'closed') {
-                this.decoder.close();
-            }
-            this.decoder = null;
-        }
-
-        this.hasInit = false;
-        this.isInitInfo = false;
-        this.isDecodeFirstIIframe = false;
-        this.off();
-        this.player.debug.log('Webcodecs', 'destroy');
-    }
-
     initDecoder() {
         const _this = this;
         this.decoder = new VideoDecoder({
@@ -167,24 +151,15 @@ interface VideoInfo {
 
     handleDecode(videoFrame: VideoFrame) {
         if (!this.isInitInfo) {
-
-            debugger
-
-            let h=videoFrame
-            
-            let videoInfo = {
+            this.player.video.updateVideoInfo({
                 width: videoFrame.codedWidth,
                 height: videoFrame.codedHeight,
-            };
+            });
+            // this.player.video.initCanvasViewSize();
 
-            debugger
-        //     this.player.video.updateVideoInfo({
-        //         width: videoFrame.codedWidth,
-        //         height: videoFrame.codedHeight,
-        //     });
-        //     this.player.video.initCanvasViewSize();
-        //     this.isInitInfo = true;
-        // }
+            debugger;
+            this.isInitInfo = true;
+        }
 
         // if (!this.player._times.videoStart) {
         //     this.player._times.videoStart = now();
@@ -200,15 +175,17 @@ interface VideoInfo {
     }
 
     handleError(error: Error) {
-        this.player.debug.error('Webcodecs', 'VideoDecoder handleError', error);
+        console.log(error);
+        // this.player.debug.error('Webcodecs', 'VideoDecoder handleError', error);
     }
 
-    decodeVideo(payload, ts, isIframe) {
+    decodeVideo(payload: Uint8Array, ts: number, isIframe: boolean): void {
         // this.player.debug.log('Webcodecs decoder', 'decodeVideo', ts, isIframe);
-        // eslint-disable-next-line no-negated-condition
+
+// eslint-disable-next-line no-negated-condition
         if (!this.hasInit) {
             if (isIframe && payload[1] === 0) {
-                const videoCodec = (payload[0] & 0x0F);
+                const videoCodec: number = (payload[0] & 0x0F);
                 this.player.video.updateVideoInfo({
                     encTypeCode: videoCodec,
                 });
@@ -228,17 +205,15 @@ interface VideoInfo {
             }
         } else {
             // check width or height change
-            // if (isIframe && payload[1] === 0) {
-            //     let data = payload.slice(5);
-            //     const config = parseAVCDecoderConfigurationRecord(data);
-            //     const { videoInfo } = this.player.video;
-            //     if (config.codecWidth !== videoInfo.width || config.codecHeight !== videoInfo.height) {
-            //         this.player.debug.log('Webcodecs', `width or height is update, width ${videoInfo.width}-> ${config.codecWidth}, height ${videoInfo.height}-> ${config.codecHeight}`);
-            //         this.player.emit(EVENTS_ERROR.webcodecsWidthOrHeightChange);
-            //         return;
-            //     }
-            // }
-
+            if (isIframe && payload[1] === 0) {
+                // let data: Uint8Array = payload.slice(5);
+                // const config: DecoderConfiguration = parseAVCDecoderConfigurationRecord(data);
+                // const { videoInfo } = this.player.video;
+                // if (config.codecWidth !== videoInfo.width || config.codecHeight !== videoInfo.height) {
+                //     this.player.emit(EVENTS_ERROR.webcodecsWidthOrHeightChange);
+                //     return;
+                // }
+            }
 
             // fix : Uncaught DOMException: Failed to execute 'decode' on 'VideoDecoder': A key frame is required after configure() or flush().
             if (!this.isDecodeFirstIIframe && isIframe) {
@@ -246,10 +221,10 @@ interface VideoInfo {
             }
 
             if (this.isDecodeFirstIIframe) {
-                const chunk = new EncodedVideoChunk({
+                const chunk: EncodedVideoChunk = new EncodedVideoChunk({
                     data: payload.slice(5),
                     timestamp: ts,
-                    type: isIframe ? ENCODED_VIDEO_TYPE.key : ENCODED_VIDEO_TYPE.delta, // 判断是否his关键帧
+                    type: isIframe ? ENCODED_VIDEO_TYPE.key : ENCODED_VIDEO_TYPE.delta,
                 });
                 this.player.emit(EVENTS.timeUpdate, ts);
                 try {
@@ -257,7 +232,7 @@ interface VideoInfo {
                         return;
                     }
                     this.decoder.decode(chunk);
-                } catch (e) {
+                } catch (e: any) {
                     if (e.toString().indexOf(WCS_ERROR.keyframeIsRequiredError) !== -1) {
                         this.player.emit(EVENTS_ERROR.webcodecsDecodeError);
                     } else if (e.toString().indexOf(WCS_ERROR.canNotDecodeClosedCodec) !== -1) {
@@ -265,14 +240,11 @@ interface VideoInfo {
                     }
                 }
             } else {
-                // this.player.debug.warn('Webcodecs', 'VideoDecoder isDecodeFirstIIframe false');
+
             }
         }
     }
-
-    isDecodeStateClosed() {
-        return this.decoder.state === 'closed';
-    }
 }
+
 
 export default WebcodecsDecoder;
