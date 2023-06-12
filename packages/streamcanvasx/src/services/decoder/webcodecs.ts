@@ -225,9 +225,9 @@ interface VideoInfo {
             if (this.isDecodeFirstIIframe) {
                   // 创建一个新的已编码视频块，包含了视频数据、时间戳和帧类型
                 const chunk: EncodedVideoChunk = new EncodedVideoChunk({
-                    data: payload.slice(5),
-                    timestamp: ts,
-                    type: isIframe ? ENCODED_VIDEO_TYPE.key : ENCODED_VIDEO_TYPE.delta,
+                    data: payload.slice(5), // 帧的原始数据。这应该是一个包含编码的视频数据的BufferSource（如ArrayBuffer或TypedArray）。
+                    timestamp: ts, // 帧的时间戳，通常表示帧在视频中的播放位置，单位是微秒。时间戳的起点应该是视频的开始。 0就是视频第一帧
+                    type: isIframe ? ENCODED_VIDEO_TYPE.key : ENCODED_VIDEO_TYPE.delta, /* type :帧类型。  "key"关键帧，delta 非关键帧 */
                 });
                 this.player.emit(EVENTS.timeUpdate, ts);
                 try {
