@@ -30,12 +30,12 @@ interface IData {
         super();
 
 
-        // this.stopId = null;
-        // this.firstTimestamp = null;
-        // this.startTimestamp = null;
-        // this.delay = -1;
-        // this.bufferList = [];
-        // this.dropping = false;
+        this.stopId = null;
+        this.firstTimestamp = null;
+        this.startTimestamp = null;
+        this.delay = -1;
+        this.bufferList = [];
+        this.dropping = false;
         // this.initInterval();
     }
     init(playerService: any) {
@@ -151,6 +151,13 @@ interface IData {
     }
 
     //    负责将提取的音频或视频负载数据解码。
+        /*
+    _doDecode 方法：这个方法的功能是将获得的音频或视频 payload（负载数据）传递给相应的解码器进行解码。
+    这个方法根据不同的设置（useWCS、useOffscreen、useMSE 等）选择不同的解码方式。
+    如果设置了 useWCS 并且 useOffscreen 未被设置，或者设置了 useMSE，
+    那么该方法会将负载数据和相关的选项（如时间戳 ts、编码类型 type、是否为关键帧 isIFrame 等）一起放入缓冲区等待解码。
+    如果都没有设置，那么该方法会直接调用相应的音频或视频解码器进行解码。
+    */
     _doDecode(data: Idemux['IData']) {
         let { payload, type, ts, isIFrame, cts } = data;
 
@@ -168,6 +175,11 @@ interface IData {
         this.pushBuffer(payload, options);
     }
 
+        /*
+    _doDecoderDecode 方法：
+    这个方法的作用和 _doDecode 方法相似，也是处理音频或视频的解码操作。
+    不过，这个方法是直接调用 player 的 decoderWorker 进行解码，
+    或者根据不同的设置使用 webcodecsDecoder 或 mseDecoder 进行解码。 */
     _doDecoderDecode(data: Idemux['IData']) {
         const { player } = this;
         const { webcodecsDecoder } = player;
