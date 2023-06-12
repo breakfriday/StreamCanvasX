@@ -247,12 +247,10 @@ interface VideoInfo {
                 this.player.emit(EVENTS.timeUpdate, ts);
                 try {
                     if (this.isDecodeStateClosed()) {
-                        this.player.debug.warn('Webcodecs', 'VideoDecoder isDecodeStateClosed true');
                         return;
                     }
                     this.decoder.decode(chunk);
                 } catch (e) {
-                    this.player.debug.error('Webcodecs', 'VideoDecoder', e);
                     if (e.toString().indexOf(WCS_ERROR.keyframeIsRequiredError) !== -1) {
                         this.player.emit(EVENTS_ERROR.webcodecsDecodeError);
                     } else if (e.toString().indexOf(WCS_ERROR.canNotDecodeClosedCodec) !== -1) {
@@ -260,7 +258,7 @@ interface VideoInfo {
                     }
                 }
             } else {
-                this.player.debug.warn('Webcodecs', 'VideoDecoder isDecodeFirstIIframe false');
+                // this.player.debug.warn('Webcodecs', 'VideoDecoder isDecodeFirstIIframe false');
             }
         }
     }
