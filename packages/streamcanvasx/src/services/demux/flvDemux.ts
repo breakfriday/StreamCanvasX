@@ -29,13 +29,12 @@ const FLV_MEDIA_TYPE = {
 class fLVDemux extends BaseDemux {
     private flvDemux: (data: ArrayBuffer) => void;
     private input: Generator<number>;
-    private Player: PlayerService;
     constructor() {
         super();
         this.input = this._inputFlv();
         this.flvDemux = this.dispatchFlvData(this.input);
     }
-    init(playerService: any) {
+    init(playerService: PlayerService) {
         this.player = playerService;
     }
     dispatchFlvData(input: Generator<number>) {
@@ -66,22 +65,6 @@ class fLVDemux extends BaseDemux {
     }
 
 
-    _doDecoderDecode(data) {
-        const { player } = this;
-        const { webcodecsDecoder, mseDecoder } = player;
-
-        if (data.type === MEDIA_TYPE.audio) {
-            if (player._opt.hasAudio) {
-                player.decoderWorker && player.decoderWorker.decodeAudio(data.payload, data.ts);
-            }
-        } else if (data.type === MEDIA_TYPE.video) {
-            if (player._opt.useWCS && !player._opt.useOffscreen) {
-                webcodecsDecoder.decodeVideo(data.payload, data.ts, data.isIFrame);
-            } else if (player._opt.useMSE) {
-                mseDecoder.decodeVideo(data.payload, data.ts, data.isIFrame, data.cts);
-            }
-        }
-    }
     * _inputFlv(): Generator<number, void, undefined> {
         yield 9;
         const tmp = new ArrayBuffer(4);
@@ -108,11 +91,13 @@ class fLVDemux extends BaseDemux {
             const payload = yield length;
             switch (type) {
                 case FLV_MEDIA_TYPE.audio:
-                    if (player._opt.hasAudio) {
+                    // player._opt.hasAudio 参数判断有没有音频
+                    if (true) {
                         player.updateStats({
                             abps: payload.byteLength,
                         });
                         if (payload.byteLength > 0) {
+                            console.log('Audio payload:', payload); // 打印音频包内容
                             this._doDecode(payload, MEDIA_TYPE.audio, ts);
                         }
                     }
@@ -129,6 +114,9 @@ class fLVDemux extends BaseDemux {
                         if (payload.byteLength > 0) {
                             const tmp32 = new Uint32Array(payload.buffer, 2, 1);
                             let cts = tmp32[0];
+
+
+                            console.log('Video payload:', payload); // 打印视频包内容
 
                             this._doDecode(payload, MEDIA_TYPE.video, ts, isIFrame, cts);
                         }
