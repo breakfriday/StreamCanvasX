@@ -207,16 +207,9 @@ interface VideoInfo {
                 this.hasInit = true;
             }
         } else {
-            // check width or height change
             // 如果当前帧是关键帧，并且payload的第二个字节为0，表示这是一个序列参数集或图像参数集包
             if (isIframe && payload[1] === 0) {
-                // let data: Uint8Array = payload.slice(5);
-                // const config: DecoderConfiguration = parseAVCDecoderConfigurationRecord(data);
-                // const { videoInfo } = this.player.video;
-                // if (config.codecWidth !== videoInfo.width || config.codecHeight !== videoInfo.height) {
-                //     this.player.emit(EVENTS_ERROR.webcodecsWidthOrHeightChange);
-                //     return;
-                // }
+
             }
 
            // 如果还没有解码过关键帧，并且当前帧是关键帧
@@ -225,7 +218,12 @@ interface VideoInfo {
                 this.isDecodeFirstIIframe = true;
             }
 
+            /*
+            isDecodeFirstIIframe 确保在解码非关键帧之前，至少已经解码过一个关键帧。
+            只有当 isDecodeFirstIIframe 为 true（表示已经解码过至少一个关键帧）时，才会尝试去解码非关键帧。
+             */
             if (this.isDecodeFirstIIframe) {
+                  // 创建一个新的已编码视频块，包含了视频数据、时间戳和帧类型
                 const chunk: EncodedVideoChunk = new EncodedVideoChunk({
                     data: payload.slice(5),
                     timestamp: ts,
@@ -248,6 +246,10 @@ interface VideoInfo {
 
             }
         }
+    }
+
+    isDecodeStateClosed() {
+        return this.decoder.state === 'closed';
     }
 }
 
