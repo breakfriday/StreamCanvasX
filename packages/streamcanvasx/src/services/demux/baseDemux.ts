@@ -171,7 +171,6 @@ interface IData {
         };
 
         if (type === MEDIA_TYPE.video) {
-            debugger;
             options.isIFrame = isIFrame;
            this.pushBuffer(payload, options);
         }
