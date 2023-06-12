@@ -184,15 +184,18 @@ interface VideoInfo {
 
 // eslint-disable-next-line no-negated-condition
         if (!this.hasInit) {
-            if (isIframe && payload[1] === 0) {
+            if (isIframe && payload[1] === 0) { // 是关键帧且payload的第2个字节为0
+                // 更新视频信息
+                // 根据视频编码格式（H.264, H.265等）进行不同的处理
+
                 const videoCodec: number = (payload[0] & 0x0F);
-                this.player.video.updateVideoInfo({
-                    encTypeCode: videoCodec,
-                });
+                // this.player.video.updateVideoInfo({
+                //     encTypeCode: videoCodec,
+                // });
 
                 // 如果解码出来的是
                 if (videoCodec === VIDEO_ENC_CODE.h265) {
-                    this.emit(EVENTS_ERROR.webcodecsH265NotSupport);
+                    console.log('不支持 H265');
                     return;
                 }
                 if (!this.player._times.decodeStart) {
@@ -205,6 +208,7 @@ interface VideoInfo {
             }
         } else {
             // check width or height change
+            // 如果当前帧是关键帧，并且payload的第二个字节为0，表示这是一个序列参数集或图像参数集包
             if (isIframe && payload[1] === 0) {
                 // let data: Uint8Array = payload.slice(5);
                 // const config: DecoderConfiguration = parseAVCDecoderConfigurationRecord(data);
@@ -215,8 +219,9 @@ interface VideoInfo {
                 // }
             }
 
-            // fix : Uncaught DOMException: Failed to execute 'decode' on 'VideoDecoder': A key frame is required after configure() or flush().
+           // 如果还没有解码过关键帧，并且当前帧是关键帧
             if (!this.isDecodeFirstIIframe && isIframe) {
+               // 标记已经解码过第一个关键帧
                 this.isDecodeFirstIIframe = true;
             }
 
