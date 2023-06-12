@@ -61,6 +61,10 @@ class fLVDemux extends BaseDemux {
         };
     }
 
+    dispatch(data) {
+        this.flvDemux(data);
+    }
+
 
     _doDecoderDecode(data) {
         const { player } = this;
