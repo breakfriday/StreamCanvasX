@@ -178,6 +178,11 @@ interface VideoInfo {
         }
 
 
+        this.player.video.render({
+            videoFrame,
+        });
+
+
         // if (!this.player._times.videoStart) {
         //     this.player._times.videoStart = now();
         //     this.player.handlePlayToRenderTimes();
@@ -223,6 +228,10 @@ interface VideoInfo {
               payload.slice(5) 这个操作是从关键帧数据中提取出AVCDecoderConfigurationRecord的部分。
               具体来说，前5个字节是FLV格式定义的固定头部，包含了一些基本的信息，例如帧类型（关键帧或非关键帧）和编码格式（例如H.264）。
               所以这里需要跳过前5个字节，从第6个字节开始才是AVCDecoderConfigurationRecord。
+
+              codec：编码格式，例如"vp8"、"vp9"、"avc"（H.264）等。
+            codedWidth 和 codedHeight：视频的宽度和高度。
+             other fields：可能还包含其他一些信息，例如比特率、帧率等，具体的内容可能会根据编码格式和实际的需求有所不同。
               */
                 const config = formatVideoDecoderConfigure(payload.slice(5));
                 this.decoder.configure(config);
