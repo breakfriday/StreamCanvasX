@@ -202,11 +202,9 @@ interface VideoInfo {
         // this.player.debug.log('Webcodecs decoder', 'decodeVideo', ts, isIframe);
 
         // eslint-disable-next-line no-negated-condition
-        if (!this.hasInit) {
+        if (!this.hasInit) { // 初始化解码器
             if (isIframe && payload[1] === 0) { // 是关键帧且payload的第2个字节为0
-                // 更新视频信息
-                // 根据视频编码格式（H.264, H.265等）进行不同的处理
-
+                // 获取视频编码方式
                 const videoCodec: number = (payload[0] & 0x0F);
                 // this.player.video.updateVideoInfo({
                 //     encTypeCode: videoCodec,
@@ -221,9 +219,14 @@ interface VideoInfo {
                     this.player._times.decodeStart = now();
                 }
 
+            /*
+              payload.slice(5) 这个操作是从关键帧数据中提取出AVCDecoderConfigurationRecord的部分。
+              具体来说，前5个字节是FLV格式定义的固定头部，包含了一些基本的信息，例如帧类型（关键帧或非关键帧）和编码格式（例如H.264）。
+              所以这里需要跳过前5个字节，从第6个字节开始才是AVCDecoderConfigurationRecord。
+              */
                 const config = formatVideoDecoderConfigure(payload.slice(5));
                 this.decoder.configure(config);
-                debugger;
+                // hasInit 视频解码器是否已经初始化
                 this.hasInit = true;
             }
         } else {
