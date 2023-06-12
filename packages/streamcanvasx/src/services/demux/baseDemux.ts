@@ -91,7 +91,6 @@ interface IData {
      如果延迟过大，会开启丢帧模式，丢弃一些数据以减小延迟。
     */
     initInterval() {
-        console.log('common dumex', 'init Interval');
         let _loop = () => {
             let data;
             /*
