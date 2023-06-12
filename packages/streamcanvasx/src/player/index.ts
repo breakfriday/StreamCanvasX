@@ -34,7 +34,7 @@ class Player extends Emitter {
             videoStart: '', // 7
             playTimestamp: '', // playStart- playInitStart
             streamTimestamp: '', // streamStart - playStart
-            streamResponseTimestamp: '', // streamResponse - streamStart
+            streamResponseTimestamp: '', // streamResponse - streamStart_times
             demuxTimestamp: '', // demuxStart - streamResponse
             decodeTimestamp: '', // decodeStart - demuxStart
             videoTimestamp: '', // videoStart - decodeStart

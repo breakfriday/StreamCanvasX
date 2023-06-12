@@ -26,6 +26,7 @@ class PlayerService extends Emitter {
     flvVDemuxService: FlvDemuxService;
     private _stats: Stats;
     private _startBpsTime?: number;
+    _times: any;
     constructor(
         @inject(TYPES.IServiceA) logger: ServiceA,
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -35,6 +36,23 @@ class PlayerService extends Emitter {
         this.httpFlvStreamService = httpFlvStreamService;
         this.flvVDemuxService = flvVDemuxService;
         this.init();
+
+        this._times = {
+            playInitStart: '', // 1
+            playStart: '', // 2
+            streamStart: '', // 3
+            streamResponse: '', // 4
+            demuxStart: '', // 5
+            decodeStart: '', // 6
+            videoStart: '', // 7
+            playTimestamp: '', // playStart- playInitStart
+            streamTimestamp: '', // streamStart - playStart
+            streamResponseTimestamp: '', // streamResponse - streamStart_times
+            demuxTimestamp: '', // demuxStart - streamResponse
+            decodeTimestamp: '', // decodeStart - demuxStart
+            videoTimestamp: '', // videoStart - decodeStart
+            allTimestamp: '', // videoStart - playInitStart
+        };
 
         this._stats = {
             buf: 0, // 当前缓冲区时长，单位毫秒,
@@ -47,6 +65,7 @@ class PlayerService extends Emitter {
 
     init() {
         this.httpFlvStreamService.init(this);
+        this.flvVDemuxService.init(this);
     }
     log() {
         alert(22);
