@@ -161,6 +161,7 @@ interface IData {
     _doDecode(data: Idemux['IData']) {
         let { payload, type, ts, isIFrame, cts } = data;
 
+
         const { player } = this;
         let options = {
             ts: ts,
@@ -170,9 +171,10 @@ interface IData {
         };
 
         if (type === MEDIA_TYPE.video) {
+            debugger;
             options.isIFrame = isIFrame;
+           this.pushBuffer(payload, options);
         }
-        this.pushBuffer(payload, options);
     }
 
         /*
