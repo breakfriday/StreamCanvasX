@@ -7,7 +7,7 @@ import auth from '@ice/plugin-auth';
 const minify = process.env.NODE_ENV === 'production' ? 'swc' : false;
 export default defineConfig(() => ({
   ssg: false,
-  minify,
+  minify: false,
   plugins: [request(), store(), auth()],
   compileDependencies: false,
 }));
