@@ -12,7 +12,7 @@ const SimplePage = () => {
     // if (vedio_ref) {
     //   const el = vedio_ref?.current;
     //   if (el) {
-    //     player(el);
+    //     player(el);_times
     //   }
 
       let h = createOriginServiceInstance('geoiosss');
