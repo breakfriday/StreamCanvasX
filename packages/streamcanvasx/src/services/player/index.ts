@@ -11,11 +11,20 @@ function now() {
     return new Date().getTime();
 }
 
+type Stats = {
+    ts?: number;
+    buf?: number;
+    fps: number;
+    abps: number;
+    vbps: number;
+};
+
 @injectable()
 class PlayerService extends Emitter {
     logger: ServiceA;
     httpFlvStreamService: HttpFlvStreamService;
     flvVDemuxService: FlvDemuxService;
+    private _stats: Stats;
     private _startBpsTime?: number;
     constructor(
         @inject(TYPES.IServiceA) logger: ServiceA,
@@ -26,6 +35,14 @@ class PlayerService extends Emitter {
         this.httpFlvStreamService = httpFlvStreamService;
         this.flvVDemuxService = flvVDemuxService;
         this.init();
+
+        this._stats = {
+            buf: 0, // 当前缓冲区时长，单位毫秒,
+            fps: 0, // 当前视频帧率
+            abps: 0, // 当前音频码率，单位bit
+            vbps: 0, // 当前视频码率，单位bit
+            ts: 0, // 当前视频帧pts，单位毫秒
+        };
     }
 
     init() {
@@ -43,20 +60,20 @@ class PlayerService extends Emitter {
     }
 
         //
-        updateStats(options) {
+    updateStats(options: any) {
             options = options || {};
 
             if (!this._startBpsTime) {
                 this._startBpsTime = now();
             }
 
-            if (isNotEmpty(options.ts)) {
-                this._stats.ts = options.ts;
-            }
+            // if (isNotEmpty(options.ts)) {
+            //     this._stats.ts = options.ts;
+            // }
 
-            if (isNotEmpty(options.buf)) {
-                this._stats.buf = options.buf;
-            }
+            // if (isNotEmpty(options.buf)) {
+            //     this._stats.buf = options.buf;
+            // }
 
             if (options.fps) {
                 this._stats.fps += 1;
@@ -75,8 +92,8 @@ class PlayerService extends Emitter {
                 return;
             }
 
-            this.emit(EVENTS.stats, this._stats);
-            this.emit(EVENTS.performance, fpsStatus(this._stats.fps));
+            // this.emit(EVENTS.stats, this._stats);
+            // this.emit(EVENTS.performance, fpsStatus(this._stats.fps));
             this._stats.fps = 0;
             this._stats.abps = 0;
             this._stats.vbps = 0;

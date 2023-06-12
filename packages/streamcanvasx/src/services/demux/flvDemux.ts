@@ -25,7 +25,7 @@ const FLV_MEDIA_TYPE = {
   }
 
 
-  @injectable()
+@injectable()
 class fLVDemux extends BaseDemux {
     private flvDemux: (data: ArrayBuffer) => void;
     private input: Generator<number>;
@@ -60,7 +60,7 @@ class fLVDemux extends BaseDemux {
         };
     }
 
-    dispatch(data) {
+    dispatch(data: any) {
         this.flvDemux(data);
     }
 
@@ -88,14 +88,16 @@ class fLVDemux extends BaseDemux {
                 tmp8[3] = t[11];
                 ts = tmp32[0];
             }
-            const payload = yield length;
+            const payload: any = yield length;
+
+            debugger
             switch (type) {
                 case FLV_MEDIA_TYPE.audio:
                     // player._opt.hasAudio 参数判断有没有音频
                     if (true) {
-                        player.updateStats({
-                            abps: payload.byteLength,
-                        });
+                        // player.updateStats({
+                        //     abps: payload.byteLength,
+                        // });
                         if (payload.byteLength > 0) {
                             console.log('Audio payload:', payload); // 打印音频包内容
                             this._doDecode(payload, MEDIA_TYPE.audio, ts);
@@ -104,12 +106,12 @@ class fLVDemux extends BaseDemux {
                     break;
                 case FLV_MEDIA_TYPE.video:
                     if (!player._times.demuxStart) {
-                        player._times.demuxStart = now();
+                        // player._times.demuxStart = now();
                     }
                     if (player._opt.hasVideo) {
-                        player.updateStats({
-                            vbps: payload.byteLength,
-                        });
+                        // player.updateStats({
+                        //     vbps: payload.byteLength,
+                        // });
                         const isIFrame = payload[0] >> 4 === 1;
                         if (payload.byteLength > 0) {
                             const tmp32 = new Uint32Array(payload.buffer, 2, 1);
