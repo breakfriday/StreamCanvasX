@@ -90,7 +90,6 @@ class fLVDemux extends BaseDemux {
             }
             const payload: Uint8Array = yield length;
 
-            debugger;
             switch (type) {
                 case FLV_MEDIA_TYPE.audio:
                     // player._opt.hasAudio 参数判断有没有音频
@@ -99,7 +98,7 @@ class fLVDemux extends BaseDemux {
                         //     abps: payload.byteLength,
                         // });
                         if (payload.byteLength > 0) {
-                            console.log('Audio payload:', payload); // 打印音频包内容
+                            console.log('打印音频包内容:', payload); // 打印音频包内容
 
 
                           this._doDecode({ payload, type: MEDIA_TYPE.audio, ts });
@@ -123,6 +122,9 @@ class fLVDemux extends BaseDemux {
                                 tmp32[2] = payload[2];
                                 tmp32[3] = 0;
                                 let cts = tmp32[0];
+
+                                console.log('打印视频包内容:', payload); // 打印音频包内容
+
 
                                 this._doDecode({ payload, type: MEDIA_TYPE.video, ts, isIFrame, cts });
                             }
