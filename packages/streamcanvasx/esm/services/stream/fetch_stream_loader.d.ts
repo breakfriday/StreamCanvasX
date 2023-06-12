@@ -1,3 +1,4 @@
+import PlayerService from '../player';
 declare class HttpFlvStreamLoader {
     private _requestAbort;
     private _abortController;
@@ -7,6 +8,7 @@ declare class HttpFlvStreamLoader {
     get requestAbort(): boolean;
     set requestAbort(value: boolean);
     get abortController(): AbortController;
+    init(playerService: PlayerService): void;
     fetchStream(url: string): Promise<void>;
     abortFetch(): void;
     processStream(reader: ReadableStreamDefaultReader): Promise<void>;

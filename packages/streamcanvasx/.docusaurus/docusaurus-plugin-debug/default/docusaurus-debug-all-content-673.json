@@ -194,7 +194,33 @@
     }
   },
   "docusaurus-plugin-content-pages": {
-    "demo-pages": null,
+    "demo-pages": [
+      {
+        "type": "jsx",
+        "permalink": "/StreamCanvasX/demos/IcePkgDemo_2ac6eb",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_2ac6eb.jsx"
+      },
+      {
+        "type": "jsx",
+        "permalink": "/StreamCanvasX/demos/IcePkgDemo_3d1c42",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_3d1c42.jsx"
+      },
+      {
+        "type": "jsx",
+        "permalink": "/StreamCanvasX/demos/IcePkgDemo_75e193",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_75e193.jsx"
+      },
+      {
+        "type": "jsx",
+        "permalink": "/StreamCanvasX/demos/IcePkgDemo_8bcb51",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_8bcb51.jsx"
+      },
+      {
+        "type": "jsx",
+        "permalink": "/StreamCanvasX/demos/IcePkgDemo_bb32fb",
+        "source": "@site/.docusaurus/demo-pages/IcePkgDemo_bb32fb.jsx"
+      }
+    ],
     "default": null
   },
   "docusaurus-plugin-debug": {},
