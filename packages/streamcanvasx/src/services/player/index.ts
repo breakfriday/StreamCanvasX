@@ -5,6 +5,7 @@ import { ServiceA } from '../ServiceA';
 import { TYPES } from '../../serviceFactories/symbol';
 import HttpFlvStreamService from '../stream/fetch_stream_loader';
 import FlvDemuxService from '../demux/flvDemux';
+import { DEFAULT_PLAYER_OPTIONS } from '../../constant';
 
 
 function now() {
@@ -21,20 +22,21 @@ type Stats = {
 
 @injectable()
 class PlayerService extends Emitter {
-    logger: ServiceA;
     httpFlvStreamService: HttpFlvStreamService;
     flvVDemuxService: FlvDemuxService;
     private _stats: Stats;
     private _startBpsTime?: number;
+    _opt: any;
     _times: any;
     constructor(
-        @inject(TYPES.IServiceA) logger: ServiceA,
+
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
         @inject(TYPES.IFLVDemuxService) flvVDemuxService: FlvDemuxService,
         ) {
         super();
         this.httpFlvStreamService = httpFlvStreamService;
         this.flvVDemuxService = flvVDemuxService;
+        this._opt = Object.assign({}, DEFAULT_PLAYER_OPTIONS);
         this.init();
 
         this._times = {
