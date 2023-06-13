@@ -1,6 +1,8 @@
 
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../player';
+
+@injectable()
 class CanvasVideoService {
     canvas_el: HTMLCanvasElement;
     canvas_context: CanvasRenderingContext2D;
@@ -8,21 +10,22 @@ class CanvasVideoService {
     playerService: PlayerService;
     constructor() {
         this.canvas_el = document.createElement('canvas');
-        this.init();
+        this._initContext2D();
+        this.setCanvasSize();
     }
 
     init() {
-        this._initContext2D();
+
     }
 
-    getTarget() {
-        return this.canvas_el;
-    }
 
+    setCanvasEL(el: HTMLCanvasElement) {
+        this.canvas_el = document.createElement('canvas');
+    }
 
     setCanvasSize() {
-        this.canvas_el.width = 400;
-        this.canvas_el.height = 400;
+        this.canvas_el.width = 2000;
+        this.canvas_el.height = 1000;
     }
 
     _initContext2D() {
@@ -30,9 +33,13 @@ class CanvasVideoService {
     }
 
     render(videoFrame: VideoFrame) {
-        let video_width = 400;
-        let video_height = 400;
+        let video_width = 2000;
+        let video_height = 1000;
         this.canvas_context.drawImage(videoFrame, 0, 0, video_width, video_height);
+    }
+
+    getCanvas2dEl() {
+        return this.canvas_el;
     }
 }
 
