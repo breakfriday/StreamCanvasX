@@ -31,6 +31,8 @@ const FlvDemux = () => {
         }}
         >abort</Button>
         <div id="aa" />
+
+        <img src="https://img.alicdn.com/tfs/TB1.ZBecq67gK0jSZFHXXa9jVXa-904-826.png" id="webtest" width={100} />
       </>
 
 

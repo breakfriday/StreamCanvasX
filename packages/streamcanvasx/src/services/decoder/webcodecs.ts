@@ -234,11 +234,6 @@ interface VideoInfo {
                 this.hasInit = true;
             }
         } else {
-            // 如果当前帧是关键帧，并且payload的第二个字节为0，表示这是一个序列参数集或图像参数集包
-            if (isIframe && payload[1] === 0) {
-
-            }
-
            // 如果还没有解码过关键帧，并且当前帧是关键帧
             if (!this.isDecodeFirstIIframe && isIframe) {
                // 标记已经解码过第一个关键帧
