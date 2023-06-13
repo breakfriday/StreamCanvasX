@@ -7,6 +7,7 @@ import HttpFlvStreamService from '../stream/fetch_stream_loader';
 import FlvDemuxService from '../demux/flvDemux';
 import { DEFAULT_PLAYER_OPTIONS } from '../../constant';
 import WebcodecsDecoderService from '../decoder/webcodecs';
+import CanvasVideoService from '../video/canvasVideoService';
 
 
 function now() {
@@ -26,6 +27,7 @@ class PlayerService extends Emitter {
     httpFlvStreamService: HttpFlvStreamService;
     flvVDemuxService: FlvDemuxService;
     webcodecsDecoderService: WebcodecsDecoderService;
+    canvasVideoService: CanvasVideoService;
     private _stats: Stats;
     private _startBpsTime?: number;
     _opt: any;
@@ -35,11 +37,13 @@ class PlayerService extends Emitter {
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
         @inject(TYPES.IFLVDemuxService) flvVDemuxService: FlvDemuxService,
         @inject(TYPES.IWebcodecsDecoderService) webcodecsDecoderService: WebcodecsDecoderService,
+        @inject(TYPES.ICanvasVideoService) canvasVideoService: CanvasVideoService,
         ) {
         super();
         this.httpFlvStreamService = httpFlvStreamService;
         this.flvVDemuxService = flvVDemuxService;
         this.webcodecsDecoderService = webcodecsDecoderService;
+        this.canvasVideoService = canvasVideoService;
         this._opt = Object.assign({}, DEFAULT_PLAYER_OPTIONS);
         this.init();
 

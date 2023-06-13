@@ -6,6 +6,7 @@ import { Divider, Space, Button } from 'antd';
 
 
  const h = createPlayerServiceInstance();
+
 const FlvDemux = () => {
     return (
       <>
@@ -15,6 +16,11 @@ const FlvDemux = () => {
             let url = 'http://localhost:8080/live/livestream.flv';
             // fetchflv.fetchStream(url);
            h.httpFlvStreamService.fetchStream(url);
+
+           let el = h.canvasVideoService.getCanvas2dEl();
+
+           let container = document.getElementById('aa');
+           container?.appendChild(el);
       }}
         >
           fetch flv httpdd
@@ -24,6 +30,7 @@ const FlvDemux = () => {
            h.httpFlvStreamService.abortFetch();
         }}
         >abort</Button>
+        <div id="aa" />
       </>
 
 
