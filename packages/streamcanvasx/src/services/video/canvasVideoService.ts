@@ -43,12 +43,15 @@ class CanvasVideoService {
     gPUSampler: GPUSampler;
     constructor() {
         this.canvas_el = document.createElement('canvas');
-        this._initContext2D();
+        // this._initContext2D();
+
+        this.init();
         this.setCanvasSize();
     }
 
     init() {
-
+         this.initGpu();
+        // this._initContext2D();
     }
 
 
@@ -64,58 +67,53 @@ class CanvasVideoService {
 
           this.GpuContext = this.canvas_el.getContext('webgpu');
 
-                 // Create a basic vertex shader
-                const vertexShader = `
-                [[stage(vertex)]] fn main(
-                    [[builtin(vertex_index)]] VertexIndex : u32
-                ) -> [[builtin(position)]] vec4<f32> {
-                    var pos : array<vec2<f32>, 3> = array<vec2<f32>, 3>(
-                        vec2<f32>(-1.0, -1.0),
-                        vec2<f32>(3.0, -1.0),
-                        vec2<f32>(-1.0, 3.0)
-                    );
-                    return vec4<f32>(pos[VertexIndex], 0.0, 1.0);
-                }
-            `;
+          this.GpuContext.configure({
+            device: this.device,
+            format: 'bgra8unorm',
+          });
 
-              // Create a basic fragment shader
-            const fragmentShader = `
-                [[group(0), binding(0)]] var s: sampler;
-                [[group(0), binding(1)]] var t: texture_2d<f32>;
+            // Create a basic vertex shader
+            const vertexShader = `
+            [[stage(vertex)]] fn main(
+                [[builtin(vertex_index)]] VertexIndex : u32
+            ) -> [[builtin(position)]] vec4<f32> {
+                var pos : array<vec2<f32>, 3> = array<vec2<f32>, 3>(
+                    vec2<f32>(-1.0, -1.0),
+                    vec2<f32>(3.0, -1.0),
+                    vec2<f32>(-1.0, 3.0)
+                );
+                return vec4<f32>(pos[VertexIndex], 0.0, 1.0);
+            }
+        `;
 
-                [[stage(fragment)]] fn main([[builtin(fragment_coord)]] FragCoord : vec4<f32>)
-                -> [[builtin(color)]] vec4<f32> {
-                    return textureSample(t, s, FragCoord.xy / vec2<f32>(512.0, 512.0));
-                }
-            `;
+        // Create a basic fragment shader
+        const fragmentShader = `
+            [[group(0), binding(0)]] var s: sampler;
+            [[group(0), binding(1)]] var t: texture_2d<f32>;
 
-            const bindGroupLayout = this.device.createBindGroupLayout({
-                entries: [
-                    {
-                        binding: 0,
-                        visibility: GPUShaderStage.FRAGMENT,
-                        sampler: {
-                            type: 'filtering',
-                        },
-                    },
-                    {
-                        binding: 1,
-                        visibility: GPUShaderStage.FRAGMENT,
-                        texture: {
-                            sampleType: 'float',
-                        },
-                    },
-                ],
-            });
+            [[stage(fragment)]] fn main([[builtin(fragment_coord)]] FragCoord : vec4<f32>)
+            -> [[builtin(color)]] vec4<f32> {
+                return textureSample(t, s, FragCoord.xy / vec2<f32>(512.0, 512.0));
+            }
+        `;
 
-            // Create a pipeline layout
-            const pipelineLayout = this.device.createPipelineLayout({
-                bindGroupLayouts: [bindGroupLayout],
-            });
 
+            // const renderPipeline = this.device.createRenderPipeline({
+            //     layout: 'auto',
+            //     vertex: {
+            //         module: this.device.createShaderModule({ code: vertexShader }),
+            //         entryPoint: 'main',
+            //     },
+            //     fragment: {
+            //         module: this.device.createShaderModule({ code: fragmentShader }),
+            //         entryPoint: 'main',
+            //         targets: [{ format: 'bgra8unorm' }],
+            //     },
+            //     primitive: { topology: 'triangle-list' },
+            // });
                 // Create a render pipeline with the shaders
             this.renderPipeline = this.device.createRenderPipeline({
-                    layout: pipelineLayout,
+                    layout: 'auto',
                     vertex: {
                         module: this.device.createShaderModule({
                             code: vertexShader,
@@ -136,20 +134,26 @@ class CanvasVideoService {
                     },
                 });
 
-                this.gPUSampler = this.device.createSampler();
+         this.gPUSampler = this.device.createSampler();
     }
 
     renderFrameByWebgpu(frame: VideoFrame) {
+        let { displayWidth, displayHeight } = frame;
+
         const videoTexture = this.device.createTexture({
-            size: [frame.displayWidth, frame.displayHeight, 1],
+            size: [displayWidth = 2000, displayHeight = 1000, 1],
             format: 'rgba8unorm',
             usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.TEXTURE_BINDING,
         });
 
+        const canvas = new OffscreenCanvas(displayWidth, displayHeight);
+        const context = canvas.getContext('2d');
+        context.drawImage(frame, 0, 0, displayWidth, displayHeight);
+
         this.device.queue.copyExternalImageToTexture(
-            { source: frame },
+            { source: canvas },
             { texture: videoTexture },
-            [frame.displayWidth, frame.displayHeight],
+            [displayWidth, displayHeight],
         );
 
         const bindGroup = this.device.createBindGroup({
@@ -165,7 +169,9 @@ class CanvasVideoService {
             colorAttachments: [
                 {
                     view: this.GpuContext.getCurrentTexture().createView(),
-                    loadOp: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
+                    loadOp: 'clear',
+                    loadValue: { r: 0, g: 0, b: 0, a: 1 }, // 清空颜色
+
                     storeOp: 'store',
                 },
             ],
@@ -238,12 +244,11 @@ class CanvasVideoService {
         // this.contextGlDestroy = webgl.destroy;
     }
 
-    _initContext2D() {
-        this.canvas_context = this.canvas_el.getContext('2d');
-    }
 
     render(videoFrame: VideoFrame) {
-        this.renderCanvas2d(videoFrame);
+        // this.renderCanvas2d(videoFrame);
+
+        this.renderFrameByWebgpu(videoFrame);
     }
 
     renderCanvas2d(videoFrame: VideoFrame) {
