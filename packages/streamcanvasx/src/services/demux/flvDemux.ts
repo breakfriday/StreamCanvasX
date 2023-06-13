@@ -123,7 +123,7 @@ class fLVDemux extends BaseDemux {
                                 tmp32[3] = 0;
                                 let cts = tmp32[0];
 
-                                this.player.debugLogService.log({ title: '打印视频包内容', info: payload, logkey: 'd' });
+                                this.player.debugLogService.log({ title: '打印视频包内容', info: payload, logkey: 'packetLog' });
 
 
                                 this._doDecode({ payload, type: MEDIA_TYPE.video, ts, isIFrame, cts });

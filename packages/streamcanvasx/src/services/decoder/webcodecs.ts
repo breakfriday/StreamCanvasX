@@ -204,16 +204,11 @@ interface VideoInfo {
 
     // 对视频数据进行解码
     decodeVideo(payload: Uint8Array, ts: number, isIframe: boolean): void {
-        // this.player.debug.log('Webcodecs decoder', 'decodeVideo', ts, isIframe);
-
         // eslint-disable-next-line no-negated-condition
         if (!this.hasInit) { // 初始化解码器
             if (isIframe && payload[1] === 0) { // 是关键帧且payload的第2个字节为0
                 // 获取视频编码方式
                 const videoCodec: number = (payload[0] & 0x0F);
-                // this.player.video.updateVideoInfo({
-                //     encTypeCode: videoCodec,
-                // });
 
                 // 如果解码出来的是
                 if (videoCodec === VIDEO_ENC_CODE.h265) {
