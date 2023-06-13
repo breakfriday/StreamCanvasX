@@ -32,6 +32,12 @@ function createContextGL($canvas: HTMLCanvasElement): WebGLRenderingContext | nu
     return gl;
   }
 
+  enum UseMode {
+    UseWebGL,
+    UseCanvas,
+    UseWebGPU,
+  }
+
 @injectable()
 class CanvasVideoService {
     canvas_el: HTMLCanvasElement;
@@ -44,6 +50,7 @@ class CanvasVideoService {
     renderPipeline: GPURenderPipeline;
     gPUSampler: GPUSampler;
     regGl: REGL.Regl;
+    useMode: UseMode;
     constructor() {
         this.canvas_el = document.createElement('canvas');
         // this._initContext2D();
@@ -54,10 +61,15 @@ class CanvasVideoService {
 
     init() {
         // this.initGpu();
+         this.setUseMode(UseMode.UseCanvas);
          this._initContext2D();
+
 
         // this.initgl();
     }
+    setUseMode(mode: UseMode): void {
+        this.useMode = mode;
+      }
 
     initgl() {
         this.regGl = createREGL({ canvas: this.canvas_el, extensions: ['OES_texture_float'] });
@@ -240,29 +252,6 @@ class CanvasVideoService {
         // this.GpuContext.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
 
     }
-
-
-    // async function drawFrame() {
-    //     // 使用HTMLCanvasElement或OffscreenCanvas的绘制上下文
-    //     let canvas = document.querySelector("canvas");
-    //     let context = canvas.getContext("2d");
-
-    //     // 将视频帧绘制到canvas
-    //     context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-
-    //     // 将canvas像素复制到GPU纹理
-    //     let imageBitmap = await createImageBitmap(canvas);
-    //     device.queue.copyExternalImageToTexture(
-    //         { source: imageBitmap },
-    //         { texture: texture },
-    //         [video.videoWidth, video.videoHeight]
-    //     );
-
-    //     // 在这里使用纹理进行渲染
-    //     // ...
-
-    //     requestAnimationFrame(drawFrame);
-    // }
 
 
     setCanvasEL(el: HTMLCanvasElement) {
