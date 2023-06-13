@@ -98,7 +98,7 @@ class fLVDemux extends BaseDemux {
                         //     abps: payload.byteLength,
                         // });
                         if (payload.byteLength > 0) {
-                            console.log('打印音频包内容:', payload); // 打印音频包内容
+                            this.player.debugLogService.log({ title: '打印视频包内容', info: payload, logkey: 'd' });
 
 
                           this._doDecode({ payload, type: MEDIA_TYPE.audio, ts });
@@ -123,7 +123,7 @@ class fLVDemux extends BaseDemux {
                                 tmp32[3] = 0;
                                 let cts = tmp32[0];
 
-                                console.log('打印视频包内容:', payload); // 打印音频包内容
+                                this.player.debugLogService.log({ title: '打印视频包内容', info: payload, logkey: 'd' });
 
 
                                 this._doDecode({ payload, type: MEDIA_TYPE.video, ts, isIFrame, cts });
