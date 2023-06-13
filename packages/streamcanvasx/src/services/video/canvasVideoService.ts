@@ -55,6 +55,8 @@ class CanvasVideoService {
     init() {
         // this.initGpu();
          this._initContext2D();
+
+        // this.initgl();
     }
 
     initgl() {
@@ -63,7 +65,7 @@ class CanvasVideoService {
 
     async drawGl(frame: VideoFrame) {
         let ImageBitmap = await createImageBitmap(frame);
-        const texture = this.regGl.texture(ImageBitmap);
+        const texture = this.regGl.texture(frame);
 
 
         const draw = this.regGl({
@@ -93,7 +95,11 @@ class CanvasVideoService {
             count: 6,
           });
 
+          this.regGl.clear({ color: [0, 0, 0, 1] });
+
+
           draw(texture);
+          texture.destroy();
     }
 
     _initContext2D() {
@@ -280,6 +286,8 @@ class CanvasVideoService {
         this.renderCanvas2d(videoFrame);
 
        // this.renderFrameByWebgpu(videoFrame);
+
+    //    this.drawGl(videoFrame);
     }
 
     renderCanvas2d(videoFrame: VideoFrame) {
