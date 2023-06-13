@@ -59,7 +59,9 @@ class HttpFlvStreamLoader {
                 return;
             }
 
-            const reader = response.body?.getReader();
+            // fetch API 的 Response 对象的 body 属性是一个 ReadableStream 流。
+            const stream = response.body;
+            const reader = stream?.getReader();
             if (reader) {
                 await this.processStream(reader);
             }
