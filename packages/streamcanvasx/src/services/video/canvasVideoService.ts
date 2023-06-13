@@ -62,7 +62,19 @@ class CanvasVideoService {
     init() {
         // this.initGpu();
          this.setUseMode(UseMode.UseCanvas);
-         this._initContext2D();
+
+
+         switch (this.useMode) {
+            case UseMode.UseCanvas:
+                this._initContext2D();
+                break;
+            case UseMode.UseWebGL:
+                this.initgl();
+                break;
+            case UseMode.UseWebGPU:
+                this.initGpu();
+            break;
+        }
 
 
         // this.initgl();
