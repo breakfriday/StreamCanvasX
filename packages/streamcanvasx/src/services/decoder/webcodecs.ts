@@ -177,11 +177,10 @@ interface VideoInfo {
             this.isInitInfo = true;
         }
 
-        this.player.canvasVideoService.render(videoFrame);
+        this.player.debugLogService.info({ title: 'videoFrame', info: videoFrame, logkey: 'videoFrame' });
 
-        // this.player.video.render({
-        //     videoFrame,
-        // });
+
+        this.player.canvasVideoService.render(videoFrame);
 
 
         // if (!this.player._times.videoStart) {
