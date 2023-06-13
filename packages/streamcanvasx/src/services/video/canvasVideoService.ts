@@ -243,11 +243,13 @@ class CanvasVideoService {
     }
 
     render(videoFrame: VideoFrame) {
+        this.renderCanvas2d(videoFrame);
+    }
+
+    renderCanvas2d(videoFrame: VideoFrame) {
         let video_width = videoFrame.codedHeight;
         let video_height = videoFrame.codedHeight;
 
-
-        let hhh = createImageBitmap(VideoFrame);
 
         this.canvas_context.drawImage(videoFrame, 0, 0, video_width, video_height);
     }
