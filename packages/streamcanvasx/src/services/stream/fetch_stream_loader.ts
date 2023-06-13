@@ -79,7 +79,7 @@ class HttpFlvStreamLoader {
                 const { done, value } = await reader.read();
 
                 const chunk = value?.buffer;
-                console.log(chunk);
+                // console.log(chunk);
                 if (done) {
                     console.log('Stream complete');
                     return;
