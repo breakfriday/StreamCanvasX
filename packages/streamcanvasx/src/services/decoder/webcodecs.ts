@@ -157,6 +157,7 @@ interface VideoInfo {
         this.decoder = new VideoDecoder({
             output(videoFrame) {
                 _this.handleDecode(videoFrame);
+                videoFrame.close();
             },
             error(error) {
                 _this.handleError(error);
