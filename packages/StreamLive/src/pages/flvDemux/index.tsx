@@ -15,6 +15,87 @@ const FlvDemux = () => {
           onClick={() => {
             let url = 'http://localhost:8080/live/livestream.flv';
             // fetchflv.fetchStream(url);
+            const h = createPlayerServiceInstance();
+           h.httpFlvStreamService.fetchStream(url);
+
+           let el = h.canvasVideoService.getCanvas2dEl();
+
+           let container = document.getElementById('aa');
+           container?.appendChild(el);
+      }}
+        >
+          fetch flv http
+        </Button>
+        <Button
+          type="primary"
+          onClick={() => {
+            let url = 'http://localhost:8080/live/livestream.flv';
+            // fetchflv.fetchStream(url);
+            const h = createPlayerServiceInstance();
+           h.httpFlvStreamService.fetchStream(url);
+
+           let el = h.canvasVideoService.getCanvas2dEl();
+
+           let container = document.getElementById('aa');
+           container?.appendChild(el);
+      }}
+        >
+          fetch flv http
+        </Button>
+        <Button
+          type="primary"
+          onClick={() => {
+            let url = 'http://localhost:8080/live/livestream.flv';
+            // fetchflv.fetchStream(url);
+            const h = createPlayerServiceInstance();
+           h.httpFlvStreamService.fetchStream(url);
+
+           let el = h.canvasVideoService.getCanvas2dEl();
+
+           let container = document.getElementById('aa');
+           container?.appendChild(el);
+      }}
+        >
+          fetch flv http
+        </Button>
+        <Button
+          type="primary"
+          onClick={() => {
+            let url = 'http://localhost:8080/live/livestream.flv';
+            // fetchflv.fetchStream(url);
+            const h = createPlayerServiceInstance();
+           h.httpFlvStreamService.fetchStream(url);
+
+           let el = h.canvasVideoService.getCanvas2dEl();
+
+           let container = document.getElementById('aa');
+           container?.appendChild(el);
+      }}
+        >
+          fetch flv http
+        </Button>
+        <Button
+          type="primary"
+          onClick={() => {
+            let url = 'http://localhost:8080/live/livestream.flv';
+            // fetchflv.fetchStream(url);
+            const h = createPlayerServiceInstance();
+           h.httpFlvStreamService.fetchStream(url);
+
+           let el = h.canvasVideoService.getCanvas2dEl();
+
+           let container = document.getElementById('aa');
+           container?.appendChild(el);
+      }}
+        >
+          fetch flv http
+        </Button>
+        <Button
+          type="primary"
+          onClick={() => {
+            let url = 'http://localhost:8080/live/livestream.flv';
+            // fetchflv.fetchStream(url);
+            const h = createPlayerServiceInstance();
            h.httpFlvStreamService.fetchStream(url);
 
            let el = h.canvasVideoService.getCanvas2dEl();
