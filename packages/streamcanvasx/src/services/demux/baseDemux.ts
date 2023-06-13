@@ -35,6 +35,7 @@ interface IData {
         this.startTimestamp = null;
         this.delay = -1;
         this.bufferList = [];
+        window.buff2 = this.bufferList;
         this.dropping = false;
     }
     // init(playerService: any) {
