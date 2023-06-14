@@ -291,6 +291,37 @@ class CanvasVideoService {
     //    this.drawGl(videoFrame);
     }
 
+    renderGl() {
+        // Define a REGL command to render the video frame.
+        const render = this.regGl({
+            frag: `
+            precision mediump float;
+            uniform sampler2D texture;
+            varying vec2 uv;
+            void main () {
+                gl_FragColor = texture2D(texture, uv);
+            }
+            `,
+            vert: `
+            precision mediump float;
+            attribute vec2 position;
+            varying vec2 uv;
+            void main () {
+                uv = position;
+                gl_Position = vec4(1.0 - 2.0 * position, 0, 1);
+            }
+            `,
+            attributes: {
+            position: [[0, 0], [0, 1], [1, 1], [0, 0], [1, 1], [1, 0]],
+            },
+            uniforms: {
+                
+            texture: this.regGl.prop('')
+            },
+            count: 6,
+        });
+    }
+
     renderCanvas2d(videoFrame: VideoFrame) {
         let video_width = videoFrame.codedHeight;
         let video_height = videoFrame.codedHeight;

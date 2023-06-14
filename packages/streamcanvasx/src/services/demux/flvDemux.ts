@@ -37,12 +37,15 @@ class fLVDemux extends BaseDemux {
     // init(playerService: PlayerService) {
     //     this.player = playerService;
     // }
+
+    // 处理一个输入的 ArrayBuffer，并将其解析为多种不同的消息类型
     dispatchFlvData(input: Generator<number>) {
         let need = input.next();
         let buffer: Uint8Array = null;
         return (value: ArrayBuffer) => {
             let data = new Uint8Array(value);
             if (buffer) {
+                // 如果存在未处理完的缓冲区数据（在上次的transform调用中），将其与新的数据拼接起来
                 let combine = new Uint8Array(buffer.length + data.length);
                 combine.set(buffer);
                 combine.set(data, buffer.length);
@@ -65,6 +68,7 @@ class fLVDemux extends BaseDemux {
     }
 
 
+    // 调用 _decode ,pushbuffer
     * _inputFlv(): Generator<number, void, undefined> {
         yield 9;
         const tmp = new ArrayBuffer(4);
