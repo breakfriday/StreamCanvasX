@@ -271,8 +271,8 @@ class CanvasVideoService {
     }
 
     setCanvasSize() {
-        this.canvas_el.width = 2000;
-        this.canvas_el.height = 1000;
+        this.canvas_el.width = 400;
+        this.canvas_el.height = 200;
     }
 
     _initContextGl() {
@@ -315,7 +315,7 @@ class CanvasVideoService {
             position: [[0, 0], [0, 1], [1, 1], [0, 0], [1, 1], [1, 0]],
             },
             uniforms: {
-                
+
             texture: this.regGl.prop('')
             },
             count: 6,
@@ -327,7 +327,7 @@ class CanvasVideoService {
         let video_height = videoFrame.codedHeight;
 
 
-        this.canvas_context.drawImage(videoFrame, 0, 0, video_width, video_height);
+        this.canvas_context.drawImage(videoFrame, 0, 0, 400, 200);
     }
 
     getCanvas2dEl() {
