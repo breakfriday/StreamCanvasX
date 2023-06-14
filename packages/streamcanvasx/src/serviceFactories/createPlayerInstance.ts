@@ -14,6 +14,8 @@ import CanvasVideoService from '../services/video/canvasVideoService';
 
 import DebugLogService from '../services/DebugLogService';
 
+import FLVDemuxStream from '../services/demux/flvDemuxStream';
+
 
 containerPlayer.bind<PlayerService>(TYPES.IPlayerService).to(PlayerService);
 containerPlayer.bind<HttpFlvStreamLoader>(TYPES.IHttpFlvStreamLoader).to(HttpFlvStreamLoader);
@@ -26,6 +28,7 @@ containerPlayer.bind<CanvasVideoService>(TYPES.ICanvasVideoService).to(CanvasVid
 
 containerPlayer.bind<DebugLogService>(TYPES.IDebugLogService).to(DebugLogService);
 
+containerPlayer.bind<FLVDemuxStream>(TYPES.IFLVDemuxStream).to(FLVDemuxStream);
  function createPlayerServiceInstance(): PlayerService {
    return containerPlayer.get<PlayerService>(TYPES.IPlayerService);
  }
