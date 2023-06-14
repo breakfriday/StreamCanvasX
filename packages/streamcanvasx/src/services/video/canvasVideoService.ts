@@ -211,13 +211,13 @@ class CanvasVideoService {
               usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
         });
 
-        const textureView = videoTexture.createView();
+       // const textureView = videoTexture.createView();
 
+        let externalTexture = this.device.importExternalTexture({
+            source: frame,
+          });
 
-        // let imageBitmap = await createImageBitmap(frame);
-
-        let image = document.getElementById('webtest');
-        let imageBitmap = await createImageBitmap(image);
+          textureView = externalTexture.createView();
 
 
         // 将图像复制到纹理
