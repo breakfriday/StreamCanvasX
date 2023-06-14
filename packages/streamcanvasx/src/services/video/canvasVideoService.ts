@@ -284,16 +284,28 @@ class CanvasVideoService {
 
 
     render(videoFrame: VideoFrame) {
-        this.renderCanvas2d(videoFrame);
+        switch (this.useMode) {
+            case UseMode.UseCanvas:
+                this.renderCanvas2d(videoFrame);
+                break;
+            case UseMode.UseWebGL:
+                this.renderGl(videoFrame);
+                break;
+            case UseMode.UseWebGPU:
+                this.renderFrameByWebgpu(videoFrame);
+            break;
+        }
+
 
        // this.renderFrameByWebgpu(videoFrame);
 
     //    this.drawGl(videoFrame);
     }
 
-    renderGl() {
+    renderGl(videoFrame: VideoFrame) {
         // Define a REGL command to render the video frame.
-        const render = this.regGl({
+        let { regGl } = this;
+        const drawImage = this.regGl({
             frag: `
             precision mediump float;
             uniform sampler2D texture;
@@ -312,13 +324,12 @@ class CanvasVideoService {
             }
             `,
             attributes: {
-            position: [[0, 0], [0, 1], [1, 1], [0, 0], [1, 1], [1, 0]],
+                position: [[-1, -1], [1, -1], [-1, 1], [1, 1]],
             },
             uniforms: {
-
-            texture: this.regGl.prop('')
-            },
-            count: 6,
+                texture: regGl.prop('texture'),
+              },
+            count: 4,
         });
     }
 
