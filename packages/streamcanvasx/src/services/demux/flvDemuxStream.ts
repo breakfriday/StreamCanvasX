@@ -29,21 +29,24 @@ const FLV_PACKET_HEADER_SIZE = 15;
 
 
 @injectable()
-class fLVDemux extends BaseDemux {
+class FLVDemuxStream extends BaseDemux {
     private flvDemux: (data: ArrayBuffer) => void;
     private input: Generator<number>;
     private flvStream: TransformStream;
+    private streamWriter: WritableStreamDefaultWriter;
 
     constructor() {
         super();
         this.createFlvStream();
     }
+
     createFlvStream() {
         let buffer: Uint8Array = null; // Move
         const tmp = new ArrayBuffer(4);
         const tmp8 = new Uint8Array(tmp);
         const tmp32 = new Uint32Array(tmp);
         const $this = this;
+        let headerProcessed = false;
         this.flvStream = new TransformStream({
             start(controller) {
                 // Initial setup, if needed
@@ -60,12 +63,13 @@ class fLVDemux extends BaseDemux {
                     buffer = null;
                 }
 
-                // 去除FLV文件头部，前9个字节是文件头部
-                if (data.length >= FLV_HEADER_SIZE) {
+                // 如果未处理头部，去除FLV文件头部，前9个字节是文件头部
+                if (headerProcessed === false && data.length >= FLV_HEADER_SIZE) {
                     const header = data.slice(0, FLV_HEADER_SIZE);
                     // 在此处处理头部数据...  （可以获取头部数据里的一些信息）
                     // 切掉已处理的头部数据，保留剩余数据以处理后续的FLV数据包
                     data = data.slice(FLV_HEADER_SIZE);
+                    headerProcessed = true;
                 }
 
                   // 循环处理剩余的FLV数据包，每个数据包至少包含15个字节的包头部 ,Process packets
@@ -82,7 +86,18 @@ class fLVDemux extends BaseDemux {
                         tmp8[1] = packetHeader[6];
                         tmp8[2] = packetHeader[5];
                         const length = tmp32[0];
+                        tmp8[0] = packetHeader[10];
+                        tmp8[1] = packetHeader[9];
+                        tmp8[2] = packetHeader[8];
 
+                         let ts = tmp32[0];
+                        if (ts === 0xFFFFFF) {
+                             tmp8[3] = packetHeader[11];
+                            ts = tmp32[0];
+                        }
+
+                        //  判断剩余的数据长度是否足够包含一个完整的数据包（包头 + 包体）。如果不够，就将剩余的数据存入缓冲区，等待下一次新数据的到来。
+                        // 如果足够，就会继续在循环中处理下一个数据包。
                         // 如果剩余的数据长度小于数据包的长度，则退出循环，将剩余数据存入缓冲区，等待下次的transform调用
                         if (data.length < length + FLV_PACKET_HEADER_SIZE) {
                             break;
@@ -111,22 +126,25 @@ class fLVDemux extends BaseDemux {
                 // final processing, if needed
             },
         });
+
+        this.streamWriter = this.flvStream.writable.getWriter();
     }
 
     processAudioPayload(data: {payload: Uint8Array; type: number; ts: number}) {
-        this._doDecode(data);
+        let { payload } = data;
+        this.player.debugLogService.log({ title: '打印音频包内容', info: payload, logkey: 'packetLog' });
     }
 
     processVideoPayload(data: {payload: Uint8Array; type: number; ts: number}) {
-        this._doDecode(data);
+        let { payload } = data;
+        this.player.debugLogService.log({ title: '打印视频包内容', info: payload, logkey: 'packetLog' });
     }
 
     dispatch(data: ArrayBuffer) {
-        const writer = this.flvStream.writable.getWriter();
-        writer.write(data);
-        writer.releaseLock();
+        this.streamWriter.write(data);
+        // writer.releaseLock();
     }
 }
 
 
-export default fLVDemux;
+export default FLVDemuxStream;

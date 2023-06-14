@@ -1,5 +1,5 @@
 const logCondition = {
-    packetLog: false,
+    packetLog: true,
     videoFrame: false,
 
 };
