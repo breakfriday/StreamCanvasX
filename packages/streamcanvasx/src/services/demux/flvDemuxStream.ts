@@ -68,7 +68,7 @@ class fLVDemux extends BaseDemux {
                     data = data.slice(FLV_HEADER_SIZE);
                 }
 
-                  // 循环处理剩余的FLV数据包，每个数据包至少包含15个字节的包头部
+                  // 循环处理剩余的FLV数据包，每个数据包至少包含15个字节的包头部 ,Process packets
                     while (data.length >= FLV_PACKET_HEADER_SIZE) {
                         // 获取当前数据包的头部信息
                         const packetHeader = data.slice(0, FLV_PACKET_HEADER_SIZE);
@@ -76,6 +76,7 @@ class fLVDemux extends BaseDemux {
 
                         // 利用包头数据中的信息计算数据包的长度
                         tmp8[3] = 0;
+                        // 获取数据包的类型， 第五个字节
                         const type = packetHeader[4];
                         tmp8[0] = packetHeader[7];
                         tmp8[1] = packetHeader[6];
@@ -94,11 +95,11 @@ class fLVDemux extends BaseDemux {
                         switch (type) {
                             case FLV_MEDIA_TYPE.audio:
                                 // 处理音频数据
-                                $this.processAudioPayload(payload);
+                                $this.processAudioPayload({ payload, type: MEDIA_TYPE.audio, ts });
                                 break;
                             case FLV_MEDIA_TYPE.video:
                                 // 处理视频数据
-                                $this.processVideoPayload(payload);
+                                $this.processVideoPayload({ payload, type: MEDIA_TYPE.audio, ts });
                                 break;
                         }
 
@@ -112,12 +113,12 @@ class fLVDemux extends BaseDemux {
         });
     }
 
-    processAudioPayload(payload: Uint8Array) {
-
+    processAudioPayload(data: {payload: Uint8Array; type: number; ts: number}) {
+        this._doDecode(data);
     }
 
-    processVideoPayload(payload: Uint8Array) {
-
+    processVideoPayload(data: {payload: Uint8Array; type: number; ts: number}) {
+        this._doDecode(data);
     }
 
     dispatch(data: ArrayBuffer) {
