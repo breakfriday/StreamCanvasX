@@ -114,7 +114,7 @@ class FLVDemuxStream extends BaseDemux {
                                 break;
                             case FLV_MEDIA_TYPE.video:
                                 // 处理视频数据
-                                $this.processVideoPayload({ payload, type: MEDIA_TYPE.audio, ts });
+                                $this.processVideoPayload({ payload, type: MEDIA_TYPE.audio, ts, tmp32 });
                                 break;
                         }
 
@@ -135,14 +135,27 @@ class FLVDemuxStream extends BaseDemux {
         this.player.debugLogService.log({ title: '打印音频包内容', info: payload, logkey: 'packetLog' });
     }
 
-    processVideoPayload(data: {payload: Uint8Array; type: number; ts: number}) {
-        let { payload } = data;
-        this.player.debugLogService.log({ title: '打印视频包内容', info: payload, logkey: 'packetLog' });
+    processVideoPayload(data: {payload: Uint8Array; type: number; ts: number; tmp32: Uint32Array}) {
+        let { payload, type, ts, tmp32 } = data;
+        const isIFrame = payload[0] >> 4 === 1;
+        if (payload.byteLength > 0) {
+            tmp32[0] = payload[4];
+            tmp32[1] = payload[3];
+            tmp32[2] = payload[2];
+            tmp32[3] = 0;
+            let cts = tmp32[0];
+            this.player.debugLogService.log({ title: '打印视频包内容', info: payload, logkey: 'packetLog' });
+            // this._doDecode({ payload, type: MEDIA_TYPE.video, ts, isIFrame, cts });
+        }
     }
 
     dispatch(data: ArrayBuffer) {
         this.streamWriter.write(data);
         // writer.releaseLock();
+    }
+
+    destroy(): void {
+        this.streamWriter.releaseLock();
     }
 }
 
