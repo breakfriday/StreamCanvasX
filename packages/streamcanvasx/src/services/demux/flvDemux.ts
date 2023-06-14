@@ -130,6 +130,11 @@ class fLVDemux extends BaseDemux {
                              //   this.player.debugLogService.log({ title: '打印视频包内容', info: payload, logkey: 'packetLog' });
 
 
+                            //  if (isIFrame === false) {
+                            //     if (Math.random() <= 0.25) {
+                            //         return false;
+                            //     }
+                            //  }
                                 this._doDecode({ payload, type: MEDIA_TYPE.video, ts, isIFrame, cts });
                             }
                         }
