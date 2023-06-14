@@ -42,6 +42,8 @@ class FLVDemuxStream extends BaseDemux {
 
     createFlvStream() {
         let buffer: Uint8Array = null; // Move
+        // 创建了一个 ArrayBuffer 对象，并对其进行了两种类型的视图（View）映射。
+        // tmp8 和 tmp32 都引用的是同一个内存中的数据
         const tmp = new ArrayBuffer(4);
         const tmp8 = new Uint8Array(tmp);
         const tmp32 = new Uint32Array(tmp);
@@ -86,9 +88,9 @@ class FLVDemuxStream extends BaseDemux {
                         tmp8[1] = packetHeader[6];
                         tmp8[2] = packetHeader[5];
                         const length = tmp32[0];
-                        tmp8[0] = packetHeader[10];
-                        tmp8[1] = packetHeader[9];
-                        tmp8[2] = packetHeader[8];
+                        // tmp8[0] = packetHeader[10];
+                        // tmp8[1] = packetHeader[9];
+                        // tmp8[2] = packetHeader[8];
 
                          let ts = tmp32[0];
                         if (ts === 0xFFFFFF) {
@@ -120,14 +122,33 @@ class FLVDemuxStream extends BaseDemux {
 
                         // 切掉已处理的数据包，保留剩余数据以处理后续的FLV数据包
                         data = data.slice(length + FLV_PACKET_HEADER_SIZE);
+                        if (data.length > 0) {
+                            buffer = data;
+                        }
                     }
               },
               flush(controller) {
+                console.log('[flush]');
                 // final processing, if needed
             },
         });
 
         this.streamWriter = this.flvStream.writable.getWriter();
+
+        this.flvStream.readable.pipeTo(new WritableStream({
+            write(chunk) {
+              // 在这里处理接收到的数据
+              console.log('Received:', chunk);
+            },
+            close() {
+              // 当转换流关闭时的清理操作
+              console.log('Transformation completed.');
+            },
+          }));
+    }
+
+    parseChunks(chunk: ArrayBuffer, controller) {
+
     }
 
     processAudioPayload(data: {payload: Uint8Array; type: number; ts: number}) {
@@ -149,8 +170,8 @@ class FLVDemuxStream extends BaseDemux {
         }
     }
 
-    dispatch(data: ArrayBuffer) {
-        this.streamWriter.write(data);
+  async dispatch(data: ArrayBuffer) {
+       await this.streamWriter.write(data);
         // writer.releaseLock();
     }
 
