@@ -51,6 +51,7 @@ class CanvasVideoService {
     gPUSampler: GPUSampler;
     regGl: REGL.Regl;
     useMode: UseMode;
+    sampler: GPUSampler;
     constructor() {
         this.canvas_el = document.createElement('canvas');
         // this._initContext2D();
@@ -61,7 +62,8 @@ class CanvasVideoService {
 
     init() {
         // this.initGpu();
-         this.setUseMode(UseMode.UseCanvas);
+          this.setUseMode(UseMode.UseCanvas);
+        // this.setUseMode(UseMode.UseWebGPU);
 
 
          switch (this.useMode) {
@@ -143,36 +145,64 @@ class CanvasVideoService {
 
           this.GpuContext = this.canvas_el.getContext('webgpu');
 
+          // navigator.gpu.getPreferredCanvasFormat() 返回最适合当前设备和环境的WebGPU canvas上下文的颜色格式
+          const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
+
+
           this.GpuContext.configure({
             device: this.device,
-            format: 'bgra8unorm',
+            format: presentationFormat,
+            alphaMode: 'premultiplied',
           });
 
             // Create a basic vertex shader
-            const vertexShader = `
+            const vertexShader = `@group(0) @binding(0) var mySampler : sampler;
+            @group(0) @binding(1) var myTexture : texture_2d<f32>;
+            
             struct VertexOutput {
-              [[builtin(position)]] position: vec4<f32>;
-              [[location(0)]] texCoord: vec2<f32>;
-            };
-          
-            [[stage(vertex)]]
-            fn main([[location(0)]] position: vec4<f32>,
-                    [[location(1)]] texCoord: vec2<f32>) -> VertexOutput {
-              var output: VertexOutput;
-              output.position = position;
-              output.texCoord = texCoord;
+              @builtin(position) Position : vec4<f32>,
+              @location(0) fragUV : vec2<f32>,
+            }
+            
+            @vertex
+            fn vert_main(@builtin(vertex_index) VertexIndex : u32) -> VertexOutput {
+              const pos = array(
+                vec2( 1.0,  1.0),
+                vec2( 1.0, -1.0),
+                vec2(-1.0, -1.0),
+                vec2( 1.0,  1.0),
+                vec2(-1.0, -1.0),
+                vec2(-1.0,  1.0),
+              );
+            
+              const uv = array(
+                vec2(1.0, 0.0),
+                vec2(1.0, 1.0),
+                vec2(0.0, 1.0),
+                vec2(1.0, 0.0),
+                vec2(0.0, 1.0),
+                vec2(0.0, 0.0),
+              );
+            
+              var output : VertexOutput;
+              output.Position = vec4(pos[VertexIndex], 0.0, 1.0);
+              output.fragUV = uv[VertexIndex];
               return output;
             }
-          `;
+            
+            @fragment
+            fn frag_main(@location(0) fragUV : vec2<f32>) -> @location(0) vec4<f32> {
+              return textureSample(myTexture, mySampler, fragUV);
+            }`;
 
         // Create a basic fragment shader
-        const fragmentShader = `
-        [[group(0), binding(0)]] var srcTexture: texture_2d<f32>;
-        [[stage(fragment)]]
-        fn main([[location(0)]] texCoord: vec2<f32>) -> [[location(0)]] vec4<f32> {
-          return textureLoad(srcTexture, vec2<i32>(i32(texCoord.x * 640), i32(texCoord.y * 480)), 0);
-        }
-      `;
+        const fragmentShader = `@group(0) @binding(1) var mySampler: sampler;
+        @group(0) @binding(2) var myTexture: texture_external;
+        
+        @fragment
+        fn main(@location(0) fragUV : vec2<f32>) -> @location(0) vec4<f32> {
+          return textureSampleBaseClampToEdge(myTexture, mySampler, fragUV);
+        }`;
 
 
       // 创建渲染管道
@@ -182,7 +212,7 @@ class CanvasVideoService {
                         module: this.device.createShaderModule({
                             code: vertexShader,
                         }),
-                        entryPoint: 'main',
+                        entryPoint: 'vert_main',
                     },
                     fragment: {
                         module: this.device.createShaderModule({
@@ -190,45 +220,90 @@ class CanvasVideoService {
                         }),
                         entryPoint: 'main',
                         targets: [{
-                            format: 'bgra8unorm',
+                            format: presentationFormat,
                         }],
                     },
 
-                    primitive: { topology: 'triangle-strip', stripIndexFormat: 'uint16' },
+                    primitive: {
+                        topology: 'triangle-list',
+                      },
+                    // primitive: { topology: 'triangle-strip', stripIndexFormat: 'uint16' },
                 });
+
+
+            this.sampler = this.device.createSampler({
+                magFilter: 'linear',
+                minFilter: 'linear',
+            });
     }
 
     async renderFrameByWebgpu(frame: VideoFrame) {
-        let { displayWidth, displayHeight } = frame;
-
-
-        const videoTexture = this.device.createTexture({
-            size: {
-                width: displayWidth,
-                height: displayHeight,
+        const uniformBindGroup = this.device.createBindGroup({
+            layout: this.renderPipeline.getBindGroupLayout(0),
+            entries: [
+              {
+                binding: 1,
+                resource: this.sampler,
               },
-              format: 'rgba8unorm',
-              usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
-        });
+              {
+                binding: 2,
+                resource: this.device.importExternalTexture({
+                  source: frame as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+                }),
+              },
+            ],
+          });
+
+   /*        const uniformBindGroup = device.createBindGroup({
+            layout: this.pipeline.getBindGroupLayout(0),
+            entries: [
+              {
+                binding: 1,
+                resource: sampler,
+              },
+              {
+                binding: 2,
+                resource: device.importExternalTexture({
+                  source: videoFrame as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+                }),
+              },
+            ],
+          });
+ */
+
+          const commandEncoder = this.device.createCommandEncoder();
+          const textureView = this.GpuContext.getCurrentTexture().createView();
+
+          const renderPassDescriptor: GPURenderPassDescriptor = {
+            colorAttachments: [
+              {
+                view: textureView,
+                clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
+                loadOp: 'clear',
+                storeOp: 'store',
+              },
+            ],
+          };
+
+
+        // const videoTexture = this.device.createTexture({
+        //     size: {
+        //         width: displayWidth,
+        //         height: displayHeight,
+        //       },
+        //       format: 'rgba8unorm',
+        //       usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
+        // });
 
        // const textureView = videoTexture.createView();
 
-        let externalTexture = this.device.importExternalTexture({
-            source: frame,
-          });
 
-          textureView = externalTexture.createView();
-
-
-        // 将图像复制到纹理
-        this.device.queue.copyExternalImageToTexture(
-            { source: imageBitmap },
-            { texture: videoTexture },
-            [displayWidth, displayHeight],
-        );
-
-
-        const commandEncoder = this.device.createCommandEncoder();
+        // // 将图像复制到纹理
+        // this.device.queue.copyExternalImageToTexture(
+        //     { source: imageBitmap },
+        //     { texture: videoTexture },
+        //     [displayWidth, displayHeight],
+        // );
 
 
         // commandEncoder.copyTextureToBuffer(
@@ -237,24 +312,12 @@ class CanvasVideoService {
         //     [displayWidth, displayHeight],
         // );
 
-        const renderPassDescriptor: GPURenderPassDescriptor = {
-            colorAttachments: [
-                {
-                    view: textureView,
-                    loadOp: 'clear',
-                    loadValue: { r: 0, g: 0, b: 0, a: 1 }, // 清空颜色
-
-                    storeOp: 'store',
-                },
-            ],
-        };
 
         // 创建指令池
         const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
         passEncoder.setPipeline(this.renderPipeline);
-        passEncoder.draw(3, 1, 0, 0);
+        passEncoder.draw(6, 1, 0, 0);
         passEncoder.end();
-
         this.device.queue.submit([commandEncoder.finish()]);
     }
 
