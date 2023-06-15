@@ -63,7 +63,7 @@ class CanvasVideoService {
         // this.initGpu();
         //  this.setUseMode(UseMode.UseCanvas);
         //  this.setUseMode(UseMode.UseWebGPU);
-         let model = parm || UseMode.UseWebGPU;
+         let model = parm || UseMode.UseCanvas;
 
 
           this.setUseMode(model);
@@ -367,6 +367,16 @@ class CanvasVideoService {
 
     getCanvas2dEl() {
         return this.canvas_el;
+    }
+    createVideoFramCallBack(video: HTMLVideoElement) {
+      let cb = () => {
+        video.requestVideoFrameCallback(() => {
+          console.log('-----------');
+            this.renderFrameByWebgpu(video);
+          cb();
+        });
+      };
+      cb();
     }
 }
 
