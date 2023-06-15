@@ -98,6 +98,22 @@ class PlayerService extends Emitter {
         this.httpFlvStreamService.fetchStream(url);
     }
 
+    // viedeo render 使用webGpu
+    video_render(video: HTMLVideoElement) {
+        if ('requestVideoFrameCallback' in video) {
+            video.requestVideoFrameCallback(() => {
+                this.canvasVideoService.renderFrameByWebgpu(video);
+            });
+
+
+            // video.requestVideoFrameCallback(frame);
+          } else {
+
+            // requestAnimationFrame(frame);
+          }
+    }
+
+
         //
     updateStats(options: any) {
             options = options || {};
