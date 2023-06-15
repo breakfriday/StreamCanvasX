@@ -15,8 +15,8 @@ export const FILE_SUFFIX = {
 export const MEDIA_SOURCE_UPDATE_END_TIMEOUT = 10 * 1000;
 // default player options
 export const DEFAULT_PLAYER_OPTIONS = {
-    videoBuffer: 1000,
-    videoBufferDelay: 1000,
+    videoBuffer: 100,
+    videoBufferDelay: 100,
     isResize: true,
     isFullResize: false,
     isFlv: false,

@@ -36,13 +36,14 @@ let HttpFlvStreamLoader = class HttpFlvStreamLoader {
             signal: this.abortController.signal
         };
         try {
-            var _response_body;
             const response = await fetch(url, params);
             if (this.requestAbort === true) {
                 response.body.cancel();
                 return;
             }
-            const reader = (_response_body = response.body) === null || _response_body === void 0 ? void 0 : _response_body.getReader();
+            // fetch API 的 Response 对象的 body 属性是一个 ReadableStream 流。
+            const stream = response.body;
+            const reader = stream === null || stream === void 0 ? void 0 : stream.getReader();
             if (reader) {
                 await this.processStream(reader);
             }
@@ -56,12 +57,13 @@ let HttpFlvStreamLoader = class HttpFlvStreamLoader {
             try {
                 const { done , value  } = await reader.read();
                 const chunk = value === null || value === void 0 ? void 0 : value.buffer;
-                console.log(chunk);
+                // console.log(chunk);
                 if (done) {
                     console.log('Stream complete');
                     return;
                 }
                 this.playerService.flvVDemuxService.dispatch(value);
+            // this.playerService.fLVDemuxStream.dispatch(value);
             // Your process goes here, where you can handle each chunk of FLV data
             // For example:
             // this.processFlvChunk(value);

@@ -41,7 +41,7 @@ var HttpFlvStreamLoader = /*#__PURE__*/ function() {
             value: function fetchStream(url) {
                 var _this = this;
                 return _async_to_generator(function() {
-                    var sourceUrl, headers, params, _response_body, response, reader, e;
+                    var sourceUrl, headers, params, response, stream, reader, e;
                     return _ts_generator(this, function(_state) {
                         switch(_state.label){
                             case 0:
@@ -77,7 +77,8 @@ var HttpFlvStreamLoader = /*#__PURE__*/ function() {
                                         2
                                     ];
                                 }
-                                reader = (_response_body = response.body) === null || _response_body === void 0 ? void 0 : _response_body.getReader();
+                                stream = response.body;
+                                reader = stream === null || stream === void 0 ? void 0 : stream.getReader();
                                 if (!reader) return [
                                     3,
                                     4
@@ -143,7 +144,7 @@ var HttpFlvStreamLoader = /*#__PURE__*/ function() {
                             case 2:
                                 _ref = _state.sent(), done = _ref.done, value = _ref.value;
                                 chunk = value === null || value === void 0 ? void 0 : value.buffer;
-                                console.log(chunk);
+                                // console.log(chunk);
                                 if (done) {
                                     console.log("Stream complete");
                                     return [
