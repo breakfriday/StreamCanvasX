@@ -34,6 +34,14 @@ const asideMenuConfig: MenuDataItem[] = [
         name: 'webgpuRener',
         path: 'webgpuRener',
       },
+      {
+        name: 'webGlRender',
+        path: 'webGLRender',
+      },
+      {
+        name: 'canvasRender',
+        path: 'canvasRender',
+      },
     ],
   },
   {
