@@ -30,6 +30,10 @@ const asideMenuConfig: MenuDataItem[] = [
         name: 'flvDemux',
         path: 'flvDemux',
       },
+      {
+        name: 'webgpuRener',
+        path: 'webgpuRener',
+      },
     ],
   },
   {
