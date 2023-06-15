@@ -32,45 +32,17 @@ const FlvDemux = () => {
           type="primary"
           onClick={() => {
             const player = createPlayerServiceInstance();
+
             let el = player.canvasVideoService.getCanvas2dEl();
             let container = document.getElementById('aa');
             container?.appendChild(el);
             let video: HTMLVideoElement = document.getElementById('vidd')!;
-            // const video: HTMLVideoElement = document.getElementById('vidd')!;
-
-
-            // let callback = (now, metadata) => {
-            //     // 这里你可以做任何你想在每一帧更新时执行的操作
-            //     // 'now' 参数是自页面加载以来的毫秒数，是一个高精度的时间戳
-            //     // 'metadata' 参数包含有关当前视频帧的信息，包括预计的显示时间，视频帧的尺寸，媒体时间等
-            //     console.log('Timestamp: ', now);
-            //     console.log('Frame metadata: ', metadata);
-            //     player.canvasVideoService.renderFrameByWebgpu(video);
-            //     // 如果你想在下一帧再次运行回调，你需要再次请求它
-            //     video.requestVideoFrameCallback(callback);
-            // };
-
-            // let pp = () => {
-            //   requestAnimationFrame(() => {
-            //     console.log('-----------');
-            //     player.canvasVideoService.renderFrameByWebgpu(video);
-            //     pp();
-            //   });
-            // };
-
-
-            // setTimeout(() => {
-            //    pp();
-            //   // requestAnimationFrame(() => {
-            //   //   player.canvasVideoService.renderFrameByWebgpu(window.tt);
-            //   // });
-            // }, 400);
 
 
            let pp = () => {
               video.requestVideoFrameCallback(() => {
                 console.log('-----------');
-                player.canvasVideoService.renderFrameByWebgpu(video);
+                player.canvasVideoService.render(video);
                 pp();
               });
             };
@@ -79,30 +51,39 @@ const FlvDemux = () => {
           setTimeout(() => {
           video.requestVideoFrameCallback(pp);
           }, 300);
-
-          // 首次请求回调
-
-            // 首次请求回调
-
-
-          //  let play = async () => {
-          //   const video = document.createElement('video');
-          //   video.width = 300;
-          //   video.loop = true;
-          //   video.autoplay = true;
-          //   video.muted = true;
-          //   video.src = window.blobUrl;
-          //   await video.play();
-
-          //   debugger;
-
-          //  player.video_render(video);
-          //  };
-
-          //  play();
       }}
         >
           play webgpu video
+        </Button>
+
+
+        <Button
+          type="primary"
+          onClick={() => {
+            const player = createPlayerServiceInstance();
+            player.canvasVideoService.init(1);
+
+            let el = player.canvasVideoService.getCanvas2dEl();
+            let container = document.getElementById('aa');
+            container?.appendChild(el);
+            let video: HTMLVideoElement = document.getElementById('vidd')!;
+
+
+           let pp = () => {
+              video.requestVideoFrameCallback(() => {
+                console.log('-----------');
+                player.canvasVideoService.render(video);
+                pp();
+              });
+            };
+
+
+          setTimeout(() => {
+          video.requestVideoFrameCallback(pp);
+          }, 300);
+      }}
+        >
+          play canvas2d video
         </Button>
 
 

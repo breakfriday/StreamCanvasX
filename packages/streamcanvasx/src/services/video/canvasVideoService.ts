@@ -59,10 +59,14 @@ class CanvasVideoService {
         this.setCanvasSize();
     }
 
-    init() {
+    init(parm?: UseMode) {
         // this.initGpu();
         //  this.setUseMode(UseMode.UseCanvas);
-         this.setUseMode(UseMode.UseWebGPU);
+        //  this.setUseMode(UseMode.UseWebGPU);
+         let model = parm || UseMode.UseWebGPU;
+
+
+          this.setUseMode(model);
 
 
          switch (this.useMode) {
@@ -303,7 +307,7 @@ class CanvasVideoService {
     }
 
 
-    render(videoFrame: VideoFrame) {
+    render(videoFrame: VideoFrame | HTMLVideoElement) {
         switch (this.useMode) {
             case UseMode.UseCanvas:
                 this.renderCanvas2d(videoFrame);
@@ -353,9 +357,9 @@ class CanvasVideoService {
         });
     }
 
-    renderCanvas2d(videoFrame: VideoFrame) {
-        let video_width = videoFrame.codedHeight;
-        let video_height = videoFrame.codedHeight;
+    renderCanvas2d(videoFrame: VideoFrame | HTMLVideoElement) {
+        // let video_width = videoFrame.codedHeight;
+        // let video_height = videoFrame.codedHeight;
 
 
         this.canvas_context.drawImage(videoFrame, 0, 0, 400, 200);
