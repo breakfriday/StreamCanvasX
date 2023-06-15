@@ -63,11 +63,13 @@ class CanvasVideoService {
         // this.initGpu();
         //  this.setUseMode(UseMode.UseCanvas);
         //  this.setUseMode(UseMode.UseWebGPU);
-         let model = parm || UseMode.UseCanvas;
+        //  let model = parm || UseMode.UseWebGPU;
 
 
-          this.setUseMode(model);
+        //   this.setUseMode(model);
 
+        //  this.setUseMode(UseMode.UseWebGPU);
+        this.setUseMode(UseMode.UseCanvas);
 
          switch (this.useMode) {
             case UseMode.UseCanvas:
@@ -369,10 +371,11 @@ class CanvasVideoService {
         return this.canvas_el;
     }
     createVideoFramCallBack(video: HTMLVideoElement) {
+      let $this = this;
       let cb = () => {
         video.requestVideoFrameCallback(() => {
           console.log('-----------');
-            this.renderFrameByWebgpu(video);
+            $this.renderFrameByWebgpu(video);
           cb();
         });
       };
