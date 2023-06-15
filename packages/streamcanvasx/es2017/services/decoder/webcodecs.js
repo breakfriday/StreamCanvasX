@@ -1,4 +1,6 @@
 import { _ as _define_property } from "@swc/helpers/_/_define_property";
+import { _ as _ts_decorate } from "@swc/helpers/_/_ts_decorate";
+import { injectable } from 'inversify';
 import Emitter from '../../utils/emitter';
 function now() {
     return new Date().getTime();
@@ -94,7 +96,10 @@ const WCS_ERROR = {
     keyframeIsRequiredError: 'A key frame is required after configure() or flush()',
     canNotDecodeClosedCodec: "Cannot call 'decode' on a closed codec"
 };
-class WebcodecsDecoder extends Emitter {
+let WebcodecsDecoder = class WebcodecsDecoder extends Emitter {
+    init(playerService) {
+        this.player = playerService;
+    }
     destroy() {
         if (this.decoder) {
             if (this.decoder.state !== 'closed') {
@@ -106,87 +111,90 @@ class WebcodecsDecoder extends Emitter {
         this.isInitInfo = false;
         this.isDecodeFirstIIframe = false;
         this.off();
-        this.player.debug.log('Webcodecs', 'destroy');
     }
+    // 用于初始化解码器
     initDecoder() {
         const _this = this;
         this.decoder = new VideoDecoder({
             output (videoFrame) {
                 _this.handleDecode(videoFrame);
+                videoFrame.close();
             },
             error (error) {
                 _this.handleError(error);
             }
         });
     }
+    // 处理解码后的视频帧
     handleDecode(videoFrame) {
         if (!this.isInitInfo) {
-            let videoInfo = {
-                width: videoFrame.codedWidth,
-                height: videoFrame.codedHeight
-            };
-            this.player.video.updateVideoInfo({
-                width: videoFrame.codedWidth,
-                height: videoFrame.codedHeight
-            });
-            this.player.video.initCanvasViewSize();
+            // this.player.video.updateVideoInfo({
+            //     width: videoFrame.codedWidth,
+            //     height: videoFrame.codedHeight,
+            // });
+            // this.player.video.initCanvasViewSize();
             this.isInitInfo = true;
         }
-        if (!this.player._times.videoStart) {
-            this.player._times.videoStart = now();
-            this.player.handlePlayToRenderTimes();
-        }
-        this.player.handleRender();
-        this.player.video.render({
-            videoFrame
+        this.player.debugLogService.info({
+            title: 'videoFrame',
+            info: videoFrame,
+            logkey: 'videoFrame'
         });
-        this.player.updateStats({
-            fps: true,
-            ts: 0,
-            buf: this.player.demux.delay
-        });
+        this.player.canvasVideoService.render(videoFrame);
+    // if (!this.player._times.videoStart) {
+    //     this.player._times.videoStart = now();
+    //     this.player.handlePlayToRenderTimes();
+    // }
+    // this.player.handleRender();
+    // this.player.video.render({
+    //     videoFrame,
+    // });
+    // this.player.updateStats({ fps: true, ts: 0, buf: this.player.demux.delay });
     }
+    // 处理解码过程中的错误
     handleError(error) {
-        this.player.debug.error('Webcodecs', 'VideoDecoder handleError', error);
+        console.error(error);
+    // this.player.debug.error('Webcodecs', 'VideoDecoder handleError', error);
     }
+    // 对视频数据进行解码
     decodeVideo(payload, ts, isIframe) {
-        // this.player.debug.log('Webcodecs decoder', 'decodeVideo', ts, isIframe);
         // eslint-disable-next-line no-negated-condition
         if (!this.hasInit) {
             if (isIframe && payload[1] === 0) {
+                // 获取视频编码方式
                 const videoCodec = payload[0] & 0x0F;
-                this.player.video.updateVideoInfo({
-                    encTypeCode: videoCodec
-                });
                 // 如果解码出来的是
                 if (videoCodec === VIDEO_ENC_CODE.h265) {
-                    this.emit(EVENTS_ERROR.webcodecsH265NotSupport);
+                    console.log('不支持 H265');
                     return;
                 }
                 if (!this.player._times.decodeStart) {
                     this.player._times.decodeStart = now();
                 }
-                const config = formatVideoDecoderConfigure(payload.slice(5));
+                /*
+              payload.slice(5) 这个操作是从关键帧数据中提取出AVCDecoderConfigurationRecord的部分。
+              具体来说，前5个字节是FLV格式定义的固定头部，包含了一些基本的信息，例如帧类型（关键帧或非关键帧）和编码格式（例如H.264）。
+              所以这里需要跳过前5个字节，从第6个字节开始才是AVCDecoderConfigurationRecord。
+
+              codec：编码格式，例如"vp8"、"vp9"、"avc"（H.264）等。
+            codedWidth 和 codedHeight：视频的宽度和高度。
+             other fields：可能还包含其他一些信息，例如比特率、帧率等，具体的内容可能会根据编码格式和实际的需求有所不同。
+              */ const config = formatVideoDecoderConfigure(payload.slice(5));
                 this.decoder.configure(config);
+                // hasInit 视频解码器是否已经初始化
                 this.hasInit = true;
             }
         } else {
-            // check width or height change
-            // if (isIframe && payload[1] === 0) {
-            //     let data = payload.slice(5);
-            //     const config = parseAVCDecoderConfigurationRecord(data);
-            //     const { videoInfo } = this.player.video;
-            //     if (config.codecWidth !== videoInfo.width || config.codecHeight !== videoInfo.height) {
-            //         this.player.debug.log('Webcodecs', `width or height is update, width ${videoInfo.width}-> ${config.codecWidth}, height ${videoInfo.height}-> ${config.codecHeight}`);
-            //         this.player.emit(EVENTS_ERROR.webcodecsWidthOrHeightChange);
-            //         return;
-            //     }
-            // }
-            // fix : Uncaught DOMException: Failed to execute 'decode' on 'VideoDecoder': A key frame is required after configure() or flush().
+            // 如果还没有解码过关键帧，并且当前帧是关键帧
             if (!this.isDecodeFirstIIframe && isIframe) {
+                // 标记已经解码过第一个关键帧
                 this.isDecodeFirstIIframe = true;
             }
-            if (this.isDecodeFirstIIframe) {
+            /*
+            isDecodeFirstIIframe 确保在解码非关键帧之前，至少已经解码过一个关键帧。
+            只有当 isDecodeFirstIIframe 为 true（表示已经解码过至少一个关键帧）时，才会尝试去解码非关键帧。
+             */ if (this.isDecodeFirstIIframe) {
+                // 创建一个新的已编码视频块，包含了视频数据、时间戳和帧类型
                 const chunk = new EncodedVideoChunk({
                     data: payload.slice(5),
                     timestamp: ts,
@@ -195,41 +203,39 @@ class WebcodecsDecoder extends Emitter {
                 this.player.emit(EVENTS.timeUpdate, ts);
                 try {
                     if (this.isDecodeStateClosed()) {
-                        this.player.debug.warn('Webcodecs', 'VideoDecoder isDecodeStateClosed true');
                         return;
                     }
                     this.decoder.decode(chunk);
                 } catch (e) {
-                    this.player.debug.error('Webcodecs', 'VideoDecoder', e);
                     if (e.toString().indexOf(WCS_ERROR.keyframeIsRequiredError) !== -1) {
                         this.player.emit(EVENTS_ERROR.webcodecsDecodeError);
                     } else if (e.toString().indexOf(WCS_ERROR.canNotDecodeClosedCodec) !== -1) {
                         this.player.emit(EVENTS_ERROR.webcodecsDecodeError);
                     }
                 }
-            } else {
-                this.player.debug.warn('Webcodecs', 'VideoDecoder isDecodeFirstIIframe false');
-            }
+            } else {}
         }
     }
     isDecodeStateClosed() {
         return this.decoder.state === 'closed';
     }
-    constructor(player){
+    constructor(){
         super();
         _define_property(this, "player", void 0);
         _define_property(this, "hasInit", void 0);
         _define_property(this, "isDecodeFirstIIframe", void 0);
         _define_property(this, "isInitInfo", void 0);
         _define_property(this, "decoder", void 0);
-        this.player = player;
         this.hasInit = false;
         this.isDecodeFirstIIframe = false;
         this.isInitInfo = false;
         this.decoder = null;
         this.initDecoder();
     }
-}
-export { WebcodecsDecoder as default };
+};
+WebcodecsDecoder = _ts_decorate([
+    injectable()
+], WebcodecsDecoder);
+export default WebcodecsDecoder;
 
  //# sourceMappingURL=webcodecs.js.map

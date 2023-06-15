@@ -89,7 +89,7 @@ class HttpFlvStreamLoader {
 
                 this.playerService.flvVDemuxService.dispatch(value);
 
-                this.playerService.fLVDemuxStream.dispatch(value);
+               // this.playerService.fLVDemuxStream.dispatch(value);
 
                 // Your process goes here, where you can handle each chunk of FLV data
                 // For example:

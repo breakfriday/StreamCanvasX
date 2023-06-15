@@ -48,7 +48,6 @@ class CanvasVideoService {
     device: GPUDevice;
     GpuContext: GPUCanvasContext;
     renderPipeline: GPURenderPipeline;
-    gPUSampler: GPUSampler;
     regGl: REGL.Regl;
     useMode: UseMode;
     sampler: GPUSampler;
@@ -254,22 +253,6 @@ class CanvasVideoService {
             ],
           });
 
-   /*        const uniformBindGroup = device.createBindGroup({
-            layout: this.pipeline.getBindGroupLayout(0),
-            entries: [
-              {
-                binding: 1,
-                resource: sampler,
-              },
-              {
-                binding: 2,
-                resource: device.importExternalTexture({
-                  source: videoFrame as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-                }),
-              },
-            ],
-          });
- */
 
           const commandEncoder = this.device.createCommandEncoder();
           const textureView = this.GpuContext.getCurrentTexture().createView();
@@ -286,36 +269,10 @@ class CanvasVideoService {
           };
 
 
-        // const videoTexture = this.device.createTexture({
-        //     size: {
-        //         width: displayWidth,
-        //         height: displayHeight,
-        //       },
-        //       format: 'rgba8unorm',
-        //       usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
-        // });
-
-       // const textureView = videoTexture.createView();
-
-
-        // // 将图像复制到纹理
-        // this.device.queue.copyExternalImageToTexture(
-        //     { source: imageBitmap },
-        //     { texture: videoTexture },
-        //     [displayWidth, displayHeight],
-        // );
-
-
-        // commandEncoder.copyTextureToBuffer(
-        //     { source: canvas },
-        //     { texture: videoTexture, mipLevel: 1 },
-        //     [displayWidth, displayHeight],
-        // );
-
-
         // 创建指令池
         const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
         passEncoder.setPipeline(this.renderPipeline);
+        passEncoder.setBindGroup(0, uniformBindGroup);
         passEncoder.draw(6, 1, 0, 0);
         passEncoder.end();
         this.device.queue.submit([commandEncoder.finish()]);
