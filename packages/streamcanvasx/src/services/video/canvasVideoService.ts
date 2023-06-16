@@ -59,7 +59,7 @@ class CanvasVideoService {
         // this.initGpu();
         //  this.setUseMode(UseMode.UseCanvas);
         //  this.setUseMode(UseMode.UseWebGPU);
-          let model = parm || UseMode.UseWebGPU;
+          let model = parm || UseMode.UseCanvas;
 
 
           this.setUseMode(model);
