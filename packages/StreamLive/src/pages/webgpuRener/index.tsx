@@ -23,6 +23,7 @@ const FlvDemux = () => {
           window.blobUrl = URL.createObjectURL(files_data);
           video.src = blobUrl;
           video.load();
+          video.play();
         }}
         />
         <video controls id="vidd" width={300} />
@@ -37,20 +38,7 @@ const FlvDemux = () => {
             let container = document.getElementById('aa');
             container?.appendChild(el);
             let video: HTMLVideoElement = document.getElementById('vidd')!;
-
-
-           let pp = () => {
-              video.requestVideoFrameCallback(() => {
-                console.log('-----------');
-                player.canvasVideoService.render(video);
-                pp();
-              });
-            };
-
-
-          setTimeout(() => {
-          video.requestVideoFrameCallback(pp);
-          }, 300);
+           player.canvasVideoService.createVideoFramCallBack(video);
       }}
         >
           play webgpu video
@@ -61,7 +49,7 @@ const FlvDemux = () => {
           type="primary"
           onClick={() => {
             const player = createPlayerServiceInstance();
-            player.canvasVideoService.init(1);
+
 
             let el = player.canvasVideoService.getCanvas2dEl();
             let container = document.getElementById('aa');
@@ -69,18 +57,21 @@ const FlvDemux = () => {
             let video: HTMLVideoElement = document.getElementById('vidd')!;
 
 
-           let pp = () => {
-              video.requestVideoFrameCallback(() => {
-                console.log('-----------');
-                player.canvasVideoService.render(video);
-                pp();
-              });
-            };
+            player.canvasVideoService.createVideoFramCallBack(video);
 
 
-          setTimeout(() => {
-          video.requestVideoFrameCallback(pp);
-          }, 300);
+          //  let pp = () => {
+          //     video.requestVideoFrameCallback(() => {
+          //       console.log('-----------');
+          //       player.canvasVideoService.render(video);
+          //       pp();
+          //     });
+          //   };
+
+
+          // setTimeout(() => {
+          // video.requestVideoFrameCallback(pp);
+          // }, 300);
       }}
         >
           play canvas2d video

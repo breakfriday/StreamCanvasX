@@ -374,8 +374,8 @@ class CanvasVideoService {
       let $this = this;
       let cb = () => {
         video.requestVideoFrameCallback(() => {
-          console.log('-----------');
-            $this.renderFrameByWebgpu(video);
+            // $this.renderFrameByWebgpu(video);
+            $this.render(video);
           cb();
         });
       };
