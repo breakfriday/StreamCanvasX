@@ -239,8 +239,9 @@ class CanvasVideoService {
     }
 
     async renderFrameByWebgpu(frame: VideoFrame | HTMLVideoElement) {
-        const uniformBindGroup = this.device.createBindGroup({
-            layout: this.renderPipeline.getBindGroupLayout(0),
+        let $this = this;
+        const uniformBindGroup = $this.device.createBindGroup({
+            layout: $this.renderPipeline.getBindGroupLayout(0),
             entries: [
               {
                 binding: 1,

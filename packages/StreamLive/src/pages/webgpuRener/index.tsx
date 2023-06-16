@@ -32,29 +32,29 @@ const FlvDemux = () => {
         <Button
           type="primary"
           onClick={() => {
-            const player = createPlayerServiceInstance();
+            const player = createPlayerServiceInstance({ model: 1 });
 
             let el = player.canvasVideoService.getCanvas2dEl();
             let container = document.getElementById('aa');
             container?.appendChild(el);
-            let video: HTMLVideoElement = document.getElementById('vidd')!;
+            let video: HTMLVideoElement = document.getElementById('vidd')! as HTMLVideoElement;
            player.canvasVideoService.createVideoFramCallBack(video);
       }}
         >
-          play webgpu video
+          play canvas2d video
         </Button>
 
 
         <Button
           type="primary"
           onClick={() => {
-            const player = createPlayerServiceInstance();
+            const player = createPlayerServiceInstance({ model: 2 });
 
 
             let el = player.canvasVideoService.getCanvas2dEl();
             let container = document.getElementById('aa');
             container?.appendChild(el);
-            let video: HTMLVideoElement = document.getElementById('vidd')!;
+            let video: HTMLVideoElement = document.getElementById('vidd')! as HTMLVideoElement;
 
 
             player.canvasVideoService.createVideoFramCallBack(video);
@@ -74,7 +74,8 @@ const FlvDemux = () => {
           // }, 300);
       }}
         >
-          play canvas2d video
+          play webgpu video
+
         </Button>
 
 
