@@ -86,7 +86,7 @@ class PlayerService extends Emitter {
     }
 
     init(config?: Partial<{model?: UseMode}>) {
-        let { model = UseMode.UseCanvas } = config;
+        let { model = UseMode.UseWebGPU } = config;
         this.httpFlvStreamService.init(this);
         this.flvVDemuxService.init(this);
         this.webcodecsDecoderService.init(this);
