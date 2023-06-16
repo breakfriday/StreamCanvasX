@@ -134,9 +134,9 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
 
 
  interface IplayerConfig{
-  model: UseMode;
-  url: string;
-  useWebworker: boolean;
+  model?: UseMode;
+  url?: string;
+  useWebworker?: boolean;
 
 }
 
