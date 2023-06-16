@@ -11,6 +11,9 @@ import CanvasVideoService from '../video/canvasVideoService';
 import DebugLogService from '../DebugLogService';
 import FLVDemuxStream from '../demux/flvDemuxStream';
 
+import mpegts from 'mpegts.js';
+import Mpegts from 'mpegts.js';
+
 
 function now() {
     return new Date().getTime();
@@ -32,6 +35,7 @@ class PlayerService extends Emitter {
     canvasVideoService: CanvasVideoService;
     debugLogService: DebugLogService;
     fLVDemuxStream: FLVDemuxStream;
+    mpegtsPlayer: Mpegts.Player;
     private _stats: Stats;
     private _startBpsTime?: number;
     _opt: any;
@@ -87,6 +91,43 @@ class PlayerService extends Emitter {
         this.webcodecsDecoderService.init(this);
         this.fLVDemuxStream.init(this);
     }
+    createFlvPlayer(parms: { type?: string; isLive?: boolean; url: string}) {
+        let { type = 'flv', isLive = true, url } = parms;
+        let videoEl = document.createElement('video');
+        // document.getElementById('cont').append(videoEl);
+        // videoEl.controls = true;
+        // videoEl.width = 300;
+
+        if (videoEl) {
+          this.mpegtsPlayer = mpegts.createPlayer({
+            type: type!, // could also be mpegts, m2ts, flv
+            isLive: isLive,
+            url: url,
+            hasAudio: true,
+
+          }, { enableStashBuffer: false, enableWorker: true, liveBufferLatencyChasing: true });
+          this.mpegtsPlayer.attachMediaElement(videoEl);
+        //   this.getVideoSize();
+          this.mpegtsPlayer.load();
+
+          this.mpegtsPlayer.on(mpegts.Events.MEDIA_INFO, (parm) => {
+            let video_width = parm.metadata.width;
+            let video_height = parm.metadata.height;
+            // this.metadata = {
+            //   video_height, video_width,
+            // };
+            // this.getVideoSize();
+           });
+
+          this.mpegtsPlayer.on(mpegts.Events.METADATA_ARRIVED, (parm) => {
+            this.mpegtsPlayer.play();
+            debugger;
+          });
+        }
+
+        // this.canvasVideoService.render(videoEl);
+        this.canvasVideoService.createVideoFramCallBack(videoEl);
+      }
     log() {
         alert(22);
     }
