@@ -105,7 +105,7 @@ class PlayerService extends Emitter {
             url: url,
             hasAudio: true,
 
-          }, { enableStashBuffer: false, enableWorker: true, liveBufferLatencyChasing: true });
+          }, { enableStashBuffer: false, enableWorker: true, liveBufferLatencyChasing: true, autoCleanupSourceBuffer: true });
           this.mpegtsPlayer.attachMediaElement(videoEl);
         //   this.getVideoSize();
           this.mpegtsPlayer.load();
