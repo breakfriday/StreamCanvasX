@@ -306,3 +306,10 @@ export const FETCH_ERROR = {
     abortError2: 'AbortError',
     abort: 'AbortError',
 };
+
+
+export enum UseMode {
+    UseWebGL,
+    UseCanvas,
+    UseWebGPU,
+  }

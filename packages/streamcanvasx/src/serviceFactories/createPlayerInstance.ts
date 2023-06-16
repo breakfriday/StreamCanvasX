@@ -16,6 +16,8 @@ import DebugLogService from '../services/DebugLogService';
 
 import FLVDemuxStream from '../services/demux/flvDemuxStream';
 
+import { IplayerConfig } from '../types/services';
+
 
 containerPlayer.bind<PlayerService>(TYPES.IPlayerService).to(PlayerService);
 containerPlayer.bind<HttpFlvStreamLoader>(TYPES.IHttpFlvStreamLoader).to(HttpFlvStreamLoader);
@@ -29,8 +31,10 @@ containerPlayer.bind<CanvasVideoService>(TYPES.ICanvasVideoService).to(CanvasVid
 containerPlayer.bind<DebugLogService>(TYPES.IDebugLogService).to(DebugLogService);
 
 containerPlayer.bind<FLVDemuxStream>(TYPES.IFLVDemuxStream).to(FLVDemuxStream);
- function createPlayerServiceInstance(): PlayerService {
-   return containerPlayer.get<PlayerService>(TYPES.IPlayerService);
+ function createPlayerServiceInstance(config: IplayerConfig): PlayerService {
+  let playerInstance = containerPlayer.get<PlayerService>(TYPES.IPlayerService);
+  playerInstance.init(config || {});
+   return playerInstance;
  }
 
  export { createPlayerServiceInstance };

@@ -6,6 +6,7 @@ import REGL from 'Regl';
 
 import WebGLYUVRenderer from './WebGLColorConverter';
 
+import { UseMode } from '../../constant';
 function createContextGL($canvas: HTMLCanvasElement): WebGLRenderingContext | null {
     let gl: WebGLRenderingContext | null = null;
 
@@ -32,11 +33,6 @@ function createContextGL($canvas: HTMLCanvasElement): WebGLRenderingContext | nu
     return gl;
   }
 
-  enum UseMode {
-    UseWebGL,
-    UseCanvas,
-    UseWebGPU,
-  }
 
 @injectable()
 class CanvasVideoService {
@@ -55,7 +51,7 @@ class CanvasVideoService {
         this.canvas_el = document.createElement('canvas');
         // this._initContext2D();
 
-        this.init();
+        // this.init();
         this.setCanvasSize();
     }
 
@@ -63,13 +59,13 @@ class CanvasVideoService {
         // this.initGpu();
         //  this.setUseMode(UseMode.UseCanvas);
         //  this.setUseMode(UseMode.UseWebGPU);
-        //  let model = parm || UseMode.UseWebGPU;
+          let model = parm || UseMode.UseWebGPU;
 
 
-        //   this.setUseMode(model);
+          this.setUseMode(model);
 
         //  this.setUseMode(UseMode.UseWebGPU);
-        this.setUseMode(UseMode.UseCanvas);
+        // this.setUseMode(UseMode.UseCanvas);
 
          switch (this.useMode) {
             case UseMode.UseCanvas:

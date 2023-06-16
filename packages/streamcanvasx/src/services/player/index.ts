@@ -10,7 +10,7 @@ import WebcodecsDecoderService from '../decoder/webcodecs';
 import CanvasVideoService from '../video/canvasVideoService';
 import DebugLogService from '../DebugLogService';
 import FLVDemuxStream from '../demux/flvDemuxStream';
-
+import { UseMode } from '../../constant';
 import mpegts from 'mpegts.js';
 import Mpegts from 'mpegts.js';
 
@@ -57,7 +57,7 @@ class PlayerService extends Emitter {
         this.debugLogService = debugLogService;
         this.fLVDemuxStream = fLVDemuxStream;
         this._opt = Object.assign({}, DEFAULT_PLAYER_OPTIONS);
-        this.init();
+
 
         this._times = {
             playInitStart: '', // 1
@@ -85,11 +85,13 @@ class PlayerService extends Emitter {
         };
     }
 
-    init() {
+    init(config?: Partial<{model?: UseMode}>) {
+        let { model = UseMode.UseCanvas } = config;
         this.httpFlvStreamService.init(this);
         this.flvVDemuxService.init(this);
         this.webcodecsDecoderService.init(this);
         this.fLVDemuxStream.init(this);
+        this.canvasVideoService.init(model);
     }
     createFlvPlayer(parms: { type?: string; isLive?: boolean; url: string}) {
         let { type = 'flv', isLive = true, url } = parms;
@@ -105,7 +107,7 @@ class PlayerService extends Emitter {
             url: url,
             hasAudio: true,
 
-          }, { enableStashBuffer: false, enableWorker: true, liveBufferLatencyChasing: true, autoCleanupSourceBuffer: true });
+          }, { enableStashBuffer: false, enableWorker: false, liveBufferLatencyChasing: true, autoCleanupSourceBuffer: true });
           this.mpegtsPlayer.attachMediaElement(videoEl);
         //   this.getVideoSize();
           this.mpegtsPlayer.load();

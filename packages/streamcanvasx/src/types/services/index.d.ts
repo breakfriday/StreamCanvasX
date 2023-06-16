@@ -1,3 +1,4 @@
+import { UseMode } from '../../constant';
 export interface IDrawer {
     mediaSource_el?: HTMLAudioElement | HTMLVideoElement;
     canvas?: HTMLCanvasElement;
@@ -130,3 +131,14 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   recordType: string;
   useWebFullScreen: boolean;
 }
+
+
+ interface IplayerConfig{
+  model: UseMode;
+  url: string;
+  useWebworker: boolean;
+
+}
+
+
+export type IplayerConfig = Partial<IplayerConfig>;
