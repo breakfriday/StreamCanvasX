@@ -135,7 +135,7 @@ interface VideoInfo {
     }
     init(playerService: PlayerService) {
         this.player = playerService;
-        this.initDecoder();
+        // this.initDecoder();
     }
     destroy() {
         if (this.decoder) {
