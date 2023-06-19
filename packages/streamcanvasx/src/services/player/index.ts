@@ -108,8 +108,8 @@ class PlayerService extends Emitter {
             hasAudio: true,
             hasVideo: true,
 
-          }, { enableStashBuffer: false,
-                enableWorker: false,
+          }, { enableStashBuffer: true,
+                enableWorker: true,
                 liveBufferLatencyChasing: true,
                 autoCleanupSourceBuffer: true,
                 lazyLoad: false,
@@ -128,7 +128,6 @@ class PlayerService extends Emitter {
            });
 
            this.mpegtsPlayer.on(mpegts.Events.ERROR, (error, detailError) => {
-            alert('nertwork error');
             if (error === mpegts.ErrorTypes.NETWORK_ERROR) {
                 this.mpegtsPlayer.unload();
                 this.mpegtsPlayer.load();
