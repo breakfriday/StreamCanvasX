@@ -13,7 +13,7 @@ import FLVDemuxStream from '../demux/flvDemuxStream';
 import { UseMode } from '../../constant';
 import mpegts from 'mpegts.js';
 import Mpegts from 'mpegts.js';
-
+import { IplayerConfig } from '../../types/services';
 
 function now() {
     return new Date().getTime();
@@ -106,6 +106,7 @@ class PlayerService extends Emitter {
             isLive: isLive,
             url: url,
             hasAudio: true,
+            hasVideo: true,
 
           }, { enableStashBuffer: false, enableWorker: false, liveBufferLatencyChasing: true, autoCleanupSourceBuffer: true });
           this.mpegtsPlayer.attachMediaElement(videoEl);
