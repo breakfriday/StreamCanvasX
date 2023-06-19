@@ -108,7 +108,12 @@ class PlayerService extends Emitter {
             hasAudio: true,
             hasVideo: true,
 
-          }, { enableStashBuffer: false, enableWorker: false, liveBufferLatencyChasing: true, autoCleanupSourceBuffer: true });
+          }, { enableStashBuffer: false,
+                enableWorker: false,
+                liveBufferLatencyChasing: true,
+                autoCleanupSourceBuffer: true,
+                lazyLoad: false,
+         });
           this.mpegtsPlayer.attachMediaElement(videoEl);
         //   this.getVideoSize();
           this.mpegtsPlayer.load();
@@ -121,6 +126,16 @@ class PlayerService extends Emitter {
             // };
             // this.getVideoSize();
            });
+
+           this.mpegtsPlayer.on(mpegts.Events.ERROR, (error, detailError) => {
+            alert('nertwork error');
+            if (error === mpegts.ErrorTypes.NETWORK_ERROR) {
+                this.mpegtsPlayer.unload();
+                this.mpegtsPlayer.load();
+                this.mpegtsPlayer.play();
+            }
+      });
+
 
           this.mpegtsPlayer.on(mpegts.Events.METADATA_ARRIVED, (parm) => {
             this.mpegtsPlayer.play();
