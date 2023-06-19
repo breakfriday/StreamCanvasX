@@ -39,7 +39,7 @@ class PlayerService extends Emitter {
     private _stats: Stats;
     private _startBpsTime?: number;
     _opt: any;
-    _times: any;
+    _times: any;ds
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -123,13 +123,16 @@ class PlayerService extends Emitter {
 
           this.mpegtsPlayer.on(mpegts.Events.METADATA_ARRIVED, (parm) => {
             this.mpegtsPlayer.play();
-            debugger;
           });
         }
 
         // this.canvasVideoService.render(videoEl);
         this.canvasVideoService.createVideoFramCallBack(videoEl);
       }
+
+    destroy() {
+        this.mpegtsPlayer.destroy();
+    }
     log() {
         alert(22);
     }
