@@ -11,15 +11,17 @@ const VideoComponents = () => {
     // loadMediaEvent();
   }, []);
 
+  const containerRef = useRef(null);
+
 
   return (<div >
     <Form
       name="basic"
       autoComplete="off"
-      onFinish={(value: string) => {
-           let player = createPlayerServiceInstance();
+      onFinish={(value: {url: string}) => {
+           let player = createPlayerServiceInstance({});
 
-           let pp = player.createFlvPlayer({ url: value.url });
+          player.createFlvPlayer({ url: value.url });
 
            let canvas_el = player.canvasVideoService.getCanvas2dEl();
 
@@ -44,6 +46,8 @@ const VideoComponents = () => {
         </Button>
       </Form.Item>
     </Form>
+
+    <div ref={containerRef} />
   </div>);
 };
 

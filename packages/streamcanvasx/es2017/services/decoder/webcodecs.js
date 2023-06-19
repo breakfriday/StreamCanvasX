@@ -99,6 +99,7 @@ const WCS_ERROR = {
 let WebcodecsDecoder = class WebcodecsDecoder extends Emitter {
     init(playerService) {
         this.player = playerService;
+    // this.initDecoder();
     }
     destroy() {
         if (this.decoder) {
@@ -230,7 +231,6 @@ let WebcodecsDecoder = class WebcodecsDecoder extends Emitter {
         this.isDecodeFirstIIframe = false;
         this.isInitInfo = false;
         this.decoder = null;
-        this.initDecoder();
     }
 };
 WebcodecsDecoder = _ts_decorate([

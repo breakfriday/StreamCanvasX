@@ -118,7 +118,6 @@ var WebcodecsDecoder = /*#__PURE__*/ function(Emitter) {
         _this.isDecodeFirstIIframe = false;
         _this.isInitInfo = false;
         _this.decoder = null;
-        _this.initDecoder();
         return _this;
     }
     _create_class(WebcodecsDecoder, [
@@ -126,6 +125,7 @@ var WebcodecsDecoder = /*#__PURE__*/ function(Emitter) {
             key: "init",
             value: function init(playerService) {
                 this.player = playerService;
+            // this.initDecoder();
             }
         },
         {
