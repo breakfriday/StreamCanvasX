@@ -60,15 +60,12 @@ export default SimpleDemo;
 ##  flv直播流播放
 
 ```tsx
-import {  createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
+import {  createPlayerServiceInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 
-const streamPlayer = createMainPlayerInstance({ root_el: veido_flv_ref?.current!, canvas_el: canvas_ref?.current! });
+ let player = createPlayerServiceInstance({});
 
-streamPlayer?.createFlvPlayer({
-          type: 'flv', // could also be mpegts, m2ts, flv
-          isLive: true,
-          url: url,
-      });
+ player.createFlvPlayer({ url: '' });
+
 ```
 
 ```tsx  preview
@@ -107,32 +104,37 @@ const SimpleDemo = () => {
             ref={veido_flv_ref}
             style={{ width: '300px', height: '300px' }}
           />
-               <Form
-                  name="basic"
-                  autoComplete="off"
-                  onFinish={(values) => {
-                    flv_play({ url: values.url });
-              }}
+          <Form
+            name="basic"
+            autoComplete="off"
+            onFinish={(value: string) => {
+                let player = createPlayerServiceInstance();
+
+                 player.createFlvPlayer({ url: value.url });
+
+             
+
+           
+                }}
+           >
+              <Form.Item
+                label="url"
+                name="url"
+              >
+                <Input />
+              </Form.Item>
+
+
+              <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
                 >
-                  <Form.Item
-                    label="url"
-                    name="url"
-                  >
-                    <Input />
-                  </Form.Item>
-
-
-                  <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                    >
-                      flv_play
-                    </Button>
-                  </Form.Item>
-                </Form>
-
-           <canvas ref={canvas_ref}  width="300" height="300" />
+                  fetch_play
+                </Button>
+              </Form.Item>
+    </Form>
+         
     </div>
     </>
   )

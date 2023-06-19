@@ -47,22 +47,28 @@ class CanvasVideoService {
     regGl: REGL.Regl;
     useMode: UseMode;
     sampler: GPUSampler;
+    contentEl: HTMLElement;
     constructor() {
         this.canvas_el = document.createElement('canvas');
         // this._initContext2D();
 
         // this.init();
-        this.setCanvasSize();
+        // this.setCanvasSize();
     }
 
-    init(parm?: UseMode) {
+    init(data: {model?: UseMode; contentEl?: HTMLElement | null}) {
         // this.initGpu();
         //  this.setUseMode(UseMode.UseCanvas);
         //  this.setUseMode(UseMode.UseWebGPU);
-          let model = parm || UseMode.UseCanvas;
+        let { model = UseMode.UseCanvas, contentEl } = data || {};
 
 
           this.setUseMode(model);
+          if (contentEl) {
+            this.contentEl = contentEl;
+            this.setCanvasSize();
+            this.contentEl.append(this.canvas_el);
+          }
 
         //  this.setUseMode(UseMode.UseWebGPU);
         // this.setUseMode(UseMode.UseCanvas);
@@ -294,8 +300,16 @@ class CanvasVideoService {
     }
 
     setCanvasSize() {
-        this.canvas_el.width = 400;
-        this.canvas_el.height = 200;
+      let height = 200;
+      let width = 400;
+
+      if (this.contentEl) {
+        height = this.contentEl.clientHeight;
+        width = this.contentEl.clientWidth;
+      }
+
+        this.canvas_el.width = width;
+        this.canvas_el.height = height;
     }
 
     _initContextGl() {
