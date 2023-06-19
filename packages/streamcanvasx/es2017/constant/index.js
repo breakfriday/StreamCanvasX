@@ -261,5 +261,11 @@ export const FETCH_ERROR = {
     abortError2: 'AbortError',
     abort: 'AbortError'
 };
+export var UseMode;
+(function(UseMode) {
+    UseMode[UseMode["UseWebGL"] = 0] = "UseWebGL";
+    UseMode[UseMode["UseCanvas"] = 1] = "UseCanvas";
+    UseMode[UseMode["UseWebGPU"] = 2] = "UseWebGPU";
+})(UseMode || (UseMode = {}));
 
  //# sourceMappingURL=index.js.map
