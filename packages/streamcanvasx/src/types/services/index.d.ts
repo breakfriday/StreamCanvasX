@@ -137,8 +137,10 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   model?: UseMode;
   url?: string;
   useWebworker?: boolean;
-  hasVideo?: true;
-  hasAudio?: true;
+  hasVideo?: boolean;
+  hasAudio?: boolean;
+  rootEl?: HTMLElement;
+
 
 }
 
