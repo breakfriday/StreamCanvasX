@@ -39,7 +39,7 @@ class PlayerService extends Emitter {
     private _stats: Stats;
     private _startBpsTime?: number;
     _opt: any;
-    _times: any;ds
+    _times: any;
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -86,7 +86,7 @@ class PlayerService extends Emitter {
     }
 
     init(config?: Partial<{model?: UseMode}>) {
-        let { model = UseMode.UseWebGPU } = config;
+        let { model = UseMode.UseCanvas } = config;
         this.httpFlvStreamService.init(this);
         this.flvVDemuxService.init(this);
         this.webcodecsDecoderService.init(this);
