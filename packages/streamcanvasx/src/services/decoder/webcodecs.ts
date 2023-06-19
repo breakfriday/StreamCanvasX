@@ -132,10 +132,10 @@ interface VideoInfo {
         this.isDecodeFirstIIframe = false;
         this.isInitInfo = false;
         this.decoder = null;
-        this.initDecoder();
     }
     init(playerService: PlayerService) {
         this.player = playerService;
+        this.initDecoder();
     }
     destroy() {
         if (this.decoder) {
