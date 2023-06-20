@@ -5,6 +5,7 @@ import createREGL from 'regl';
 import REGL from 'Regl';
 
 import WebGLYUVRenderer from './WebGLColorConverter';
+import { GPUDevice, GPUSampler, GPURenderPipeline, GPUCanvasContext } from '../../types/services/webGpu';
 
 import { UseMode } from '../../constant';
 function createContextGL($canvas: HTMLCanvasElement): WebGLRenderingContext | null {

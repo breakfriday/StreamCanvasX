@@ -1,119 +1,119 @@
-import { _ as _assert_this_initialized } from '@swc/helpers/_/_assert_this_initialized';
-import { _ as _class_call_check } from '@swc/helpers/_/_class_call_check';
-import { _ as _create_class } from '@swc/helpers/_/_create_class';
-import { _ as _define_property } from '@swc/helpers/_/_define_property';
-import { _ as _inherits } from '@swc/helpers/_/_inherits';
-import { _ as _create_super } from '@swc/helpers/_/_create_super';
-import { _ as _ts_decorate } from '@swc/helpers/_/_ts_decorate';
-import { injectable } from 'inversify';
-import Emitter from '../../utils/emitter';
+import { _ as _assert_this_initialized } from "@swc/helpers/_/_assert_this_initialized";
+import { _ as _class_call_check } from "@swc/helpers/_/_class_call_check";
+import { _ as _create_class } from "@swc/helpers/_/_create_class";
+import { _ as _define_property } from "@swc/helpers/_/_define_property";
+import { _ as _inherits } from "@swc/helpers/_/_inherits";
+import { _ as _create_super } from "@swc/helpers/_/_create_super";
+import { _ as _ts_decorate } from "@swc/helpers/_/_ts_decorate";
+import { injectable } from "inversify";
+import Emitter from "../../utils/emitter";
 function now() {
     return new Date().getTime();
 }
-let formatVideoDecoderConfigure = function (avcC) {
-    let codecArray = avcC.subarray(1, 4);
-    let codecString = 'avc1.';
-    for (let j = 0; j < 3; j++) {
-        let h = codecArray[j].toString(16);
+var formatVideoDecoderConfigure = function(avcC) {
+    var codecArray = avcC.subarray(1, 4);
+    var codecString = "avc1.";
+    for(var j = 0; j < 3; j++){
+        var h = codecArray[j].toString(16);
         if (h.length < 2) {
-            h = '0'.concat(h);
+            h = "0".concat(h);
         }
         codecString += h;
     }
     return {
         codec: codecString,
-        description: avcC,
+        description: avcC
     };
 };
-let ENCODED_VIDEO_TYPE = {
-    key: 'key',
-    delta: 'delta',
+var ENCODED_VIDEO_TYPE = {
+    key: "key",
+    delta: "delta"
 };
-let EVENTS = {
-    fullscreen: 'fullscreen$2',
-    webFullscreen: 'webFullscreen',
-    decoderWorkerInit: 'decoderWorkerInit',
-    play: 'play',
-    playing: 'playing',
-    pause: 'pause',
-    mute: 'mute',
-    load: 'load',
-    loading: 'loading',
-    videoInfo: 'videoInfo',
-    timeUpdate: 'timeUpdate',
-    audioInfo: 'audioInfo',
-    log: 'log',
-    error: 'error',
-    kBps: 'kBps',
-    timeout: 'timeout',
-    delayTimeout: 'delayTimeout',
-    loadingTimeout: 'loadingTimeout',
-    stats: 'stats',
-    performance: 'performance',
-    record: 'record',
-    recording: 'recording',
-    recordingTimestamp: 'recordingTimestamp',
-    recordStart: 'recordStart',
-    recordEnd: 'recordEnd',
-    recordCreateError: 'recordCreateError',
-    buffer: 'buffer',
-    videoFrame: 'videoFrame',
-    start: 'start',
-    metadata: 'metadata',
-    resize: 'resize',
-    streamEnd: 'streamEnd',
-    streamSuccess: 'streamSuccess',
-    streamMessage: 'streamMessage',
-    streamError: 'streamError',
-    volumechange: 'volumechange',
-    destroy: 'destroy',
-    mseSourceOpen: 'mseSourceOpen',
-    mseSourceClose: 'mseSourceClose',
-    mseSourceBufferError: 'mseSourceBufferError',
-    mseSourceBufferBusy: 'mseSourceBufferBusy',
-    mseSourceBufferFull: 'mseSourceBufferFull',
-    videoWaiting: 'videoWaiting',
-    videoTimeUpdate: 'videoTimeUpdate',
-    videoSyncAudio: 'videoSyncAudio',
-    playToRenderTimes: 'playToRenderTimes',
+var EVENTS = {
+    fullscreen: "fullscreen$2",
+    webFullscreen: "webFullscreen",
+    decoderWorkerInit: "decoderWorkerInit",
+    play: "play",
+    playing: "playing",
+    pause: "pause",
+    mute: "mute",
+    load: "load",
+    loading: "loading",
+    videoInfo: "videoInfo",
+    timeUpdate: "timeUpdate",
+    audioInfo: "audioInfo",
+    log: "log",
+    error: "error",
+    kBps: "kBps",
+    timeout: "timeout",
+    delayTimeout: "delayTimeout",
+    loadingTimeout: "loadingTimeout",
+    stats: "stats",
+    performance: "performance",
+    record: "record",
+    recording: "recording",
+    recordingTimestamp: "recordingTimestamp",
+    recordStart: "recordStart",
+    recordEnd: "recordEnd",
+    recordCreateError: "recordCreateError",
+    buffer: "buffer",
+    videoFrame: "videoFrame",
+    start: "start",
+    metadata: "metadata",
+    resize: "resize",
+    streamEnd: "streamEnd",
+    streamSuccess: "streamSuccess",
+    streamMessage: "streamMessage",
+    streamError: "streamError",
+    volumechange: "volumechange",
+    destroy: "destroy",
+    mseSourceOpen: "mseSourceOpen",
+    mseSourceClose: "mseSourceClose",
+    mseSourceBufferError: "mseSourceBufferError",
+    mseSourceBufferBusy: "mseSourceBufferBusy",
+    mseSourceBufferFull: "mseSourceBufferFull",
+    videoWaiting: "videoWaiting",
+    videoTimeUpdate: "videoTimeUpdate",
+    videoSyncAudio: "videoSyncAudio",
+    playToRenderTimes: "playToRenderTimes"
 };
-let EVENTS_ERROR = {
-    playError: 'playIsNotPauseOrUrlIsNull',
-    fetchError: 'fetchError',
-    websocketError: 'websocketError',
-    webcodecsH265NotSupport: 'webcodecsH265NotSupport',
-    webcodecsDecodeError: 'webcodecsDecodeError',
-    webcodecsWidthOrHeightChange: 'webcodecsWidthOrHeightChange',
-    mediaSourceH265NotSupport: 'mediaSourceH265NotSupport',
+var EVENTS_ERROR = {
+    playError: "playIsNotPauseOrUrlIsNull",
+    fetchError: "fetchError",
+    websocketError: "websocketError",
+    webcodecsH265NotSupport: "webcodecsH265NotSupport",
+    webcodecsDecodeError: "webcodecsDecodeError",
+    webcodecsWidthOrHeightChange: "webcodecsWidthOrHeightChange",
+    mediaSourceH265NotSupport: "mediaSourceH265NotSupport",
     mediaSourceFull: EVENTS.mseSourceBufferFull,
     mseSourceBufferError: EVENTS.mseSourceBufferError,
-    mediaSourceAppendBufferError: 'mediaSourceAppendBufferError',
-    mediaSourceBufferListLarge: 'mediaSourceBufferListLarge',
-    mediaSourceAppendBufferEndTimeout: 'mediaSourceAppendBufferEndTimeout',
-    wasmDecodeError: 'wasmDecodeError',
-    webglAlignmentError: 'webglAlignmentError',
+    mediaSourceAppendBufferError: "mediaSourceAppendBufferError",
+    mediaSourceBufferListLarge: "mediaSourceBufferListLarge",
+    mediaSourceAppendBufferEndTimeout: "mediaSourceAppendBufferEndTimeout",
+    wasmDecodeError: "wasmDecodeError",
+    webglAlignmentError: "webglAlignmentError"
 };
-let VIDEO_ENC_CODE = {
+var VIDEO_ENC_CODE = {
     h264: 7,
-    h265: 12,
+    h265: 12
 };
-let WCS_ERROR = {
-    keyframeIsRequiredError: 'A key frame is required after configure() or flush()',
-    canNotDecodeClosedCodec: "Cannot call 'decode' on a closed codec",
+var WCS_ERROR = {
+    keyframeIsRequiredError: "A key frame is required after configure() or flush()",
+    canNotDecodeClosedCodec: "Cannot call 'decode' on a closed codec"
 };
-let WebcodecsDecoder = /* #__PURE__ */ (function (Emitter) {
-    'use strict';
+var WebcodecsDecoder = /*#__PURE__*/ function(Emitter) {
+    "use strict";
     _inherits(WebcodecsDecoder, Emitter);
-    let _super = _create_super(WebcodecsDecoder);
+    var _super = _create_super(WebcodecsDecoder);
     function WebcodecsDecoder() {
         _class_call_check(this, WebcodecsDecoder);
-        let _this;
+        var _this;
         _this = _super.call(this);
-        _define_property(_assert_this_initialized(_this), 'player', void 0);
-        _define_property(_assert_this_initialized(_this), 'hasInit', void 0);
-        _define_property(_assert_this_initialized(_this), 'isDecodeFirstIIframe', void 0);
-        _define_property(_assert_this_initialized(_this), 'isInitInfo', void 0);
-        _define_property(_assert_this_initialized(_this), 'decoder', void 0);
+        _define_property(_assert_this_initialized(_this), "player", void 0);
+        _define_property(_assert_this_initialized(_this), "hasInit", void 0);
+        _define_property(_assert_this_initialized(_this), "isDecodeFirstIIframe", void 0);
+        _define_property(_assert_this_initialized(_this), "isInitInfo", void 0);
+        _define_property(_assert_this_initialized(_this), "decoder", void 0);
         _this.hasInit = false;
         _this.isDecodeFirstIIframe = false;
         _this.isInitInfo = false;
@@ -122,17 +122,17 @@ let WebcodecsDecoder = /* #__PURE__ */ (function (Emitter) {
     }
     _create_class(WebcodecsDecoder, [
         {
-            key: 'init',
+            key: "init",
             value: function init(playerService) {
                 this.player = playerService;
             // this.initDecoder();
-            },
+            }
         },
         {
-            key: 'destroy',
+            key: "destroy",
             value: function destroy() {
                 if (this.decoder) {
-                    if (this.decoder.state !== 'closed') {
+                    if (this.decoder.state !== "closed") {
                         this.decoder.close();
                     }
                     this.decoder = null;
@@ -141,13 +141,13 @@ let WebcodecsDecoder = /* #__PURE__ */ (function (Emitter) {
                 this.isInitInfo = false;
                 this.isDecodeFirstIIframe = false;
                 this.off();
-            },
+            }
         },
         {
             // 用于初始化解码器
-            key: 'initDecoder',
+            key: "initDecoder",
             value: function initDecoder() {
-                let _this = this;
+                var _this = this;
                 this.decoder = new VideoDecoder({
                     output: function output(videoFrame) {
                         _this.handleDecode(videoFrame);
@@ -155,13 +155,13 @@ let WebcodecsDecoder = /* #__PURE__ */ (function (Emitter) {
                     },
                     error: function error(error) {
                         _this.handleError(error);
-                    },
+                    }
                 });
-            },
+            }
         },
         {
             // 处理解码后的视频帧
-            key: 'handleDecode',
+            key: "handleDecode",
             value: function handleDecode(videoFrame) {
                 if (!this.isInitInfo) {
                     // this.player.video.updateVideoInfo({
@@ -172,9 +172,9 @@ let WebcodecsDecoder = /* #__PURE__ */ (function (Emitter) {
                     this.isInitInfo = true;
                 }
                 this.player.debugLogService.info({
-                    title: 'videoFrame',
+                    title: "videoFrame",
                     info: videoFrame,
-                    logkey: 'videoFrame',
+                    logkey: "videoFrame"
                 });
                 this.player.canvasVideoService.render(videoFrame);
             // if (!this.player._times.videoStart) {
@@ -186,28 +186,28 @@ let WebcodecsDecoder = /* #__PURE__ */ (function (Emitter) {
             //     videoFrame,
             // });
             // this.player.updateStats({ fps: true, ts: 0, buf: this.player.demux.delay });
-            },
+            }
         },
         {
             // 处理解码过程中的错误
-            key: 'handleError',
+            key: "handleError",
             value: function handleError(error) {
                 console.error(error);
             // this.player.debug.error('Webcodecs', 'VideoDecoder handleError', error);
-            },
+            }
         },
         {
             // 对视频数据进行解码
-            key: 'decodeVideo',
+            key: "decodeVideo",
             value: function decodeVideo(payload, ts, isIframe) {
                 // eslint-disable-next-line no-negated-condition
                 if (!this.hasInit) {
                     if (isIframe && payload[1] === 0) {
                         // 获取视频编码方式
-                        let videoCodec = payload[0] & 0x0F;
+                        var videoCodec = payload[0] & 0x0F;
                         // 如果解码出来的是
                         if (videoCodec === VIDEO_ENC_CODE.h265) {
-                            console.log('不支持 H265');
+                            console.log("不支持 H265");
                             return;
                         }
                         if (!this.player._times.decodeStart) {
@@ -221,7 +221,7 @@ let WebcodecsDecoder = /* #__PURE__ */ (function (Emitter) {
               codec：编码格式，例如"vp8"、"vp9"、"avc"（H.264）等。
             codedWidth 和 codedHeight：视频的宽度和高度。
              other fields：可能还包含其他一些信息，例如比特率、帧率等，具体的内容可能会根据编码格式和实际的需求有所不同。
-              */ let config = formatVideoDecoderConfigure(payload.slice(5));
+              */ var config = formatVideoDecoderConfigure(payload.slice(5));
                         this.decoder.configure(config);
                         // hasInit 视频解码器是否已经初始化
                         this.hasInit = true;
@@ -237,10 +237,10 @@ let WebcodecsDecoder = /* #__PURE__ */ (function (Emitter) {
             只有当 isDecodeFirstIIframe 为 true（表示已经解码过至少一个关键帧）时，才会尝试去解码非关键帧。
              */ if (this.isDecodeFirstIIframe) {
                         // 创建一个新的已编码视频块，包含了视频数据、时间戳和帧类型
-                        let chunk = new EncodedVideoChunk({
+                        var chunk = new EncodedVideoChunk({
                             data: payload.slice(5),
                             timestamp: ts,
-                            type: isIframe ? ENCODED_VIDEO_TYPE.key : ENCODED_VIDEO_TYPE.delta,
+                            type: isIframe ? ENCODED_VIDEO_TYPE.key : ENCODED_VIDEO_TYPE.delta
                         });
                         this.player.emit(EVENTS.timeUpdate, ts);
                         try {
@@ -257,20 +257,18 @@ let WebcodecsDecoder = /* #__PURE__ */ (function (Emitter) {
                         }
                     } else {}
                 }
-            },
+            }
         },
         {
-            key: 'isDecodeStateClosed',
+            key: "isDecodeStateClosed",
             value: function isDecodeStateClosed() {
-                return this.decoder.state === 'closed';
-            },
-        },
+                return this.decoder.state === "closed";
+            }
+        }
     ]);
     return WebcodecsDecoder;
-}(Emitter));
+}(Emitter);
 WebcodecsDecoder = _ts_decorate([
-    injectable(),
+    injectable()
 ], WebcodecsDecoder);
 export default WebcodecsDecoder;
-
- // # sourceMappingURL=webcodecs.js.map

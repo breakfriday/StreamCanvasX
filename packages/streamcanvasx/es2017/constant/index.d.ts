@@ -256,3 +256,8 @@ export declare const FETCH_ERROR: {
     abortError2: string;
     abort: string;
 };
+export declare enum UseMode {
+    UseWebGL = 0,
+    UseCanvas = 1,
+    UseWebGPU = 2
+}
