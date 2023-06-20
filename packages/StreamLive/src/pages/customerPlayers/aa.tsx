@@ -19,9 +19,9 @@ const VideoComponents = () => {
       name="basic"
       autoComplete="off"
       onFinish={(value: {url: string}) => {
-           let player = createPlayerServiceInstance({});
+           let player = createPlayerServiceInstance({ url: value.url });
 
-          player.createFlvPlayer({ url: value.url });
+          player.createFlvPlayer({});
 
            let canvas_el = player.canvasVideoService.getCanvas2dEl();
 

@@ -85,16 +85,17 @@ class PlayerService extends Emitter {
         };
     }
 
-    init(config?: Partial<{model?: UseMode}>) {
-        let { model = UseMode.UseCanvas } = config;
-        this.httpFlvStreamService.init(this);
+    init(config?: IplayerConfig) {
+        let { model = UseMode.UseCanvas, url = '' } = config;
+        this.httpFlvStreamService.init(this, url);
         this.flvVDemuxService.init(this);
         this.webcodecsDecoderService.init(this);
         this.fLVDemuxStream.init(this);
         this.canvasVideoService.init({ parm: model, contentEl: null });
     }
-    createFlvPlayer(parms: { type?: string; isLive?: boolean; url: string}) {
-        let { type = 'flv', isLive = true, url } = parms;
+    createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
+        let { type = 'flv', isLive = true } = parms;
+        let { url } = this.httpFlvStreamService;
         let videoEl = document.createElement('video');
         // document.getElementById('cont').append(videoEl);
         // videoEl.controls = true;
@@ -214,6 +215,11 @@ class PlayerService extends Emitter {
             this._stats.abps = 0;
             this._stats.vbps = 0;
             this._startBpsTime = _nowTime;
+        }
+        retry() {
+           if (this.mpegtsPlayer) {
+             this.mpegtsPlayer.destroy();
+           }
         }
 }
 
