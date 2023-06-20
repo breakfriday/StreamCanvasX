@@ -221,6 +221,12 @@ class PlayerService extends Emitter {
              this.mpegtsPlayer.destroy();
            }
         }
+
+        reload() {
+            this.mpegtsPlayer.unload();
+            this.mpegtsPlayer.load();
+            this.mpegtsPlayer.play();
+        }
 }
 
 export default PlayerService;
