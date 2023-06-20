@@ -143,6 +143,7 @@ class PlayerService extends Emitter {
             if (speed <= 10) {
                 this.reload();
             }
+            this.emit('otherInfo', data);
         });
 
 
