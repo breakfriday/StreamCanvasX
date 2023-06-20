@@ -8,13 +8,13 @@ const VideoComponents = (props) => {
   useEffect(() => {
     let { url } = props;
 
-    let player = createPlayerServiceInstance({ url });
+    let player = createPlayerServiceInstance({ url, contentEl: containerRef.current! });
 
     player.createFlvPlayer({});
 
-    let canvas_el = player.canvasVideoService.getCanvas2dEl();
+    // let canvas_el = player.canvasVideoService.getCanvas2dEl();
 
-    containerRef.current!.append(canvas_el);
+    // containerRef.current!.append(canvas_el);
 
 
     // loadMediaEvent();
@@ -25,7 +25,7 @@ const VideoComponents = (props) => {
 
   return (
     <div >
-      <div ref={containerRef} />
+      <div style={{ width: '200px', height: '200px' }} ref={containerRef} />
     </div>);
 };
 
