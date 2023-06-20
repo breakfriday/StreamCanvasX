@@ -303,6 +303,7 @@ class CanvasVideoService {
       let height = 200;
       let width = 400;
 
+
       if (this.contentEl) {
         height = this.contentEl.clientHeight;
         width = this.contentEl.clientWidth;

@@ -86,12 +86,12 @@ class PlayerService extends Emitter {
     }
 
     init(config?: IplayerConfig) {
-        let { model = UseMode.UseCanvas, url = '' } = config;
+        let { model = UseMode.UseCanvas, url = '', contentEl = null } = config;
         this.httpFlvStreamService.init(this, url);
         this.flvVDemuxService.init(this);
         this.webcodecsDecoderService.init(this);
         this.fLVDemuxStream.init(this);
-        this.canvasVideoService.init({ parm: model, contentEl: null });
+        this.canvasVideoService.init({ parm: model, contentEl });
     }
     createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
         let { type = 'flv', isLive = true } = parms;
