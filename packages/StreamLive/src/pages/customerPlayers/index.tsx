@@ -56,6 +56,8 @@ const HlsDemo = () => {
 
       <div>
         //https://breakfriday.github.io/StreamCanvasX/
+
+        // http://192.168.3.15/live/haikang.live.flv
       </div>
 
     </div>
