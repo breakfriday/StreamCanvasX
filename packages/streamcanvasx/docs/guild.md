@@ -71,18 +71,17 @@ import {  createPlayerServiceInstance } from 'streamcanvasx/es2017/serviceFactor
 ```tsx  preview
 import * as React from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
-import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
+import {createPlayerServiceInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 const {useRef,useEffect}=React
 
 
 const SimpleDemo = () => {
   const veido_flv_ref = React.useRef<HTMLVideoElement | null>(null);
-  const canvas_ref = React.useRef<HTMLCanvasElement | null>(null);
+ 
    let streamPlayerRef = useRef<mainPlayerService | null>(null);
 
   useEffect(() => {
-    const streamPlayer = createMainPlayerInstance({ root_el: veido_flv_ref?.current!, canvas_el: canvas_ref?.current! });
-    streamPlayerRef.current = streamPlayer;
+  
 
   }, []);
 
@@ -102,15 +101,24 @@ const SimpleDemo = () => {
   
           <div
             ref={veido_flv_ref}
-            style={{ width: '300px', height: '300px' }}
+            style={{ height: '300px' }}
           />
           <Form
             name="basic"
             autoComplete="off"
-            onFinish={(value: string) => {
+            onFinish={(value: {url:string}) => {
                 let player = createPlayerServiceInstance();
 
-                 player.createFlvPlayer({ url: value.url });
+                let url=value.url;
+
+                player.createFlvPlayer({ url: value.url });
+
+                let canvas_el = player.canvasVideoService.getCanvas2dEl();
+
+
+                 veido_flv_ref.current.append(canvas_el);
+
+                
 
              
 

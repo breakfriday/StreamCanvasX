@@ -139,7 +139,7 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   useWebworker?: boolean;
   hasVideo?: boolean;
   hasAudio?: boolean;
-  rootEl?: HTMLElement;
+  contentEl?: HTMLElement;
 
 
 }
