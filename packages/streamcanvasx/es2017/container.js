@@ -7,3 +7,5 @@ const containerPlayer = new Container();
 // container.bind<Logger>(Logger).toSelf();
 // container.bind<orignClass>(orignClass).toSelf();
 export { container1, Container, containerPlayer };
+
+ //# sourceMappingURL=container.js.map

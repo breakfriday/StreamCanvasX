@@ -267,3 +267,5 @@ export var UseMode;
     UseMode[UseMode["UseCanvas"] = 1] = "UseCanvas";
     UseMode[UseMode["UseWebGPU"] = 2] = "UseWebGPU";
 })(UseMode || (UseMode = {}));
+
+ //# sourceMappingURL=index.js.map

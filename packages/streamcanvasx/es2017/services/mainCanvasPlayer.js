@@ -198,3 +198,5 @@ mainPlayerService = _ts_decorate([
     injectable()
 ], mainPlayerService);
 export default mainPlayerService;
+
+ //# sourceMappingURL=mainCanvasPlayer.js.map
