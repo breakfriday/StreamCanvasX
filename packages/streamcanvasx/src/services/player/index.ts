@@ -140,9 +140,7 @@ class PlayerService extends Emitter {
 
           this.mpegtsPlayer.on(mpegts.Events.STATISTICS_INFO, (data) => {
             let { speed } = data;
-            if (speed <= 10) {
-                this.reload();
-            }
+
             this.emit('otherInfo', data);
         });
 
