@@ -6,6 +6,7 @@ class HttpFlvStreamLoader {
     private _requestAbort: boolean;
     private _abortController: AbortController;
     private playerService: PlayerService;
+    public url: string;
     constructor(
         // @inject(new LazyServiceIdentifer(() => TYPES.IPlayerService)) playerService: PlayerService,
 
@@ -33,8 +34,9 @@ class HttpFlvStreamLoader {
         return this._abortController;
     }
 
-    init(playerService: PlayerService) {
+    init(playerService: PlayerService, url: string) {
         this.playerService = playerService;
+        this.url = url;
     }
 
     async fetchStream(url: string): Promise<void> {
