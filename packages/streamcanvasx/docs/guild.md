@@ -158,6 +158,8 @@ export default SimpleDemo;
 import * as React from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
 import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
+import { StyleProvider } from '@ant-design/cssinjs';
+
 const {useRef,useEffect}=React
 
 
