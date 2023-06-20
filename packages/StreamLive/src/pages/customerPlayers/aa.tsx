@@ -5,10 +5,12 @@ import { createPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/
 
 
 const VideoComponents = (props) => {
+  const streamPlayer = useRef<any>(null);
   useEffect(() => {
     let { url } = props;
 
     let player = createPlayerServiceInstance({ url, contentEl: containerRef.current! });
+    streamPlayer.current = player;
 
     player.createFlvPlayer({});
 
@@ -26,6 +28,11 @@ const VideoComponents = (props) => {
   return (
     <div >
       <div style={{ width: '200px', height: '200px' }} ref={containerRef} />
+      <div onClick={() => {
+        let play = streamPlayer.current;
+        play.reload();
+      }}
+      >retry</div>
     </div>);
 };
 
