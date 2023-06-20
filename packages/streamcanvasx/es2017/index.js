@@ -3,5 +3,3 @@ export function foo(options) {
     alert(334443);
     return true;
 }
-
- //# sourceMappingURL=index.js.map

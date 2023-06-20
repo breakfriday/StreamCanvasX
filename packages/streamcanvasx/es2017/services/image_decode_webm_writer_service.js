@@ -123,5 +123,3 @@ class ImageDecoderService {
     }
 }
 export { ImageDecoderService };
-
- //# sourceMappingURL=image_decode_webm_writer_service.js.map

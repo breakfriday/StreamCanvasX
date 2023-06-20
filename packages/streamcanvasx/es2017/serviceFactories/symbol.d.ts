@@ -6,5 +6,9 @@ declare const TYPES: {
     IPlayerService: symbol;
     IHttpFlvStreamLoader: symbol;
     IFLVDemuxService: symbol;
+    IWebcodecsDecoderService: symbol;
+    ICanvasVideoService: symbol;
+    IDebugLogService: symbol;
+    IFLVDemuxStream: symbol;
 };
 export { TYPES };

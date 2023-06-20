@@ -19,8 +19,9 @@ let HttpFlvStreamLoader = class HttpFlvStreamLoader {
     get abortController() {
         return this._abortController;
     }
-    init(playerService) {
+    init(playerService, url) {
         this.playerService = playerService;
+        this.url = url;
     }
     async fetchStream(url) {
         let sourceUrl = url;
@@ -78,6 +79,7 @@ let HttpFlvStreamLoader = class HttpFlvStreamLoader {
         _define_property(this, "_requestAbort", void 0);
         _define_property(this, "_abortController", void 0);
         _define_property(this, "playerService", void 0);
+        _define_property(this, "url", void 0);
         this.requestAbort = false;
     // this.playerService = playerService;
     }
@@ -86,5 +88,3 @@ HttpFlvStreamLoader = _ts_decorate([
     injectable()
 ], HttpFlvStreamLoader);
 export default HttpFlvStreamLoader;
-
- //# sourceMappingURL=fetch_stream_loader.js.map
