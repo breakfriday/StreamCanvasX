@@ -12,7 +12,8 @@
     "start:streamLive": "pnpm -r --filter=./packages/streamLive run start",
     "docs:streamcanvasx": "pnpm -r --filter=./packages/streamcanvasx run start",
     "buildDocs:streamcanvasx": "pnpm -r --filter=./packages/streamcanvasx run build",
-    "build:streamcanvasx":"pnpm -r --filter=./packages/pkg1 run start"
+    "build:streamcanvasx":"pnpm -r --filter=./packages/pkg1 run start",
+    "publish:streamcanvasx":"pnpm -r publish --filter=./packages/streamcanvasx --no-git-checks"
   },
   "repository": "git@github.com:breakfriday/canvasTable.git",
   "author": "breakhappy <break_happy@163.com>",
