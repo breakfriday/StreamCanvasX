@@ -37,11 +37,11 @@ const VideoComponents = (props) => {
     <div >
       <div style={{ width: '200px', height: '200px' }} ref={containerRef} />
       <div>{JSON.stringify(info)}</div>
-      <div onClick={() => {
+      <Button onClick={() => {
         let play = streamPlayer.current;
         play.reload();
       }}
-      >retry</div>
+      >retry</Button>
     </div>);
 };
 
