@@ -48,6 +48,8 @@ class CanvasVideoService {
     useMode: UseMode;
     sampler: GPUSampler;
     contentEl: HTMLElement;
+    clear: boolean;
+    loading: boolean;
     constructor() {
         this.canvas_el = document.createElement('canvas');
         // this._initContext2D();
@@ -392,6 +394,76 @@ class CanvasVideoService {
         });
       };
       cb();
+    }
+
+    clearCanvas() {
+      let canvasEl = this.canvas_el;
+      this.clear = true;
+      // 清除画布
+      this.canvas_context.clearRect(0, 0, canvasEl.width, canvasEl.height);
+    }
+    drawLoading() {
+      let ctx = this.canvas_context;
+      let { canvas_el } = this;
+      let canvas = canvas_el;
+
+      // 定义圆的半径和线宽
+      const radius = 50;
+      const lineWidth = 10;
+
+      // 初始化弧形进度条的起始角度和结束角度
+      let startAngle = 0;
+      let endAngle = 0;
+      let $this = this;
+
+      let drawAnimation = () => {
+        // 定义圆心的坐标
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        if (this.loading === false) {
+          return false;
+        }
+        if ($this.clear === true) {
+          // this.destory()
+          $this.clearCanvas();
+          return false;
+        }
+        // 清除画布内容，准备绘制新的帧
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 绘制背景圆圈
+        ctx.beginPath(); // 开始新路径
+        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI); // 画一个完整的圆
+        ctx.lineWidth = lineWidth; // 设置线宽
+        ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)'; // 设置线条颜色
+        ctx.stroke(); // 描边路径
+
+        // 绘制loading进度弧形
+        ctx.beginPath(); // 开始新路径
+        ctx.arc(centerX, centerY, radius, startAngle * Math.PI, endAngle * Math.PI); // 画一个弧形
+        ctx.lineWidth = lineWidth; // 设置线宽
+        ctx.strokeStyle = 'rgba(50, 150, 255, 1)'; // 设置线条颜色
+        ctx.stroke(); // 描边路径
+
+        // 更新弧形进度条的起始角度和结束角度，用于下一帧的绘制
+        startAngle += 0.01;
+        endAngle += 0.02;
+
+        // 当角度达到2π时，将其重置为0
+        if (startAngle >= 2) {
+          startAngle = 0;
+        }
+
+        if (endAngle >= 2) {
+          endAngle = 0;
+        }
+
+        // 使用requestAnimationFrame()函数递归调用drawLoading()，实现动画效果
+        requestAnimationFrame(drawAnimation);
+      };
+
+
+      drawAnimation();
     }
 }
 
