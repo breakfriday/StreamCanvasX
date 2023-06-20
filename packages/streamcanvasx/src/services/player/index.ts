@@ -15,6 +15,8 @@ import mpegts from 'mpegts.js';
 import Mpegts from 'mpegts.js';
 import { IplayerConfig } from '../../types/services';
 import { runInThisContext } from 'vm';
+import debounce from 'lodash/debounce';
+import throttle from 'lodash/throttle';
 
 function now() {
     return new Date().getTime();
@@ -41,6 +43,7 @@ class PlayerService extends Emitter {
     private _startBpsTime?: number;
     _opt: any;
     _times: any;
+    reload: any;
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -93,6 +96,7 @@ class PlayerService extends Emitter {
         this.webcodecsDecoderService.init(this);
         this.fLVDemuxStream.init(this);
         this.canvasVideoService.init({ parm: model, contentEl });
+        this.debounceReload();
     }
     createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
         let { type = 'flv', isLive = true } = parms;
@@ -131,9 +135,7 @@ class PlayerService extends Emitter {
 
            this.mpegtsPlayer.on(mpegts.Events.ERROR, (error, detailError) => {
             if (error === mpegts.ErrorTypes.NETWORK_ERROR) {
-                this.mpegtsPlayer.unload();
-                this.mpegtsPlayer.load();
-                this.mpegtsPlayer.play();
+               this.reload();
             }
           });
 
@@ -230,11 +232,27 @@ class PlayerService extends Emitter {
            }
         }
 
-        reload() {
-            this.mpegtsPlayer.unload();
-            this.mpegtsPlayer.load();
-            this.mpegtsPlayer.play();
+        debounceReload() {
+            let $this = this;
+
+           this.reload = throttle(() => {
+                $this.mpegtsPlayer.unload();
+                $this.mpegtsPlayer.load();
+                $this.mpegtsPlayer.play();
+            }, 7 * 1000);
         }
+
+        // reload() {
+        //     let $this = this;
+        //     debugger;
+        //     let debounceReload = fpdebounce(() => {
+        //         $this.mpegtsPlayer.unload();
+        //         $this.mpegtsPlayer.load();
+        //         $this.mpegtsPlayer.play();
+        //     })(10 * 1000);
+        //     debugger;
+        //     return debounceReload;
+        // }
 }
 
 export default PlayerService;
