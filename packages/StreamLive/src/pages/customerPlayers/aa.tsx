@@ -21,7 +21,7 @@ const VideoComponents = () => {
       onFinish={(value: {url: string}) => {
            let player = createPlayerServiceInstance({ url: value.url });
 
-          player.createFlvPlayer({});
+             player.createFlvPlayer({});
 
            let canvas_el = player.canvasVideoService.getCanvas2dEl();
 
