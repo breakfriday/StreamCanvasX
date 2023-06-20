@@ -14,6 +14,7 @@ import { UseMode } from '../../constant';
 import mpegts from 'mpegts.js';
 import Mpegts from 'mpegts.js';
 import { IplayerConfig } from '../../types/services';
+import { runInThisContext } from 'vm';
 
 function now() {
     return new Date().getTime();
@@ -134,7 +135,15 @@ class PlayerService extends Emitter {
                 this.mpegtsPlayer.load();
                 this.mpegtsPlayer.play();
             }
-      });
+          });
+
+
+          this.mpegtsPlayer.on(mpegts.Events.STATISTICS_INFO, (data) => {
+            let { speed } = data;
+            if (speed <= 10) {
+                this.reload();
+            }
+        });
 
 
           this.mpegtsPlayer.on(mpegts.Events.METADATA_ARRIVED, (parm) => {
