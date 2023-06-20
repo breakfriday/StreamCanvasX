@@ -40,3 +40,5 @@ export class WaveformVisualizer {
         _define_property(this, "audioSourceNode", void 0);
     }
 }
+
+ //# sourceMappingURL=waveform_visualizer_render.js.map

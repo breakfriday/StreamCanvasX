@@ -72,79 +72,102 @@ import {  createPlayerServiceInstance } from 'streamcanvasx/es2017/serviceFactor
 import * as React from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
 import {createPlayerServiceInstance } from 'streamcanvasx/es2017/serviceFactories/index';
-const {useRef,useEffect}=React
+const {useRef,useEffect,useState}=React
 
 
-const SimpleDemo = () => {
-  const veido_flv_ref = React.useRef<HTMLVideoElement | null>(null);
- 
-   let streamPlayerRef = useRef<mainPlayerService | null>(null);
+
+const VideoComponents = (props) => {
+  const streamPlayer = useRef<any>(null);
+  const [info, setInfo] = useState<any>();
 
   useEffect(() => {
-  
+    let { url } = props;
 
+    let player = createPlayerServiceInstance({ url, contentEl: containerRef.current! });
+    streamPlayer.current = player;
+
+    player.createFlvPlayer({});
+
+    player.on('otherInfo', (data) => {
+      let { speed } = data;
+      setInfo({ speed });
+    });
+
+    // let canvas_el = player.canvasVideoService.getCanvas2dEl();
+
+    // containerRef.current!.append(canvas_el);
+
+
+    // loadMediaEvent();
   }, []);
 
-    const flv_play = (params) => {
-    let { url} = params;
-    let streamPlayer =  streamPlayerRef.current
-        streamPlayer?.createFlvPlayer({
-          type: 'flv', // could also be mpegts, m2ts, flv
-          isLive: true,
-          url: url,
-      });
-    };
+
+  const containerRef = useRef(null);
+
 
   return (
-    <>
+    <div >
+      <div style={{ width: '200px', height: '200px' }} ref={containerRef} />
+      <div>{JSON.stringify(info)}</div>
+      <Button onClick={() => {
+        let play = streamPlayer.current;
+        play.reload();
+      }}
+      >retry</Button>
+    </div>);
+}
+
+const SimpleDemo=()=>{
+
+  useEffect(() => {}, []);
+  const [data, setData] = useState<Array<{url: string}>>([]);
+  return (
     <div>
-  
-          <div
-            ref={veido_flv_ref}
-            style={{ height: '300px' }}
-          />
-          <Form
-            name="basic"
-            autoComplete="off"
-            onFinish={(value: {url:string}) => {
-                let player = createPlayerServiceInstance();
 
-                let url=value.url;
-
-                player.createFlvPlayer({ url: value.url });
-
-                let canvas_el = player.canvasVideoService.getCanvas2dEl();
-
-
-                 veido_flv_ref.current.append(canvas_el);
-
-                
-
-             
-
-           
-                }}
-           >
-              <Form.Item
-                label="url"
-                name="url"
-              >
-                <Input />
-              </Form.Item>
+      <Form
+        name="basic"
+        autoComplete="off"
+        onFinish={(value: {url: string}) => {
+            let item = { url: value.url };
+            let temp = Object.assign([], data);
+            temp.push(item);
+            setData(temp);
+          }}
+      >
+        <Form.Item
+          label="url"
+          name="url"
+        >
+          <Input />
+        </Form.Item>
 
 
-              <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                >
-                  fetch_play
-                </Button>
-              </Form.Item>
-    </Form>
-         
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button
+            type="primary"
+            htmlType="submit"
+          >
+            fetch_play
+          </Button>
+        </Form.Item>
+      </Form>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+
+        {
+          data.map((item, inx) => {
+            let { url } = item;
+
+            return (<VideoComponents url={url} key={inx} />);
+          })
+        }
+      </div>
+
+
+      <div>
+        //https://breakfriday.github.io/StreamCanvasX/
+      </div>
+
     </div>
-    </>
   )
 }
 

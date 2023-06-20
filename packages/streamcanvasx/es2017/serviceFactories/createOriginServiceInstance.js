@@ -25,3 +25,5 @@ function createOriginServiceInstance(name) {
 // const originClassInstance = originClassFactory('Hello, InversifyJS!');
 // LogServiceB: Hello, InversifyJS!
 export default createOriginServiceInstance;
+
+ //# sourceMappingURL=createOriginServiceInstance.js.map

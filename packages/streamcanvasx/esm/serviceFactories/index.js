@@ -3,3 +3,5 @@ import { createAudioProcessingServiceInstance } from "./createAudioProcessInstan
 import { createMainPlayerInstance } from "./createMainPlayerInstance";
 import { createPlayerServiceInstance } from "./createPlayerInstance";
 export { createOriginServiceInstance, createAudioProcessingServiceInstance, createMainPlayerInstance, createPlayerServiceInstance };
+
+ //# sourceMappingURL=index.js.map

@@ -88,3 +88,5 @@ HttpFlvStreamLoader = _ts_decorate([
     injectable()
 ], HttpFlvStreamLoader);
 export default HttpFlvStreamLoader;
+
+ //# sourceMappingURL=fetch_stream_loader.js.map

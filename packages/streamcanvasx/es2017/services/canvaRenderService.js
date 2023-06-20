@@ -6,3 +6,5 @@ let canvasRenderService = class canvasRenderService {
 canvasRenderService = _ts_decorate([
     injectable()
 ], canvasRenderService);
+
+ //# sourceMappingURL=canvaRenderService.js.map
