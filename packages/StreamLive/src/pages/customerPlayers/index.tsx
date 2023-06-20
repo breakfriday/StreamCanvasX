@@ -3,6 +3,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
 import fpmap from 'lodash/fp/map';
 import VideoComponents from './aa';
+import { Data } from 'ice';
 
 const boxs = [1, 2, 3, 4, 5, 6, 7];
 
@@ -44,16 +45,12 @@ const HlsDemo = () => {
       <div style={{ display: 'flex', flexDirection: 'row' }}>
 
         {
-        (() => {
-          if (data.length > 0) {
-            return fpmap((item) => {
-              let { url } = item;
-              return (<VideoComponents url={url} />);
-            })(data);
-          }
-        })()
+          data.map((item, inx) => {
+            let { url } = item;
 
-      }
+            return (<VideoComponents url={url} key={inx} />);
+          })
+        }
       </div>
 
 
