@@ -67,7 +67,7 @@ class CanvasVideoService {
       this.resizeObserver = new ResizeObserver(() => {
         setTimeout(() => {
            this.setCanvasSize();
-        }, 200);
+        }, 20);
       });
 
       this.resizeObserver.observe(this.contentEl);
@@ -492,8 +492,10 @@ class CanvasVideoService {
     }
 
     destroy() {
-      this.canvas_el.remove();
-      this.contentEl = null;
+      if (this.canvas_el && this.contentEl) {
+        this.canvas_el.remove();
+        this.contentEl = null;
+      }
     }
 }
 
