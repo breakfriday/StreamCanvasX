@@ -475,6 +475,11 @@ class CanvasVideoService {
 
       drawAnimation();
     }
+
+    destroy() {
+      this.canvas_el.remove();
+      this.contentEl = null;
+    }
 }
 
 

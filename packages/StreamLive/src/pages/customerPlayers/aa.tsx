@@ -2,6 +2,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
 import { createPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
+import { PlayCircleFilled } from '@ant-design/icons';
 
 
 const VideoComponents = (props) => {
@@ -42,6 +43,11 @@ const VideoComponents = (props) => {
         play.reload();
       }}
       >retry</Button>
+      <Button onClick={() => {
+        let play = streamPlayer.current;
+        play.destroy();
+      }}
+      >destroy</Button>
     </div>);
 };
 
