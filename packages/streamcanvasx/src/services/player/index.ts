@@ -98,8 +98,8 @@ class PlayerService extends Emitter {
         this.canvasVideoService.init({ parm: model, contentEl });
         this.debounceReload();
     }
-    createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
-        let { type = 'flv', isLive = true } = parms;
+    createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string;hasVideo?: boolean; hasAudio?: boolean}) {
+        let { type = 'flv', isLive = true, hasAudio = true, hasVideo = true } = parms;
         let { url } = this.httpFlvStreamService;
         let videoEl = document.createElement('video');
         // document.getElementById('cont').append(videoEl);
@@ -111,8 +111,8 @@ class PlayerService extends Emitter {
             type: type!, // could also be mpegts, m2ts, flv
             isLive: isLive,
             url: url,
-            hasAudio: true,
-            hasVideo: true,
+            hasAudio: hasAudio,
+            hasVideo: hasVideo,
 
           }, { enableStashBuffer: true,
                 enableWorker: true,

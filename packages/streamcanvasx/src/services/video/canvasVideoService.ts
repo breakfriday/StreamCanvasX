@@ -51,6 +51,7 @@ class CanvasVideoService {
     contentEl: HTMLElement;
     clear: boolean;
     loading: boolean;
+    frameInfo: VideoFrame;
     constructor() {
         this.canvas_el = document.createElement('canvas');
         // this._initContext2D();
@@ -378,8 +379,16 @@ class CanvasVideoService {
         // let video_width = videoFrame.codedHeight;
         // let video_height = videoFrame.codedHeight;
 
+        let width = 400;
+        let height = 200;
 
-        this.canvas_context.drawImage(videoFrame, 0, 0, 400, 200);
+        if (this.contentEl) {
+          width = this.contentEl.clientWidth;
+          height = this.contentEl.clientHeight;
+        }
+
+
+        this.canvas_context.drawImage(videoFrame, 0, 0, width, height);
     }
 
     getCanvas2dEl() {
