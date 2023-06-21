@@ -272,5 +272,3 @@ WebcodecsDecoder = _ts_decorate([
     injectable()
 ], WebcodecsDecoder);
 export default WebcodecsDecoder;
-
- //# sourceMappingURL=webcodecs.js.map
