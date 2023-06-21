@@ -18,5 +18,3 @@ var canvasRenderService = /*#__PURE__*/ function() {
 canvasRenderService = _ts_decorate([
     injectable()
 ], canvasRenderService);
-
- //# sourceMappingURL=canvaRenderService.js.map

@@ -12,5 +12,3 @@ const TYPES = {
     IFLVDemuxStream: Symbol.for('IFLVDemuxStream')
 };
 export { TYPES };
-
- //# sourceMappingURL=symbol.js.map

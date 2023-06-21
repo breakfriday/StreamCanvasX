@@ -16,5 +16,3 @@ OriginSerivce = _ts_decorate([
     injectable(),
     _ts_param(0, inject(TYPES.IServiceA))
 ], OriginSerivce);
-
- //# sourceMappingURL=orignClass.js.map

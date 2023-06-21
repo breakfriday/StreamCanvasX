@@ -20,5 +20,3 @@ export var ServiceA = /*#__PURE__*/ function() {
 ServiceA = _ts_decorate([
     injectable()
 ], ServiceA);
-
- //# sourceMappingURL=ServiceA.js.map

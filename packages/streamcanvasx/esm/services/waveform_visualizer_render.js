@@ -51,5 +51,3 @@ export var WaveformVisualizer = /*#__PURE__*/ function() {
     ]);
     return WaveformVisualizer;
 }();
-
- //# sourceMappingURL=waveform_visualizer_render.js.map
