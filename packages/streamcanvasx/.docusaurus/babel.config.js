@@ -1,7 +1,7 @@
 
 module.exports = {
   presets: [
-    require.resolve('/home/break_happy/project/stream_20/node_modules/.pnpm/@docusaurus+core@2.4.1_3lwsldy73qonkf7lzjkvnayuta/node_modules/@docusaurus/core/lib/babel/preset.js'),
+    require.resolve('/home/break_happy/project/stream_21/node_modules/.pnpm/@docusaurus+core@2.4.1_3lwsldy73qonkf7lzjkvnayuta/node_modules/@docusaurus/core/lib/babel/preset.js'),
     [
       require.resolve('@babel/preset-react'),
       {
