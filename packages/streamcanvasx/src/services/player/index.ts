@@ -161,10 +161,13 @@ class PlayerService extends Emitter {
       }
 
     destroy() {
+        if (this.canvasVideoService) {
+            this.canvasVideoService.destroy();
+        }
+
         if (this.mpegtsPlayer) {
             this.mpegtsPlayer.destroy();
         }
-        this.canvasVideoService.destroy();
     }
     log() {
         alert(22);
