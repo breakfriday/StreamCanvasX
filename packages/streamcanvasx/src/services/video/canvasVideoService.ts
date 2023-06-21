@@ -52,12 +52,25 @@ class CanvasVideoService {
     clear: boolean;
     loading: boolean;
     frameInfo: VideoFrame;
+    resizeObserver: ResizeObserver;
     constructor() {
         this.canvas_el = document.createElement('canvas');
+
+        this.canvas_el.style.position = 'absolute';
         // this._initContext2D();
 
         // this.init();
         // this.setCanvasSize();
+    }
+
+    event() {
+      this.resizeObserver = new ResizeObserver(() => {
+        setTimeout(() => {
+           this.setCanvasSize();
+        }, 200);
+      });
+
+      this.resizeObserver.observe(this.contentEl);
     }
 
     init(data: {model?: UseMode; contentEl?: HTMLElement | null}) {
@@ -72,6 +85,8 @@ class CanvasVideoService {
             this.contentEl = contentEl;
             this.setCanvasSize();
             this.contentEl.append(this.canvas_el);
+
+            this.event();
           }
 
         //  this.setUseMode(UseMode.UseWebGPU);
