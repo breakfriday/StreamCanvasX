@@ -114,7 +114,7 @@ class PlayerService extends Emitter {
             hasAudio: hasAudio,
             hasVideo: hasVideo,
 
-          }, { enableStashBuffer: true,
+          }, { enableStashBuffer: false,
                 enableWorker: true,
                 liveBufferLatencyChasing: true,
                 autoCleanupSourceBuffer: true,
@@ -144,7 +144,7 @@ class PlayerService extends Emitter {
             let { speed } = data;
 
             if (speed <= 10) {
-                this.reload();
+                // this.reload();
             }
 
             this.emit('otherInfo', data);

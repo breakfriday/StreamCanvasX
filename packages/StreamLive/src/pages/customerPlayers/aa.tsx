@@ -48,6 +48,11 @@ const VideoComponents = (props) => {
         play.destroy();
       }}
       >destroy</Button>
+      <Button onClick={() => {
+        let play = streamPlayer.current;
+        play.mpegtsPlayer.play();
+      }}
+      >DD</Button>
     </div>);
 };
 
