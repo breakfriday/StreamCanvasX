@@ -134,6 +134,7 @@ class PlayerService extends Emitter {
            });
 
            this.mpegtsPlayer.on(mpegts.Events.ERROR, (error, detailError) => {
+            this.emit('errorInfo', error);
             if (error === mpegts.ErrorTypes.NETWORK_ERROR) {
                this.reload();
             }
