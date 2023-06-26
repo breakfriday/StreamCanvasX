@@ -22,6 +22,12 @@ const VideoComponents = (props) => {
       setInfo({ speed });
     });
 
+    player.on('errorInfo', (data) => {
+      console.log('--------------------');
+      console.info(data);
+      console.log('--------------------');
+    });
+
     // let canvas_el = player.canvasVideoService.getCanvas2dEl();
 
     // containerRef.current!.append(canvas_el);
