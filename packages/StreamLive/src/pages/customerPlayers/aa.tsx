@@ -9,6 +9,8 @@ const VideoComponents = (props) => {
   const streamPlayer = useRef<any>(null);
   const [info, setInfo] = useState<any>();
 
+  const [info1, setInfo1] = useState<any>();
+
   useEffect(() => {
     let { url } = props;
 
@@ -28,6 +30,11 @@ const VideoComponents = (props) => {
       console.log('--------------------');
     });
 
+    player.on('performaceInfo', (data) => {
+      setInfo1(data);
+    });
+
+
     // let canvas_el = player.canvasVideoService.getCanvas2dEl();
 
     // containerRef.current!.append(canvas_el);
@@ -43,7 +50,8 @@ const VideoComponents = (props) => {
   return (
     <div >
       <div style={{ width: '200px', height: '200px' }} ref={containerRef} />
-      <div>{JSON.stringify(info)}</div>
+      <div>{JSON.stringify(info)} </div>
+      <div>{JSON.stringify(info1)}</div>
       <Button onClick={() => {
         let play = streamPlayer.current;
         play.reload();
