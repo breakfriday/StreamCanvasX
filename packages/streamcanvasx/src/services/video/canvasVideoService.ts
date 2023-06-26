@@ -73,10 +73,11 @@ class CanvasVideoService {
       this.resizeObserver.observe(this.contentEl);
     }
 
-    init(data: {model?: UseMode; contentEl?: HTMLElement | null}) {
+    init(playerService: PlayerService, data: {model?: UseMode; contentEl?: HTMLElement | null}) {
         // this.initGpu();
         //  this.setUseMode(UseMode.UseCanvas);
         //  this.setUseMode(UseMode.UseWebGPU);
+        this.playerService = playerService;
         let { model = UseMode.UseCanvas, contentEl } = data || {};
 
 
@@ -411,9 +412,43 @@ class CanvasVideoService {
     }
     createVideoFramCallBack(video: HTMLVideoElement) {
       let $this = this;
+
+
+      let frame_count = 0;
+      let start_time = 0.0;
+
+      function millisecondsToTime(ms: any) {
+        // 将时间戳转换为秒并取整
+        let seconds = Math.floor(ms / 1000);
+
+        // 计算小时数、分钟数和秒数
+        let hours = Math.floor(seconds / 3600);
+        let minutes = Math.floor((seconds - (hours * 3600)) / 60);
+         seconds = seconds - (hours * 3600) - (minutes * 60);
+
+        // 如果只有一位数字，前面补0
+        if (hours < 10) { hours = `0${hours}`; }
+        if (minutes < 10) { minutes = `0${minutes}`; }
+        if (seconds < 10) { seconds = `0${seconds}`; }
+
+        // 返回格式化的字符串
+        return `${hours}:${minutes}:${seconds}`;
+      }
       let cb = () => {
-        video.requestVideoFrameCallback(() => {
+        video.requestVideoFrameCallback((now) => {
             // $this.renderFrameByWebgpu(video);
+            if (start_time == 0.0) {
+              start_time = now;
+            }
+            let last_time = performance.now();
+
+            let elapsed = (now - start_time) / 1000.0;
+            let fps = (++frame_count / elapsed).toFixed(3);
+
+            let performanceInfo = { fps: fps, duringtime: millisecondsToTime(now - start_time) };
+            // console.info(performanceInfo);
+
+            $this.playerService.emit('performaceInfo', performanceInfo);
             $this.render(video);
           cb();
         });
