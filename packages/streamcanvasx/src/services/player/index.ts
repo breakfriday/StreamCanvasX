@@ -95,7 +95,8 @@ class PlayerService extends Emitter {
         this.flvVDemuxService.init(this);
         this.webcodecsDecoderService.init(this);
         this.fLVDemuxStream.init(this);
-        this.canvasVideoService.init(this, { parm: model, contentEl });
+        this.canvasVideoService.init(this, { model: model, contentEl });
+
         this.debounceReload();
     }
     createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string;hasVideo?: boolean; hasAudio?: boolean}) {
