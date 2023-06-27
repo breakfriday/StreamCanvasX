@@ -140,6 +140,7 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   hasVideo?: boolean;
   hasAudio?: boolean;
   contentEl?: HTMLElement;
+  showAudio?: boolean;
 
 
 }
