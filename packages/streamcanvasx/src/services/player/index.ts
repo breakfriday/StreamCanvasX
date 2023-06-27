@@ -249,7 +249,10 @@ class PlayerService extends Emitter {
            this.reload = throttle(() => {
                 $this.mpegtsPlayer.unload();
                 $this.mpegtsPlayer.load();
-                $this.mpegtsPlayer.play();
+                setTimeout(() => {
+                    $this.mpegtsPlayer.play();
+                }, 200);
+                // $this.mpegtsPlayer.play();
             }, 10 * 1000);
         }
 
