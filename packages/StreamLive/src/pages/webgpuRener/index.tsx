@@ -55,16 +55,21 @@ const FlvDemux = () => {
         <Button
           type="primary"
           onClick={() => {
-            const player = createPlayerServiceInstance({ model: 2 });
+            // const player = createPlayerServiceInstance({ model: 2 });
 
 
-            let el = player.canvasVideoService.getCanvas2dEl();
-            let container = document.getElementById('aa');
-            container?.appendChild(el);
-            let video: HTMLVideoElement = document.getElementById('vidd')! as HTMLVideoElement;
+            // let el = player.canvasVideoService.getCanvas2dEl();
+            // let container = document.getElementById('aa');
+            // container?.appendChild(el);
+            // let video: HTMLVideoElement = document.getElementById('vidd')! as HTMLVideoElement;
 
 
-            player.canvasVideoService.createVideoFramCallBack(video);
+            // player.canvasVideoService.createVideoFramCallBack(video);
+
+            let temp = Object.assign([], data);
+            temp.push({ type: 2 });
+
+            setData(temp);
 
 
           //  let pp = () => {
