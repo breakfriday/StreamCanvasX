@@ -1,11 +1,14 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Divider, Space, Button } from 'antd';
 // import { HttpFlvStreamLoader } from 'streamcanvasx/es2017/services/stream/fetch_stream_loader';
 
- import { createPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
+import { createPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
+
+import Player from './aa';
 
 
 const FlvDemux = () => {
+   let [data, setData] = useState<Array<{type: number}>>([]);
     return (
       <>
 
@@ -32,13 +35,17 @@ const FlvDemux = () => {
         <Button
           type="primary"
           onClick={() => {
-            const player = createPlayerServiceInstance({ model: 1 });
+            let temp = Object.assign([], data);
+            temp.push({ type: 1 });
 
-            let el = player.canvasVideoService.getCanvas2dEl();
-            let container = document.getElementById('aa');
-            container?.appendChild(el);
-            let video: HTMLVideoElement = document.getElementById('vidd')! as HTMLVideoElement;
-           player.canvasVideoService.createVideoFramCallBack(video);
+            setData(temp);
+          //   const player = createPlayerServiceInstance({ model: 1 });
+
+          //   let el = player.canvasVideoService.getCanvas2dEl();
+          //   let container = document.getElementById('aa');
+          //   container?.appendChild(el);
+          //   let video: HTMLVideoElement = document.getElementById('vidd')! as HTMLVideoElement;
+          //  player.canvasVideoService.createVideoFramCallBack(video);
       }}
         >
           play canvas2d video
@@ -77,6 +84,18 @@ const FlvDemux = () => {
           play webgpu video
 
         </Button>
+
+        <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+
+          {
+          (() => {
+            return data.map((value, inx) => {
+              let { type } = value;
+              return <Player key={inx} type={type} />;
+            });
+          })()
+        }
+        </div>
 
 
       </>
