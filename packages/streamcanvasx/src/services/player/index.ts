@@ -46,6 +46,7 @@ class PlayerService extends Emitter {
     _opt: any;
     _times: any;
     reload: any;
+    config: IplayerConfig;
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -94,13 +95,14 @@ class PlayerService extends Emitter {
     }
 
     init(config?: IplayerConfig) {
-        let { model = UseMode.UseCanvas, url = '', contentEl = null } = config;
+        let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false } = config;
         this.httpFlvStreamService.init(this, url);
         this.flvVDemuxService.init(this);
         this.webcodecsDecoderService.init(this);
         this.fLVDemuxStream.init(this);
         this.canvasVideoService.init(this, { model: model, contentEl });
 
+        this.config = config;
 
         this.debounceReload();
     }
@@ -111,6 +113,8 @@ class PlayerService extends Emitter {
         // document.getElementById('cont').append(videoEl);
         // videoEl.controls = true;
         // videoEl.width = 300;
+
+        let { showAudio } = this.config;
 
 
         this.audioProcessingService.init(this, { media_el: videoEl });
@@ -168,11 +172,9 @@ class PlayerService extends Emitter {
           });
         }
 
-        if (hasVideo === true) {
+        if (showAudio === false) {
             // this.canvasVideoService.render(videoEl);
             this.canvasVideoService.createVideoFramCallBack(videoEl);
-        } else {
-
         }
       }
 
