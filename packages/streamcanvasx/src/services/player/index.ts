@@ -96,13 +96,14 @@ class PlayerService extends Emitter {
 
     init(config?: IplayerConfig) {
         let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false } = config;
+        this.config = { model, url, contentEl, showAudio };
+
         this.httpFlvStreamService.init(this, url);
         this.flvVDemuxService.init(this);
         this.webcodecsDecoderService.init(this);
         this.fLVDemuxStream.init(this);
         this.canvasVideoService.init(this, { model: model, contentEl });
 
-        this.config = config;
 
         this.debounceReload();
     }
@@ -171,6 +172,7 @@ class PlayerService extends Emitter {
             this.mpegtsPlayer.play();
           });
         }
+
 
         if (showAudio === false) {
             // this.canvasVideoService.render(videoEl);
