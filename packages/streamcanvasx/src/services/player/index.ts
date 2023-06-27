@@ -158,8 +158,12 @@ class PlayerService extends Emitter {
           });
         }
 
-        // this.canvasVideoService.render(videoEl);
-        this.canvasVideoService.createVideoFramCallBack(videoEl);
+        if (hasVideo === true) {
+            // this.canvasVideoService.render(videoEl);
+            this.canvasVideoService.createVideoFramCallBack(videoEl);
+        } else {
+
+        }
       }
 
     destroy() {
