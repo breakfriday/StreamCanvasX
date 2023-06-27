@@ -16,7 +16,7 @@ import DebugLogService from '../services/DebugLogService';
 
 import FLVDemuxStream from '../services/demux/flvDemuxStream';
 
-import AudioProcessingService from '../services/audioProcessingService';
+import AudioProcessingService from '../services/audio/audioContextService';
 
 import { IplayerConfig } from '../types/services';
 

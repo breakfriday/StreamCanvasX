@@ -4,9 +4,9 @@ import PlayerService from '../player';
 @injectable()
 class AudioProcessingService {
     context: {
-        audioContext: AudioContext;
-        analyserNode: AnalyserNode;
-        gainNode: GainNode;
+        audioContext?: AudioContext;
+        analyserNode?: AnalyserNode;
+        gainNode?: GainNode;
         audioSourceNode?: MediaElementAudioSourceNode;
         mediaSource_el?: HTMLAudioElement | HTMLVideoElement;
     };
@@ -16,11 +16,16 @@ class AudioProcessingService {
     bufferDataLength: number;
 
 
+    constructor() {
+      this.context = {};
+    }
+
+
     init(playerService: PlayerService, option: {media_el: HTMLVideoElement}) {
         let { media_el } = option;
-        this.createAudioContext();
-        this.setMediaSource_el(media_el);
-        this.audioContextConnect();
+         this.createAudioContext();
+         this.setMediaSource_el(media_el);
+         this.audioContextConnect();
     }
 
     updateBufferData() {
@@ -78,3 +83,5 @@ class AudioProcessingService {
        this.bufferData = new Float32Array(this.bufferDataLength);
       }
 }
+
+export default AudioProcessingService;

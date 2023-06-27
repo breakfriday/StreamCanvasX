@@ -17,7 +17,7 @@ import { IplayerConfig } from '../../types/services';
 import { runInThisContext } from 'vm';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
-import AudioProcessingService from '../audioProcessingService';
+import AudioProcessingService from '../audio/audioContextService';
 
 function now() {
     return new Date().getTime();
@@ -63,6 +63,7 @@ class PlayerService extends Emitter {
         this.canvasVideoService = canvasVideoService;
         this.debugLogService = debugLogService;
         this.fLVDemuxStream = fLVDemuxStream;
+        this.audioProcessingService = audioProcessingService;
         this._opt = Object.assign({}, DEFAULT_PLAYER_OPTIONS);
 
 
@@ -110,6 +111,11 @@ class PlayerService extends Emitter {
         // document.getElementById('cont').append(videoEl);
         // videoEl.controls = true;
         // videoEl.width = 300;
+
+
+        this.audioProcessingService.init(this, { media_el: videoEl });
+
+        // this.audioProcessingService.init(this, { media_el: videoEl });
 
         if (videoEl) {
           this.mpegtsPlayer = mpegts.createPlayer({
