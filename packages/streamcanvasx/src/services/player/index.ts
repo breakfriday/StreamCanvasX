@@ -117,8 +117,11 @@ class PlayerService extends Emitter {
 
         let { showAudio } = this.config;
 
+        if (hasAudio === true) {
+            this.audioProcessingService.init(this, { media_el: videoEl });
+            this.audioProcessingService.mute(true);
+        }
 
-        this.audioProcessingService.init(this, { media_el: videoEl });
 
         // this.audioProcessingService.init(this, { media_el: videoEl });
 
