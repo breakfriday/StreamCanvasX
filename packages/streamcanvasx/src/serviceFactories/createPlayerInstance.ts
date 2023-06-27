@@ -16,6 +16,8 @@ import DebugLogService from '../services/DebugLogService';
 
 import FLVDemuxStream from '../services/demux/flvDemuxStream';
 
+import AudioProcessingService from '../services/audioProcessingService';
+
 import { IplayerConfig } from '../types/services';
 
 
@@ -29,6 +31,8 @@ containerPlayer.bind<FLVDemuxService>(TYPES.IFLVDemuxService).to(FLVDemuxService
 containerPlayer.bind<CanvasVideoService>(TYPES.ICanvasVideoService).to(CanvasVideoService);
 
 containerPlayer.bind<DebugLogService>(TYPES.IDebugLogService).to(DebugLogService);
+
+containerPlayer.bind<AudioProcessingService>(TYPES.IAudioProcessingService).to(AudioProcessingService);
 
 containerPlayer.bind<FLVDemuxStream>(TYPES.IFLVDemuxStream).to(FLVDemuxStream);
  function createPlayerServiceInstance(config: IplayerConfig): PlayerService {
