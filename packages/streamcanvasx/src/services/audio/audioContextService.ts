@@ -26,7 +26,10 @@ class AudioProcessingService {
          this.createAudioContext();
          this.setMediaSource_el(media_el);
          this.audioContextConnect();
-         this.updateBufferData();
+
+         if (playerService.config.showAudio === true) {
+          this.updateBufferData();
+         }
     }
 
     updateBufferData() {
