@@ -533,6 +533,27 @@ class CanvasVideoService {
         this.contentEl = null;
       }
     }
+
+    setError() {
+      this.playerService.mpegtsPlayer.destroy();
+      this.clearCanvas();
+
+      let canvasContext = this.canvas_context;
+      let canvas = this.canvas_el;
+      let { errorUrl = '' } = this.playerService.config;
+
+      let errorImg = new Image();
+      errorImg.src = errorUrl;
+
+      errorImg.onload = function () {
+         errorImg.width = 100;
+
+
+        let startY = (canvas.height - errorImg.height) / 2;
+        let startX = (canvas.height - errorImg.height) / 2;
+        canvasContext.drawImage(errorImg, startX, startY);
+    };
+    }
 }
 
 

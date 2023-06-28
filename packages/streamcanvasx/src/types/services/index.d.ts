@@ -141,6 +141,7 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   hasAudio?: boolean;
   contentEl?: HTMLElement;
   showAudio?: boolean;
+  errorUrl?: string;
 
 
 }
