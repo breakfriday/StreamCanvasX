@@ -64,6 +64,7 @@ class CanvasVideoService {
     }
 
     event() {
+      // 监听 dom size 变化， 调整canvas 大小
       this.resizeObserver = new ResizeObserver(() => {
         setTimeout(() => {
            this.setCanvasSize();
