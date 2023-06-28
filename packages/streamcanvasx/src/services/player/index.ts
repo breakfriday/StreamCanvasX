@@ -47,6 +47,7 @@ class PlayerService extends Emitter {
     _times: any;
     reload: any;
     config: IplayerConfig;
+    error_connect_times: number;
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -66,6 +67,7 @@ class PlayerService extends Emitter {
         this.fLVDemuxStream = fLVDemuxStream;
         this.audioProcessingService = audioProcessingService;
         this._opt = Object.assign({}, DEFAULT_PLAYER_OPTIONS);
+        this.error_connect_times = 0;
 
 
         this._times = {
@@ -95,8 +97,8 @@ class PlayerService extends Emitter {
     }
 
     init(config?: IplayerConfig) {
-        let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false, hasAudio = true, hasVideo = true } = config;
-        this.config = { model, url, contentEl, showAudio, hasAudio, hasVideo };
+        let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false, hasAudio = true, hasVideo = true, errorUrl = '' } = config;
+        this.config = { model, url, contentEl, showAudio, hasAudio, hasVideo, errorUrl };
 
         this.httpFlvStreamService.init(this, url);
         this.flvVDemuxService.init(this);
@@ -156,7 +158,7 @@ class PlayerService extends Emitter {
            this.mpegtsPlayer.on(mpegts.Events.ERROR, (error, detailError) => {
             this.emit('errorInfo', error);
             if (error === mpegts.ErrorTypes.NETWORK_ERROR) {
-               this.reload();
+               this.reload2();
             }
           });
 
@@ -281,6 +283,18 @@ class PlayerService extends Emitter {
            if (this.mpegtsPlayer) {
              this.mpegtsPlayer.destroy();
            }
+        }
+
+        reload2() {
+            this.error_connect_times++;
+            if (this.error_connect_times > 3) {
+                this.canvasVideoService.setError();
+            }
+            this.mpegtsPlayer.unload();
+            this.mpegtsPlayer.load();
+            setTimeout(() => {
+                this.mpegtsPlayer.play();
+            }, 200);
         }
 
         debounceReload() {
