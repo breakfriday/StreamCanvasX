@@ -12,7 +12,7 @@ const VideoComponents = (props) => {
   const [info1, setInfo1] = useState<any>();
 
   useEffect(() => {
-    let { url, showAudio = true } = props;
+    let { url, showAudio = false } = props;
 
     let player = createPlayerServiceInstance({ url, contentEl: containerRef.current!, showAudio });
     streamPlayer.current = player;
