@@ -95,8 +95,8 @@ class PlayerService extends Emitter {
     }
 
     init(config?: IplayerConfig) {
-        let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false } = config;
-        this.config = { model, url, contentEl, showAudio };
+        let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false, hasAudio = true, hasVideo = true } = config;
+        this.config = { model, url, contentEl, showAudio, hasAudio, hasVideo };
 
         this.httpFlvStreamService.init(this, url);
         this.flvVDemuxService.init(this);
@@ -107,15 +107,16 @@ class PlayerService extends Emitter {
 
         this.debounceReload();
     }
-    createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string;hasVideo?: boolean; hasAudio?: boolean}) {
-        let { type = 'flv', isLive = true, hasAudio = true, hasVideo = true } = parms;
+    createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
+        let { type = 'flv', isLive = true } = parms;
         let { url } = this.httpFlvStreamService;
         let videoEl = document.createElement('video');
         // document.getElementById('cont').append(videoEl);
         // videoEl.controls = true;
         // videoEl.width = 300;
 
-        let { showAudio } = this.config;
+        let { showAudio, hasAudio, hasVideo } = this.config;
+
 
         if (hasAudio === true) {
             this.audioProcessingService.init(this, { media_el: videoEl });
