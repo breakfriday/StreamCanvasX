@@ -180,6 +180,8 @@ class PlayerService extends Emitter {
         if (showAudio === false) {
             // this.canvasVideoService.render(videoEl);
             this.canvasVideoService.createVideoFramCallBack(videoEl);
+        } else {
+            this.audioProcessingService.visulizerDraw();
         }
       }
 
