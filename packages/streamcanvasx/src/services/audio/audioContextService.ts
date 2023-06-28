@@ -36,6 +36,7 @@ class AudioProcessingService {
 
     visulizerDraw() {
       let canvasContext = this.playerService.canvasVideoService.canvas_context;
+      let canvas = this.playerService.canvasVideoService.canvas_el;
 
       const bufferLength = this.context.analyserNode.frequencyBinCount;
       const dataArray = new Uint8Array(bufferLength);
@@ -46,10 +47,10 @@ class AudioProcessingService {
 
         // 清除canvas
         canvasContext.fillStyle = 'rgb(255, 255, 255)';
-        canvasContext.fillRect(0, 0, this.context.canvas.width, this.context.canvas.height);
+        canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 
         // 设置绘制音频数据的样式
-        const barWidth = (this.context.canvas.width / bufferLength) * 2.5;
+        const barWidth = (canvas.width / bufferLength) * 2.5;
         let barHeight;
         let x = 0;
 
@@ -63,7 +64,7 @@ class AudioProcessingService {
           // this.canvasContext.fillStyle = 'rgb(0, 0, 0)';
           // this.canvas_context.fillStyle = `rgb(${r},${g},${b})`;
           canvasContext.fillStyle = 'rgb(0, 0, 0)';
-          canvasContext.fillRect(x, this.context.canvas.height - barHeight, barWidth, barHeight);
+          canvasContext.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
 
           x += barWidth + 1;
         }
