@@ -15,6 +15,7 @@ class AudioProcessingService {
     bufferData: Float32Array; // 时域 缓存
     bufferDataLength: number;
     playerService: PlayerService;
+    clear: boolean;
 
 
     constructor() {
@@ -32,6 +33,59 @@ class AudioProcessingService {
          if (playerService.config.showAudio === true) {
           this.updateBufferData();
          }
+    }
+
+    clearCanvas() {
+      let canvasContext = this.playerService.canvasVideoService.canvas_context;
+      let canvas = this.playerService.canvasVideoService.canvas_el;
+      this.clear = true;
+      // 清除画布
+      canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    visulizerDraw1() {
+      let dataArray = this.bufferData;
+      let bufferLength = this.bufferDataLength;
+
+      let canvasContext = this.playerService.canvasVideoService.canvas_context;
+      let canvas = this.playerService.canvasVideoService.canvas_el;
+      const AnimationFrame = () => {
+        if (this.clear === true) {
+          // this.destory()
+
+          return false;
+        }
+        // 清除画布
+        canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 设置波形图样式
+        canvasContext.lineWidth = 2;
+        canvasContext.strokeStyle = '#7f0';
+
+
+        // 绘制波形图
+        canvasContext.beginPath();
+        const sliceWidth = canvas.width / bufferLength;
+        let x = 0;
+        for (let i = 0; i < bufferLength; i++) {
+          const value = dataArray[i] * canvas.height / 2;
+          const y = canvas.height / 2 + value;
+
+          if (i === 0) {
+            canvasContext.moveTo(x, y);
+          } else {
+            canvasContext.lineTo(x, y);
+          }
+
+          x += sliceWidth;
+        }
+        canvasContext.lineTo(canvas.width, canvas.height / 2);
+        canvasContext.stroke();
+
+        // 循环绘制
+        requestAnimationFrame(AnimationFrame.bind(this));
+      };
+      AnimationFrame();
     }
 
     visulizerDraw() {
