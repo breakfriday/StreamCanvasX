@@ -14,6 +14,7 @@ class AudioProcessingService {
     dataArray: any;
     bufferData: Float32Array; // 时域 缓存
     bufferDataLength: number;
+    playerService: PlayerService;
 
 
     constructor() {
@@ -26,10 +27,48 @@ class AudioProcessingService {
          this.createAudioContext();
          this.setMediaSource_el(media_el);
          this.audioContextConnect();
+         this.playerService = playerService;
 
          if (playerService.config.showAudio === true) {
           this.updateBufferData();
          }
+    }
+
+    visulizerDraw() {
+      let canvasContext = this.playerService.canvasVideoService.canvas_context;
+
+      const bufferLength = this.context.analyserNode.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+      const AnimationFrame = () => {
+        requestAnimationFrame(AnimationFrame.bind(this));
+        // 获取音频数据
+        this.context.analyserNode.getByteFrequencyData(dataArray);
+
+        // 清除canvas
+        canvasContext.fillStyle = 'rgb(255, 255, 255)';
+        canvasContext.fillRect(0, 0, this.context.canvas.width, this.context.canvas.height);
+
+        // 设置绘制音频数据的样式
+        const barWidth = (this.context.canvas.width / bufferLength) * 2.5;
+        let barHeight;
+        let x = 0;
+
+        for (let i = 0; i < bufferLength; i++) {
+          barHeight = dataArray[i] / 2;
+
+          const r = barHeight + (25 * (i / bufferLength));
+          const g = 250 * (i / bufferLength);
+          const b = 50;
+
+          // this.canvasContext.fillStyle = 'rgb(0, 0, 0)';
+          // this.canvas_context.fillStyle = `rgb(${r},${g},${b})`;
+          canvasContext.fillStyle = 'rgb(0, 0, 0)';
+          canvasContext.fillRect(x, this.context.canvas.height - barHeight, barWidth, barHeight);
+
+          x += barWidth + 1;
+        }
+      };
+      AnimationFrame();
     }
 
     updateBufferData() {
