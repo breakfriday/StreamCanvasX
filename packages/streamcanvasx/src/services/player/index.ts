@@ -163,8 +163,9 @@ class PlayerService extends Emitter {
           this.mpegtsPlayer.on(mpegts.Events.STATISTICS_INFO, (data) => {
             let { speed } = data;
 
-            if (speed <= 10) {
+            if (speed <= 5) {
                 // this.reload();
+                this.reload();
             }
 
             this.emit('otherInfo', data);
@@ -221,6 +222,20 @@ class PlayerService extends Emitter {
     }
 
 
+    throttle(fn: Function, delay: number) {
+        let _start = Date.now();
+        return (...args: any[]) => {
+          let _now = Date.now();
+          let self = this;
+          let _args = args;
+             if (_now - _start >= delay) {
+            fn.apply(self, _args);
+            _start = Date.now();
+          }
+        };
+      }
+
+
         //
     updateStats(options: any) {
             options = options || {};
@@ -270,7 +285,7 @@ class PlayerService extends Emitter {
         debounceReload() {
             let $this = this;
 
-           this.reload = throttle(() => {
+           this.reload = this.throttle(() => {
                 $this.mpegtsPlayer.unload();
                 $this.mpegtsPlayer.load();
                 setTimeout(() => {
