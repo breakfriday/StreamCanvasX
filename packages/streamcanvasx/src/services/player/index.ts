@@ -291,6 +291,7 @@ class PlayerService extends Emitter {
             this.error_connect_times++;
             if (this.error_connect_times >= 3) {
                this.setError();
+               return false;
             }
             this.mpegtsPlayer.unload();
             this.mpegtsPlayer.load();
