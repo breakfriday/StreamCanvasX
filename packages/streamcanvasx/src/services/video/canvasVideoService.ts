@@ -535,9 +535,9 @@ class CanvasVideoService {
     }
 
     setError() {
-      this.playerService.mpegtsPlayer.destroy();
-      this.playerService.audioProcessingService.clearCanvas();
-      this.clearCanvas();
+      // this.playerService.mpegtsPlayer.destroy();
+      // this.playerService.audioProcessingService.clearCanvas();
+      // this.clearCanvas();
 
       let canvasContext = this.canvas_context;
       let canvas = this.canvas_el;
