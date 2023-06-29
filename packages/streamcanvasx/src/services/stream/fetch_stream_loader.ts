@@ -7,6 +7,8 @@ class HttpFlvStreamLoader {
     private _abortController: AbortController;
     private playerService: PlayerService;
     public url: string;
+    maxHeartTimes: number;
+    hertTime: number;
     constructor(
         // @inject(new LazyServiceIdentifer(() => TYPES.IPlayerService)) playerService: PlayerService,
 
@@ -14,6 +16,8 @@ class HttpFlvStreamLoader {
 
     ) {
         this.requestAbort = false;
+        this.hertTime = 0;
+        this.maxHeartTimes = 10;
         // this.playerService = playerService;
     }
     static isSupported() {
