@@ -181,6 +181,7 @@ class PlayerService extends Emitter {
 
           this.mpegtsPlayer.on(mpegts.Events.METADATA_ARRIVED, (parm) => {
             this.canvasVideoService.loading = false;
+            this.httpFlvStreamService.hertTime = 0;
             this.mpegtsPlayer.play();
           });
         }
@@ -306,7 +307,9 @@ class PlayerService extends Emitter {
         }
 
         setError() {
+            this.canvasVideoService.loading = false;
             this.mpegtsPlayer.pause();
+            this.mpegtsPlayer.unload();
             // this.mpegtsPlayer.destroy();
             if (this.config.showAudio === true) {
                 this.audioProcessingService.clearCanvas();
@@ -322,6 +325,12 @@ class PlayerService extends Emitter {
 
            this.reload = this.throttle(() => {
             //    this.canvasVideoService.drawLoading();
+                this.httpFlvStreamService.hertTime++;
+                if (this.httpFlvStreamService.hertTime > this.httpFlvStreamService.maxHeartTimes) {
+                    console.log('超过最大重连次数');
+                    this.setError();
+                    return false;
+                }
                 $this.mpegtsPlayer.unload();
                 $this.mpegtsPlayer.load();
                 setTimeout(() => {
