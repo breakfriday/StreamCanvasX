@@ -168,6 +168,9 @@ class AudioProcessingService {
       audioContextConnect() {
         this.context.audioSourceNode!.connect(this.context.analyserNode!);
         this.context.analyserNode!.connect(this.context.audioContext!.destination);
+
+
+        this.context.gainNode.gain.value = 3;
       }
 
       mute(parm?: boolean) {
