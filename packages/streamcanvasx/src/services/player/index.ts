@@ -289,7 +289,7 @@ class PlayerService extends Emitter {
 
         reload2() {
             this.error_connect_times++;
-            if (this.error_connect_times > 3) {
+            if (this.error_connect_times >= 3) {
                 this.canvasVideoService.setError();
             }
             this.mpegtsPlayer.unload();
@@ -309,7 +309,7 @@ class PlayerService extends Emitter {
                     $this.mpegtsPlayer.play();
                 }, 200);
                 // $this.mpegtsPlayer.play();
-            }, 10 * 1000);
+            }, 15 * 1000);
         }
 
         // reload() {
