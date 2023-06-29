@@ -290,13 +290,23 @@ class PlayerService extends Emitter {
         reload2() {
             this.error_connect_times++;
             if (this.error_connect_times >= 3) {
-                this.canvasVideoService.setError();
+               this.setError();
             }
             this.mpegtsPlayer.unload();
             this.mpegtsPlayer.load();
             setTimeout(() => {
                 this.mpegtsPlayer.play();
             }, 200);
+        }
+
+        setError() {
+            this.mpegtsPlayer.pause();
+            this.mpegtsPlayer.destroy();
+            if (this.config.showAudio === true) {
+                this.audioProcessingService.clearCanvas();
+            } else {
+               this.canvasVideoService.clearCanvas();
+            }
         }
 
         debounceReload() {
