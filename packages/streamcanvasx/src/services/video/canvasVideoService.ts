@@ -547,12 +547,12 @@ class CanvasVideoService {
       errorImg.src = errorUrl;
 
       errorImg.onload = function () {
-         errorImg.width = 100;
+         errorImg.width = 120;
 
 
-        let startY = (canvas.height - 100) / 2;
-        let startX = (canvas.height - 100) / 2;
-        canvasContext.drawImage(errorImg, startX, startY, 100, 100);
+        let startY = (canvas.height - 120) / 2;
+        let startX = (canvas.width - 120) / 2;
+        canvasContext.drawImage(errorImg, startX, startY, 120, 120);
     };
     }
 }
