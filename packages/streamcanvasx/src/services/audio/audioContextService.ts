@@ -55,32 +55,36 @@ class AudioProcessingService {
 
           return false;
         }
-        // 清除画布
-        canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 
-        // 设置波形图样式
-        canvasContext.lineWidth = 2;
-        canvasContext.strokeStyle = '#7f0';
+        if (this.playerService.canvasVideoService.loading === false) {
+          canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+
+          // 设置波形图样式
+          canvasContext.lineWidth = 2;
+          canvasContext.strokeStyle = '#7f0';
 
 
-        // 绘制波形图
-        canvasContext.beginPath();
-        const sliceWidth = canvas.width / bufferLength;
-        let x = 0;
-        for (let i = 0; i < bufferLength; i++) {
-          const value = dataArray[i] * canvas.height / 2;
-          const y = canvas.height / 2 + value;
+          // 绘制波形图
+          canvasContext.beginPath();
+          const sliceWidth = canvas.width / bufferLength;
+          let x = 0;
+          for (let i = 0; i < bufferLength; i++) {
+            const value = dataArray[i] * canvas.height / 2;
+            const y = canvas.height / 2 + value;
 
-          if (i === 0) {
-            canvasContext.moveTo(x, y);
-          } else {
-            canvasContext.lineTo(x, y);
+            if (i === 0) {
+              canvasContext.moveTo(x, y);
+            } else {
+              canvasContext.lineTo(x, y);
+            }
+
+            x += sliceWidth;
           }
-
-          x += sliceWidth;
+          canvasContext.lineTo(canvas.width, canvas.height / 2);
+          canvasContext.stroke();
         }
-        canvasContext.lineTo(canvas.width, canvas.height / 2);
-        canvasContext.stroke();
+        // 清除画布
+
 
         // 循环绘制
         requestAnimationFrame(AnimationFrame.bind(this));
