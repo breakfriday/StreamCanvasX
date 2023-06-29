@@ -477,6 +477,8 @@ class CanvasVideoService {
       let endAngle = 0;
       let $this = this;
 
+      this.loading = true;
+
       let drawAnimation = () => {
         // 定义圆心的坐标
         const centerX = canvas.width / 2;

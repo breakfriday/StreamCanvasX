@@ -146,6 +146,8 @@ class PlayerService extends Emitter {
         //   this.getVideoSize();
           this.mpegtsPlayer.load();
 
+          this.canvasVideoService.drawLoading();
+
           this.mpegtsPlayer.on(mpegts.Events.MEDIA_INFO, (parm) => {
             let video_width = parm.metadata.width;
             let video_height = parm.metadata.height;
@@ -178,6 +180,7 @@ class PlayerService extends Emitter {
 
 
           this.mpegtsPlayer.on(mpegts.Events.METADATA_ARRIVED, (parm) => {
+            this.canvasVideoService.loading = false;
             this.mpegtsPlayer.play();
           });
         }
@@ -295,6 +298,7 @@ class PlayerService extends Emitter {
             }
             this.mpegtsPlayer.unload();
             this.mpegtsPlayer.load();
+            this.canvasVideoService.drawLoading();
             setTimeout(() => {
                 this.mpegtsPlayer.play();
             }, 200);
@@ -316,6 +320,7 @@ class PlayerService extends Emitter {
             let $this = this;
 
            this.reload = this.throttle(() => {
+               this.canvasVideoService.drawLoading();
                 $this.mpegtsPlayer.unload();
                 $this.mpegtsPlayer.load();
                 setTimeout(() => {
