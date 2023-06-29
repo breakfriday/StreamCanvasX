@@ -534,7 +534,7 @@ class CanvasVideoService {
       }
     }
 
-    setError() {
+    drawError() {
       // this.playerService.mpegtsPlayer.destroy();
       // this.playerService.audioProcessingService.clearCanvas();
       // this.clearCanvas();
@@ -550,9 +550,9 @@ class CanvasVideoService {
          errorImg.width = 100;
 
 
-        let startY = (canvas.height - errorImg.height) / 2;
-        let startX = (canvas.height - errorImg.height) / 2;
-        canvasContext.drawImage(errorImg, startX, startY);
+        let startY = (canvas.height - 100) / 2;
+        let startX = (canvas.height - 100) / 2;
+        canvasContext.drawImage(errorImg, startX, startY, 100, 100);
     };
     }
 }
