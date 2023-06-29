@@ -8,6 +8,8 @@ build/
 dist/
 tmp/
 lib/
+esm/
+es2017/
 
 # misc
 .idea/
@@ -17,6 +19,7 @@ lib/
 *.dia~
 .ice
 .vscode
+.docusaurus
 
 npm-debug.log*
 yarn-debug.log*
