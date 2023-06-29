@@ -293,6 +293,7 @@ class PlayerService extends Emitter {
         reload2() {
             this.error_connect_times++;
             if (this.error_connect_times >= 3) {
+               this.canvasVideoService.loading = false;
                this.setError();
                return false;
             }
@@ -320,7 +321,7 @@ class PlayerService extends Emitter {
             let $this = this;
 
            this.reload = this.throttle(() => {
-               this.canvasVideoService.drawLoading();
+            //    this.canvasVideoService.drawLoading();
                 $this.mpegtsPlayer.unload();
                 $this.mpegtsPlayer.load();
                 setTimeout(() => {
