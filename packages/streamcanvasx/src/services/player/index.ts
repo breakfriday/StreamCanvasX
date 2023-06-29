@@ -301,12 +301,14 @@ class PlayerService extends Emitter {
 
         setError() {
             this.mpegtsPlayer.pause();
-            this.mpegtsPlayer.destroy();
+            // this.mpegtsPlayer.destroy();
             if (this.config.showAudio === true) {
                 this.audioProcessingService.clearCanvas();
             } else {
                this.canvasVideoService.clearCanvas();
             }
+
+            this.canvasVideoService.drawError();
         }
 
         debounceReload() {
