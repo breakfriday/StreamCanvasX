@@ -131,15 +131,20 @@ class AudioProcessingService {
     }
 
     updateBufferData() {
-        let { dataArray, bufferData } = this;
-        let { bufferDataLength } = this;
-          // 将旧的数据向前移动
-        bufferData.copyWithin(0, dataArray.length);
-        this.context.analyserNode?.getFloatTimeDomainData(dataArray);
-        // 将新的数据添加到缓存的末尾
-        bufferData.set(dataArray, bufferDataLength - dataArray.length);
-        // 每帧都更新缓存
-        requestAnimationFrame(this.updateBufferData.bind(this));
+      let { dataArray, bufferData } = this;
+      let { bufferDataLength } = this;
+      if (this.clear === true) {
+        // this.destory()
+
+        return false;
+      }
+        // 将旧的数据向前移动
+      bufferData.copyWithin(0, dataArray.length);
+      this.context.analyserNode?.getFloatTimeDomainData(dataArray);
+      // 将新的数据添加到缓存的末尾
+      bufferData.set(dataArray, bufferDataLength - dataArray.length);
+      // 每帧都更新缓存
+      requestAnimationFrame(this.updateBufferData.bind(this));
     }
 
 
