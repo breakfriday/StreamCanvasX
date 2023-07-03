@@ -19,7 +19,7 @@ import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
 import AudioProcessingService from '../audio/audioContextService';
 
-window.streamCanvasX = '0.1.17';
+window.streamCanvasX = '0.1.18';
 function now() {
     return new Date().getTime();
 }
