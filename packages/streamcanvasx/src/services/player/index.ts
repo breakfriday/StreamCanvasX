@@ -129,19 +129,32 @@ class PlayerService extends Emitter {
         // this.audioProcessingService.init(this, { media_el: videoEl });
 
         if (videoEl) {
-          this.mpegtsPlayer = mpegts.createPlayer({
-            type: type!, // could also be mpegts, m2ts, flv
-            isLive: isLive,
-            url: url,
-            hasAudio: hasAudio,
-            hasVideo: hasVideo,
+            if (showAudio === true) {
+                this.mpegtsPlayer = mpegts.createPlayer({
+                    type: type!, // could also be mpegts, m2ts, flv
+                    isLive: isLive,
+                    url: url,
+                    hasAudio: hasAudio,
+                    hasVideo: hasVideo,
 
-          }, { enableStashBuffer: false,
-                enableWorker: true,
-                liveBufferLatencyChasing: true,
-                autoCleanupSourceBuffer: true,
-                lazyLoad: false,
-         });
+                  }, {
+                 });
+            } else {
+                this.mpegtsPlayer = mpegts.createPlayer({
+                    type: type!, // could also be mpegts, m2ts, flv
+                    isLive: isLive,
+                    url: url,
+                    hasAudio: hasAudio,
+                    hasVideo: hasVideo,
+
+                  }, { enableStashBuffer: false,
+                        enableWorker: true,
+                        liveBufferLatencyChasing: true,
+                        autoCleanupSourceBuffer: true,
+                        lazyLoad: false,
+                 });
+            }
+
           this.mpegtsPlayer.attachMediaElement(videoEl);
         //   this.getVideoSize();
           this.mpegtsPlayer.load();

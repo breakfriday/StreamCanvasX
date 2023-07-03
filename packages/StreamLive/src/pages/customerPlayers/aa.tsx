@@ -51,7 +51,7 @@ const VideoComponents = (props) => {
 
   return (
     <div >
-      <div style={{ width: '200px', height: '200px' }} ref={containerRef} />
+      <div style={{ width: '400px', height: '200px' }} ref={containerRef} />
       <div>{JSON.stringify(info)} </div>
       <div>{JSON.stringify(info1)}</div>
       <Button onClick={() => {
