@@ -1,7 +1,6 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import Emitter from '../../utils/emitter';
 
-import { ServiceA } from '../ServiceA';
 import { TYPES } from '../../serviceFactories/symbol';
 import HttpFlvStreamService from '../stream/fetch_stream_loader';
 import FlvDemuxService from '../demux/flvDemux';
@@ -14,10 +13,17 @@ import { UseMode } from '../../constant';
 import mpegts from 'mpegts.js';
 import Mpegts from 'mpegts.js';
 import { IplayerConfig } from '../../types/services';
-import { runInThisContext } from 'vm';
-import debounce from 'lodash/debounce';
-import throttle from 'lodash/throttle';
 import AudioProcessingService from '../audio/audioContextService';
+
+
+mpegts.LoggingControl.applyConfig({
+    forceGlobalTag: true,
+    globalTag: 'streanCanvasX',
+    enableDebug: true,
+    enableAll: true,
+    enableInfo: true,
+
+ });
 
 window.streamCanvasX = '0.1.18';
 function now() {
@@ -157,6 +163,7 @@ class PlayerService extends Emitter {
                         liveBufferLatencyChasing: true,
                         autoCleanupSourceBuffer: true,
                         lazyLoad: false,
+                        liveBufferLatencyMinRemain: 0.1,
                  });
             }
 
