@@ -22,10 +22,13 @@ mpegts.LoggingControl.applyConfig({
     enableDebug: true,
     enableAll: true,
     enableInfo: true,
+    enableVerbose: false,
+    enableError: true,
+    enableWarn: false,
 
  });
 
-window.streamCanvasX = '0.1.20';
+window.streamCanvasX = '0.1.21';
 function now() {
     return new Date().getTime();
 }
@@ -189,7 +192,7 @@ class PlayerService extends Emitter {
             if (error === mpegts.ErrorTypes.NETWORK_ERROR || error === mpegts.ErrorTypes.MEDIA_ERROR) {
                 setTimeout(() => {
                     this.reload2();
-                }, 1 * 1000);
+                }, 8 * 1000);
             }
           });
 
