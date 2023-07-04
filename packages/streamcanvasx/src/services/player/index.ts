@@ -195,14 +195,16 @@ class PlayerService extends Emitter {
           this.mpegtsPlayer.on(mpegts.Events.STATISTICS_INFO, (data) => {
             let { speed, decodedFrames } = data;
 
-            if (speed <= 5) {
+            if (speed <= 1) {
                 // this.reload();
                 this.reload();
+            } else {
+                if (decodedFrames > 0 || hasVideo === false) {
+                    this.canvasVideoService.loading = false;
+                    this.httpFlvStreamService.hertTime = 0;
+                }
             }
-            if (decodedFrames > 0) {
-                this.canvasVideoService.loading = false;
-                this.httpFlvStreamService.hertTime = 0;
-            }
+
 
             this.emit('otherInfo', data);
         });
