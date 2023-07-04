@@ -183,11 +183,13 @@ class PlayerService extends Emitter {
            });
 
            this.mpegtsPlayer.on(mpegts.Events.ERROR, (error, detailError) => {
-            this.emit('errorInfo', error);
-            if (error === mpegts.ErrorTypes.NETWORK_ERROR) {
+            console.log('---------');
+            console.info(error);
+            console.log('---------');
+            if (error === mpegts.ErrorTypes.NETWORK_ERROR || error === mpegts.ErrorTypes.MEDIA_ERROR) {
                 setTimeout(() => {
                     this.reload2();
-                }, 8 * 1000);
+                }, 1 * 1000);
             }
           });
 
