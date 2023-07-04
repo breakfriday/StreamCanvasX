@@ -193,11 +193,15 @@ class PlayerService extends Emitter {
 
 
           this.mpegtsPlayer.on(mpegts.Events.STATISTICS_INFO, (data) => {
-            let { speed } = data;
+            let { speed, decodedFrames } = data;
 
             if (speed <= 5) {
                 // this.reload();
                 this.reload();
+            }
+            if (decodedFrames > 0) {
+                this.canvasVideoService.loading = false;
+                this.httpFlvStreamService.hertTime = 0;
             }
 
             this.emit('otherInfo', data);
@@ -205,8 +209,8 @@ class PlayerService extends Emitter {
 
 
           this.mpegtsPlayer.on(mpegts.Events.METADATA_ARRIVED, (parm) => {
-            this.canvasVideoService.loading = false;
-            this.httpFlvStreamService.hertTime = 0;
+            // this.canvasVideoService.loading = false;
+            // this.httpFlvStreamService.hertTime = 0;
             this.mpegtsPlayer.play();
           });
         }
