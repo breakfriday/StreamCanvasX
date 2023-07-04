@@ -25,7 +25,7 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.18';
+window.streamCanvasX = '0.1.19';
 function now() {
     return new Date().getTime();
 }
