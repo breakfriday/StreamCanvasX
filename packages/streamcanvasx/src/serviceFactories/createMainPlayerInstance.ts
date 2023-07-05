@@ -6,7 +6,7 @@ import { IAudioProcessingService } from '../types/services';
 import { interfaces } from 'inversify';
 import { ImainPlayerService } from '../types/services';
 
-const worker = new Worker(new URL('work.js', import.meta.url));
+// const worker = new Worker(new URL('work.js', import.meta.url));
 
 
 container1.bind<interfaces.Factory<mainPlayerService>>(TYPES.IMainPlayerService)
