@@ -1,6 +1,6 @@
 {
-  "name": "my-app",
-  "productName": "my-app",
+  "name": "myApp",
+  "productName": "myApp",
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": "src/index.js",
@@ -18,6 +18,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "@electron-forge/cli":"6.2.1"
+
   }
 }
