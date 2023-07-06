@@ -21,7 +21,7 @@ import AudioProcessingService from '../services/audio/audioContextService';
 import { IplayerConfig } from '../types/services';
 
 
-const worker = new Worker(new URL('work.js', import.meta.url));
+// const worker = new Worker(new URL('work.js', import.meta.url));
 
 containerPlayer.bind<PlayerService>(TYPES.IPlayerService).to(PlayerService);
 containerPlayer.bind<HttpFlvStreamLoader>(TYPES.IHttpFlvStreamLoader).to(HttpFlvStreamLoader);
