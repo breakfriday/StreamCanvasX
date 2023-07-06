@@ -28,7 +28,7 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.22';
+window.streamCanvasX = '0.1.23';
 function now() {
     return new Date().getTime();
 }
@@ -166,7 +166,8 @@ class PlayerService extends Emitter {
                         liveBufferLatencyChasing: true,
                         liveBufferLatencyMaxLatency: 1, // seconds.
                         autoCleanupSourceBuffer: true,
-                        autoCleanupMaxBackwardDuration: 5, // seconds.
+                        // autoCleanupMaxBackwardDuration: 5, // seconds.
+                         autoCleanupMinBackwardDuration: 5,
                         lazyLoad: false,
                         liveBufferLatencyMinRemain: 0.1,
                         lazyLoadMaxDuration: 4, // seconds.
@@ -202,6 +203,15 @@ class PlayerService extends Emitter {
 
           this.mpegtsPlayer.on(mpegts.Events.STATISTICS_INFO, (data) => {
             let { speed, decodedFrames } = data;
+
+            let end = this.mpegtsPlayer.buffered.end(0);
+            let delta = end - this.mpegtsPlayer.currentTime; // 获取buffered与当前播放位置的差值
+            if (delta > 5 || delta < 0) {
+                 this.mpegtsPlayer.currentTime = this.mpegtsPlayer.buffered.end(0) - 1;
+              }
+            // console.info(end);
+            // console.info(this.mpegtsPlayer.buffered);
+
 
             if (speed <= 1) {
                 // this.reload();
