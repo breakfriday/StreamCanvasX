@@ -117,6 +117,8 @@ class PlayerService extends Emitter {
         this.canvasVideoService.init(this, { model: model, contentEl });
 
 
+        const decode_worker = new Worker(new URL('../decoder/decode_worker.js', import.meta.url));
+
         this.debounceReload();
     }
     createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
