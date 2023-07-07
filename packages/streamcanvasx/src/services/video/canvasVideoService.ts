@@ -468,11 +468,11 @@ class CanvasVideoService {
       let { canvas_el } = this;
       let canvas = canvas_el;
 
-      // 定义圆的半径和线宽
+      // Define the circle radius and line width
       const radius = 50;
       const lineWidth = 10;
 
-      // 初始化弧形进度条的起始角度和结束角度
+      // Initialize the start and end angles of the arc progress bar
       let startAngle = 0;
       let endAngle = 0;
       let $this = this;
@@ -480,7 +480,7 @@ class CanvasVideoService {
       this.loading = true;
 
       let drawAnimation = () => {
-        // 定义圆心的坐标
+        // Define the center coordinates of the circle
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
         if (this.loading === false) {
@@ -491,28 +491,28 @@ class CanvasVideoService {
           $this.clearCanvas();
           return false;
         }
-        // 清除画布内容，准备绘制新的帧
+        // Clear the canvas content to prepare for drawing a new frame
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // 绘制背景圆圈
-        ctx.beginPath(); // 开始新路径
-        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI); // 画一个完整的圆
-        ctx.lineWidth = lineWidth; // 设置线宽
-        ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)'; // 设置线条颜色
-        ctx.stroke(); // 描边路径
+        // Draw the background circle
+        ctx.beginPath(); // Begin a new path
+        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI); // Draw a full circle
+        ctx.lineWidth = lineWidth; // Set the line width
+        ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)'; // Set the line color
+        ctx.stroke(); // Stroke the path
 
-        // 绘制loading进度弧形
-        ctx.beginPath(); // 开始新路径
-        ctx.arc(centerX, centerY, radius, startAngle * Math.PI, endAngle * Math.PI); // 画一个弧形
-        ctx.lineWidth = lineWidth; // 设置线宽
-        ctx.strokeStyle = 'rgba(50, 150, 255, 1)'; // 设置线条颜色
-        ctx.stroke(); // 描边路径
+        // Draw the loading progress arc
+        ctx.beginPath(); // Begin a new path
+        ctx.arc(centerX, centerY, radius, startAngle * Math.PI, endAngle * Math.PI); // Draw an arc
+        ctx.lineWidth = lineWidth; // Set the line width
+        ctx.strokeStyle = 'rgba(50, 150, 255, 1)'; // Set the line color
+        ctx.stroke(); // Stroke the path
 
-        // 更新弧形进度条的起始角度和结束角度，用于下一帧的绘制
+        // Update the start and end angles of the arc progress bar for the next frame
         startAngle += 0.01;
         endAngle += 0.02;
 
-        // 当角度达到2π时，将其重置为0
+        // When the angle reaches 2π, reset it to 0
         if (startAngle >= 2) {
           startAngle = 0;
         }
@@ -521,13 +521,78 @@ class CanvasVideoService {
           endAngle = 0;
         }
 
-        // 使用requestAnimationFrame()函数递归调用drawLoading()，实现动画效果
-        requestAnimationFrame(drawAnimation);
+        // Use the setTimeout function to recursively call drawLoading() to achieve animation effect
+        setTimeout(drawAnimation, 1000 / 30); // Approximate 60 FPS
       };
-
 
       drawAnimation();
     }
+
+    // drawLoading() {
+    //   let ctx = this.canvas_context;
+    //   let { canvas_el } = this;
+    //   let canvas = canvas_el;
+
+    //   // 定义圆的半径和线宽
+    //   const radius = 50;
+    //   const lineWidth = 10;
+
+    //   // 初始化弧形进度条的起始角度和结束角度
+    //   let startAngle = 0;
+    //   let endAngle = 0;
+    //   let $this = this;
+
+    //   this.loading = true;
+
+    //   let drawAnimation = () => {
+    //     // 定义圆心的坐标
+    //     const centerX = canvas.width / 2;
+    //     const centerY = canvas.height / 2;
+    //     if (this.loading === false) {
+    //       return false;
+    //     }
+    //     if ($this.clear === true) {
+    //       // this.destory()
+    //       $this.clearCanvas();
+    //       return false;
+    //     }
+    //     // 清除画布内容，准备绘制新的帧
+    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    //     // 绘制背景圆圈
+    //     ctx.beginPath(); // 开始新路径
+    //     ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI); // 画一个完整的圆
+    //     ctx.lineWidth = lineWidth; // 设置线宽
+    //     ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)'; // 设置线条颜色
+    //     ctx.stroke(); // 描边路径
+
+    //     // 绘制loading进度弧形
+    //     ctx.beginPath(); // 开始新路径
+    //     ctx.arc(centerX, centerY, radius, startAngle * Math.PI, endAngle * Math.PI); // 画一个弧形
+    //     ctx.lineWidth = lineWidth; // 设置线宽
+    //     ctx.strokeStyle = 'rgba(50, 150, 255, 1)'; // 设置线条颜色
+    //     ctx.stroke(); // 描边路径
+
+    //     // 更新弧形进度条的起始角度和结束角度，用于下一帧的绘制
+    //     startAngle += 0.01;
+    //     endAngle += 0.02;
+
+    //     // 当角度达到2π时，将其重置为0
+    //     if (startAngle >= 2) {
+    //       startAngle = 0;
+    //     }
+
+    //     if (endAngle >= 2) {
+    //       endAngle = 0;
+    //     }
+
+    //     // 使用requestAnimationFrame()函数递归调用drawLoading()，实现动画效果
+    //     requestAnimationFrame(drawAnimation);
+    //   };
+
+
+    //   drawAnimation();
+    // }
 
     destroy() {
       if (this.canvas_el && this.contentEl) {
