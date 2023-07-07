@@ -157,10 +157,10 @@ class AudioProcessingService {
         this.context.audioContext = new AudioContext();
         this.context.analyserNode = this.context.audioContext.createAnalyser();
 
-        this.context.analyserNode.fftSize = 512;
+        this.context.analyserNode.fftSize = 256;
         this.context.gainNode = this.context.audioContext.createGain();
 
-        this.bufferLength = this.context.analyserNode.fftSize;
+        this.bufferLength = this.context.analyserNode.frequencyBinCount;
         this.dataArray = new Float32Array(this.bufferLength);
         this.setBufferData();
       }
