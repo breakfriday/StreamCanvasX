@@ -202,15 +202,24 @@ class PlayerService extends Emitter {
             }
           });
 
+        //   const seedFrame = () => {
+        //     setTimeout(() => {
+        //     let end = this.mpegtsPlayer.buffered.end(0);
+        //     let delta = end - this.mpegtsPlayer.currentTime; // 获取buffered与当前播放位置的差值
+        //     if (delta > 5 || delta < 0) {
+        //          this.mpegtsPlayer.currentTime = this.mpegtsPlayer.buffered.end(0) - 1;
+        //       }
+        //     }, 9 * 1000);
+        //   };
 
           this.mpegtsPlayer.on(mpegts.Events.STATISTICS_INFO, (data) => {
             let { speed, decodedFrames } = data;
 
-            let end = this.mpegtsPlayer.buffered.end(0);
-            let delta = end - this.mpegtsPlayer.currentTime; // 获取buffered与当前播放位置的差值
-            if (delta > 5 || delta < 0) {
-                 this.mpegtsPlayer.currentTime = this.mpegtsPlayer.buffered.end(0) - 1;
-              }
+            // let end = this.mpegtsPlayer.buffered.end(0);
+            // let delta = end - this.mpegtsPlayer.currentTime; // 获取buffered与当前播放位置的差值
+            // if (delta > 5 || delta < 0) {
+            //      this.mpegtsPlayer.currentTime = this.mpegtsPlayer.buffered.end(0) - 1;
+            //   }
             // console.info(end);
             // console.info(this.mpegtsPlayer.buffered);
 
