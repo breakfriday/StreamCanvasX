@@ -28,7 +28,7 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.26';
+window.streamCanvasX = '0.1.27';
 function now() {
     return new Date().getTime();
 }
@@ -200,6 +200,12 @@ class PlayerService extends Emitter {
                     this.reload2();
                 }, 8 * 1000);
             }
+          });
+
+          this.mpegtsPlayer.on(mpegts.Events.LOADING_COMPLETE, () => {
+            setTimeout(() => {
+                this.reload2();
+            }, 8 * 1000);
           });
 
         //   const seedFrame = () => {
