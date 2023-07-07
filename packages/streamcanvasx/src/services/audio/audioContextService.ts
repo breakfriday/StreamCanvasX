@@ -130,21 +130,43 @@ class AudioProcessingService {
       AnimationFrame();
     }
 
+    // updateBufferData() {
+    //   let { dataArray, bufferData } = this;
+    //   let { bufferDataLength } = this;
+    //   if (this.clear === true) {
+    //     // this.destory()
+
+    //     return false;
+    //   }
+    //     // 将旧的数据向前移动
+    //   bufferData.copyWithin(0, dataArray.length);
+    //   this.context.analyserNode?.getFloatTimeDomainData(dataArray);
+    //   // 将新的数据添加到缓存的末尾
+    //   bufferData.set(dataArray, bufferDataLength - dataArray.length);
+    //   // 每帧都更新缓存
+    //   requestAnimationFrame(this.updateBufferData.bind(this));
+    // }
+
+
     updateBufferData() {
       let { dataArray, bufferData } = this;
       let { bufferDataLength } = this;
+
       if (this.clear === true) {
         // this.destory()
 
         return false;
       }
-        // 将旧的数据向前移动
+      // Move old data forward
       bufferData.copyWithin(0, dataArray.length);
+
       this.context.analyserNode?.getFloatTimeDomainData(dataArray);
-      // 将新的数据添加到缓存的末尾
+
+      // Add new data to the end of the buffer
       bufferData.set(dataArray, bufferDataLength - dataArray.length);
-      // 每帧都更新缓存
-      requestAnimationFrame(this.updateBufferData.bind(this));
+
+
+      setTimeout(this.updateBufferData.bind(this), 1000 / 30); // Updates at roughly 30 FPS
     }
 
 
@@ -191,7 +213,7 @@ class AudioProcessingService {
 
       setBufferData() {
         // 根据 AudioContext 的采样率、所需的缓存时间和 FFT 大小来设置缓存区大小
-       this.bufferDataLength = Math.ceil(1 * this.context.audioContext!.sampleRate / this.dataArray.length) * this.dataArray.length;
+       this.bufferDataLength = Math.ceil(0.4 * this.context.audioContext!.sampleRate / this.dataArray.length) * this.dataArray.length;
        this.bufferData = new Float32Array(this.bufferDataLength);
       }
 }
