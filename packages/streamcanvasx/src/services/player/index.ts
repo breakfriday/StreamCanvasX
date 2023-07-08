@@ -28,7 +28,7 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.27';
+window.streamCanvasX = '0.1.28';
 function now() {
     return new Date().getTime();
 }
@@ -237,6 +237,7 @@ class PlayerService extends Emitter {
                 if (decodedFrames > 0 || hasVideo === false) {
                     this.canvasVideoService.loading = false;
                     this.httpFlvStreamService.hertTime = 0;
+                    this.error_connect_times = 0;
                 }
             }
 
@@ -248,6 +249,7 @@ class PlayerService extends Emitter {
           this.mpegtsPlayer.on(mpegts.Events.METADATA_ARRIVED, (parm) => {
             // this.canvasVideoService.loading = false;
             // this.httpFlvStreamService.hertTime = 0;
+            this.canvasVideoService.loading = false;
             this.mpegtsPlayer.play();
           });
         }
@@ -359,7 +361,9 @@ class PlayerService extends Emitter {
 
         reload2() {
             this.error_connect_times++;
-            if (this.error_connect_times >= 3) {
+
+
+            if (this.error_connect_times > 3) {
                this.canvasVideoService.loading = false;
                this.setError();
                return false;
