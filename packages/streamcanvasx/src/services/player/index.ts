@@ -28,7 +28,7 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.29';
+window.streamCanvasX = '0.1.30';
 function now() {
     return new Date().getTime();
 }
@@ -388,6 +388,7 @@ class PlayerService extends Emitter {
             }
 
             this.canvasVideoService.drawError();
+            this.emit('otherInfo', { speed: 0 });
         }
 
         debounceReload() {
