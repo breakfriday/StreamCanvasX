@@ -16,6 +16,7 @@ class AudioProcessingService {
     bufferDataLength: number;
     playerService: PlayerService;
     clear: boolean;
+    timeId: any;
 
 
     constructor() {
@@ -154,6 +155,7 @@ class AudioProcessingService {
 
       if (this.clear === true) {
         // this.destory()
+        clearTimeout(this.timeId);
 
         return false;
       }
@@ -166,7 +168,7 @@ class AudioProcessingService {
       bufferData.set(dataArray, bufferDataLength - dataArray.length);
 
 
-      setTimeout(this.updateBufferData.bind(this), 1000 / 30); // Updates at roughly 30 FPS
+      this.timeId = setTimeout(this.updateBufferData.bind(this), 1000 / 30); // Updates at roughly 30 FPS
     }
 
 

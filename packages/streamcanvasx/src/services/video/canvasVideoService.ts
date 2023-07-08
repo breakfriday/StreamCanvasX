@@ -467,6 +467,10 @@ class CanvasVideoService {
       let ctx = this.canvas_context;
       let { canvas_el } = this;
       let canvas = canvas_el;
+      let timeId: any = null;
+      if (this.loading === true) {
+        return false;
+      }
 
       // Define the circle radius and line width
       const radius = 50;
@@ -484,10 +488,12 @@ class CanvasVideoService {
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
         if (this.loading === false) {
+          clearTimeout(timeId);
           return false;
         }
         if ($this.clear === true) {
           // this.destory()
+          clearTimeout(timeId);
           $this.clearCanvas();
           return false;
         }
@@ -522,7 +528,7 @@ class CanvasVideoService {
         }
 
         // Use the setTimeout function to recursively call drawLoading() to achieve animation effect
-        setTimeout(drawAnimation, 1000 / 30); // Approximate 60 FPS
+        timeId = setTimeout(drawAnimation, 1000 / 30); // Approximate 60 FPS
       };
 
       drawAnimation();
