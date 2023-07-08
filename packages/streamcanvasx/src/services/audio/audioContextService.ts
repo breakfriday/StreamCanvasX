@@ -50,9 +50,13 @@ class AudioProcessingService {
 
       let canvasContext = this.playerService.canvasVideoService.canvas_context;
       let canvas = this.playerService.canvasVideoService.canvas_el;
+
+      let animationId: number | null = null;
       const AnimationFrame = () => {
         if (this.clear === true) {
           // this.destory()
+
+          cancelAnimationFrame(animationId);
 
           return false;
         }
@@ -88,7 +92,7 @@ class AudioProcessingService {
 
 
         // 循环绘制
-        requestAnimationFrame(AnimationFrame.bind(this));
+        animationId = requestAnimationFrame(AnimationFrame.bind(this));
       };
       AnimationFrame();
     }
