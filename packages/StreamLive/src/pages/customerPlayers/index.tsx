@@ -48,7 +48,7 @@ const HlsDemo = () => {
           </Button>
         </Form.Item>
       </Form>
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
 
         {
           data.map((item, inx) => {
