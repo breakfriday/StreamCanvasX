@@ -1,6 +1,6 @@
 
 import React, { useRef, useEffect, useState } from 'react';
-import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
+import { Divider, Space, Button, Checkbox, Form, Input, Radio } from 'antd';
 import fpmap from 'lodash/fp/map';
 import VideoComponents from './aa';
 import { Data } from 'ice';
@@ -11,15 +11,15 @@ let streamPlayers: any = [];
 
 const HlsDemo = () => {
   useEffect(() => {}, []);
-  const [data, setData] = useState<Array<{url: string}>>([]);
+  const [data, setData] = useState<Array<{url: string; type: number}>>([]);
   return (
     <div>
 
       <Form
         name="basic"
         autoComplete="off"
-        onFinish={(value: {url: string}) => {
-            let item = { url: value.url };
+        onFinish={(value: {url: string; type: number}) => {
+            let item = { url: value.url, type: value.type };
             let temp = Object.assign([], data);
             temp.push(item);
             setData(temp);
@@ -30,6 +30,12 @@ const HlsDemo = () => {
           name="url"
         >
           <Input />
+        </Form.Item>
+        <Form.Item label="type" name="type">
+          <Radio.Group>
+            <Radio value="1"> 视频 </Radio>
+            <Radio value="2"> 音频 </Radio>
+          </Radio.Group>
         </Form.Item>
 
 
@@ -46,9 +52,20 @@ const HlsDemo = () => {
 
         {
           data.map((item, inx) => {
-            let { url } = item;
+            let { url, type } = item;
+            let showAudio = false;
+            let hasAudio = false;
+            let hasVideo = true;
 
-            return (<VideoComponents url={url} key={inx} />);
+            if (type == 2) {
+                 showAudio = true;
+                  hasAudio = true;
+               hasVideo = false;
+            } else {
+
+            }
+
+            return (<VideoComponents url={url} key={inx} hasVideo={hasVideo} hasAudio={hasAudio} showAudio={showAudio} />);
           })
         }
       </div>
