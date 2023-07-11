@@ -154,6 +154,9 @@ class PlayerService extends Emitter {
                     hasVideo: hasVideo,
 
                   }, {
+                        enableStashBuffer: false,
+                        enableWorker: true,
+                        liveBufferLatencyChasing: true,
                  });
             } else {
                 this.mpegtsPlayer = mpegts.createPlayer({
@@ -163,9 +166,9 @@ class PlayerService extends Emitter {
                     hasAudio: hasAudio,
                     hasVideo: hasVideo,
 
-                  }, { enableStashBuffer: true,
-                         enableWorker: true,
-                         liveBufferLatencyChasing: true,
+                  }, { enableStashBuffer: false,
+                       enableWorker: true,
+                       liveBufferLatencyChasing: true,
                         // liveBufferLatencyMaxLatency: 1, // seconds.
                         // autoCleanupSourceBuffer: true,
                         // // autoCleanupMaxBackwardDuration: 5, // seconds.
