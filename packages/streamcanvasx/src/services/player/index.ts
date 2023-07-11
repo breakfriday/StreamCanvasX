@@ -259,7 +259,11 @@ class PlayerService extends Emitter {
             // this.canvasVideoService.render(videoEl);
             this.canvasVideoService.createVideoFramCallBack(videoEl);
         } else {
+            if (this.config.useOffScreen === true) {
+            this.audioProcessingService.visulizerDraw2();
+            } else {
             this.audioProcessingService.visulizerDraw1();
+            }
         }
       }
 
