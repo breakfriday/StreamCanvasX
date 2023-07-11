@@ -163,16 +163,16 @@ class PlayerService extends Emitter {
                     hasAudio: hasAudio,
                     hasVideo: hasVideo,
 
-                  }, { enableStashBuffer: false,
-                        enableWorker: true,
-                        liveBufferLatencyChasing: true,
-                        liveBufferLatencyMaxLatency: 1, // seconds.
-                        autoCleanupSourceBuffer: true,
-                        // autoCleanupMaxBackwardDuration: 5, // seconds.
-                         autoCleanupMinBackwardDuration: 5,
-                        lazyLoad: false,
-                        liveBufferLatencyMinRemain: 0.1,
-                        lazyLoadMaxDuration: 4, // seconds.
+                  }, { enableStashBuffer: true,
+                         enableWorker: true,
+                         liveBufferLatencyChasing: true,
+                        // liveBufferLatencyMaxLatency: 1, // seconds.
+                        // autoCleanupSourceBuffer: true,
+                        // // autoCleanupMaxBackwardDuration: 5, // seconds.
+                        //  autoCleanupMinBackwardDuration: 5,
+                        // lazyLoad: false,
+                        // liveBufferLatencyMinRemain: 0.1,
+                        // lazyLoadMaxDuration: 4, // seconds.
                  });
             }
 
