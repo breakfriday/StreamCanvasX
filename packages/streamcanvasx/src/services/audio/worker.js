@@ -1,4 +1,17 @@
 onmessage = (event) => {
+    switch (event.data.event) {
+        case 'updateBufferData':
+          // 处理更新 bufferData 的逻辑
+            update_audio_buffer(event);
+          break;
+        // 可以添加其他 case 来处理不同的事件
+        default:
+          break;
+      }
+  };
+
+
+  const update_audio_buffer = (event) => {
     let offscreenCanvas = event.data.canvas;
     let { bufferData } = event.data;
     let bufferLength = bufferData.length;
