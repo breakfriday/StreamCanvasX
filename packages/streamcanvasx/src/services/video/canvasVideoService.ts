@@ -162,7 +162,8 @@ class CanvasVideoService {
       if (this.playerService.config.useOffScreen === true) {
         let offscreenCanvas = this.canvas_el.transferControlToOffscreen();
         this.offscreen_canvas = offscreenCanvas;
-        this.offscreen_canvas_context = offscreenCanvas.getContext('2d');
+        // 不能在主线程中  获取上下问
+        // this.offscreen_canvas_context = offscreenCanvas.getContext('2d');
       } else {
         this.canvas_context = this.canvas_el.getContext('2d');
       }
@@ -472,12 +473,18 @@ class CanvasVideoService {
     }
 
     clearCanvas() {
+      if (this.playerService.config.useOffScreen === true) {
+        return false;
+      }
       let canvasEl = this.canvas_el;
       this.clear = true;
       // 清除画布
       this.canvas_context.clearRect(0, 0, canvasEl.width, canvasEl.height);
     }
     drawLoading() {
+      if (this.playerService.config.useOffScreen === true) {
+        return false;
+      }
       let ctx = this.canvas_context;
       let { canvas_el } = this;
       let canvas = canvas_el;
