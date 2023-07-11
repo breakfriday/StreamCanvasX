@@ -109,6 +109,12 @@ class AudioProcessingService {
       let bufferLength = this.bufferDataLength;
       let canvasContext = this.playerService.canvasVideoService.canvas_context;
       let canvas = this.playerService.canvasVideoService.canvas_el;
+      canvasContext.lineWidth = 2;
+      canvasContext.strokeStyle = '#7f0';
+      setTimeout(() => {
+        canvasContext.lineWidth = 5;
+        canvasContext.strokeStyle = '#7f0';
+      }, 400);
 
       const AnimationFrame = () => {
          dataArray = this.bufferData;
@@ -119,8 +125,8 @@ class AudioProcessingService {
 
           if (this.playerService.canvasVideoService.loading === false) {
               canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-              canvasContext.lineWidth = 2;
-              canvasContext.strokeStyle = '#7f0';
+              // canvasContext.lineWidth = 2;
+              // canvasContext.strokeStyle = '#7f0';
 
               canvasContext.beginPath();
               const sliceWidth = canvas.width / bufferLength;
@@ -142,7 +148,7 @@ class AudioProcessingService {
           }
 
           // Use setTimeout here to loop function call. Adjust the delay time as per your requirement. Here 1000/60 mimics a framerate of 60 FPS, similar to requestAnimationFrame
-          setTimeout(AnimationFrame.bind(this), 1000 / 30);
+          setTimeout(AnimationFrame.bind(this), 1000 / 15);
       };
       AnimationFrame();
   }
@@ -308,7 +314,7 @@ class AudioProcessingService {
 
       setBufferData() {
         // 根据 AudioContext 的采样率、所需的缓存时间和 FFT 大小来设置缓存区大小
-       this.bufferDataLength = Math.ceil(0.4 * this.context.audioContext!.sampleRate / this.dataArray.length) * this.dataArray.length;
+       this.bufferDataLength = Math.ceil(0.2 * this.context.audioContext!.sampleRate / this.dataArray.length) * this.dataArray.length;
        this.bufferData = new Float32Array(this.bufferDataLength);
       }
 }
