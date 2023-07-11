@@ -57,7 +57,8 @@ onmessage = (event) => {
 
     let canvas = offscreenCanvas;
 
-
+    canvasContext.lineWidth = 5;
+    canvasContext.strokeStyle = '#7f0';
     const AnimationFrame = () => {
         let dataArray = bufferData;
 
@@ -65,8 +66,7 @@ onmessage = (event) => {
 
 
             canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-            canvasContext.lineWidth = 2;
-            canvasContext.strokeStyle = '#7f0';
+
 
             canvasContext.beginPath();
             const sliceWidth = canvas.width / bufferLength;
