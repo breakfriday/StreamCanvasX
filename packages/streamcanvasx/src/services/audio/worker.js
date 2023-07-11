@@ -9,15 +9,14 @@ onmessage = (event) => {
           // 处理更新 bufferData 的逻辑
             // render_audio_buffer(event);
 
-            render_audio_buffer2(event);
+            render_audio_buffer(event);
           break;
         // 可以添加其他 case 来处理不同的事件
         case 'updateBufferData':
              update_buffer(event);
           break;
-        case 'renderBuffer':
 
-             render_audio_buffer2();
+
         default:
           break;
       }
@@ -48,55 +47,6 @@ onmessage = (event) => {
 
 
   const render_audio_buffer = (event) => {
-    let { dataArray } = event.data;
-    let { bufferLength } = event.data;
-
-    if (event.data.canvas) {
-        offscreenCanvas = event.data.canvas;
-        canvasContext = offscreenCanvas.getContext('2d');
-    }
-
-    let canvas = offscreenCanvas;
-
-
-    const AnimationFrame = () => {
-        if (this.clear === true) {
-            // This returns the function, effectively stopping the loop
-            return;
-        }
-
-
-            canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-            canvasContext.lineWidth = 2;
-            canvasContext.strokeStyle = '#7f0';
-
-            canvasContext.beginPath();
-            const sliceWidth = canvas.width / bufferLength;
-            let x = 0;
-            for (let i = 0; i < bufferLength; i++) {
-                const value = dataArray[i] * canvas.height / 2;
-                const y = canvas.height / 2 + value;
-
-                if (i === 0) {
-                    canvasContext.moveTo(x, y);
-                } else {
-                    canvasContext.lineTo(x, y);
-                }
-
-                x += sliceWidth;
-            }
-            canvasContext.lineTo(canvas.width, canvas.height / 2);
-            canvasContext.stroke();
-
-
-        // Use setTimeout here to loop function call. Adjust the delay time as per your requirement. Here 1000/60 mimics a framerate of 60 FPS, similar to requestAnimationFrame
-        // setTimeout(AnimationFrame.bind(this), 1000 / 30);
-    };
-    AnimationFrame();
-  };
-
-
-  const render_audio_buffer2 = (event) => {
     let animationId = null;
 
 
