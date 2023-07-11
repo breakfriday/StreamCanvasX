@@ -107,14 +107,14 @@ class PlayerService extends Emitter {
     }
 
     init(config?: IplayerConfig) {
-        let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false, hasAudio = true, hasVideo = true, errorUrl = '' } = config;
-        this.config = { model, url, contentEl, showAudio, hasAudio, hasVideo, errorUrl };
+        let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false, hasAudio = true, hasVideo = true, errorUrl = '', useOffScreen = false } = config;
+        this.config = { model, url, contentEl, showAudio, hasAudio, hasVideo, errorUrl, useOffScreen };
 
         this.httpFlvStreamService.init(this, url);
         this.flvVDemuxService.init(this);
         this.webcodecsDecoderService.init(this);
         this.fLVDemuxStream.init(this);
-        this.canvasVideoService.init(this, { model: model, contentEl });
+        this.canvasVideoService.init(this, { model: model, contentEl, useOffScreen });
 
 
         const decode_worker = new Worker(new URL('../decoder/decode_worker.js', import.meta.url));
