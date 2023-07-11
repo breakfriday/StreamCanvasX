@@ -142,6 +142,7 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   contentEl?: HTMLElement;
   showAudio?: boolean;
   errorUrl?: string;
+  useOffScreen?: boolean;
 
 
 }

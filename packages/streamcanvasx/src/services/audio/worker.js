@@ -1,4 +1,4 @@
-onmessage = (e) => {
+onmessage = (event) => {
     let offscreenCanvas = event.data.canvas;
     let { bufferData } = event.data;
     let bufferLength = bufferData.length;
