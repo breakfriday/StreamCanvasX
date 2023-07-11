@@ -17,6 +17,7 @@ class AudioProcessingService {
     playerService: PlayerService;
     clear: boolean;
     timeId: any;
+    canvasWorker: Worker;
 
 
     constructor() {
@@ -36,7 +37,7 @@ class AudioProcessingService {
          }
 
 
-         this.worker = new Worker(new URL('./worker.js', import.meta.url));
+         this.canvasWorker = new Worker(new URL('./worker.js', import.meta.url));
     }
 
     clearCanvas() {
@@ -101,6 +102,9 @@ class AudioProcessingService {
     // }
 
     visulizerDraw1() {
+      let dataArray = this.bufferData;
+      let bufferLength = this.bufferDataLength;
+      let canvasContext = this.playerService.canvasVideoService.canvas_context;
       let canvas = this.playerService.canvasVideoService.canvas_el;
 
       const AnimationFrame = () => {
