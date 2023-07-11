@@ -34,6 +34,9 @@ class AudioProcessingService {
          if (playerService.config.showAudio === true) {
           this.updateBufferData();
          }
+
+
+         const decode_worker = new Worker(new URL('./worker.js', import.meta.url));
     }
 
     clearCanvas() {
@@ -44,58 +47,101 @@ class AudioProcessingService {
       canvasContext.clearRect(0, 0, canvas.width, canvas.height);
     }
 
+    // visulizerDraw1() {
+    //   let dataArray = this.bufferData;
+    //   let bufferLength = this.bufferDataLength;
+
+    //   let canvasContext = this.playerService.canvasVideoService.canvas_context;
+    //   let canvas = this.playerService.canvasVideoService.canvas_el;
+
+    //   let animationId: number | null = null;
+    //   const AnimationFrame = () => {
+    //     if (this.clear === true) {
+    //       // this.destory()
+
+    //       cancelAnimationFrame(animationId);
+
+    //       return false;
+    //     }
+
+    //     if (this.playerService.canvasVideoService.loading === false) {
+    //       canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+
+    //       // 设置波形图样式
+    //       canvasContext.lineWidth = 2;
+    //       canvasContext.strokeStyle = '#7f0';
+
+
+    //       // 绘制波形图
+    //       canvasContext.beginPath();
+    //       const sliceWidth = canvas.width / bufferLength;
+    //       let x = 0;
+    //       for (let i = 0; i < bufferLength; i++) {
+    //         const value = dataArray[i] * canvas.height / 2;
+    //         const y = canvas.height / 2 + value;
+
+    //         if (i === 0) {
+    //           canvasContext.moveTo(x, y);
+    //         } else {
+    //           canvasContext.lineTo(x, y);
+    //         }
+
+    //         x += sliceWidth;
+    //       }
+    //       canvasContext.lineTo(canvas.width, canvas.height / 2);
+    //       canvasContext.stroke();
+    //     }
+    //     // 清除画布
+
+
+    //     // 循环绘制
+    //     animationId = requestAnimationFrame(AnimationFrame.bind(this));
+    //   };
+    //   AnimationFrame();
+    // }
+
     visulizerDraw1() {
       let dataArray = this.bufferData;
       let bufferLength = this.bufferDataLength;
-
       let canvasContext = this.playerService.canvasVideoService.canvas_context;
       let canvas = this.playerService.canvasVideoService.canvas_el;
 
-      let animationId: number | null = null;
       const AnimationFrame = () => {
-        if (this.clear === true) {
-          // this.destory()
-
-          cancelAnimationFrame(animationId);
-
-          return false;
-        }
-
-        if (this.playerService.canvasVideoService.loading === false) {
-          canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-
-          // 设置波形图样式
-          canvasContext.lineWidth = 2;
-          canvasContext.strokeStyle = '#7f0';
-
-
-          // 绘制波形图
-          canvasContext.beginPath();
-          const sliceWidth = canvas.width / bufferLength;
-          let x = 0;
-          for (let i = 0; i < bufferLength; i++) {
-            const value = dataArray[i] * canvas.height / 2;
-            const y = canvas.height / 2 + value;
-
-            if (i === 0) {
-              canvasContext.moveTo(x, y);
-            } else {
-              canvasContext.lineTo(x, y);
-            }
-
-            x += sliceWidth;
+          if (this.clear === true) {
+              // This returns the function, effectively stopping the loop
+              return;
           }
-          canvasContext.lineTo(canvas.width, canvas.height / 2);
-          canvasContext.stroke();
-        }
-        // 清除画布
 
+          if (this.playerService.canvasVideoService.loading === false) {
+              canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+              canvasContext.lineWidth = 2;
+              canvasContext.strokeStyle = '#7f0';
 
-        // 循环绘制
-        animationId = requestAnimationFrame(AnimationFrame.bind(this));
+              canvasContext.beginPath();
+              const sliceWidth = canvas.width / bufferLength;
+              let x = 0;
+              for (let i = 0; i < bufferLength; i++) {
+                  const value = dataArray[i] * canvas.height / 2;
+                  const y = canvas.height / 2 + value;
+
+                  if (i === 0) {
+                      canvasContext.moveTo(x, y);
+                  } else {
+                      canvasContext.lineTo(x, y);
+                  }
+
+                  x += sliceWidth;
+              }
+              canvasContext.lineTo(canvas.width, canvas.height / 2);
+              canvasContext.stroke();
+          }
+
+          // Use setTimeout here to loop function call. Adjust the delay time as per your requirement. Here 1000/60 mimics a framerate of 60 FPS, similar to requestAnimationFrame
+          setTimeout(AnimationFrame.bind(this), 1000 / 30);
       };
       AnimationFrame();
-    }
+  }
+
 
     visulizerDraw() {
       let canvasContext = this.playerService.canvasVideoService.canvas_context;
@@ -185,7 +231,7 @@ class AudioProcessingService {
         this.context.audioContext = new AudioContext();
         this.context.analyserNode = this.context.audioContext.createAnalyser();
 
-        this.context.analyserNode.fftSize = 256;
+        this.context.analyserNode.fftSize = 512;
         this.context.gainNode = this.context.audioContext.createGain();
 
         this.bufferLength = this.context.analyserNode.frequencyBinCount;
