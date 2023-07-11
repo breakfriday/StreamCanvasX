@@ -160,8 +160,8 @@ class CanvasVideoService {
 
     _initContext2D() {
       if (this.playerService.config.useOffScreen === true) {
-        let offscreenCanvas = this.canvas_el.transferControlToOffscreen();
-        this.offscreen_canvas = offscreenCanvas;
+        // let offscreenCanvas = this.canvas_el.transferControlToOffscreen();
+        // this.offscreen_canvas = offscreenCanvas;
         // 不能在主线程中  获取上下问
         // this.offscreen_canvas_context = offscreenCanvas.getContext('2d');
       } else {
@@ -338,6 +338,10 @@ class CanvasVideoService {
     setCanvasSize() {
       let height = 200;
       let width = 400;
+
+      if (this.playerService.config.useOffScreen == true) {
+        return false;
+      }
 
 
       if (this.contentEl) {
