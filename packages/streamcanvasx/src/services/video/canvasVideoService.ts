@@ -38,7 +38,7 @@ function createContextGL($canvas: HTMLCanvasElement): WebGLRenderingContext | nu
 @injectable()
 class CanvasVideoService {
     canvas_el: HTMLCanvasElement;
-    canvas_context: CanvasRenderingContext2D;
+    canvas_context: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
     context2D: CanvasRenderingContext2D;
     playerService: PlayerService;
     contextGl: WebGLRenderingContext;
@@ -74,7 +74,7 @@ class CanvasVideoService {
       this.resizeObserver.observe(this.contentEl);
     }
 
-    init(playerService: PlayerService, data: {model?: UseMode; contentEl?: HTMLElement | null}) {
+    init(playerService: PlayerService, data: {model?: UseMode; contentEl?: HTMLElement | null; useOffScreen: boolean}) {
         // this.initGpu();
         //  this.setUseMode(UseMode.UseCanvas);
         //  this.setUseMode(UseMode.UseWebGPU);
@@ -157,8 +157,19 @@ class CanvasVideoService {
     }
 
     _initContext2D() {
+      if (this.playerService.config.useOffScreen === true) {
+        let offscreenCanvas = this.canvas_el.transferControlToOffscreen();
+        this.canvas_context = offscreenCanvas.getContext('2d');
+      } else {
         this.canvas_context = this.canvas_el.getContext('2d');
+      }
+       // this.canvas_context = this.canvas_el.getContext('2d');
     }
+
+    // _initOffScreen() {
+    //   let offscreenCanvas = this.canvas_el.transferControlToOffscreen();
+    //   this.canvas_context = offscreenCanvas.getContext('2d');
+    // }
 
 
     async initGpu() {
