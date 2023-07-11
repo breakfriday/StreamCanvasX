@@ -50,11 +50,6 @@ onmessage = (event) => {
     let animationId = null;
 
 
-    let dataArray = bufferData;
-
-    let bufferLength = bufferDataLength_float32;
-
-
     if (event.data.canvas) {
         offscreenCanvas = event.data.canvas;
         canvasContext = offscreenCanvas.getContext('2d');
@@ -64,10 +59,9 @@ onmessage = (event) => {
 
 
     const AnimationFrame = () => {
-        if (this.clear === true) {
-            // This returns the function, effectively stopping the loop
-            return;
-        }
+        let dataArray = bufferData;
+
+        let bufferLength = bufferDataLength_float32;
 
 
             canvasContext.clearRect(0, 0, canvas.width, canvas.height);
@@ -94,7 +88,7 @@ onmessage = (event) => {
 
 
         // Use setTimeout here to loop function call. Adjust the delay time as per your requirement. Here 1000/60 mimics a framerate of 60 FPS, similar to requestAnimationFrame
-        // setTimeout(AnimationFrame.bind(this), 1000 / 30);
+         setTimeout(AnimationFrame.bind(this), 1000 / 15);
     };
     AnimationFrame();
   };

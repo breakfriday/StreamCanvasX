@@ -149,39 +149,13 @@ class AudioProcessingService {
 
   // render by offscreen
   visulizerDraw2() {
-    let dataArray = this.bufferData;
-    let bufferLength = this.bufferDataLength;
-    // let canvasContext = this.playerService.canvasVideoService.offscreen_canvas_context;
-  //  let { offscreen_canvas } = this.playerService.canvasVideoService;
     const offscreen_canvas = this.playerService.canvasVideoService.canvas_el.transferControlToOffscreen();
 
-    let init = false;
 
-    const AnimationFrame = () => {
-        if (this.clear === true) {
-            // This returns the function, effectively stopping the loop
-            return;
-        }
-        if (init === true) {
-          this.canvasWorker.postMessage({
-            event: 'updateBufferRender',
-            dataArray: this.bufferData,
-            bufferLength: bufferLength });
-        } else {
-          this.canvasWorker.postMessage({
-            event: 'updateBufferRender',
-            canvas: offscreen_canvas,
-            dataArray: this.bufferData,
-            bufferLength: bufferLength }, [offscreen_canvas]);
-        }
-
-        init = true;
-
-
-        // Use setTimeout here to loop function call. Adjust the delay time as per your requirement. Here 1000/60 mimics a framerate of 60 FPS, similar to requestAnimationFrame
-        setTimeout(AnimationFrame.bind(this), 1000 / 30);
-    };
-    AnimationFrame();
+    this.canvasWorker.postMessage({
+      event: 'updateBufferRender',
+      canvas: offscreen_canvas,
+     }, [offscreen_canvas]);
 }
 
 
