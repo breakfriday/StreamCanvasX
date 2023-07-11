@@ -4,6 +4,7 @@ import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch } from 'an
 import fpmap from 'lodash/fp/map';
 import VideoComponents from './aa';
 import { Data } from 'ice';
+import './index.css';
 
 const boxs = [1, 2, 3, 4, 5, 6, 7];
 

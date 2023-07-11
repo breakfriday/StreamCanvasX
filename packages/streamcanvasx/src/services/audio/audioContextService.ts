@@ -108,6 +108,7 @@ class AudioProcessingService {
       let canvas = this.playerService.canvasVideoService.canvas_el;
 
       const AnimationFrame = () => {
+         dataArray = this.bufferData;
           if (this.clear === true) {
               // This returns the function, effectively stopping the loop
               return;
@@ -143,11 +144,13 @@ class AudioProcessingService {
       AnimationFrame();
   }
 
+  // render by offscreen
   visulizerDraw2() {
     let dataArray = this.bufferData;
     let bufferLength = this.bufferDataLength;
     // let canvasContext = this.playerService.canvasVideoService.offscreen_canvas_context;
-    let { offscreen_canvas } = this.playerService.canvasVideoService;
+  //  let { offscreen_canvas } = this.playerService.canvasVideoService;
+    const offscreen_canvas = this.playerService.canvasVideoService.canvas_el.transferControlToOffscreen();
 
     let init = false;
 
@@ -267,7 +270,7 @@ class AudioProcessingService {
         this.context.audioContext = new AudioContext();
         this.context.analyserNode = this.context.audioContext.createAnalyser();
 
-        this.context.analyserNode.fftSize = 512;
+        this.context.analyserNode.fftSize = 128;
         this.context.gainNode = this.context.audioContext.createGain();
 
         this.bufferLength = this.context.analyserNode.frequencyBinCount;
