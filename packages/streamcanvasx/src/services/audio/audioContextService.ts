@@ -1,5 +1,6 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../player';
+import { debug } from 'console';
 
 @injectable()
 class AudioProcessingService {
@@ -32,7 +33,9 @@ class AudioProcessingService {
          this.audioContextConnect();
          this.playerService = playerService;
 
-         if (playerService.config.showAudio === true) {
+         if (playerService.config.showAudio === true && playerService.config.useOffScreen === true) {
+          this.update_buffer_worker();
+         } else {
           this.updateBufferData();
          }
 
@@ -161,12 +164,12 @@ class AudioProcessingService {
         }
         if (init === true) {
           this.canvasWorker.postMessage({
-            event: 'updateBufferData',
+            event: 'updateBufferRender',
             dataArray: this.bufferData,
             bufferLength: bufferLength });
         } else {
           this.canvasWorker.postMessage({
-            event: 'updateBufferData',
+            event: 'updateBufferRender',
             canvas: offscreen_canvas,
             dataArray: this.bufferData,
             bufferLength: bufferLength }, [offscreen_canvas]);
@@ -258,6 +261,33 @@ class AudioProcessingService {
 
 
       this.timeId = setTimeout(this.updateBufferData.bind(this), 1000 / 30); // Updates at roughly 30 FPS
+    }
+
+    update_buffer_worker() {
+      let { dataArray, bufferData } = this;
+      let { bufferDataLength } = this;
+
+
+      let timeId: any = '';
+
+      let $this = this;
+
+
+      let interval_fn = () => {
+        timeId = setTimeout(() => {
+        $this.context.analyserNode?.getFloatTimeDomainData(dataArray);
+
+
+         $this.canvasWorker.postMessage({
+            event: 'updateBufferData',
+            dataArray: dataArray,
+            bufferDataLength: bufferDataLength,
+          });
+          interval_fn.call(this);
+        }, 1000 / 30);
+      };
+
+      interval_fn();
     }
 
 
