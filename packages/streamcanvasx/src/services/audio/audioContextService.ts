@@ -109,18 +109,22 @@ class AudioProcessingService {
       let bufferLength = this.bufferDataLength;
       let canvasContext = this.playerService.canvasVideoService.canvas_context;
       let canvas = this.playerService.canvasVideoService.canvas_el;
-      canvasContext.lineWidth = 2;
-      canvasContext.strokeStyle = '#7f0';
-      setTimeout(() => {
-        canvasContext.lineWidth = 5;
-        canvasContext.strokeStyle = '#7f0';
-      }, 400);
+      // canvasContext.lineWidth = 2;
+      // canvasContext.strokeStyle = '#7f0';
+      // setTimeout(() => {
+      //   canvasContext.lineWidth = 5;
+      //   canvasContext.strokeStyle = '#7f0';
+      // }, 400);
 
       const AnimationFrame = () => {
          dataArray = this.bufferData;
           if (this.clear === true) {
               // This returns the function, effectively stopping the loop
               return;
+          }
+          if (canvasContext.lineWidth != 5) {
+            canvasContext.lineWidth = 5;
+            canvasContext.strokeStyle = '#7f0';
           }
 
           if (this.playerService.canvasVideoService.loading === false) {
@@ -148,7 +152,7 @@ class AudioProcessingService {
           }
 
           // Use setTimeout here to loop function call. Adjust the delay time as per your requirement. Here 1000/60 mimics a framerate of 60 FPS, similar to requestAnimationFrame
-          setTimeout(AnimationFrame.bind(this), 1000 / 15);
+          setTimeout(AnimationFrame.bind(this), 1000 / 10);
       };
       AnimationFrame();
   }
