@@ -339,9 +339,9 @@ class CanvasVideoService {
       let height = 200;
       let width = 400;
 
-      if (this.playerService.config.useOffScreen == true) {
-        return false;
-      }
+      // if (this.playerService.config.useOffScreen == true) {
+      //   return false;
+      // }
 
 
       if (this.contentEl) {
