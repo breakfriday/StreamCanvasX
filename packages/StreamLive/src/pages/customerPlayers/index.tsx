@@ -1,6 +1,6 @@
 
 import React, { useRef, useEffect, useState } from 'react';
-import { Divider, Space, Button, Checkbox, Form, Input, Radio } from 'antd';
+import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch } from 'antd';
 import fpmap from 'lodash/fp/map';
 import VideoComponents from './aa';
 import { Data } from 'ice';
@@ -11,15 +11,15 @@ let streamPlayers: any = [];
 
 const HlsDemo = () => {
   useEffect(() => {}, []);
-  const [data, setData] = useState<Array<{url: string; type: number}>>([]);
+  const [data, setData] = useState<Array<{url: string; type: number; useOffScreen: boolean}>>([]);
   return (
     <div>
 
       <Form
         name="basic"
         autoComplete="off"
-        onFinish={(value: {url: string; type: number}) => {
-            let item = { url: value.url, type: value.type };
+        onFinish={(value: {url: string; type: number; useOffScreen: boolean}) => {
+            let item = { url: value.url, type: value.type, useOffScreen: value.useOffScreen };
             let temp = Object.assign([], data);
             temp.push(item);
             setData(temp);
@@ -38,6 +38,9 @@ const HlsDemo = () => {
           </Radio.Group>
         </Form.Item>
 
+        <Form.Item label="useOffScreen Audio " valuePropName="useOffScreen" name="useOffScreen">
+          <Switch />
+        </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button
@@ -52,7 +55,7 @@ const HlsDemo = () => {
 
         {
           data.map((item, inx) => {
-            let { url, type } = item;
+            let { url, type, useOffScreen } = item;
             let showAudio = false;
             let hasAudio = false;
             let hasVideo = true;
@@ -60,12 +63,12 @@ const HlsDemo = () => {
             if (type == 2) {
                  showAudio = true;
                   hasAudio = true;
-               hasVideo = false;
+                   hasVideo = false;
             } else {
 
             }
 
-            return (<VideoComponents url={url} key={inx} hasVideo={hasVideo} hasAudio={hasAudio} showAudio={showAudio} />);
+            return (<VideoComponents url={url} key={inx} hasVideo={hasVideo} hasAudio={hasAudio} showAudio={showAudio} useOffScreen={useOffScreen} />);
           })
         }
       </div>
