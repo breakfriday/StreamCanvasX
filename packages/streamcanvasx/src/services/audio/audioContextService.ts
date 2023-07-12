@@ -31,10 +31,11 @@ class AudioProcessingService {
 
     init(playerService: PlayerService, option: {media_el: HTMLVideoElement}) {
         let { media_el } = option;
+        this.playerService = playerService;
          this.createAudioContext();
          this.setMediaSource_el(media_el);
          this.audioContextConnect();
-         this.playerService = playerService;
+
 
          if (playerService.config.showAudio === true && playerService.config.useOffScreen === true) {
           this.update_buffer_worker();
@@ -112,6 +113,7 @@ class AudioProcessingService {
       let bufferLength = this.bufferDataLength;
       let canvasContext = this.playerService.canvasVideoService.canvas_context;
       let canvas = this.playerService.canvasVideoService.canvas_el;
+      let { renderPerSecond } = this.playerService.config;
 
       let timeId: any = '';
       // canvasContext.lineWidth = 2;
@@ -160,7 +162,7 @@ class AudioProcessingService {
           }
 
           // Use setTimeout here to loop function call. Adjust the delay time as per your requirement. Here 1000/60 mimics a framerate of 60 FPS, similar to requestAnimationFrame
-          timeId = setTimeout(AnimationFrame.bind(this), render_times);
+          timeId = setTimeout(AnimationFrame.bind(this), renderPerSecond);
       };
       AnimationFrame();
   }
@@ -171,6 +173,8 @@ class AudioProcessingService {
     let bufferLength = this.bufferDataLength;
     let canvasContext = this.playerService.canvasVideoService.canvas_context;
     let canvas = this.playerService.canvasVideoService.canvas_el;
+
+    let { renderPerSecond } = this.playerService.config;
 
     let timeId: any = '';
     // canvasContext.lineWidth = 2;
@@ -241,7 +245,7 @@ class AudioProcessingService {
         }
 
         // Use setTimeout here to loop function call. Adjust the delay time as per your requirement. Here 1000/60 mimics a framerate of 60 FPS, similar to requestAnimationFrame
-        timeId = setTimeout(AnimationFrame.bind(this), render_times);
+        timeId = setTimeout(AnimationFrame.bind(this), renderPerSecond);
     };
     AnimationFrame();
   }
@@ -317,6 +321,8 @@ class AudioProcessingService {
       let { dataArray, bufferData } = this;
       let { bufferDataLength } = this;
 
+      let { updataBufferPerSecond } = this.playerService.config;
+
       if (this.clear === true) {
         // this.destory()
         clearTimeout(this.timeId);
@@ -338,7 +344,7 @@ class AudioProcessingService {
       }
 
 
-      this.timeId = setTimeout(this.updateBufferData.bind(this), update_buffer_times); // Updates at roughly 30 FPS
+      this.timeId = setTimeout(this.updateBufferData.bind(this), updataBufferPerSecond); // Updates at roughly 30 FPS
     }
 
     update_buffer_worker() {
@@ -375,10 +381,11 @@ class AudioProcessingService {
   }
 
     createAudioContext() {
+      let { fftsize } = this.playerService.config;
         this.context.audioContext = new AudioContext();
         this.context.analyserNode = this.context.audioContext.createAnalyser();
 
-        this.context.analyserNode.fftSize = 128;
+        this.context.analyserNode.fftSize = fftsize;
         this.context.gainNode = this.context.audioContext.createGain();
 
         this.bufferLength = this.context.analyserNode.frequencyBinCount;
