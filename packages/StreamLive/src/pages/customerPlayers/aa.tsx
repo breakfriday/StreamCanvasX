@@ -13,6 +13,10 @@ interface IVideoComponent {
   showAudio?: boolean;
   useOffScreen?: boolean;
   audioDrawType?: number ; // You might want to replace 'string' with the actual type here
+  renderPerSecond?: number;
+  updataBufferPerSecond?: number;
+  fftsize?: number;
+  bufferSize?: number;
 }
 
 const VideoComponents: React.FC<IVideoComponent> = (props) => {
