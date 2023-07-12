@@ -28,7 +28,7 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.30';
+window.streamCanvasX = '0.1.32';
 function now() {
     return new Date().getTime();
 }
@@ -169,13 +169,13 @@ class PlayerService extends Emitter {
                   }, { enableStashBuffer: false,
                        enableWorker: true,
                        liveBufferLatencyChasing: true,
-                        // liveBufferLatencyMaxLatency: 1, // seconds.
-                        // autoCleanupSourceBuffer: true,
-                        // // autoCleanupMaxBackwardDuration: 5, // seconds.
-                        //  autoCleanupMinBackwardDuration: 5,
-                        // lazyLoad: false,
-                        // liveBufferLatencyMinRemain: 0.1,
-                        // lazyLoadMaxDuration: 4, // seconds.
+                        liveBufferLatencyMaxLatency: 1, // seconds.
+                        autoCleanupSourceBuffer: true,
+                        // autoCleanupMaxBackwardDuration: 5, // seconds.
+                         autoCleanupMinBackwardDuration: 5,
+                        lazyLoad: false,
+                        liveBufferLatencyMinRemain: 0.1,
+                        lazyLoadMaxDuration: 4, // seconds.
                  });
             }
 
