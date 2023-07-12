@@ -19,6 +19,10 @@ const HlsDemo = () => {
       <Form
         name="basic"
         autoComplete="off"
+        onFieldsChange={(data) => {
+          // let h = data;
+          // debugger;
+        }}
         onFinish={(value: {url: string; type: number; useOffScreen: boolean; audioDrawType: number}) => {
             let item = { url: value.url, type: value.type, useOffScreen: value.useOffScreen, audioDrawType: value.audioDrawType };
             let temp = Object.assign([], data);
@@ -32,18 +36,18 @@ const HlsDemo = () => {
         >
           <Input />
         </Form.Item>
-        <Form.Item label="type" name="type">
+        <Form.Item label="type" name="type" initialValue={'1'}>
           <Radio.Group>
             <Radio value="1"> 视频 </Radio>
             <Radio value="2"> 音频 </Radio>
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item label="useOffScreen Audio " valuePropName="useOffScreen" name="useOffScreen">
+        <Form.Item label="useOffScreen Audio " valuePropName="useOffScreen" name="useOffScreen" initialValue={false}>
           <Switch />
         </Form.Item>
 
-        <Form.Item label="renderType" name="audioDrawType">
+        <Form.Item label="renderType" name="audioDrawType" initialValue={'1'}>
           <Radio.Group>
             <Radio value="2"> 波形渲染 </Radio>
             <Radio value="1"> 对称渲染 </Radio>
