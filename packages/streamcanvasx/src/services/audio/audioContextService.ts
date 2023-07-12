@@ -1,6 +1,9 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../player';
-import { debug } from 'console';
+
+
+const render_times = 1000 / 15;
+const update_buffer_times = 1000 / 30;
 
 @injectable()
 class AudioProcessingService {
@@ -157,7 +160,7 @@ class AudioProcessingService {
           }
 
           // Use setTimeout here to loop function call. Adjust the delay time as per your requirement. Here 1000/60 mimics a framerate of 60 FPS, similar to requestAnimationFrame
-          timeId = setTimeout(AnimationFrame.bind(this), 1000 / 10);
+          timeId = setTimeout(AnimationFrame.bind(this), render_times);
       };
       AnimationFrame();
   }
@@ -238,7 +241,7 @@ class AudioProcessingService {
         }
 
         // Use setTimeout here to loop function call. Adjust the delay time as per your requirement. Here 1000/60 mimics a framerate of 60 FPS, similar to requestAnimationFrame
-        timeId = setTimeout(AnimationFrame.bind(this), 1000 / 10);
+        timeId = setTimeout(AnimationFrame.bind(this), render_times);
     };
     AnimationFrame();
   }
@@ -335,7 +338,7 @@ class AudioProcessingService {
       }
 
 
-      this.timeId = setTimeout(this.updateBufferData.bind(this), 1000 / 30); // Updates at roughly 30 FPS
+      this.timeId = setTimeout(this.updateBufferData.bind(this), update_buffer_times); // Updates at roughly 30 FPS
     }
 
     update_buffer_worker() {
@@ -359,7 +362,7 @@ class AudioProcessingService {
             bufferDataLength: bufferDataLength,
           });
           interval_fn.call(this);
-        }, 1000 / 30);
+        }, update_buffer_times);
       };
 
       interval_fn();
