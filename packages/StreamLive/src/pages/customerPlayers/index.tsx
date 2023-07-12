@@ -24,7 +24,7 @@ interface IFormData{
 
 const HlsDemo = () => {
   useEffect(() => {}, []);
-  const [data, setData] = useState<Array<{url: string; type: number; useOffScreen: boolean; audioDrawType: number}>>([]);
+  const [data, setData] = useState<Array<IFormData>>([]);
   const [form_ref] = Form.useForm();
   const [formState, setFormState] = useState({ url: '', type: '1', useOffScreen: false, audioDrawType: '1' });
   return (
@@ -163,6 +163,11 @@ const HlsDemo = () => {
               showAudio={showAudio}
               useOffScreen={useOffScreen}
               audioDrawType={audioDrawType}
+              updataBufferPerSecond={item.updataBufferPerSecond}
+              renderPerSecond={item.renderPerSecond}
+              fftsize={item.fftsize}
+              bufferSize={item.bufferSize}
+
             />);
           })
         }
