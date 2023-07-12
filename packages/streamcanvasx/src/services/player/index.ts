@@ -109,7 +109,20 @@ class PlayerService extends Emitter {
     init(config?: IplayerConfig) {
         // let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false, hasAudio = true, hasVideo = true, errorUrl = '', useOffScreen = false, audioDraw = 1 } = config;
 
-        const default_config: IplayerConfig = { model: UseMode.UseCanvas, url: '', showAudio: false, hasAudio: true, hasVideo: true, errorUrl: '', useOffScreen: false, audioDraw: 1 };
+        const default_config: IplayerConfig = {
+            model: UseMode.UseCanvas,
+            url: '',
+            showAudio: false,
+            hasAudio: true,
+            hasVideo: true,
+            errorUrl: '',
+            useOffScreen: false,
+            audioDraw: 1,
+            updataBufferPerSecond: 30,
+            renderPerSecond: 30,
+            fftsize: 128,
+            bufferSize: 0.2,
+        };
 
         this.config = Object.assign(default_config, config);
         let { model, url, contentEl, useOffScreen } = this.config;
