@@ -144,6 +144,10 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   errorUrl?: string;
   useOffScreen?: boolean;
   audioDraw?: number;
+  renderPerSecond?: number;
+  updataBufferPerSecond?: number;
+  fftsize?: number;
+  bufferSize?: number;
 
 
 }
