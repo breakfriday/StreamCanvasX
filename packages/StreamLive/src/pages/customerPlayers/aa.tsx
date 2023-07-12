@@ -57,6 +57,10 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
     });
 
 
+    return () => {
+      player.destroy();
+    };
+
     // let canvas_el = player.canvasVideoService.getCanvas2dEl();
 
     // containerRef.current!.append(canvas_el);
