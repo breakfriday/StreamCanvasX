@@ -188,6 +188,7 @@ class AudioProcessingService {
           canvasContext.lineWidth = 1;
           canvasContext.strokeStyle = '#7f0';
         }
+        canvasContext.strokeStyle = '#7f0';
 
         if (this.playerService.canvasVideoService.loading === false) {
             canvasContext.clearRect(0, 0, canvas.width, canvas.height);
@@ -198,6 +199,7 @@ class AudioProcessingService {
 
             const sliceWidth = canvas.width / bufferLength;
             let x = 0;
+            let gap = 20;
 
             for (let i = 0; i < bufferLength; i++) {
                 let v = dataArray[i];
@@ -207,12 +209,25 @@ class AudioProcessingService {
                 // 对于下半部分
                 let y_lower = (1.0 + v) * canvas.height / 4 + canvas.height / 2; // 首先反转 v，然后加上画布高度的一半，使其位于下半部分
 
+                if (v === 0) {
+                  y_upper = canvas.height / 2 - gap / 2;
+                  y_lower = canvas.height / 2 + gap / 2;
+              }
+
                 if (i === 0) {
                     canvasContext.moveTo(x, y_upper); // 上半部分
                     canvasContext.moveTo(x, y_lower); // 下半部分
                 } else {
                     canvasContext.lineTo(x, y_upper); // 上半部分
                     canvasContext.lineTo(x, y_lower); // 下半部分
+
+                    if (window.hh === true) {
+                      let pp = dataArray;
+                      let v = dataArray[i];
+                      let y1 = y_upper;
+
+                      debugger;
+                    }
                 }
 
 
