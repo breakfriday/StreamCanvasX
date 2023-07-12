@@ -43,6 +43,13 @@ const HlsDemo = () => {
           <Switch />
         </Form.Item>
 
+        <Form.Item label="renderType" name="rebderType">
+          <Radio.Group>
+            <Radio value="1"> 波形渲染 </Radio>
+            <Radio value="2"> 对称渲染 </Radio>
+          </Radio.Group>
+        </Form.Item>
+
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button
             type="primary"
