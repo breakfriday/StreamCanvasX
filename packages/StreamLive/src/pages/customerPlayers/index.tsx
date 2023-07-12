@@ -13,15 +13,18 @@ let streamPlayers: any = [];
 const HlsDemo = () => {
   useEffect(() => {}, []);
   const [data, setData] = useState<Array<{url: string; type: number; useOffScreen: boolean; audioDrawType: number}>>([]);
+  const [form_ref] = Form.useForm();
+  const [formState, setFormState] = useState({ url: '', type: '1', useOffScreen: false, audioDrawType: '1' });
   return (
     <div>
 
       <Form
         name="basic"
+        form={form_ref}
         autoComplete="off"
-        onFieldsChange={(data) => {
-          // let h = data;
-          // debugger;
+        onFieldsChange={(value) => {
+           let data = form_ref.getFieldsValue();
+            setFormState(data);
         }}
         onFinish={(value: {url: string; type: number; useOffScreen: boolean; audioDrawType: number}) => {
             let item = { url: value.url, type: value.type, useOffScreen: value.useOffScreen, audioDrawType: value.audioDrawType };
@@ -43,16 +46,22 @@ const HlsDemo = () => {
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item label="useOffScreen Audio " valuePropName="useOffScreen" name="useOffScreen" initialValue={false}>
-          <Switch />
-        </Form.Item>
+        {
+         formState.type === '2' ? (<Form.Item label="useOffScreen Audio " valuePropName="useOffScreen" name="useOffScreen" initialValue={false}>
+           <Switch />
+         </Form.Item>) : ''
+        }
 
-        <Form.Item label="renderType" name="audioDrawType" initialValue={'1'}>
-          <Radio.Group>
-            <Radio value="2"> 波形渲染 </Radio>
-            <Radio value="1"> 对称渲染 </Radio>
-          </Radio.Group>
-        </Form.Item>
+
+        {
+           formState.type === '2' && formState.useOffScreen != true ? (<Form.Item label="renderType" name="audioDrawType" initialValue={'1'}>
+             <Radio.Group>
+               <Radio value="2"> 波形渲染 </Radio>
+               <Radio value="1"> 对称渲染 </Radio>
+             </Radio.Group>
+           </Form.Item>) : ''
+        }
+
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button
