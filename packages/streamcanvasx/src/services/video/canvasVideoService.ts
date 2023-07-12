@@ -626,6 +626,9 @@ class CanvasVideoService {
     // }
 
     destroy() {
+      if (this.playerService.config.showAudio === true) {
+        this.playerService.audioProcessingService.clearCanvas();
+      }
       if (this.canvas_el && this.contentEl) {
         this.canvas_el.remove();
         this.contentEl = null;
