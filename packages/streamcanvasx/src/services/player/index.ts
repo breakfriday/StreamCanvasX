@@ -265,7 +265,7 @@ class PlayerService extends Emitter {
             if (this.config.useOffScreen === true) {
             this.audioProcessingService.visulizerDraw2();
             } else {
-            this.audioProcessingService.visulizerDraw1();
+            this.audioProcessingService.drawSymmetricWaveform();
             }
         }
       }
