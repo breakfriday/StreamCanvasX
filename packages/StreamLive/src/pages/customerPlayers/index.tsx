@@ -12,15 +12,15 @@ let streamPlayers: any = [];
 
 const HlsDemo = () => {
   useEffect(() => {}, []);
-  const [data, setData] = useState<Array<{url: string; type: number; useOffScreen: boolean}>>([]);
+  const [data, setData] = useState<Array<{url: string; type: number; useOffScreen: boolean; audioDrawType: number}>>([]);
   return (
     <div>
 
       <Form
         name="basic"
         autoComplete="off"
-        onFinish={(value: {url: string; type: number; useOffScreen: boolean}) => {
-            let item = { url: value.url, type: value.type, useOffScreen: value.useOffScreen };
+        onFinish={(value: {url: string; type: number; useOffScreen: boolean; audioDrawType: number}) => {
+            let item = { url: value.url, type: value.type, useOffScreen: value.useOffScreen, audioDrawType: value.audioDrawType };
             let temp = Object.assign([], data);
             temp.push(item);
             setData(temp);
@@ -43,10 +43,10 @@ const HlsDemo = () => {
           <Switch />
         </Form.Item>
 
-        <Form.Item label="renderType" name="rebderType">
+        <Form.Item label="renderType" name="audioDrawType">
           <Radio.Group>
-            <Radio value="1"> 波形渲染 </Radio>
-            <Radio value="2"> 对称渲染 </Radio>
+            <Radio value="2"> 波形渲染 </Radio>
+            <Radio value="1"> 对称渲染 </Radio>
           </Radio.Group>
         </Form.Item>
 
@@ -63,7 +63,7 @@ const HlsDemo = () => {
 
         {
           data.map((item, inx) => {
-            let { url, type, useOffScreen } = item;
+            let { url, type, useOffScreen, audioDrawType } = item;
             let showAudio = false;
             let hasAudio = false;
             let hasVideo = true;
@@ -76,7 +76,15 @@ const HlsDemo = () => {
 
             }
 
-            return (<VideoComponents url={url} key={inx} hasVideo={hasVideo} hasAudio={hasAudio} showAudio={showAudio} useOffScreen={useOffScreen} />);
+            return (<VideoComponents
+              url={url}
+              key={inx}
+              hasVideo={hasVideo}
+              hasAudio={hasAudio}
+              showAudio={showAudio}
+              useOffScreen={useOffScreen}
+              audioDrawType={audioDrawType}
+            />);
           })
         }
       </div>

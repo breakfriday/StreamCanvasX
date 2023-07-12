@@ -107,8 +107,8 @@ class PlayerService extends Emitter {
     }
 
     init(config?: IplayerConfig) {
-        let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false, hasAudio = true, hasVideo = true, errorUrl = '', useOffScreen = false } = config;
-        this.config = { model, url, contentEl, showAudio, hasAudio, hasVideo, errorUrl, useOffScreen };
+        let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false, hasAudio = true, hasVideo = true, errorUrl = '', useOffScreen = false, audioDraw = 1 } = config;
+        this.config = { model, url, contentEl, showAudio, hasAudio, hasVideo, errorUrl, useOffScreen, audioDraw };
 
         this.httpFlvStreamService.init(this, url);
         this.flvVDemuxService.init(this);
@@ -265,7 +265,18 @@ class PlayerService extends Emitter {
             if (this.config.useOffScreen === true) {
             this.audioProcessingService.visulizerDraw2();
             } else {
-            this.audioProcessingService.drawSymmetricWaveform();
+                switch (this.config.audioDraw * 1) {
+                    case 1:
+                        this.audioProcessingService.drawSymmetricWaveform();
+                        break;
+                    case 2:
+                        this, this.audioProcessingService.visulizerDraw1();
+                        break;
+                    default:
+                        this.audioProcessingService.drawSymmetricWaveform();
+
+                    break;
+                }
             }
         }
       }

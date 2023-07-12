@@ -143,6 +143,7 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   showAudio?: boolean;
   errorUrl?: string;
   useOffScreen?: boolean;
+  audioDraw?: number;
 
 
 }
