@@ -107,8 +107,12 @@ class PlayerService extends Emitter {
     }
 
     init(config?: IplayerConfig) {
-        let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false, hasAudio = true, hasVideo = true, errorUrl = '', useOffScreen = false, audioDraw = 1 } = config;
-        this.config = { model, url, contentEl, showAudio, hasAudio, hasVideo, errorUrl, useOffScreen, audioDraw };
+        // let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false, hasAudio = true, hasVideo = true, errorUrl = '', useOffScreen = false, audioDraw = 1 } = config;
+
+        const default_config = { model: UseMode.UseCanvas, url: '', showAudio: false, hasAudio: true, hasVideo: true, errorUrl: '', useOffScreen: false, audioDraw: 1 };
+
+        this.config = Object.assign(default_config, config);
+        let { model, url, contentEl, useOffScreen } = this.config;
 
         this.httpFlvStreamService.init(this, url);
         this.flvVDemuxService.init(this);
