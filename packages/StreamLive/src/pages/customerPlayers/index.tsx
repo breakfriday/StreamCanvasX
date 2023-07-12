@@ -1,6 +1,6 @@
 
 import React, { useRef, useEffect, useState } from 'react';
-import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch } from 'antd';
+import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider } from 'antd';
 import fpmap from 'lodash/fp/map';
 import VideoComponents from './aa';
 import { Data } from 'ice';
@@ -60,6 +60,47 @@ const HlsDemo = () => {
                <Radio value="1"> 对称渲染 </Radio>
              </Radio.Group>
            </Form.Item>) : ''
+        }
+
+        {
+            formState.type === '2' && formState.useOffScreen != true ? (
+              <Form.Item name="renderPerSecond" label="renderPerSecond" initialValue={15}>
+                <Slider
+                  marks={{
+                15: '15',
+                30: '30',
+                60: '60',
+
+          }}
+                />
+              </Form.Item>) : ''
+        }
+
+        {
+            formState.type === '2' && formState.useOffScreen != true ? (
+              <Form.Item name="updataBufferPerSecond" label="updataBufferPerSecond" initialValue={15}>
+                <Slider
+                  marks={{
+                15: '15',
+                30: '30',
+                60: '60',
+
+          }}
+                />
+              </Form.Item>) : ''
+        }
+
+        {
+            formState.type === '2' && formState.useOffScreen != true ? (<Form.Item label="fftsize" name="fftsize" initialValue={'1'}>
+              <Radio.Group>
+                <Radio value={64}> 64 </Radio>
+                <Radio value={128}> 128 </Radio>
+                <Radio value={256}> 256 </Radio>
+                <Radio value={512}> 512 </Radio>
+                <Radio value={1024}> 1024 </Radio>
+                <Radio value={2048}> 2048</Radio>
+              </Radio.Group>
+            </Form.Item>) : ''
         }
 
 
