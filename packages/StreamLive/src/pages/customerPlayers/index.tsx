@@ -91,7 +91,7 @@ const HlsDemo = () => {
         }
 
         {
-            formState.type === '2' && formState.useOffScreen != true ? (<Form.Item label="fftsize" name="fftsize" initialValue={'1'}>
+            formState.type === '2' && formState.useOffScreen != true ? (<Form.Item label="fftsize" name="fftsize" initialValue={128}>
               <Radio.Group>
                 <Radio value={64}> 64 </Radio>
                 <Radio value={128}> 128 </Radio>
@@ -101,6 +101,17 @@ const HlsDemo = () => {
                 <Radio value={2048}> 2048</Radio>
               </Radio.Group>
             </Form.Item>) : ''
+        }
+
+        {
+            formState.type === '2' && formState.useOffScreen != true ? (
+              <Form.Item label="bufferSize" name="bufferSize" initialValue={0.2}>
+                <Slider
+                  min={0}
+                  max={10}
+                  step={0.01}
+                />
+              </Form.Item>) : ''
         }
 
 
