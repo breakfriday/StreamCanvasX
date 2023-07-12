@@ -118,8 +118,8 @@ class PlayerService extends Emitter {
             errorUrl: '',
             useOffScreen: false,
             audioDraw: 1,
-            updataBufferPerSecond: 30,
-            renderPerSecond: 30,
+            updataBufferPerSecond: 15,
+            renderPerSecond: 15,
             fftsize: 128,
             bufferSize: 0.2,
         };
