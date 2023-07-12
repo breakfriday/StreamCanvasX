@@ -10,6 +10,18 @@ const boxs = [1, 2, 3, 4, 5, 6, 7];
 
 let streamPlayers: any = [];
 
+interface IFormData{
+  url: string;
+  type: number;
+  useOffScreen: boolean;
+  audioDrawType: number;
+  renderPerSecond?: number;
+  updataBufferPerSecond?: number;
+  fftsize?: number;
+  bufferSize?: number;
+
+}
+
 const HlsDemo = () => {
   useEffect(() => {}, []);
   const [data, setData] = useState<Array<{url: string; type: number; useOffScreen: boolean; audioDrawType: number}>>([]);
@@ -26,10 +38,12 @@ const HlsDemo = () => {
            let data = form_ref.getFieldsValue();
             setFormState(data);
         }}
-        onFinish={(value: {url: string; type: number; useOffScreen: boolean; audioDrawType: number}) => {
-            let item = { url: value.url, type: value.type, useOffScreen: value.useOffScreen, audioDrawType: value.audioDrawType };
+        onFinish={(value: IFormData) => {
+            let item = { ...value };
             let temp = Object.assign([], data);
             temp.push(item);
+
+
             setData(temp);
           }}
       >
