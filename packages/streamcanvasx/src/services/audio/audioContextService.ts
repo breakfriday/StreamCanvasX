@@ -109,6 +109,8 @@ class AudioProcessingService {
       let bufferLength = this.bufferDataLength;
       let canvasContext = this.playerService.canvasVideoService.canvas_context;
       let canvas = this.playerService.canvasVideoService.canvas_el;
+
+      let timeId: any = '';
       // canvasContext.lineWidth = 2;
       // canvasContext.strokeStyle = '#7f0';
       // setTimeout(() => {
@@ -120,6 +122,7 @@ class AudioProcessingService {
          dataArray = this.bufferData;
           if (this.clear === true) {
               // This returns the function, effectively stopping the loop
+              clearTimeout(timeId);
               return;
           }
           if (canvasContext.lineWidth != 5) {
@@ -136,8 +139,10 @@ class AudioProcessingService {
               const sliceWidth = canvas.width / bufferLength;
               let x = 0;
               for (let i = 0; i < bufferLength; i++) {
-                  const value = dataArray[i] * canvas.height / 2;
-                  const y = canvas.height / 2 + value;
+                  // const value = dataArray[i] * canvas.height / 2;
+                  // const y = canvas.height / 2 + value;
+                  let v = dataArray[i];
+                  const y = (1.0 - v) * canvas.height / 2; // 转换为画布坐标
 
                   if (i === 0) {
                       canvasContext.moveTo(x, y);
@@ -152,11 +157,77 @@ class AudioProcessingService {
           }
 
           // Use setTimeout here to loop function call. Adjust the delay time as per your requirement. Here 1000/60 mimics a framerate of 60 FPS, similar to requestAnimationFrame
-          setTimeout(AnimationFrame.bind(this), 1000 / 10);
+          timeId = setTimeout(AnimationFrame.bind(this), 1000 / 10);
       };
       AnimationFrame();
   }
 
+
+  drawSymmetricWaveform() {
+    let dataArray = this.bufferData;
+    let bufferLength = this.bufferDataLength;
+    let canvasContext = this.playerService.canvasVideoService.canvas_context;
+    let canvas = this.playerService.canvasVideoService.canvas_el;
+
+    let timeId: any = '';
+    // canvasContext.lineWidth = 2;
+    // canvasContext.strokeStyle = '#7f0';
+    // setTimeout(() => {
+    //   canvasContext.lineWidth = 5;
+    //   canvasContext.strokeStyle = '#7f0';
+    // }, 400);
+
+    const AnimationFrame = () => {
+       dataArray = this.bufferData;
+        if (this.clear === true) {
+            // This returns the function, effectively stopping the loop
+            clearTimeout(timeId);
+            return;
+        }
+        if (canvasContext.lineWidth != 1) {
+          canvasContext.lineWidth = 1;
+          canvasContext.strokeStyle = '#7f0';
+        }
+
+        if (this.playerService.canvasVideoService.loading === false) {
+            canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+            // canvasContext.lineWidth = 2;
+            // canvasContext.strokeStyle = '#7f0';
+
+            canvasContext.beginPath();
+
+            const sliceWidth = canvas.width / bufferLength;
+            let x = 0;
+
+            for (let i = 0; i < bufferLength; i++) {
+                let v = dataArray[i];
+
+                // 对于上半部分
+                let y_upper = (1.0 - v) * canvas.height / 4; // 在原有基础上除以2，因为现在的画布分为上下两部分
+                // 对于下半部分
+                let y_lower = (1.0 + v) * canvas.height / 4 + canvas.height / 2; // 首先反转 v，然后加上画布高度的一半，使其位于下半部分
+
+                if (i === 0) {
+                    canvasContext.moveTo(x, y_upper); // 上半部分
+                    canvasContext.moveTo(x, y_lower); // 下半部分
+                } else {
+                    canvasContext.lineTo(x, y_upper); // 上半部分
+                    canvasContext.lineTo(x, y_lower); // 下半部分
+                }
+
+
+                x += sliceWidth;
+            }
+
+            canvasContext.lineTo(canvas.width, canvas.height / 2);
+            canvasContext.stroke();
+        }
+
+        // Use setTimeout here to loop function call. Adjust the delay time as per your requirement. Here 1000/60 mimics a framerate of 60 FPS, similar to requestAnimationFrame
+        timeId = setTimeout(AnimationFrame.bind(this), 1000 / 10);
+    };
+    AnimationFrame();
+  }
   // render by offscreen
   visulizerDraw2() {
     const offscreen_canvas = this.playerService.canvasVideoService.canvas_el.transferControlToOffscreen();
@@ -236,12 +307,18 @@ class AudioProcessingService {
         return false;
       }
       // Move old data forward
-      bufferData.copyWithin(0, dataArray.length);
+
 
       this.context.analyserNode?.getFloatTimeDomainData(dataArray);
 
-      // Add new data to the end of the buffer
-      bufferData.set(dataArray, bufferDataLength - dataArray.length);
+      // 取到 0 数据不更新 bufferdata
+      let hasZero = dataArray.some(value => value === 0);
+
+      if (hasZero === false) {
+        bufferData.copyWithin(0, dataArray.length);
+        // Add new data to the end of the buffer
+        bufferData.set(dataArray, bufferDataLength - dataArray.length);
+      }
 
 
       this.timeId = setTimeout(this.updateBufferData.bind(this), 1000 / 30); // Updates at roughly 30 FPS
