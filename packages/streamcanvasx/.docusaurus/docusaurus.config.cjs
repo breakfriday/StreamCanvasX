@@ -19,7 +19,7 @@ const config = {
   plugins: [
     require.resolve('@ice/pkg-plugin-docusaurus/plugin.js'),
     [
-      '/home/break_happy/project/stream_21/node_modules/.pnpm/@docusaurus+plugin-content-pages@2.4.1_3lwsldy73qonkf7lzjkvnayuta/node_modules/@docusaurus/plugin-content-pages/lib/index.js',
+      'C:\Users\86186\WebstormProjects\streamCodes2\node_modules\.pnpm\@docusaurus+plugin-content-pages@2.4.1_eslint@8.42.0_react-dom@18.2.0_react@18.2.0\node_modules\@docusaurus\plugin-content-pages\lib\index.js',
       {
         path: 'pages',
         routeBasePath: '/pages',
@@ -30,7 +30,7 @@ const config = {
 
   presets: [
     [
-      '/home/break_happy/project/stream_21/node_modules/.pnpm/@docusaurus+preset-classic@2.4.1_3lwsldy73qonkf7lzjkvnayuta/node_modules/@docusaurus/preset-classic/lib/index.js',
+      'C:\Users\86186\WebstormProjects\streamCodes2\node_modules\.pnpm\@docusaurus+preset-classic@2.4.1_eslint@8.42.0_react-dom@18.2.0_react@18.2.0\node_modules\@docusaurus\preset-classic\lib\index.js',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
@@ -71,8 +71,8 @@ const config = {
         },
       },
       prism: {
-        theme: require('/home/break_happy/project/stream_21/node_modules/.pnpm/prism-react-renderer@1.3.5_react@18.2.0/node_modules/prism-react-renderer/themes/github'),
-        darkTheme: require('/home/break_happy/project/stream_21/node_modules/.pnpm/prism-react-renderer@1.3.5_react@18.2.0/node_modules/prism-react-renderer/themes/dracula'),
+        theme: require('C:\Users\86186\WebstormProjects\streamCodes2\node_modules\.pnpm\prism-react-renderer@1.3.5_react@18.2.0\node_modules\prism-react-renderer/themes/github'),
+        darkTheme: require('C:\Users\86186\WebstormProjects\streamCodes2\node_modules\.pnpm\prism-react-renderer@1.3.5_react@18.2.0\node_modules\prism-react-renderer/themes/dracula'),
       },
       docs: {
         sidebar: {
