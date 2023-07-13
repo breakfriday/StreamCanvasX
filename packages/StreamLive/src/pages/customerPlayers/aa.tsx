@@ -25,6 +25,8 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
 
   const [info1, setInfo1] = useState<any>();
 
+  const [audioInfo, setAudioInfo] = useState<any>();
+
   useEffect(() => {
     let { url, showAudio = false, hasAudio = false, hasVideo = true, useOffScreen = false, audioDrawType = 1, fftsize, updataBufferPerSecond, renderPerSecond, bufferSize } = props;
 
@@ -64,6 +66,10 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
       setInfo1(data);
     });
 
+    player.on('audioInfo', (data) => {
+      setAudioInfo(data);
+    });
+
 
     return () => {
       player.destroy();
@@ -86,6 +92,7 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
       <div style={{ width: '400px', height: '200px', border: '1px' }} ref={containerRef} />
       <div>{JSON.stringify(info)} </div>
       <div>{JSON.stringify(info1)}</div>
+      <div>{JSON.stringify(audioInfo)}</div>
       <Button onClick={() => {
         let play = streamPlayer.current;
         play.reload();
