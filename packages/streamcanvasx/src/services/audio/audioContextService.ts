@@ -253,10 +253,12 @@ class AudioProcessingService {
   visulizerDraw2() {
     const offscreen_canvas = this.playerService.canvasVideoService.canvas_el.transferControlToOffscreen();
 
+    let { renderPerSecond } = this.playerService.config;
 
     this.canvasWorker.postMessage({
       event: 'updateBufferRender',
       canvas: offscreen_canvas,
+      renderPerSecond: renderPerSecond,
      }, [offscreen_canvas]);
 }
 
@@ -350,6 +352,7 @@ class AudioProcessingService {
     update_buffer_worker() {
       let { dataArray, bufferData } = this;
       let { bufferDataLength } = this;
+      let { updataBufferPerSecond } = this.playerService.config;
 
 
       let timeId: any = '';
@@ -368,7 +371,7 @@ class AudioProcessingService {
             bufferDataLength: bufferDataLength,
           });
           interval_fn.call(this);
-        }, update_buffer_times);
+        }, updataBufferPerSecond);
       };
 
       interval_fn();

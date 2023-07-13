@@ -50,6 +50,7 @@ onmessage = (event) => {
     let animationId = null;
 
 
+    let { renderPerSecond } = event.data;
     if (event.data.canvas) {
         offscreenCanvas = event.data.canvas;
         canvasContext = offscreenCanvas.getContext('2d');
@@ -88,7 +89,7 @@ onmessage = (event) => {
 
 
         // Use setTimeout here to loop function call. Adjust the delay time as per your requirement. Here 1000/60 mimics a framerate of 60 FPS, similar to requestAnimationFrame
-         setTimeout(AnimationFrame.bind(this), 1000 / 15);
+         setTimeout(AnimationFrame.bind(this), renderPerSecond);
     };
     AnimationFrame();
   };
