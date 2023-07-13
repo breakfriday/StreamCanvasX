@@ -1,5 +1,6 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../player';
+import { debug } from 'console';
 
 
 const render_times = 1000 / 15;
@@ -426,6 +427,21 @@ class AudioProcessingService {
        this.bufferDataLength = Math.ceil(second * this.context.audioContext!.sampleRate / this.dataArray.length) * this.dataArray.length;
 
        this.bufferData = new Float32Array(this.bufferDataLength);
+
+       this.getAuDioInfo();
+      }
+
+      getAuDioInfo() {
+        let { bufferDataLength } = this;
+        let { frequencyBinCount } = this.context.analyserNode;
+        let { updataBufferPerSecond } = this.playerService.config;
+
+
+        let realTime = bufferDataLength / (frequencyBinCount * updataBufferPerSecond);
+
+        setTimeout(() => {
+        this.playerService.emit('audioInfo', { realTime });
+        }, 900);
       }
 }
 
