@@ -61,6 +61,26 @@ const HlsDemo = () => {
         </Form.Item>
 
         {
+         formState.type === '1' ? (<Form.Item label="enableStashBuffer" valuePropName="enableStashBuffer" name="enableStashBuffer" >
+           <Switch defaultChecked />
+         </Form.Item>) : ''
+        }
+
+
+        {
+         formState.type === '1' ? (<Form.Item label="autoCleanBuffer" valuePropName="autoCleanBuffer" name="enableStashBuffer" >
+           <Switch defaultChecked />
+         </Form.Item>) : ''
+        }
+
+
+        {
+         formState.type === '1' ? (<Form.Item label="autoCleanBuffer" valuePropName="enableWorker" name="enableWorker" >
+           <Switch defaultChecked />
+         </Form.Item>) : ''
+        }
+
+        {
          formState.type === '2' ? (<Form.Item label="useOffScreen Audio " valuePropName="useOffScreen" name="useOffScreen" initialValue={false}>
            <Switch />
          </Form.Item>) : ''
