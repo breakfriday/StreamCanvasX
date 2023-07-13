@@ -1,6 +1,6 @@
 
 import React, { useRef, useEffect, useState } from 'react';
-import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider } from 'antd';
+import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row } from 'antd';
 import fpmap from 'lodash/fp/map';
 import VideoComponents from './aa';
 import { Data } from 'ice';
@@ -88,7 +88,7 @@ const HlsDemo = () => {
 
 
         {
-           formState.type === '2' && formState.useOffScreen != true ? (<Form.Item label="renderType" name="audioDrawType" initialValue={'1'}>
+           formState.type === '2' ? (<Form.Item label="renderType" name="audioDrawType" initialValue={'1'}>
              <Radio.Group>
                <Radio value="2"> 波形渲染 </Radio>
                <Radio value="1"> 对称渲染 </Radio>
@@ -97,7 +97,7 @@ const HlsDemo = () => {
         }
 
         {
-            formState.type === '2' && formState.useOffScreen != true ? (
+            formState.type === '2' ? (
               <Form.Item name="renderPerSecond" label="renderPerSecond" initialValue={15}>
                 <Slider
                   marks={{
@@ -111,7 +111,7 @@ const HlsDemo = () => {
         }
 
         {
-            formState.type === '2' && formState.useOffScreen != true ? (
+            formState.type === '2' ? (
               <Form.Item name="updataBufferPerSecond" label="updataBufferPerSecond" initialValue={15}>
                 <Slider
                   marks={{
@@ -125,7 +125,7 @@ const HlsDemo = () => {
         }
 
         {
-            formState.type === '2' && formState.useOffScreen != true ? (<Form.Item label="fftsize" name="fftsize" initialValue={128}>
+            formState.type === '2' ? (<Form.Item label="fftsize" name="fftsize" initialValue={128}>
               <Radio.Group>
                 <Radio value={64}> 64 </Radio>
                 <Radio value={128}> 128 </Radio>
@@ -138,7 +138,7 @@ const HlsDemo = () => {
         }
 
         {
-            formState.type === '2' && formState.useOffScreen != true ? (
+            formState.type === '2' ? (
               <Form.Item label="bufferSize" name="bufferSize" initialValue={0.2}>
                 <Slider
                   min={0}
