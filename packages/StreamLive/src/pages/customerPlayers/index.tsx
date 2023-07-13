@@ -27,6 +27,8 @@ const HlsDemo = () => {
   const [data, setData] = useState<Array<IFormData>>([]);
   const [form_ref] = Form.useForm();
   const [formState, setFormState] = useState({ url: '', type: '1', useOffScreen: false, audioDrawType: '1' });
+
+  const formatter = (value: number) => `${value}ms* sampleRate (44100HZ)`;
   return (
     <div>
 
@@ -144,6 +146,7 @@ const HlsDemo = () => {
                   min={0}
                   max={10}
                   step={0.01}
+                  tooltip={{ formatter }}
                 />
               </Form.Item>) : ''
         }
