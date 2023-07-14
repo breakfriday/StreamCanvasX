@@ -64,9 +64,18 @@ const HlsDemo = () => {
 
         <Row>
           <Col span={3}>
+
+            {
+            formState.type === '1' ? (<Form.Item label="decode enableWorker" valuePropName="enableWorker" name="enableWorker" >
+              <Switch defaultChecked />
+            </Form.Item>) : ''
+          }
+
+          </Col>
+          <Col span={3}>
             {
                 formState.type === '1' ? (<Form.Item label="enableStashBuffer" valuePropName="enableStashBuffer" name="enableStashBuffer" >
-                  <Switch defaultChecked />
+                  <Switch />
                 </Form.Item>) : ''
             }
           </Col>
@@ -79,15 +88,6 @@ const HlsDemo = () => {
               }
           </Col>
 
-          <Col>
-
-            {
-              formState.type === '1' ? (<Form.Item label="decode enableWorker" valuePropName="enableWorker" name="enableWorker" >
-                <Switch defaultChecked />
-              </Form.Item>) : ''
-            }
-
-          </Col>
 
         </Row>
 
