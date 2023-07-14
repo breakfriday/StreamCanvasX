@@ -79,14 +79,18 @@ const HlsDemo = () => {
               }
           </Col>
 
+          <Col>
+
+            {
+              formState.type === '1' ? (<Form.Item label="decode enableWorker" valuePropName="enableWorker" name="enableWorker" >
+                <Switch defaultChecked />
+              </Form.Item>) : ''
+            }
+
+          </Col>
+
         </Row>
 
-
-        {
-         formState.type === '1' ? (<Form.Item label="decode enableWorker" valuePropName="enableWorker" name="enableWorker" >
-           <Switch defaultChecked />
-         </Form.Item>) : ''
-        }
 
         {
          formState.type === '2' ? (<Form.Item label="useOffScreen Audio " valuePropName="useOffScreen" name="useOffScreen" initialValue={false}>
