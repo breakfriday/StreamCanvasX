@@ -62,22 +62,28 @@ const HlsDemo = () => {
           </Radio.Group>
         </Form.Item>
 
-        {
-         formState.type === '1' ? (<Form.Item label="enableStashBuffer" valuePropName="enableStashBuffer" name="enableStashBuffer" >
-           <Switch defaultChecked />
-         </Form.Item>) : ''
-        }
+        <Row>
+          <Col span={3}>
+            {
+                formState.type === '1' ? (<Form.Item label="enableStashBuffer" valuePropName="enableStashBuffer" name="enableStashBuffer" >
+                  <Switch defaultChecked />
+                </Form.Item>) : ''
+            }
+          </Col>
+
+          <Col span={3}>
+            {
+                  formState.type === '1' ? (<Form.Item label="autoCleanBuffer" valuePropName="autoCleanBuffer" name="enableStashBuffer" >
+                    <Switch defaultChecked />
+                  </Form.Item>) : ''
+              }
+          </Col>
+
+        </Row>
 
 
         {
-         formState.type === '1' ? (<Form.Item label="autoCleanBuffer" valuePropName="autoCleanBuffer" name="enableStashBuffer" >
-           <Switch defaultChecked />
-         </Form.Item>) : ''
-        }
-
-
-        {
-         formState.type === '1' ? (<Form.Item label="autoCleanBuffer" valuePropName="enableWorker" name="enableWorker" >
+         formState.type === '1' ? (<Form.Item label="decode enableWorker" valuePropName="enableWorker" name="enableWorker" >
            <Switch defaultChecked />
          </Form.Item>) : ''
         }
