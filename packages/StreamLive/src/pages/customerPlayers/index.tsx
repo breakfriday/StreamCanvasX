@@ -66,10 +66,10 @@ const HlsDemo = () => {
           <Col span={3}>
 
             {
-            formState.type === '1' ? (<Form.Item label="decode enableWorker" valuePropName="enableWorker" name="enableWorker" >
-              <Switch defaultChecked />
-            </Form.Item>) : ''
-          }
+             (<Form.Item label="decode enableWorker" valuePropName="enableWorker" name="enableWorker" >
+               <Switch defaultChecked />
+             </Form.Item>)
+            }
 
           </Col>
           <Col span={3}>
