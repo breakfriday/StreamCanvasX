@@ -4,7 +4,9 @@ import { Divider, Space, Button } from 'antd';
 
  import { createPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
 
- const containerRef = useRef(null);
+ const containerRef = useRef<any>(null);
+
+ const playerRef = useRef<any>(null);
 
 const FlvDemux = () => {
     return (
@@ -20,6 +22,7 @@ const FlvDemux = () => {
             contentEl: containerRef.current!;
             const player = createPlayerServiceInstance({ url, showAudio, hasVideo, hasAudio, contentEl });
             player.createBetaPlayer();
+            playerRef.current = player;
       }}
         >
           fetch flv http
@@ -27,6 +30,9 @@ const FlvDemux = () => {
 
 
         <Button onClick={() => {
+          let player = playerRef.current;
+          player.
+
           //  h.httpFlvStreamService.abortFetch();
         }}
         >abort</Button>
