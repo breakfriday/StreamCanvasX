@@ -138,6 +138,10 @@ class PlayerService extends Emitter {
 
         this.debounceReload();
     }
+
+    createBetaPlayer() {
+        this.httpFlvStreamService.fetchStream();
+    }
     createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
         let { type = 'flv', isLive = true } = parms;
         let { url } = this.httpFlvStreamService;

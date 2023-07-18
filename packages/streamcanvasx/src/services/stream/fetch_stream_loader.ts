@@ -43,8 +43,19 @@ class HttpFlvStreamLoader {
         this.url = url;
     }
 
-    async fetchStream(url: string): Promise<void> {
-        let sourceUrl = url;
+    // 统一 公用别名
+    open() {
+        this.fetchStream();
+    }
+   // 统一 公用别名
+    abort() {
+        this.abortFetch();
+    }
+    destroy() {
+        this.abort();
+    }
+    async fetchStream(): Promise<void> {
+        let { url } = this.playerService.config;
         let headers = new Headers();
         this._abortController = new AbortController();
         let params: RequestInit = {
