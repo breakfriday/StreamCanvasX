@@ -172,6 +172,7 @@ const HlsDemo = () => {
       </div>
 
       <video controls src="" />
+      <div>http://192.168.3.97:3000/hd_265.mp4</div>
     </div>
   );
 };
