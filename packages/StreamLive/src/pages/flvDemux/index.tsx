@@ -7,6 +7,7 @@ import { Divider, Space, Button } from 'antd';
 
 const FlvDemux = () => {
  const containerRef = useRef(null);
+ const playerRef = useRef(null);
     return (
       <>
 
