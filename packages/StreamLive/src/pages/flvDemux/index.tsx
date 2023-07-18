@@ -4,13 +4,12 @@ import { Divider, Space, Button } from 'antd';
 
  import { createPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
 
- const containerRef = useRef<any>(null);
-
- const playerRef = useRef<any>(null);
 
 const FlvDemux = () => {
+ const containerRef = useRef(null);
     return (
       <>
+
         <Button
           type="primary"
           onClick={() => {
@@ -24,22 +23,14 @@ const FlvDemux = () => {
               showAudio,
               hasVideo,
               hasAudio,
-              contentEl: containerRef.current,
+              contentEl: containerRef.current!,
               });
-            player.createBetaPlayer();
-            playerRef.current = player;
       }}
         >
           fetch flv http
         </Button>
 
 
-        <Button onClick={() => {
-
-
-          //  h.httpFlvStreamService.abortFetch();
-        }}
-        >abort</Button>
         <div ref={containerRef} />
 
 
