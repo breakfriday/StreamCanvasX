@@ -26,13 +26,15 @@ const FlvDemux = () => {
               hasAudio,
               contentEl: containerRef.current!,
               });
+
+              player.createBetaPlayer();
       }}
         >
           fetch flv http
         </Button>
 
 
-        <div ref={containerRef} />
+        <div ref={containerRef} style={{ width: '400px', height: '200px', border: '1px' }} />
 
 
       </>
