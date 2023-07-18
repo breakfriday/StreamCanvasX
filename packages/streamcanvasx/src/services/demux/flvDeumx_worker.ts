@@ -1,3 +1,5 @@
+
+import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 interface IFLVDemuxerOptions {
     uri: string | null;
     onVideoData: Function | null;
@@ -18,7 +20,7 @@ class Logger {
         console.error(`[ERROR] ${this.name}: ${message}`);
     }
 }
-
+@injectable()
 class FLVDemuxer {
     private uri: string | null;
     private ws: WebSocket | null;
@@ -58,6 +60,10 @@ class FLVDemuxer {
         this.size = 0;
         this.timestamp = 0;
         this.streamId = 0;
+    }
+
+    init() {
+
     }
 
     byteToHex(b: number): string {
