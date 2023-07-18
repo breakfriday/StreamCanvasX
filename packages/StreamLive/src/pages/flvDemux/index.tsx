@@ -18,9 +18,14 @@ const FlvDemux = () => {
             // fetchflv.fetchStream(url);
             let showAudio = false,
             hasVideo = true,
-            hasAudio = true,
-            contentEl: containerRef.current!;
-            const player = createPlayerServiceInstance({ url, showAudio, hasVideo, hasAudio, contentEl });
+            hasAudio = true;
+
+            const player = createPlayerServiceInstance({ url,
+              showAudio,
+              hasVideo,
+              hasAudio,
+              contentEl: containerRef.current,
+              });
             player.createBetaPlayer();
             playerRef.current = player;
       }}
@@ -30,8 +35,7 @@ const FlvDemux = () => {
 
 
         <Button onClick={() => {
-          let player = playerRef.current;
-          player.
+
 
           //  h.httpFlvStreamService.abortFetch();
         }}
