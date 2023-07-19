@@ -14,7 +14,7 @@ const FlvDemux = () => {
         <Button
           type="primary"
           onClick={() => {
-            let url = 'http://localhost:8080/live/livestream.flv';
+            let url = 'http://192.168.3.110:8080/live/livestream.flv';
             // fetchflv.fetchStream(url);
             let showAudio = false,
             hasVideo = true,
