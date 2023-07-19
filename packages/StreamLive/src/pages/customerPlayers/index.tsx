@@ -63,7 +63,7 @@ const HlsDemo = () => {
         </Form.Item>
 
         <Row>
-          <Col span={3}>
+          <Col span={6}>
 
             {
              (<Form.Item label="decode enableWorker" valuePropName="enableWorker" name="enableWorker" >
@@ -72,7 +72,7 @@ const HlsDemo = () => {
             }
 
           </Col>
-          <Col span={3}>
+          <Col span={6}>
             {
                 formState.type === '1' ? (<Form.Item label="enableStashBuffer" valuePropName="enableStashBuffer" name="enableStashBuffer" >
                   <Switch />
@@ -80,7 +80,7 @@ const HlsDemo = () => {
             }
           </Col>
 
-          <Col span={3}>
+          <Col span={6}>
             {
                   formState.type === '1' ? (<Form.Item label="autoCleanBuffer" valuePropName="autoCleanBuffer" name="enableStashBuffer" >
                     <Switch defaultChecked />

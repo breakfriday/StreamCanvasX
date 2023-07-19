@@ -42,6 +42,10 @@ const asideMenuConfig: MenuDataItem[] = [
         name: 'canvasRender',
         path: 'canvasRender',
       },
+      {
+        name: 'whis&whep',
+        path: 'whipwhep',
+      },
     ],
   },
   {
