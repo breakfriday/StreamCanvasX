@@ -33,8 +33,9 @@ const Whip = () => {
         whip.publish(pc, url, token);
  };
 
- const runWhep = async () => {
+ const runWhep = async (value) => {
             // Create peerconnection
+         let { url, token } = value;
         const pc = window.pc = new RTCPeerConnection();
 
         // Add recv only transceivers
@@ -49,8 +50,8 @@ const Whip = () => {
         // Create whep client
         const whep = new WHEPClient();
 
-        const url = 'https://whep.test/whep/endpoint';
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtaWxsaWNhc3QiOnsidHlwZSI6IlN1YnNjcmliZSIsInNlcnZlcklkIjoidmlld2VyMSIsInN0cmVhbUFjY291bnRJZCI6InRlc3QiLCJzdHJlYW1OYW1lIjoidGVzdCJ9LCJpYXQiOjE2NzY2NDkxOTd9.ZE8Ftz9qiS04zTKBqP1MHZTOh8dvI73FBraleQM9h1A';
+        // const url = 'https://whep.test/whep/endpoint';
+        // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtaWxsaWNhc3QiOnsidHlwZSI6IlN1YnNjcmliZSIsInNlcnZlcklkIjoidmlld2VyMSIsInN0cmVhbUFjY291bnRJZCI6InRlc3QiLCJzdHJlYW1OYW1lIjoidGVzdCJ9LCJpYXQiOjE2NzY2NDkxOTd9.ZE8Ftz9qiS04zTKBqP1MHZTOh8dvI73FBraleQM9h1A';
 
         // Start viewing
         whep.view(pc, url, token);
@@ -95,9 +96,13 @@ const Whip = () => {
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button
               type="primary"
-              htmlType="submit"
             >
-              submit
+              push  whip
+            </Button>
+            <Button
+              type="primary"
+            >
+              fetch  whep
             </Button>
           </Form.Item>
         </Form>
