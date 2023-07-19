@@ -7,9 +7,11 @@ const Whip = () => {
  const containerRef = useRef(null);
  const playerRef = useRef(null);
 
- const runWhip = async () => {
+ const runWhip = async (value) => {
             // Get mic+cam
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+
+        let { url, token } = value;
 
         // Create peerconnection
         const pc = new RTCPeerConnection();
@@ -23,8 +25,8 @@ const Whip = () => {
         // Create whip client
         const whip = new WHIPClient();
 
-        const url = 'https://whip.test/whip/endpoint';
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IndoaXAgdGVzdCIsImlhdCI6MTUxNjIzOTAyMn0.jpM01xu_vnSXioxQ3I7Z45bRh5eWRBEY2WJPZ6FerR8';
+        // const url = 'https://whip.test/whip/endpoint';
+        // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IndoaXAgdGVzdCIsImlhdCI6MTUxNjIzOTAyMn0.jpM01xu_vnSXioxQ3I7Z45bRh5eWRBEY2WJPZ6FerR8';
 
         // Start publishing
         whip.publish(pc, url, token);
@@ -38,6 +40,9 @@ const Whip = () => {
           autoComplete="off"
           onFinish={(value) => {
             let { url, token, type } = value;
+            if (type == 1) {
+                runWhip(value);
+            } else {}
           }}
         >
           <Form.Item
