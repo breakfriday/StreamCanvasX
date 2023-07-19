@@ -7,7 +7,7 @@ import { WHEPClient } from './whep.js';
 const Whip = () => {
  const containerRef = useRef(null);
  const playerRef = useRef(null);
-
+ const [form_ref] = Form.useForm();
  const runWhip = async (value) => {
             // Get mic+cam
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
@@ -63,11 +63,9 @@ const Whip = () => {
         <Form
           name="basic"
           autoComplete="off"
+          form={form_ref}
           onFinish={(value) => {
-            let { url, token, type } = value;
-            if (type == 1) {
-                runWhip(value);
-            } else {}
+
           }}
         >
           <Form.Item
@@ -96,11 +94,20 @@ const Whip = () => {
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button
               type="primary"
+              onClick={() => {
+               let data = form_ref.getFieldsValue();
+
+                runWhip(data);
+              }}
             >
               push  whip
             </Button>
             <Button
               type="primary"
+              onClick={() => {
+                let data = form_ref.getFieldsValue();
+                runWhep(data);
+              }}
             >
               fetch  whep
             </Button>
