@@ -14,6 +14,7 @@ import mpegts from 'mpegts.js';
 import Mpegts from 'mpegts.js';
 import { IplayerConfig } from '../../types/services';
 import AudioProcessingService from '../audio/audioContextService';
+import WasmDecoderService from '../decoder/wasmDecoder';
 
 
 mpegts.LoggingControl.applyConfig({
@@ -58,6 +59,7 @@ class PlayerService extends Emitter {
     reload: any;
     config: IplayerConfig;
     error_connect_times: number;
+    wasmDecoderService: WasmDecoderService;
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -67,6 +69,7 @@ class PlayerService extends Emitter {
         @inject(TYPES.IDebugLogService) debugLogService: DebugLogService,
         @inject(TYPES.IFLVDemuxStream) fLVDemuxStream: FLVDemuxStream,
         @inject(TYPES.IAudioProcessingService) audioProcessingService: AudioProcessingService,
+        @inject(TYPES.IWasmDecoderService) wasmDecoderService: WasmDecoderService,
         ) {
         super();
         this.httpFlvStreamService = httpFlvStreamService;
@@ -78,6 +81,7 @@ class PlayerService extends Emitter {
         this.audioProcessingService = audioProcessingService;
         this._opt = Object.assign({}, DEFAULT_PLAYER_OPTIONS);
         this.error_connect_times = 0;
+        this.wasmDecoderService = wasmDecoderService;
 
 
         this._times = {
@@ -132,9 +136,10 @@ class PlayerService extends Emitter {
         this.webcodecsDecoderService.init(this);
         this.fLVDemuxStream.init(this);
         this.canvasVideoService.init(this, { model: model, contentEl, useOffScreen });
+        this.wasmDecoderService.init();
 
 
-        const decode_worker = new Worker(new URL('../decoder/decode_worker.js', import.meta.url));
+        // const decode_worker = new Worker(new URL('../decoder/decode_worker.js', import.meta.url));
 
         this.debounceReload();
     }
