@@ -60,6 +60,7 @@ class PlayerService extends Emitter {
     config: IplayerConfig;
     error_connect_times: number;
     wasmDecoderService: WasmDecoderService;
+    player2: any;
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -339,15 +340,23 @@ class PlayerService extends Emitter {
 
         });
         player.play(url);
+
+
+        this.player2 = player;
     }
 
     destroy() {
         if (this.canvasVideoService) {
             this.canvasVideoService.destroy();
+            this.canvasVideoService = null;
         }
 
         if (this.mpegtsPlayer) {
             this.mpegtsPlayer.destroy();
+            this.mpegtsPlayer = null;
+        }
+        if (this.player2) {
+            this.player2.destroy();
         }
     }
     log() {
