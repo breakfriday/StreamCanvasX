@@ -10,6 +10,7 @@ const TYPES = {
     ICanvasVideoService: Symbol.for('ICanvasVideoService'),
     IDebugLogService: Symbol.for('IDebugLogService'),
     IFLVDemuxStream: Symbol.for('IFLVDemuxStream'),
+    IWasmDecoderService: Symbol.for('IWasmDecoderService'),
 
   };
 
