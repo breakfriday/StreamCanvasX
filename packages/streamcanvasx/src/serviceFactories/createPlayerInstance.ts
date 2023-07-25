@@ -20,6 +20,8 @@ import AudioProcessingService from '../services/audio/audioContextService';
 
 import { IplayerConfig } from '../types/services';
 
+import WasmDecoderService from '../services/decoder/wasmDecoder';
+
 
 // const worker = new Worker(new URL('work.js', import.meta.url));
 
@@ -35,6 +37,7 @@ containerPlayer.bind<CanvasVideoService>(TYPES.ICanvasVideoService).to(CanvasVid
 containerPlayer.bind<DebugLogService>(TYPES.IDebugLogService).to(DebugLogService);
 
 containerPlayer.bind<AudioProcessingService>(TYPES.IAudioProcessingService).to(AudioProcessingService);
+containerPlayer.bind<WasmDecoderService>(TYPES.IWasmDecoderService).to(WasmDecoderService);
 
 containerPlayer.bind<FLVDemuxStream>(TYPES.IFLVDemuxStream).to(FLVDemuxStream);
  function createPlayerServiceInstance(config: IplayerConfig): PlayerService {
