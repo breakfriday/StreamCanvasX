@@ -6,27 +6,29 @@ import { Divider, Space, Button, Form, Input } from 'antd';
  import LiveVideo from './aa';
 
 
- function loadScript(url, callback) {
-  let script: HTMLScriptElement = document.createElement('script');
-  script.type = 'text/javascript';
+ function loadScript(url: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+      // 创建一个新的 script 元素
+      const script = document.createElement('script');
+      script.src = url;
 
-  // 跨浏览器兼容性处理
-  if (script.readyState) { // IE
-      script.onreadystatechange = function () {
-          if (script.readyState === 'loaded' || script.readyState === 'complete') {
-              script.onreadystatechange = null;
-              callback();
-          }
+      // 当脚本加载并执行成功时，解析 Promise
+      script.onload = () => {
+          resolve();
       };
-  } else { // 其他浏览器
-      script.onload = function () {
-          callback();
-      };
-  }
 
-  script.src = url;
-  document.getElementsByTagName('head')[0].appendChild(script);
+      // 当加载脚本发生错误时，拒绝 Promise
+      script.onerror = (error) => {
+          reject(new Error(`Script load error: ${error}`));
+      };
+
+      // 把 script 元素添加到文档中，开始加载脚本
+      document.head.append(script);
+  });
 }
+
+
+loadScript('http://localhost:3000/jessibuca.js');
 
 
 //  loadScript('http://localhost:3000/decoder.js', () => {
@@ -87,6 +89,8 @@ const FlvDemux = () => {
               <div>
 
                 <LiveVideo url={item.url} />
+
+
               </div>
 
             );

@@ -8,7 +8,6 @@ class WasmDecoder {
 
     }
      init() {
-        debugger;
         this.decoderWorker = new Worker('http://localhost:3000/decoder.js');
      }
     _initDecoderWorker() {
