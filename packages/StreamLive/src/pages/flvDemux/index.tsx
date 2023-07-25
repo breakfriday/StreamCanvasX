@@ -28,7 +28,7 @@ import { Divider, Space, Button, Form, Input } from 'antd';
 }
 
 
-loadScript('http://localhost:3000/jessibuca.js');
+loadScript('/jessibuca.js');
 
 
 //  loadScript('http://localhost:3000/decoder.js', () => {
@@ -80,6 +80,7 @@ const FlvDemux = () => {
           </Form.Item>
         </Form>
 
+        <div>{navigator.appVersion}</div>
         {JSON.stringify(data)}
 
         {
