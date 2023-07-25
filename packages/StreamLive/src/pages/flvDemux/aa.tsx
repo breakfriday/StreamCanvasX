@@ -10,22 +10,45 @@ const LiveVideo = (props) => {
 
     const playerRef = useRef();
 
+    const runplayer1 = () => {
+      let { url } = props;
+      // fetchflv.fetchStream(url);
+      let showAudio = false,
+      hasVideo = true,
+      hasAudio = true;
+
+
+      const player = createPlayerServiceInstance({ url,
+        showAudio,
+        hasVideo,
+        hasAudio,
+        contentEl: containerRef.current!,
+        });
+
+        player.createBetaPlayer();
+    };
+
+
+    const runplayer2 = () => {
+      let { url } = props;
+      const player = new window.Jessibuca({
+        container: containerRef.current!,
+        videoBuffer: 0.2, // 缓存时长
+        isResize: false,
+        text: '',
+        loadingText: '加载中',
+        debug: true,
+        forceNoOffscreen: true,
+        isNotMute: false,
+        useWCS: false,
+        useMSE: false,
+
+    });
+    player.play(url);
+    };
+
     useEffect(() => {
-        let { url } = props;
-        // fetchflv.fetchStream(url);
-        let showAudio = false,
-        hasVideo = true,
-        hasAudio = true;
-
-
-        const player = createPlayerServiceInstance({ url,
-          showAudio,
-          hasVideo,
-          hasAudio,
-          contentEl: containerRef.current!,
-          });
-
-          player.createBetaPlayer();
+      runplayer2();
     }, []);
 
     return (

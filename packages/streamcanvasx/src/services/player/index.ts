@@ -133,10 +133,10 @@ class PlayerService extends Emitter {
 
         this.httpFlvStreamService.init(this, url);
         this.flvVDemuxService.init(this);
-        this.webcodecsDecoderService.init(this);
+        if (typeof VideoDecoder != 'undefined') this.webcodecsDecoderService.init(this);
         this.fLVDemuxStream.init(this);
         this.canvasVideoService.init(this, { model: model, contentEl, useOffScreen });
-        this.wasmDecoderService.init();
+        // this.wasmDecoderService.init();
 
 
         // const decode_worker = new Worker(new URL('../decoder/decode_worker.js', import.meta.url));
@@ -212,8 +212,13 @@ class PlayerService extends Emitter {
           this.canvasVideoService.drawLoading();
 
           this.mpegtsPlayer.on(mpegts.Events.MEDIA_INFO, (parm) => {
+            debugger;
             let video_width = parm.metadata.width;
             let video_height = parm.metadata.height;
+
+            debugger;
+
+            alert(JSON.stringify(parm));
             // this.metadata = {
             //   video_height, video_width,
             // };
@@ -279,7 +284,16 @@ class PlayerService extends Emitter {
             // this.canvasVideoService.loading = false;
             // this.httpFlvStreamService.hertTime = 0;
             this.canvasVideoService.loading = false;
-            this.mpegtsPlayer.play();
+            let { mseLivePlayback, mseH265Playback } = mpegts.getFeatureList();
+
+
+            if (parm.videocodecid == 12 && mseH265Playback === false) {
+                this.destroy();
+
+                this.createBetaPlayer2();
+            } else {
+                this.mpegtsPlayer.play();
+            }
           });
         }
 
@@ -306,6 +320,26 @@ class PlayerService extends Emitter {
             }
         }
       }
+
+    createBetaPlayer2() {
+        let { url } = this.httpFlvStreamService;
+        let container = this.config.contentEl;
+
+        const player = new window.Jessibuca({
+            container: container,
+            videoBuffer: 0.2, // 缓存时长
+            isResize: true,
+            text: '',
+            loadingText: '加载中',
+            debug: false,
+            forceNoOffscreen: true,
+            isNotMute: false,
+            useWCS: false,
+            useMSE: false,
+
+        });
+        player.play(url);
+    }
 
     destroy() {
         if (this.canvasVideoService) {
