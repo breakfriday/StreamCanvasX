@@ -22,6 +22,30 @@ interface IFormData{
 
 }
 
+function loadScript(url: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+      // 创建一个新的 script 元素
+      const script = document.createElement('script');
+      script.src = url;
+
+      // 当脚本加载并执行成功时，解析 Promise
+      script.onload = () => {
+          resolve();
+      };
+
+      // 当加载脚本发生错误时，拒绝 Promise
+      script.onerror = (error) => {
+          reject(new Error(`Script load error: ${error}`));
+      };
+
+      // 把 script 元素添加到文档中，开始加载脚本
+      document.head.append(script);
+  });
+}
+
+
+loadScript('/jessibuca.js');
+
 const HlsDemo = () => {
   useEffect(() => {}, []);
   const [data, setData] = useState<Array<IFormData>>([]);
