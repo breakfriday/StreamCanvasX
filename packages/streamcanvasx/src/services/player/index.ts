@@ -213,13 +213,10 @@ class PlayerService extends Emitter {
           this.canvasVideoService.drawLoading();
 
           this.mpegtsPlayer.on(mpegts.Events.MEDIA_INFO, (parm) => {
-            debugger;
             let video_width = parm.metadata.width;
             let video_height = parm.metadata.height;
 
-            debugger;
 
-            alert(JSON.stringify(parm));
             // this.metadata = {
             //   video_height, video_width,
             // };
