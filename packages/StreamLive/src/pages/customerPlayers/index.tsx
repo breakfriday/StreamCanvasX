@@ -46,6 +46,20 @@ function loadScript(url: string): Promise<void> {
 
 loadScript('/jessibuca.js');
 
+
+let url = `${location.origin}/ffmpeg.min.js`;
+loadScript(url).then(() => {
+  let { createFFmpeg } = window.FFmpeg;
+  let core_path = new URL('ffmpeg_core.js', document.location).href;
+  window.ffmpeg = createFFmpeg({ log: true, corePath: core_path });
+});
+
+//  window.pp = () => {
+//   window.ffmpeg.load(() => {
+//     alert(22222222);
+//   });
+// };
+
 const HlsDemo = () => {
   useEffect(() => {}, []);
   const [data, setData] = useState<Array<IFormData>>([]);
@@ -236,6 +250,9 @@ const HlsDemo = () => {
 
         // http://192.168.3.15/live/haikang.live.flv
       </div>
+
+
+      <div />
 
     </div>
   );
