@@ -29,7 +29,8 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.33';
+window.streamCanvasX = '0.1.36';
+
 function now() {
     return new Date().getTime();
 }
@@ -149,6 +150,10 @@ class PlayerService extends Emitter {
         this.httpFlvStreamService.fetchStream();
     }
     createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
+        if (window.wasmDebug) {
+            this.createBetaPlayer2();
+            return false;
+        }
         let { type = 'flv', isLive = true } = parms;
         let { url } = this.httpFlvStreamService;
         let videoEl = document.createElement('video');
@@ -326,7 +331,7 @@ class PlayerService extends Emitter {
         const player = new window.Jessibuca({
             container: container,
             videoBuffer: 0.2, // 缓存时长
-            isResize: true,
+            isResize: false,
             text: '',
             loadingText: '加载中',
             debug: false,
@@ -334,9 +339,18 @@ class PlayerService extends Emitter {
             isNotMute: false,
             useWCS: false,
             useMSE: false,
+            showBandwidth: false, // 显示网速
 
         });
         player.play(url);
+
+
+        player.on('kBps', (data) => {
+            this.emit('otherInfo', { speed: data });
+          });
+         player.on('stats', (s) => {
+            this.emit('performaceInfo', { fps: s.fps });
+          });
 
 
         this.player2 = player;
