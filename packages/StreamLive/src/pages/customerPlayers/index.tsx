@@ -26,6 +26,7 @@ function loadScript(url: string): Promise<void> {
   return new Promise((resolve, reject) => {
       // 创建一个新的 script 元素
       const script = document.createElement('script');
+      script.crossOrigin = 'anonymous';
       script.src = url;
 
       // 当脚本加载并执行成功时，解析 Promise
@@ -44,15 +45,15 @@ function loadScript(url: string): Promise<void> {
 }
 
 
-loadScript('/jessibuca.js');
+// loadScript('/jessibuca.js');
 
 
-let url = `${location.origin}/ffmpeg.min.js`;
-loadScript(url).then(() => {
-  let { createFFmpeg } = window.FFmpeg;
-  let core_path = new URL('ffmpeg_core.js', document.location).href;
-  window.ffmpeg = createFFmpeg({ log: true, corePath: core_path });
-});
+// let url = `${location.origin}/ffmpeg.min.js`;
+// loadScript(url).then(() => {
+//   let { createFFmpeg } = window.FFmpeg;
+//   let core_path = new URL('ffmpeg_core.js', document.location).href;
+//   window.ffmpeg = createFFmpeg({ log: true, corePath: core_path });
+// });
 
 //  window.pp = () => {
 //   window.ffmpeg.load(() => {
@@ -90,6 +91,7 @@ const HlsDemo = () => {
         <Form.Item
           label="url"
           name="url"
+          initialValue={'ws://172.21.58.51/live/0.live.flv'}
         >
           <Input />
         </Form.Item>
