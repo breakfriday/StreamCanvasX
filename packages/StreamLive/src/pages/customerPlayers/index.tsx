@@ -102,6 +102,19 @@ const HlsDemo = () => {
           </Radio.Group>
         </Form.Item>
 
+
+        {
+          (<Form.Item label="decodeType" valuePropName="decodeType" name="decodeType" >
+            <Radio.Group>
+              <Radio value=""> AUTO </Radio>
+              <Radio value="1"> WEBCODECS </Radio>
+              <Radio value="2">MSE</Radio>
+              <Radio value="3">WASM FFMPEG</Radio>
+            </Radio.Group>
+          </Form.Item>)
+          }
+
+
         <Row>
           <Col span={6}>
 
