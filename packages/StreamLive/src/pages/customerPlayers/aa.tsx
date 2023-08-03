@@ -27,6 +27,8 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
 
   const [audioInfo, setAudioInfo] = useState<any>();
 
+  const [degree, setDegree] = useState<any>();
+
   useEffect(() => {
     let { url, showAudio = false, hasAudio = false, hasVideo = true, useOffScreen = false, audioDrawType = 1, fftsize, updataBufferPerSecond, renderPerSecond, bufferSize } = props;
 
@@ -108,6 +110,25 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
         play.mpegtsPlayer.play();
       }}
       >DD</Button>
+      <br/>
+      <Space>
+        <Input min={-180} max={180} value={degree} onChange={ e =>{setDegree(e.target.value)}}/>
+        <Button onClick={() => {
+          let play = streamPlayer.current;
+          console.log(degree);
+          play.canvasVideoService.drawTrasform(degree);
+          // play.canvasVideoService.drawRotate(degree);
+        }}
+        >transform</Button>
+        <Button onClick={() => {
+          let play = streamPlayer.current;
+          console.log(degree);  
+          // play.canvasVideoService.drawTrasform(degree);
+          play.canvasVideoService.drawRotate(degree);
+        }}
+        >rotate</Button>
+      </Space>
+
     </div>);
 };
 
