@@ -16,6 +16,8 @@ class canvasToVideo {
     private canvas: HTMLCanvasElement;
     private IContext2D: CanvasRenderingContext2D;
     private muxer: Muxer<ArrayBufferTarget>;
+    private startTime: CSSNumberish | null;
+    private lastKeyFrame: number;
     constructor() {
 
     }
@@ -79,6 +81,18 @@ class canvasToVideo {
     async startReoord() {
         this.initAudio();
         this.createMuxer();
+        this.startTime = document.timeline.currentTime;
+        this.recording = true;
+        this.lastKeyFrame = -Infinity;
+
+        this.encodeVideoFrame();
+    }
+    encodeVideoFrame() {
+        let { canvas } = this;
+        let elapsedTime = Number(document.timeline.currentTime) - Number(this.startTime);
+        let frame = new VideoFrame(canvas, {
+            timestamp: elapsedTime * 1000,
+        });
     }
 }
 

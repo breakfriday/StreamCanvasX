@@ -73,6 +73,9 @@ importers:
       streamcanvasx:
         specifier: workspace:^0.1.0
         version: link:../streamcanvasx
+      webm-muxer:
+        specifier: ^3.1.1
+        version: 3.1.1
     devDependencies:
       '@applint/spec':
         specifier: ^1.2.3
@@ -12453,6 +12456,7 @@ packages:
     resolution: {integrity: sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==}
     engines: {node: '>=4'}
     hasBin: true
+    requiresBuild: true
 
   /mimic-fn@2.1.0:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}
