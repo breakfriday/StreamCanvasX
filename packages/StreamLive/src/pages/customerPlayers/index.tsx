@@ -88,6 +88,7 @@ const HlsDemo = () => {
           }}
       >
         <Form.Item
+          initialValue={'http://localhost:8080/live/livestream.flv'}
           label="url"
           name="url"
         >
