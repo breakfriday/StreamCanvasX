@@ -87,6 +87,8 @@ class canvasToVideo {
         this.lastKeyFrame = -Infinity;
 
         this.encodeVideoFrame();
+
+        intervalId = setInterval(this.encodeVideoFrame, 1000 / 30);
     }
     encodeVideoFrame() {
         let { canvas, lastKeyFrame, videoEncoder } = this;
@@ -106,6 +108,10 @@ class canvasToVideo {
         frame.close();
 
         this.recordTextContent = `${elapsedTime % 1000 < 500 ? '🔴' : '⚫'} Recording - ${(elapsedTime / 1000).toFixed(1)} s`;
+    }
+    async endRecording() {
+        this.recordTextContent = '';
+        this.recording = false;
     }
 
     downloadBlob(blob: Blob) {
