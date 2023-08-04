@@ -1,142 +1,273 @@
 
-import React, { useRef, useEffect } from 'react';
-import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
-// import CanvasPlayerByVideos from 'streamcanvasx/canvasPlayerByVideo';
-import mpegts from 'mpegts.js';
-import Hls from 'hls.js';
-// import CanvasAudioProcess from 'streamcanvasx/canvasAudioProcess';
-import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
-// import { ICombinedDrawer } from 'streamcanvasx';
-import mainPlayerService from 'streamcanvasx/es2017/serviceFactories/index';
-import { any } from '@tensorflow/tfjs';
+import React, { useRef, useEffect, useState } from 'react';
+import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row } from 'antd';
+import fpmap from 'lodash/fp/map';
+import VideoComponents from './aa';
+import { Data } from 'ice';
+import './index.css';
 
 const boxs = [1, 2, 3, 4, 5, 6, 7];
 
 let streamPlayers: any = [];
 
+interface IFormData{
+  url: string;
+  type: number;
+  useOffScreen: boolean;
+  audioDrawType: number;
+  renderPerSecond?: number;
+  updataBufferPerSecond?: number;
+  fftsize?: number;
+  bufferSize?: number;
+
+}
+
+function loadScript(url: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+      // 创建一个新的 script 元素
+      const script = document.createElement('script');
+      script.crossOrigin = 'anonymous';
+      script.src = url;
+
+      // 当脚本加载并执行成功时，解析 Promise
+      script.onload = () => {
+          resolve();
+      };
+
+      // 当加载脚本发生错误时，拒绝 Promise
+      script.onerror = (error) => {
+          reject(new Error(`Script load error: ${error}`));
+      };
+
+      // 把 script 元素添加到文档中，开始加载脚本
+      document.head.append(script);
+  });
+}
+
+
+// loadScript('/jessibuca.js');
+
+
+// let url = `${location.origin}/ffmpeg.min.js`;
+// loadScript(url).then(() => {
+//   let { createFFmpeg } = window.FFmpeg;
+//   let core_path = new URL('ffmpeg_core.js', document.location).href;
+//   window.ffmpeg = createFFmpeg({ log: true, corePath: core_path });
+// });
+
+//  window.pp = () => {
+//   window.ffmpeg.load(() => {
+//     alert(22222222);
+//   });
+// };
+
 const HlsDemo = () => {
-  const canvas_ref = useRef<HTMLCanvasElement | null>(null);
+  useEffect(() => {}, []);
+  const [data, setData] = useState<Array<IFormData>>([]);
+  const [form_ref] = Form.useForm();
+  const [formState, setFormState] = useState({ url: '', type: '1', useOffScreen: false, audioDrawType: '1' });
 
-
-  const video_flv_refs = useRef([]);
-
-  const canvas_refs = useRef([]);
-
-
-  const video_box = useRef<HTMLElement>();
-
-
-  let streamPlayerRef = useRef<mainPlayerService | null>(null);
-
-
-  // const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
-
-  useEffect(() => {
-    const streamPlayer = createMainPlayerInstance({ canvas_el: canvas_ref?.current!, root_el: video_box.current! });
-     streamPlayerRef.current = streamPlayer;
-
-     streamPlayers = boxs.map((item, inx) => {
-        let vedio_el = video_flv_refs.current[inx];
-        let canvas_el = canvas_refs.current[inx];
-        const streamPlayer = createMainPlayerInstance({ root_el: vedio_el, canvas_el });
-        return streamPlayer;
-    });
-
-    // loadMediaEvent();
-  }, []);
-
-  //   const url = 'https://localhost:8080/live/livestream.m3u8';
-
-  // async function decodeAudio(arrayBuffer) {
-  //   const decodedAudioData = await audioContext.decodeAudioData(arrayBuffer);
-  //   return decodedAudioData;
-  // }
-
-
-      // http://117.71.59.159:40012/live/luoxuan.live.flv
-  const flv_play_by_index = (params) => {
-    let { url, inx } = params;
-    let streamPlayer = streamPlayers[inx];
-        streamPlayer?.createFlvPlayer({
-          type: 'flv', // could also be mpegts, m2ts, flv
-          isLive: true,
-          url: url,
-      });
-    };
-
+  const formatter = (value: number) => `${value}ms* sampleRate (44100HZ)`;
   return (
     <div>
-      <input
-        type="file"
-        id="file-input"
-        accept="audio/*,video/*"
-        onChange={(event) => {
-          const streamPlayer = streamPlayerRef.current!;
 
-          const files_data = event.target?.files?.[0]; // 返回file对象， 继承自blob对象。
-          files_data ? streamPlayer.set_blob_url(files_data) : '';
+      <Form
+        name="basic"
+        form={form_ref}
+        autoComplete="off"
+        onFieldsChange={(value) => {
+           let data = form_ref.getFieldsValue();
+            setFormState(data);
         }}
-      />
+        onFinish={(value: IFormData) => {
+            let item = { ...value };
+            let temp = Object.assign([], data);
+            temp.push(item);
 
 
-      <Space direction="horizontal" />
+            setData(temp);
+          }}
+      >
+        <Form.Item
+          label="url"
+          name="url"
+          initialValue={'ws://172.21.58.51/live/0.live.flv'}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item label="type" name="type" initialValue={'1'}>
+          <Radio.Group>
+            <Radio value="1"> 视频 </Radio>
+            <Radio value="2"> 音频 </Radio>
+          </Radio.Group>
+        </Form.Item>
 
-      <Space direction="horizontal" >
-        <div ref={video_box} style={{ width: '300px', height: '300px' }}>
+
+        {
+          (<Form.Item label="decodeType" valuePropName="decodeType" name="decodeType" >
+            <Radio.Group>
+              <Radio value=""> AUTO </Radio>
+              <Radio value="1"> WEBCODECS </Radio>
+              <Radio value="2">MSE</Radio>
+              <Radio value="3">WASM FFMPEG</Radio>
+            </Radio.Group>
+          </Form.Item>)
+          }
 
 
-          <div />
+        <Row>
+          <Col span={6}>
+
+            {
+             (<Form.Item label="decode enableWorker" valuePropName="enableWorker" name="enableWorker" >
+               <Switch defaultChecked />
+             </Form.Item>)
+            }
+
+          </Col>
+          <Col span={6}>
+            {
+                formState.type === '1' ? (<Form.Item label="enableStashBuffer" valuePropName="enableStashBuffer" name="enableStashBuffer" >
+                  <Switch />
+                </Form.Item>) : ''
+            }
+          </Col>
+
+          <Col span={6}>
+            {
+                  formState.type === '1' ? (<Form.Item label="autoCleanBuffer" valuePropName="autoCleanBuffer" name="enableStashBuffer" >
+                    <Switch defaultChecked />
+                  </Form.Item>) : ''
+              }
+          </Col>
 
 
-        </div>
-        {boxs.map((item, inx) => {
-            return (
-              <div key={inx} >
-                <div
-                  ref={el => (video_flv_refs.current[inx] = el)}
-                  style={{ width: '300px', height: '300px' }}
+        </Row>
+
+
+        {
+         formState.type === '2' ? (<Form.Item label="useOffScreen Audio " valuePropName="useOffScreen" name="useOffScreen" initialValue={false}>
+           <Switch />
+         </Form.Item>) : ''
+        }
+
+
+        {
+           formState.type === '2' ? (<Form.Item label="renderType" name="audioDrawType" initialValue={'1'}>
+             <Radio.Group>
+               <Radio value="2"> 波形渲染 </Radio>
+               <Radio value="1"> 对称渲染 </Radio>
+             </Radio.Group>
+           </Form.Item>) : ''
+        }
+
+        {
+            formState.type === '2' ? (
+              <Form.Item name="renderPerSecond" label="renderPerSecond" initialValue={15}>
+                <Slider
+                  marks={{
+                15: '15',
+                30: '30',
+                60: '60',
+
+          }}
                 />
-                <Form
-                  name="basic"
-                  autoComplete="off"
-                  onFinish={(values) => {
-                    flv_play_by_index({ url: values.url, inx });
-              }}
-                >
-                  <Form.Item
-                    label="url"
-                    name="url"
-                  >
-                    <Input />
-                  </Form.Item>
+              </Form.Item>) : ''
+        }
+
+        {
+            formState.type === '2' ? (
+              <Form.Item name="updataBufferPerSecond" label="updataBufferPerSecond" initialValue={15}>
+                <Slider
+                  marks={{
+                15: '15',
+                30: '30',
+                60: '60',
+
+          }}
+                />
+              </Form.Item>) : ''
+        }
+
+        {
+            formState.type === '2' ? (<Form.Item label="fftsize" name="fftsize" initialValue={128}>
+              <Radio.Group>
+                <Radio value={64}> 64 </Radio>
+                <Radio value={128}> 128 </Radio>
+                <Radio value={256}> 256 </Radio>
+                <Radio value={512}> 512 </Radio>
+                <Radio value={1024}> 1024 </Radio>
+                <Radio value={2048}> 2048</Radio>
+              </Radio.Group>
+            </Form.Item>) : ''
+        }
+
+        {
+            formState.type === '2' ? (
+              <Form.Item label="bufferSize" name="bufferSize" initialValue={0.2}>
+                <Slider
+                  min={0}
+                  max={10}
+                  step={0.01}
+                  tooltip={{ formatter }}
+                />
+              </Form.Item>) : ''
+        }
 
 
-                  <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                    >
-                      flv_play
-                    </Button>
-                  </Form.Item>
-                </Form>
-                <div>
-                  <canvas ref={el => (canvas_refs.current[inx] = el)} id="canvas" width="300" height="300" />
-                </div>
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button
+            type="primary"
+            htmlType="submit"
+          >
+            fetch_play
+          </Button>
+        </Form.Item>
+      </Form>
+      <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
 
-              </div>
-            );
-        })}
+        {
+          data.map((item, inx) => {
+            let { url, type, useOffScreen, audioDrawType } = item;
+            let showAudio = false;
+            let hasAudio = false;
+            let hasVideo = true;
 
+            if (type == 2) {
+                 showAudio = true;
+                  hasAudio = true;
+                   hasVideo = false;
+            } else {
 
-      </Space>
+            }
 
+            return (<VideoComponents
+              url={url}
+              key={inx}
+              hasVideo={hasVideo}
+              hasAudio={hasAudio}
+              showAudio={showAudio}
+              useOffScreen={useOffScreen}
+              audioDrawType={audioDrawType}
+              updataBufferPerSecond={item.updataBufferPerSecond}
+              renderPerSecond={item.renderPerSecond}
+              fftsize={item.fftsize}
+              bufferSize={item.bufferSize}
 
-      <div id="canvas-container">
-        <canvas ref={canvas_ref} id="canvas" width="800" height="800" />
+            />);
+          })
+        }
       </div>
 
+
+      <div>
+        //https://breakfriday.github.io/StreamCanvasX/
+
+        // http://192.168.3.15/live/haikang.live.flv
+      </div>
+
+
+      <div />
 
     </div>
   );
