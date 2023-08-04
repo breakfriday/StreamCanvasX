@@ -60,81 +60,114 @@ export default SimpleDemo;
 ##  flv直播流播放
 
 ```tsx
-import {  createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
+import {  createPlayerServiceInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 
-const streamPlayer = createMainPlayerInstance({ root_el: veido_flv_ref?.current!, canvas_el: canvas_ref?.current! });
+ let player = createPlayerServiceInstance({});
 
-streamPlayer?.createFlvPlayer({
-          type: 'flv', // could also be mpegts, m2ts, flv
-          isLive: true,
-          url: url,
-      });
+ player.createFlvPlayer({ url: '' });
+
 ```
 
 ```tsx  preview
 import * as React from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
-import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
-const {useRef,useEffect}=React
+import {createPlayerServiceInstance } from 'streamcanvasx/es2017/serviceFactories/index';
+const {useRef,useEffect,useState}=React
 
 
-const SimpleDemo = () => {
-  const veido_flv_ref = React.useRef<HTMLVideoElement | null>(null);
-  const canvas_ref = React.useRef<HTMLCanvasElement | null>(null);
-   let streamPlayerRef = useRef<mainPlayerService | null>(null);
+
+const VideoComponents = (props) => {
+  const streamPlayer = useRef<any>(null);
+  const [info, setInfo] = useState<any>();
 
   useEffect(() => {
-    const streamPlayer = createMainPlayerInstance({ root_el: veido_flv_ref?.current!, canvas_el: canvas_ref?.current! });
-    streamPlayerRef.current = streamPlayer;
+    let { url } = props;
 
+    let player = createPlayerServiceInstance({ url, contentEl: containerRef.current! });
+    streamPlayer.current = player;
+
+    player.createFlvPlayer({});
+
+    player.on('otherInfo', (data) => {
+      let { speed } = data;
+      setInfo({ speed });
+    });
+
+    // let canvas_el = player.canvasVideoService.getCanvas2dEl();
+
+    // containerRef.current!.append(canvas_el);
+
+
+    // loadMediaEvent();
   }, []);
 
-    const flv_play = (params) => {
-    let { url} = params;
-    let streamPlayer =  streamPlayerRef.current
-        streamPlayer?.createFlvPlayer({
-          type: 'flv', // could also be mpegts, m2ts, flv
-          isLive: true,
-          url: url,
-      });
-    };
+
+  const containerRef = useRef(null);
+
 
   return (
-    <>
+    <div >
+      <div style={{ width: '200px', height: '200px' }} ref={containerRef} />
+      <div>{JSON.stringify(info)}</div>
+      <Button onClick={() => {
+        let play = streamPlayer.current;
+        play.reload();
+      }}
+      >retry</Button>
+    </div>);
+}
+
+const SimpleDemo=()=>{
+
+  useEffect(() => {}, []);
+  const [data, setData] = useState<Array<{url: string}>>([]);
+  return (
     <div>
-  
-          <div
-            ref={veido_flv_ref}
-            style={{ width: '300px', height: '300px' }}
-          />
-               <Form
-                  name="basic"
-                  autoComplete="off"
-                  onFinish={(values) => {
-                    flv_play({ url: values.url });
-              }}
-                >
-                  <Form.Item
-                    label="url"
-                    name="url"
-                  >
-                    <Input />
-                  </Form.Item>
+
+      <Form
+        name="basic"
+        autoComplete="off"
+        onFinish={(value: {url: string}) => {
+            let item = { url: value.url };
+            let temp = Object.assign([], data);
+            temp.push(item);
+            setData(temp);
+          }}
+      >
+        <Form.Item
+          label="url"
+          name="url"
+        >
+          <Input />
+        </Form.Item>
 
 
-                  <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                    >
-                      flv_play
-                    </Button>
-                  </Form.Item>
-                </Form>
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button
+            type="primary"
+            htmlType="submit"
+          >
+            fetch_play
+          </Button>
+        </Form.Item>
+      </Form>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
 
-           <canvas ref={canvas_ref}  width="300" height="300" />
+        {
+          data.map((item, inx) => {
+            let { url } = item;
+
+            return (<VideoComponents url={url} key={inx} />);
+          })
+        }
+      </div>
+
+
+      <div>
+        //https://breakfriday.github.io/StreamCanvasX/
+      </div>
+
     </div>
-    </>
   )
 }
 
@@ -147,7 +180,9 @@ export default SimpleDemo;
 ```tsx  preview
 import * as React from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
-import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
+import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/esm/serviceFactories/index';
+import { StyleProvider } from '@ant-design/cssinjs';
+
 const {useRef,useEffect}=React
 
 
