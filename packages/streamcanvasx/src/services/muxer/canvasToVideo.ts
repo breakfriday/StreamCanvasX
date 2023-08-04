@@ -7,7 +7,7 @@ import PlayerService from '../player';
 
 @injectable()
 class canvasToVideo {
-    private recording: boolean;
+     recording: boolean;
     private videoEncoder: VideoEncoder | null;
     private audioEncoder: AudioEncoder | null;
     private intervalId: ReturnType<typeof setInterval>;
@@ -20,7 +20,7 @@ class canvasToVideo {
     private lastKeyFrame: number;
     private recordTextContent: string;
     constructor() {
-
+       console.log('');
     }
     init(parm: {canvas?: HTMLCanvasElement}) {
         if (parm.canvas) {
