@@ -15,6 +15,7 @@ import Mpegts from 'mpegts.js';
 import { IplayerConfig } from '../../types/services';
 import AudioProcessingService from '../audio/audioContextService';
 import WasmDecoderService from '../decoder/wasmDecoder';
+import CanvasToVideoSerivce from '../muxer/canvasToVideo';
 
 
 mpegts.LoggingControl.applyConfig({
@@ -62,6 +63,7 @@ class PlayerService extends Emitter {
     error_connect_times: number;
     wasmDecoderService: WasmDecoderService;
     player2: any;
+    canvasToVideoSerivce: CanvasToVideoSerivce;
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -72,6 +74,7 @@ class PlayerService extends Emitter {
         @inject(TYPES.IFLVDemuxStream) fLVDemuxStream: FLVDemuxStream,
         @inject(TYPES.IAudioProcessingService) audioProcessingService: AudioProcessingService,
         @inject(TYPES.IWasmDecoderService) wasmDecoderService: WasmDecoderService,
+        @inject(TYPES.ICanvasToVideoSerivce) canvasToVideoSerivce: CanvasToVideoSerivce,
         ) {
         super();
         this.httpFlvStreamService = httpFlvStreamService;
@@ -84,6 +87,7 @@ class PlayerService extends Emitter {
         this._opt = Object.assign({}, DEFAULT_PLAYER_OPTIONS);
         this.error_connect_times = 0;
         this.wasmDecoderService = wasmDecoderService;
+        this.canvasToVideoSerivce = canvasToVideoSerivce;
 
 
         this._times = {
