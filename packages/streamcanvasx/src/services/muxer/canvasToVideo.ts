@@ -100,7 +100,10 @@ class canvasToVideo {
         }
     }
 
-    async startReoord() {
+    async startReoord(parm: {canvas?: HTMLCanvasElement}) {
+        if (parm.canvas) {
+            this.canvas = parm.canvas;
+        }
         if (typeof VideoEncoder === 'undefined') {
             alert('no Support  VideoEncoder / WebCodecs API  use Https');
             return;
