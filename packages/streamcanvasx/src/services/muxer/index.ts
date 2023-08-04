@@ -18,6 +18,7 @@ class canvasToVideo {
     private muxer: Muxer<ArrayBufferTarget>;
     private startTime: CSSNumberish | null;
     private lastKeyFrame: number;
+    private recordTextContent: string;
     constructor() {
 
     }
@@ -88,11 +89,34 @@ class canvasToVideo {
         this.encodeVideoFrame();
     }
     encodeVideoFrame() {
-        let { canvas } = this;
+        let { canvas, lastKeyFrame, videoEncoder } = this;
+
         let elapsedTime = Number(document.timeline.currentTime) - Number(this.startTime);
         let frame = new VideoFrame(canvas, {
             timestamp: elapsedTime * 1000,
         });
+                // Ensure a video key frame at least every 10 seconds
+        let needsKeyFrame = elapsedTime - lastKeyFrame >= 10000;
+        if (needsKeyFrame) lastKeyFrame = elapsedTime;
+
+
+        videoEncoder.encode(frame, { keyFrame: needsKeyFrame });
+
+        // 很重要 frame 一定要close
+        frame.close();
+
+        this.recordTextContent = `${elapsedTime % 1000 < 500 ? '🔴' : '⚫'} Recording - ${(elapsedTime / 1000).toFixed(1)} s`;
+    }
+
+    downloadBlob(blob: Blob) {
+        let url = window.URL.createObjectURL(blob);
+        let a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'picasso.webm';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
     }
 }
 
