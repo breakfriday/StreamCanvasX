@@ -239,7 +239,7 @@ const HlsDemo = () => {
               renderPerSecond={item.renderPerSecond}
               fftsize={item.fftsize}
               bufferSize={item.bufferSize}
-
+              // degree={}
             />);
           })
         }
