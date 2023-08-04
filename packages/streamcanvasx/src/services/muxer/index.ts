@@ -88,7 +88,7 @@ class canvasToVideo {
 
         this.encodeVideoFrame();
 
-        intervalId = setInterval(this.encodeVideoFrame, 1000 / 30);
+        this.intervalId = setInterval(this.encodeVideoFrame, 1000 / 30);
     }
     encodeVideoFrame() {
         let { canvas, lastKeyFrame, videoEncoder } = this;
@@ -112,6 +112,18 @@ class canvasToVideo {
     async endRecording() {
         this.recordTextContent = '';
         this.recording = false;
+
+        clearInterval(this.intervalId);
+
+        this.audioTrack?.stop();
+
+        await this.videoEncoder.flush();
+        await this.audioEncoder.flush();
+        this.muxer.finalize();
+
+        let { buffer } = this.muxer.target;
+
+        this.downloadBlob(new Blob([buffer]));
     }
 
     downloadBlob(blob: Blob) {
