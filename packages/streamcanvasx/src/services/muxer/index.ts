@@ -23,10 +23,6 @@ class canvasToVideo {
 
     }
     init(parm: {canvas?: HTMLCanvasElement}) {
-        if (typeof VideoEncoder === 'undefined') {
-            alert('no Support  VideoEncoder / WebCodecs API  use Https');
-            return;
-        }
         if (parm.canvas) {
             this.canvas = parm.canvas;
         }
@@ -77,9 +73,38 @@ class canvasToVideo {
             height: canvas.height,
             bitrate: 1e6,
         });
+
+        if (this.audioTrack) {
+            this.audioEncoder = new AudioEncoder({
+                output: (chunk, meta) => muxer.addAudioChunk(chunk, meta),
+                error: e => console.error(e),
+            });
+            this.audioEncoder.configure({
+                codec: 'opus',
+                numberOfChannels: 1,
+                sampleRate: audioSampleRate,
+                bitrate: 64000,
+            });
+
+            // Create a MediaStreamTrackProcessor to get AudioData chunks from the audio track
+            let trackProcessor = new MediaStreamTrackProcessor({ track: audioTrack });
+            let $this = this;
+            let consumer = new WritableStream({
+                write(audioData) {
+                    if (!$this.recording) return;
+                    $this.audioEncoder.encode(audioData);
+                    audioData.close();
+                },
+            });
+            trackProcessor.readable.pipeTo(consumer);
+        }
     }
 
     async startReoord() {
+        if (typeof VideoEncoder === 'undefined') {
+            alert('no Support  VideoEncoder / WebCodecs API  use Https');
+            return;
+        }
         this.initAudio();
         this.createMuxer();
         this.startTime = document.timeline.currentTime;
