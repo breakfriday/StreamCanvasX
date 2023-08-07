@@ -5,6 +5,9 @@ import { TYPES } from '../../serviceFactories/symbol';
 class HttpFlvStreamLoader {
     private _requestAbort: boolean;
     private _abortController: AbortController;
+    private _abortController2: AbortController;
+    private _requestAbort2: boolean;
+    private _chunks2: Array<Uint8Array>;
     private playerService: PlayerService;
     public url: string;
     maxHeartTimes: number;
@@ -89,6 +92,73 @@ class HttpFlvStreamLoader {
 
     abortFetch(): void {
         this.abortController.abort();
+    }
+
+    downLoadBlob(blob: Blob) {
+        let url = window.URL.createObjectURL(blob);
+        let a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'canvaToVideo.flv';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+
+    async downLoad() {
+        const controller = new AbortController();
+        this._abortController2 = controller;
+        const { signal } = controller;
+        let { url } = this;
+        let requestAbort = this._requestAbort2;
+
+
+        const downloadBlob = (blob: Blob) => {
+            let url = window.URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'canvaToVideo.flv';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        };
+
+
+    try {
+        const response: Response = await fetch(url, { signal });
+        if (requestAbort === true) {
+            response.body.cancel();
+            return;
+        }
+        const stream = response.body;
+        const reader = stream?.getReader();
+        const chunks = this._chunks2 = [];
+        if (reader) {
+            while (true) {
+                const { value, done } = await reader.read();
+
+                if (done || requestAbort) {
+                  break;
+                }
+
+                chunks.push(value);
+            }
+        }
+    } catch (e) {
+        console.log(e);
+    }
+    }
+
+    abortDownLoad() {
+        let controller = this._abortController2;
+        let chunks = this._chunks2;
+        if (controller) {
+            controller.abort();
+            const blob = new Blob(chunks, { type: 'video/x-flv' });
+            this.downLoadBlob(blob);
+            this._requestAbort2 = true;
+        }
     }
 
 
