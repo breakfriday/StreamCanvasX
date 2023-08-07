@@ -7,7 +7,7 @@ import PlayerService from '../player';
 
 @injectable()
 class canvasToVideo {
-    private recording: boolean;
+     recording: boolean;
     private videoEncoder: VideoEncoder | null;
     private audioEncoder: AudioEncoder | null;
     private intervalId: ReturnType<typeof setInterval>;
@@ -20,7 +20,7 @@ class canvasToVideo {
     private lastKeyFrame: number;
     private recordTextContent: string;
     constructor() {
-
+       console.log('');
     }
     init(parm: {canvas?: HTMLCanvasElement}) {
         if (parm.canvas) {
@@ -44,7 +44,7 @@ class canvasToVideo {
         let { canvas, audioTrack, audioSampleRate } = this;
 
         let muxer = new Muxer({
-            target: new WebMMuxer.ArrayBufferTarget(),
+            target: new ArrayBufferTarget(),
             video: {
                 codec: 'V_VP9',
                 width: canvas.width,
@@ -100,7 +100,10 @@ class canvasToVideo {
         }
     }
 
-    async startReoord() {
+    async startReoord(parm: {canvas?: HTMLCanvasElement}) {
+        if (parm.canvas) {
+            this.canvas = parm.canvas;
+        }
         if (typeof VideoEncoder === 'undefined') {
             alert('no Support  VideoEncoder / WebCodecs API  use Https');
             return;
@@ -113,15 +116,17 @@ class canvasToVideo {
 
         this.encodeVideoFrame();
 
-        this.intervalId = setInterval(this.encodeVideoFrame, 1000 / 30);
+        this.intervalId = setInterval(this.encodeVideoFrame.bind(this), 1000 / 30);
     }
     encodeVideoFrame() {
         let { canvas, lastKeyFrame, videoEncoder } = this;
+
 
         let elapsedTime = Number(document.timeline.currentTime) - Number(this.startTime);
         let frame = new VideoFrame(canvas, {
             timestamp: elapsedTime * 1000,
         });
+
                 // Ensure a video key frame at least every 10 seconds
         let needsKeyFrame = elapsedTime - lastKeyFrame >= 10000;
         if (needsKeyFrame) lastKeyFrame = elapsedTime;

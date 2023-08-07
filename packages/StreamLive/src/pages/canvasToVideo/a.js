@@ -1,4 +1,6 @@
-const canvas = document.querySelector('canvas');
+import WebMMuxer from 'webm-muxer';
+const resord = () => {
+	const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d', { desynchronized: true });
 const startRecordingButton = document.querySelector('#start-recording');
 const endRecordingButton = document.querySelector('#end-recording');
@@ -148,7 +150,7 @@ const downloadBlob = (blob) => {
 	let a = document.createElement('a');
 	a.style.display = 'none';
 	a.href = url;
-	a.download = 'picasso.webm';
+	a.download = 'canvaToVideo.webm';
 	document.body.appendChild(a);
 	a.click();
 	window.URL.revokeObjectURL(url);
@@ -194,3 +196,7 @@ window.addEventListener('mousemove', (e) => {
 	drawLine(lastPos, newPos);
 	lastPos = newPos;
 });
+};
+
+
+export default resord;
