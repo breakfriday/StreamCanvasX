@@ -10,6 +10,7 @@ class HttpFlvStreamLoader {
     private _chunks2: Array<Uint8Array>;
     private playerService: PlayerService;
     public url: string;
+    private downLoadInfo: {loading: boolean; text: string};
     maxHeartTimes: number;
     hertTime: number;
     constructor(
@@ -110,6 +111,8 @@ class HttpFlvStreamLoader {
         this._abortController2 = controller;
         const { signal } = controller;
         let { url } = this;
+        let tempUrl = new URL(url);
+        let downUrl = `${location.protocol}//${tempUrl.host}${tempUrl.pathname}`;
         let requestAbort = this._requestAbort2;
 
 
@@ -126,7 +129,7 @@ class HttpFlvStreamLoader {
 
 
     try {
-        const response: Response = await fetch(url, { signal });
+        const response: Response = await fetch(downUrl, { signal });
         if (requestAbort === true) {
             response.body.cancel();
             return;
@@ -146,7 +149,11 @@ class HttpFlvStreamLoader {
             }
         }
     } catch (e) {
-        console.log(e);
+        if (e.name === 'AbortError') {
+            const chunks = this._chunks2;
+            const blob = new Blob(chunks, { type: 'video/x-flv' });
+            this.downLoadBlob(blob);
+        }
     }
     }
 
@@ -155,8 +162,8 @@ class HttpFlvStreamLoader {
         let chunks = this._chunks2;
         if (controller) {
             controller.abort();
-            const blob = new Blob(chunks, { type: 'video/x-flv' });
-            this.downLoadBlob(blob);
+            // const blob = new Blob(chunks, { type: 'video/x-flv' });
+            // this.downLoadBlob(blob);
             this._requestAbort2 = true;
         }
     }

@@ -25,6 +25,9 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
 
   const [info1, setInfo1] = useState<any>();
 
+
+  const [showDownButton, setShowDownButton] = useState<boolean>(true);
+
   const [audioInfo, setAudioInfo] = useState<any>();
 
   useEffect(() => {
@@ -108,17 +111,24 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
         play.mpegtsPlayer.play();
       }}
       >DD</Button>
-      <Button onClick={() => {
-          let player = streamPlayer.current;
+      {
+        showDownButton ? (
+          <Button onClick={() => {
+            let player = streamPlayer.current;
 
-           player.httpFlvStreamService.downLoad();
-      }}
-      >download</Button>
-      <Button onClick={() => {
-          let player = streamPlayer.current;
-         player.httpFlvStreamService.abortDownLoad();
-      }}
-      >abort download</Button>
+             player.httpFlvStreamService.downLoad();
+             setShowDownButton(false);
+        }}
+          >download</Button>
+        ) : (
+          <Button onClick={() => {
+            let player = streamPlayer.current;
+           player.httpFlvStreamService.abortDownLoad();
+        }}
+          >abort download</Button>
+        )
+      }
+
     </div>);
 };
 
