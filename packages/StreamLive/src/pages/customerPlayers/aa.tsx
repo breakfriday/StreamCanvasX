@@ -124,6 +124,7 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
           <Button onClick={() => {
             let player = streamPlayer.current;
            player.httpFlvStreamService.abortDownLoad();
+           setShowDownButton(true);
         }}
           >abort download</Button>
         )
