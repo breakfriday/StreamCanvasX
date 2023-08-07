@@ -6,6 +6,7 @@ import { Muxer, ArrayBufferTarget } from 'webm-muxer';
 
  import { createPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
  import styles from './index.module.css';
+import resord from './a';
 
  interface Icanvas {
     Canvas: HTMLCanvasElement;
@@ -29,6 +30,15 @@ const CanvasToVideo = () => {
  useEffect(() => {
   init();
   event();
+
+  setTimeout(() => {
+	resord();
+  }, 400);
+
+  let player = createPlayerServiceInstance({});
+
+
+  window.player = player;
  }, []);
 
  let [recordingStatus, setRecordingStatus] = useState({ textContent: '🔴' });
@@ -73,89 +83,6 @@ const drawLine = (from, to) => {
 	ctx.stroke();
 };
 
-const startRecording = () => {
-  	// Check for VideoEncoder availability
-	if (typeof VideoEncoder === 'undefined') {
-		alert('no Support  VideoEncoder / WebCodecs API  use Https');
-		return;
-	}
-
-
-  	// Create a WebM muxer with a video track and maybe an audio track
-	muxer = new WebMMuxer.Muxer({
-		target: new WebMMuxer.ArrayBufferTarget(),
-		video: {
-			codec: 'V_VP9',
-			width: canvas.width,
-			height: canvas.height,
-			frameRate: 30,
-		},
-		firstTimestampBehavior: 'offset', // Because we're directly piping a MediaStreamTrack's data into it
-	});
-
-
- const videoEncoder = new VideoEncoder({
-		output: (chunk, meta) => muxer.addVideoChunk(chunk, meta),
-		error: e => console.error(e),
-	});
-    videoEncoder.configure({
-		codec: 'vp09.00.10.08',
-		width: canvas.width,
-		height: canvas.height,
-		bitrate: 1e6,
-	});
-
-  startTime = document.timeline.currentTime!;
-	recording = true;
-	lastKeyFrame = -Infinity;
-
-	encodeVideoFrame();
-	intervalId = setInterval(encodeVideoFrame, 1000 / 30);
-};
-
-const encodeVideoFrame = () => {
-  let elapsedTime = document.timeline.currentTime - startTime;
-	let frame = new VideoFrame(canvas, {
-		timestamp: elapsedTime * 1000,
-	});
-
-	// Ensure a video key frame at least every 10 seconds
-	let needsKeyFrame = elapsedTime - lastKeyFrame >= 10000;
-	if (needsKeyFrame) lastKeyFrame = elapsedTime;
-
-	videoEncoder!.encode(frame, { keyFrame: needsKeyFrame });
-	frame.close();
-  let textContent = `${elapsedTime % 1000 < 500 ? '🔴' : '⚫'} Recording - ${(elapsedTime / 1000).toFixed(1)} s`;
-  setRecordingStatus({ textContent });
-
-	// recordingStatus.textContent =
-	// 	`${elapsedTime % 1000 < 500 ? '🔴' : '⚫'} Recording - ${(elapsedTime / 1000).toFixed(1)} s`;
-};
-
-const endRecording = async () => {
-  setRecordingStatus({ textContent: '' });
-	recording = false;
-
-	clearInterval(intervalId);
-
-
-	await videoEncoder?.flush();
-
-	muxer.finalize();
-
-	let { buffer } = muxer.target;
-	downloadBlob(new Blob([buffer]));
-
-	videoEncoder = null;
-	audioEncoder = null;
-	muxer = null;
-	startTime = null;
-	firstAudioTimestamp = null;
-};
-
-const downloadBlob = (blob: Blob) => {
-
-};
 
 const getRelativeMousePos = (e) => {
 	let rect = canvas.getBoundingClientRect();
@@ -170,11 +97,21 @@ const getRelativeMousePos = (e) => {
           <canvas className={styles['canvas1']} ref={canvasRef} width="800" height={400} />
         </div>
         <div>
-          <Button onClick={() => {
-            startRecording();
+          <Button
+            id="start-recording"
+            onClick={() => {
+			        //  let canvas = canvasRef.current!;
+ 					//  player.canvasToVideoSerivce.startReoord({ canvas: canvas });
           }}
           >start Recording</Button>
-          <Button>strop Recording</Button>
+          <Button
+            id="end-recording"
+            onClick={() => {
+				// let canvas = canvasRef.current!;
+				// player.canvasToVideoSerivce.endRecording({ canvas: canvas });
+		  }}
+          >strop Recording</Button>
+          <p id="recording-status" />
         </div>
 
 
