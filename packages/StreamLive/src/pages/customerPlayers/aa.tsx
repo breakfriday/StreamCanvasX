@@ -108,6 +108,17 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
         play.mpegtsPlayer.play();
       }}
       >DD</Button>
+      <Button onClick={() => {
+          let player = streamPlayer.current;
+
+           player.httpFlvStreamService.downLoad();
+      }}
+      >download</Button>
+      <Button onClick={() => {
+          let player = streamPlayer.current;
+         player.httpFlvStreamService.abortDownLoad();
+      }}
+      >abort download</Button>
     </div>);
 };
 
