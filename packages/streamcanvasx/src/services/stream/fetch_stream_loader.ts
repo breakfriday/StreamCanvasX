@@ -114,6 +114,7 @@ class HttpFlvStreamLoader {
         let { url } = this;
         let tempUrl = new URL(url);
         let downUrl = `${location.protocol}//${tempUrl.host}${tempUrl.pathname}`;
+        this._requestAbort2 = false;
         let requestAbort = this._requestAbort2;
 
 
@@ -131,10 +132,10 @@ class HttpFlvStreamLoader {
 
     try {
         const response: Response = await fetch(downUrl, { signal });
-        if (requestAbort === true) {
-            response.body.cancel();
-            return;
-        }
+        // if (requestAbort === true) {
+        //     response.body.cancel();
+        //     return;
+        // }
         const stream = response.body;
         const reader = stream?.getReader();
         const chunks = this._chunks2 = [];
