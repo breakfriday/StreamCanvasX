@@ -8,6 +8,7 @@
   "private": true,
   "scripts": {
     "start": "pnpm -r --filter=./packages/StreamLive run start",
+    "starts": "pnpm -r --filter=./packages/StreamLive run starts",
     "start:myApp": "pnpm -r --filter=./packages/myApp run start",
     "docs": "pnpm -r --filter=./packages/streamcanvasx run start",
     "buildDocs:streamcanvasx": "pnpm -r --filter=./packages/streamcanvasx run build",
