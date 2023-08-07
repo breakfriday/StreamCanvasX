@@ -10,7 +10,8 @@ class HttpFlvStreamLoader {
     private _chunks2: Array<Uint8Array>;
     private playerService: PlayerService;
     public url: string;
-    private downLoadInfo: {loading: boolean; text: string};
+    private downLoadConfig: {loading: boolean; text: string; startTime: number};
+
     maxHeartTimes: number;
     hertTime: number;
     constructor(
