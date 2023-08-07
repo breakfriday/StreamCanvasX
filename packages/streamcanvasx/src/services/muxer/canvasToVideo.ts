@@ -44,7 +44,7 @@ class canvasToVideo {
         let { canvas, audioTrack, audioSampleRate } = this;
 
         let muxer = new Muxer({
-            target: new WebMMuxer.ArrayBufferTarget(),
+            target: new ArrayBufferTarget(),
             video: {
                 codec: 'V_VP9',
                 width: canvas.width,
@@ -116,15 +116,17 @@ class canvasToVideo {
 
         this.encodeVideoFrame();
 
-        this.intervalId = setInterval(this.encodeVideoFrame, 1000 / 30);
+        this.intervalId = setInterval(this.encodeVideoFrame.bind(this), 1000 / 30);
     }
     encodeVideoFrame() {
         let { canvas, lastKeyFrame, videoEncoder } = this;
+
 
         let elapsedTime = Number(document.timeline.currentTime) - Number(this.startTime);
         let frame = new VideoFrame(canvas, {
             timestamp: elapsedTime * 1000,
         });
+
                 // Ensure a video key frame at least every 10 seconds
         let needsKeyFrame = elapsedTime - lastKeyFrame >= 10000;
         if (needsKeyFrame) lastKeyFrame = elapsedTime;
@@ -146,7 +148,7 @@ class canvasToVideo {
         this.audioTrack?.stop();
 
         await this.videoEncoder.flush();
-        await this.audioEncoder.flush();
+        // await this.audioEncoder.flush();
         this.muxer.finalize();
 
         let { buffer } = this.muxer.target;
