@@ -6,7 +6,7 @@ import { Muxer, ArrayBufferTarget } from 'webm-muxer';
 
  import { createPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
  import styles from './index.module.css';
-import Player from '../webgpuRener/aa';
+import resord from './a';
 
  interface Icanvas {
     Canvas: HTMLCanvasElement;
@@ -30,6 +30,10 @@ const CanvasToVideo = () => {
  useEffect(() => {
   init();
   event();
+
+  setTimeout(() => {
+	resord();
+  }, 400);
 
   let player = createPlayerServiceInstance({});
 
@@ -93,17 +97,21 @@ const getRelativeMousePos = (e) => {
           <canvas className={styles['canvas1']} ref={canvasRef} width="800" height={400} />
         </div>
         <div>
-          <Button onClick={() => {
-			         let canvas = canvasRef.current!;
- 					 player.canvasToVideoSerivce.startReoord({ canvas: canvas });
+          <Button
+            id="start-recording"
+            onClick={() => {
+			        //  let canvas = canvasRef.current!;
+ 					//  player.canvasToVideoSerivce.startReoord({ canvas: canvas });
           }}
           >start Recording</Button>
-          <Button onClick={() => {
-				let canvas = canvasRef.current!;
-				alert(2)
-				player.canvasToVideoSerivce.endRecording({ canvas: canvas });
+          <Button
+            id="end-recording"
+            onClick={() => {
+				// let canvas = canvasRef.current!;
+				// player.canvasToVideoSerivce.endRecording({ canvas: canvas });
 		  }}
           >strop Recording</Button>
+          <p id="recording-status" />
         </div>
 
 
