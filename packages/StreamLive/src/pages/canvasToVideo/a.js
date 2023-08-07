@@ -1,4 +1,6 @@
-const canvas = document.querySelector('canvas');
+import WebMMuxer from 'webm-muxer';
+const resord = () => {
+	const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d', { desynchronized: true });
 const startRecordingButton = document.querySelector('#start-recording');
 const endRecordingButton = document.querySelector('#end-recording');
@@ -194,3 +196,7 @@ window.addEventListener('mousemove', (e) => {
 	drawLine(lastPos, newPos);
 	lastPos = newPos;
 });
+};
+
+
+export default resord;
