@@ -89,6 +89,7 @@ const HlsDemo = () => {
           }}
       >
         <Form.Item
+          initialValue={'http://localhost:8080/live/livestream.flv'}
           label="url"
           name="url"
           initialValue={'ws://172.21.58.51/live/0.live.flv'}
@@ -253,7 +254,7 @@ const HlsDemo = () => {
               renderPerSecond={item.renderPerSecond}
               fftsize={item.fftsize}
               bufferSize={item.bufferSize}
-
+              // degree={}
             />);
           })
         }

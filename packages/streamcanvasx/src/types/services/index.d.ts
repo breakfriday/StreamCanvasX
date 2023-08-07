@@ -148,7 +148,7 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   updataBufferPerSecond?: number;
   fftsize?: number;
   bufferSize?: number;
-
+  degree?: number;
 
 }
 
