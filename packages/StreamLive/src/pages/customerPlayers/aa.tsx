@@ -96,7 +96,7 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
 
   return (
     <div >
-      <div style={{ width: '400px', height: '200px', border: '1px' }} ref={containerRef} />
+      <div style={{ width: '1200px', height: '600px', border: '1px' }} ref={containerRef} />
       <div>{JSON.stringify(info)} </div>
       <div>{JSON.stringify(info1)}</div>
       <div>{JSON.stringify(audioInfo)}</div>
@@ -115,6 +115,24 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
         play.mpegtsPlayer.play();
       }}
       >DD</Button>
+      <div>
+        <Button
+          id="start-recording"
+          onClick={() => {
+            let player = streamPlayer.current;
+ 					  player.canvasToVideoSerivce.startReoord();
+          }}
+        >start Recording</Button>
+        <Button
+          id="end-recording"
+          onClick={() => {
+				// let canvas = canvasRef.current!;
+          let player = streamPlayer.current;
+				  player.canvasToVideoSerivce.endRecording();
+		  }}
+        >strop Recording</Button>
+        <p id="recording-status" />
+      </div>
       <br />
       <Space>
         <Input
