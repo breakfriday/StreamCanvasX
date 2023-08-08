@@ -33,6 +33,8 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
 
   const [degree, setDegree] = useState<any>();
 
+  const [recordTextContent, setRecordTextContent] = useState('');
+
   useEffect(() => {
     let { url, showAudio = false, hasAudio = false, hasVideo = true, useOffScreen = false, audioDrawType = 1, fftsize, updataBufferPerSecond, renderPerSecond, bufferSize, degree } = props;
 
@@ -77,6 +79,10 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
       setAudioInfo(data);
     });
 
+    player.on('recordTextContent', (text) => {
+      setRecordTextContent(text);
+    });
+
 
     return () => {
       player.destroy();
@@ -117,21 +123,19 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
       >DD</Button>
       <div>
         <Button
-          id="start-recording"
           onClick={() => {
             let player = streamPlayer.current;
  					  player.canvasToVideoSerivce.startReoord();
           }}
         >start Recording</Button>
         <Button
-          id="end-recording"
           onClick={() => {
 				// let canvas = canvasRef.current!;
           let player = streamPlayer.current;
 				  player.canvasToVideoSerivce.endRecording();
 		  }}
         >strop Recording</Button>
-        <p id="recording-status" />
+        <p >{recordTextContent}</p>
       </div>
       <br />
       <Space>
