@@ -114,7 +114,6 @@ class canvasToVideo {
         }
         await this.getAudioTrack();
 
-        debugger;
 
         this.createMuxer();
 
@@ -146,6 +145,7 @@ class canvasToVideo {
         frame.close();
 
         this.recordTextContent = `${elapsedTime % 1000 < 500 ? '🔴' : '⚫'} Recording - ${(elapsedTime / 1000).toFixed(1)} s`;
+        this.player.emit('recordTextContent', this.recordTextContent);
     }
     async endRecording() {
         this.recordTextContent = '';
