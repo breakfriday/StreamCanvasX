@@ -142,6 +142,7 @@ class PlayerService extends Emitter {
         if (typeof VideoDecoder != 'undefined') this.webcodecsDecoderService.init(this);
         this.fLVDemuxStream.init(this);
         this.canvasVideoService.init(this, { model: model, contentEl, useOffScreen });
+        this.canvasToVideoSerivce.init(this);
         // this.wasmDecoderService.init();
 
 
