@@ -430,7 +430,7 @@ class CanvasVideoService {
 
         // this.drawTrasform(30);
         this.canvas_context.drawImage(videoFrame, 0, 0, width, height);
-
+        this.drawWatermark();
         // this.drawTrasform(videoFrame, 30, ctx);
 
         // ctx.restore();
@@ -684,7 +684,27 @@ class CanvasVideoService {
     //   }
     //   return newData;
     // }
-
+      drawWatermark(){
+        let ctx = this.canvas_context;
+        // ctx.restore();
+        // ctx.save();
+        let { canvas_el } = this;
+        let canvas = canvas_el;
+        const watermark = document.createElement('canvas');
+        const watermarkSize = 50;
+        watermark.width = watermarkSize;
+        watermark.height = watermarkSize;
+        const ctxWatermark = watermark.getContext('2d');
+        ctxWatermark.textAlign = 'left';
+        ctxWatermark.textBaseline = 'top';
+        ctxWatermark.font = '12px Microsoft Yahei';
+        ctxWatermark.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        ctxWatermark.rotate(-20 * Math.PI / 180);
+        ctxWatermark.fillText('水印', 10, 20);
+        ctx.drawImage(watermark, 0, 0);
+        // ctx.fillStyle = ctx.createPattern(watermark,'repeat'); //  使用createPattern可以在ctx中进行填充
+        // ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
     // drawLoading() {
     //   let ctx = this.canvas_context;
     //   let { canvas_el } = this;
