@@ -19,16 +19,20 @@ class canvasToVideo {
     private startTime: CSSNumberish | null;
     private lastKeyFrame: number;
     private recordTextContent: string;
+    private player: PlayerService;
     constructor() {
        console.log('');
     }
-    init(parm: {canvas?: HTMLCanvasElement}) {
-        if (parm.canvas) {
-            this.canvas = parm.canvas;
-        }
+    init(playerService: PlayerService) {
+        // if (parm.canvas) {
+        //     this.canvas = parm.canvas;
+        // }
+
+        this.player = playerService;
+        this.canvas = this.player.canvasVideoService.canvas_el;
     }
 
-    async initAudio() {
+    async getAudioTrack() {
         if (typeof AudioEncoder !== 'undefined') {
             try {
                 let userMedia = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
@@ -101,15 +105,19 @@ class canvasToVideo {
     }
 
     async startReoord(parm: {canvas?: HTMLCanvasElement}) {
-        if (parm.canvas) {
-            this.canvas = parm.canvas;
-        }
+        // if (parm.canvas) {
+        //     this.canvas = parm.canvas;
+        // }
         if (typeof VideoEncoder === 'undefined') {
             alert('no Support  VideoEncoder / WebCodecs API  use Https');
             return;
         }
-        this.initAudio();
+        await this.getAudioTrack();
+
+        debugger;
+
         this.createMuxer();
+
         this.startTime = document.timeline.currentTime;
         this.recording = true;
         this.lastKeyFrame = -Infinity;
