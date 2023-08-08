@@ -48,7 +48,7 @@ const LiveVideo = (props) => {
     };
 
     useEffect(() => {
-      runplayer2();
+      runplayer1();
     }, []);
 
     return (
