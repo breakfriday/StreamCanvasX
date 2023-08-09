@@ -107,7 +107,7 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
 
   return (
     <div >
-      <div style={{ width: '1200px', height: '800px', border: '1px' }} ref={containerRef} />
+      <div style={{ width: '400px', height: '200px', border: '1px' }} ref={containerRef} />
       <div>{JSON.stringify(info)} </div>
       <div>{JSON.stringify(info1)}</div>
       <div>{JSON.stringify(audioInfo)}</div>

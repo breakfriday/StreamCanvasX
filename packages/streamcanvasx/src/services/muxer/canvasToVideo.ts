@@ -152,7 +152,7 @@ class canvasToVideo {
 
         this.startTime = document.timeline.currentTime;
         this.recording = true;
-        this.lastKeyFrame = -Infinity;
+        this.lastKeyFrame = -Infinity; 
         let { startTime, canvas, lastKeyFrame, videoEncoder } = this;
         let $this = this;
 

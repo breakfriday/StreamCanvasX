@@ -55,6 +55,7 @@ class CanvasVideoService {
     loading: boolean;
     frameInfo: VideoFrame;
     resizeObserver: ResizeObserver;
+    videoFrame: VideoFrame;
     constructor() {
         this.canvas_el = document.createElement('canvas');
 
@@ -362,6 +363,7 @@ class CanvasVideoService {
 
 
     render(videoFrame: VideoFrame | HTMLVideoElement) {
+      this.videoFrame = videoFrame as VideoFrame;
         switch (this.useMode) {
             case UseMode.UseCanvas:
                 this.renderCanvas2d(videoFrame);
