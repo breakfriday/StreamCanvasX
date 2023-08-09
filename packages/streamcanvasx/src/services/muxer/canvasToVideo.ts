@@ -2,7 +2,7 @@
 /* eslint-disable no-negated-condition */
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
  import { Muxer as MuxerWebm, ArrayBufferTarget as ArrayBufferTargetWebm } from 'webm-muxer';
- import { Muxer as MuxerMp4, ArrayBufferTarget as ArrayBufferTargetMp4 } from 'webm-muxer';
+ import { Muxer as MuxerMp4, ArrayBufferTarget as ArrayBufferTargetMp4 } from 'mp4-muxer';
 // import { Muxer, ArrayBufferTarget } from 'mp4-muxer';
 import Emitter from '../../utils/emitter';
 import PlayerService from '../player';
@@ -21,7 +21,7 @@ class canvasToVideo {
     private audioSampleRate: number;
     private canvas: HTMLCanvasElement;
     private IContext2D: CanvasRenderingContext2D;
-    private muxer: MuxerWebm<ArrayBufferTargetWebm>;
+    private muxer: MuxerWebm<ArrayBufferTargetWebm> | MuxerMp4<ArrayBufferTargetMp4>;
     private startTime: CSSNumberish | null;
     private lastKeyFrame: number;
     private recordTextContent: string;
@@ -99,13 +99,12 @@ class canvasToVideo {
             this.muxer = new MuxerMp4({
                 target: new ArrayBufferTargetMp4(),
                 video: {
-                    codec: muxerVideoCodec,
+                    codec: 'avc',
                     width: canvas.width,
                     height: canvas.height,
-                    frameRate: 30,
                 },
                 audio: audioTrack ? {
-                    codec: muxerAudioCodec,
+                    codec: 'aac',
                     sampleRate: audioSampleRate,
                     numberOfChannels: 1,
                 } : undefined,
