@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
 import { createPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
 import { PlayCircleFilled } from '@ant-design/icons';
-import records from '../canvasToVideo/a';
+import records from '../canvasToVideo/mp4';
 
 interface IVideoComponent {
   url: string;
