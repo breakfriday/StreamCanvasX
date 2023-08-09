@@ -1,10 +1,15 @@
 
 /* eslint-disable no-negated-condition */
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
-import { Muxer, ArrayBufferTarget } from 'webm-muxer';
+ import { Muxer, ArrayBufferTarget } from 'webm-muxer';
+// import { Muxer, ArrayBufferTarget } from 'mp4-muxer';
 import Emitter from '../../utils/emitter';
 import PlayerService from '../player';
 
+enum OutputFormat {
+    MP4 = 'MP4',
+    WebM = 'WebM',
+  }
 @injectable()
 class canvasToVideo {
      recording: boolean;
@@ -20,6 +25,7 @@ class canvasToVideo {
     private lastKeyFrame: number;
     private recordTextContent: string;
     private player: PlayerService;
+    private outputFormat: OutputFormat;
     constructor() {
        console.log('');
     }
@@ -27,6 +33,8 @@ class canvasToVideo {
         // if (parm.canvas) {
         //     this.canvas = parm.canvas;
         // }
+
+        this.outputFormat = OutputFormat.WebM;
 
         this.player = playerService;
         this.canvas = this.player.canvasVideoService.canvas_el;
@@ -105,9 +113,9 @@ class canvasToVideo {
     }
 
     async startReoord(parm: {canvas?: HTMLCanvasElement}) {
-        // if (parm.canvas) {
-        //     this.canvas = parm.canvas;
-        // }
+        if (parm && parm.canvas) {
+            this.canvas = parm.canvas;
+        }
         if (typeof VideoEncoder === 'undefined') {
             alert('no Support  VideoEncoder / WebCodecs API  use Https');
             return;
