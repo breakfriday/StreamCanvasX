@@ -67,11 +67,13 @@ class canvasToVideo {
         let muxerAudioCodec = '';
         let encodeVideoCodec = '';
         let encodeAudioCodec = '';
+        let audioBitrate: number;
         if (outputFormat === OutputFormat.WebM) {
             muxerVideoCodec = 'V_VP9';
             muxerAudioCodec = 'A_OPUS';
             encodeVideoCodec = 'vp09.00.10.08';
             encodeAudioCodec = 'opus';
+            audioBitrate = 64000;
             this.muxer = new MuxerWebm({
                 target: new ArrayBufferTargetWebm(),
                 video: {
@@ -93,6 +95,7 @@ class canvasToVideo {
             muxerAudioCodec = 'aac';
             encodeVideoCodec = 'avc1.4d002a';
             encodeAudioCodec = 'mp4a.40.2';
+            audioBitrate = 128000;
             this.muxer = new MuxerMp4({
                 target: new ArrayBufferTargetMp4(),
                 video: {
@@ -135,7 +138,7 @@ class canvasToVideo {
                 codec: encodeAudioCodec,
                 numberOfChannels: 1,
                 sampleRate: audioSampleRate,
-                bitrate: 64000,
+                bitrate: audioBitrate,
             });
 
             // Create a MediaStreamTrackProcessor to get AudioData chunks from the audio track
@@ -152,11 +155,14 @@ class canvasToVideo {
         }
     }
 
-    async startRecord(parm: {canvas?: HTMLCanvasElement}) {
+    async startRecord(parm: {canvas?: HTMLCanvasElement; outputFormat?: OutputFormat}) {
         this.setCanvas();
-        // if (parm && parm.canvas) {
-        //     this.setCanvas({ canvas: parm.canvas });
-        // }
+        if (parm) {
+            let { outputFormat } = parm;
+            if (outputFormat) {
+                this.outputFormat = outputFormat;
+            }
+        }
         if (typeof VideoEncoder === 'undefined') {
             alert('no Support  VideoEncoder / WebCodecs API  use Https');
             return;
@@ -240,7 +246,18 @@ class canvasToVideo {
         let a = document.createElement('a');
         a.style.display = 'none';
         a.href = url;
-        a.download = 'picasso.webm';
+        let name = '';
+        switch (this.outputFormat) {
+            case OutputFormat.MP4:
+                name = 'picasso.mp4';
+                break;
+            case OutputFormat.WebM:
+                name = 'picasso.webm';
+                break;
+            default:
+                console.log('- none--');
+        }
+        a.download = name;
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
