@@ -89,10 +89,25 @@ class canvasToVideo {
             });
         }
         if (outputFormat === OutputFormat.MP4) {
-            muxerVideoCodec = 'V_VP9';
-            muxerAudioCodec = 'A_OPUS';
-            encodeVideoCodec = 'vp09.00.10.08';
-            encodeAudioCodec = 'opus';
+            muxerVideoCodec = 'avc';
+            muxerAudioCodec = 'aac';
+            encodeVideoCodec = 'avc1.4d002a';
+            encodeAudioCodec = 'mp4a.40.2';
+            this.muxer = new MuxerMp4({
+                target: new ArrayBufferTargetMp4(),
+                video: {
+                    codec: muxerVideoCodec,
+                    width: canvas.width,
+                    height: canvas.height,
+                    frameRate: 30,
+                },
+                audio: audioTrack ? {
+                    codec: muxerAudioCodec,
+                    sampleRate: audioSampleRate,
+                    numberOfChannels: 1,
+                } : undefined,
+                firstTimestampBehavior: 'offset', // Because we're directly piping a MediaStreamTrack's data into it
+            });
         }
 
 
