@@ -1,7 +1,8 @@
 
 /* eslint-disable no-negated-condition */
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
- import { Muxer, ArrayBufferTarget } from 'webm-muxer';
+ import { Muxer as MuxerWebm, ArrayBufferTarget as ArrayBufferTargetWebm } from 'webm-muxer';
+ import { Muxer as MuxerMp4, ArrayBufferTarget as ArrayBufferTargetMp4 } from 'webm-muxer';
 // import { Muxer, ArrayBufferTarget } from 'mp4-muxer';
 import Emitter from '../../utils/emitter';
 import PlayerService from '../player';
@@ -20,7 +21,7 @@ class canvasToVideo {
     private audioSampleRate: number;
     private canvas: HTMLCanvasElement;
     private IContext2D: CanvasRenderingContext2D;
-    private muxer: Muxer<ArrayBufferTarget>;
+    private muxer: MuxerWebm<ArrayBufferTargetWebm>;
     private startTime: CSSNumberish | null;
     private lastKeyFrame: number;
     private recordTextContent: string;
@@ -45,7 +46,6 @@ class canvasToVideo {
             this.canvas = parm.canvas;
         } else {
             this.canvas = this.player.canvasVideoService.canvas_el2;
-            debugger;
         }
     }
 
@@ -72,6 +72,21 @@ class canvasToVideo {
             muxerAudioCodec = 'A_OPUS';
             encodeVideoCodec = 'vp09.00.10.08';
             encodeAudioCodec = 'opus';
+            this.muxer = new MuxerWebm({
+                target: new ArrayBufferTargetWebm(),
+                video: {
+                    codec: muxerVideoCodec,
+                    width: canvas.width,
+                    height: canvas.height,
+                    frameRate: 30,
+                },
+                audio: audioTrack ? {
+                    codec: muxerAudioCodec,
+                    sampleRate: audioSampleRate,
+                    numberOfChannels: 1,
+                } : undefined,
+                firstTimestampBehavior: 'offset', // Because we're directly piping a MediaStreamTrack's data into it
+            });
         }
         if (outputFormat === OutputFormat.MP4) {
             muxerVideoCodec = 'V_VP9';
@@ -80,23 +95,8 @@ class canvasToVideo {
             encodeAudioCodec = 'opus';
         }
 
-        let muxer = new Muxer({
-            target: new ArrayBufferTarget(),
-            video: {
-                codec: muxerVideoCodec,
-                width: canvas.width,
-                height: canvas.height,
-                frameRate: 30,
-            },
-            audio: audioTrack ? {
-                codec: muxerAudioCodec,
-                sampleRate: audioSampleRate,
-                numberOfChannels: 1,
-            } : undefined,
-            firstTimestampBehavior: 'offset', // Because we're directly piping a MediaStreamTrack's data into it
-        });
 
-        this.muxer = muxer;
+        let { muxer } = this;
 
 
         this.videoEncoder = new VideoEncoder({
