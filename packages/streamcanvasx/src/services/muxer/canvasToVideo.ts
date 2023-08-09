@@ -38,14 +38,14 @@ class canvasToVideo {
 
         this.player = playerService;
         // this.canvas = this.player.canvasVideoService.canvas_el;
-        this.setCanvas();
     }
 
     setCanvas(parm?: {canvas?: HTMLCanvasElement}) {
         if (parm && parm.canvas) {
             this.canvas = parm.canvas;
         } else {
-            this.canvas = this.player.canvasVideoService.canvas_el;
+            this.canvas = this.player.canvasVideoService.canvas_el2;
+            debugger;
         }
     }
 
@@ -138,9 +138,10 @@ class canvasToVideo {
     }
 
     async startRecord(parm: {canvas?: HTMLCanvasElement}) {
-        if (parm && parm.canvas) {
-            this.setCanvas({ canvas: parm.canvas });
-        }
+        this.setCanvas();
+        // if (parm && parm.canvas) {
+        //     this.setCanvas({ canvas: parm.canvas });
+        // }
         if (typeof VideoEncoder === 'undefined') {
             alert('no Support  VideoEncoder / WebCodecs API  use Https');
             return;
@@ -152,7 +153,7 @@ class canvasToVideo {
 
         this.startTime = document.timeline.currentTime;
         this.recording = true;
-        this.lastKeyFrame = -Infinity; 
+        this.lastKeyFrame = -Infinity;
         let { startTime, canvas, lastKeyFrame, videoEncoder } = this;
         let $this = this;
 
