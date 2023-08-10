@@ -280,7 +280,11 @@ class canvasToVideo {
         this.audioTrack?.stop();
 
         await this.videoEncoder.flush();
-        await this.audioEncoder.flush();
+
+        // 可能 没有音频
+        if (this.audioEncoder) {
+            await this.audioEncoder.flush();
+        }
         this.muxer.finalize();
 
         let { buffer } = this.muxer.target;
