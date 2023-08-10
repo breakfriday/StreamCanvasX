@@ -96,6 +96,19 @@ const HlsDemo = () => {
         >
           <Input />
         </Form.Item>
+
+        <Form.Item
+          label="media"
+          name="media"
+          initialValue={['hasVideo', 'hasAudio']}
+        >
+          <Checkbox.Group>
+            <Checkbox value="hasAudio" >hasAudio</Checkbox>
+            <Checkbox value="hasVideo" >hasVideo</Checkbox>
+          </Checkbox.Group>
+
+        </Form.Item>
+
         <Form.Item label="type" name="type" initialValue={'1'}>
           <Radio.Group>
             <Radio value="1"> 视频 </Radio>
@@ -229,10 +242,12 @@ const HlsDemo = () => {
 
         {
           data.map((item, inx) => {
-            let { url, type, useOffScreen, audioDrawType } = item;
+            let { url, type, useOffScreen, audioDrawType, media } = item;
             let showAudio = false;
-            let hasAudio = false;
+
+            let hasAudio = media.includes('hasAudio');
             let hasVideo = true;
+
 
             if (type == 2) {
                  showAudio = true;
