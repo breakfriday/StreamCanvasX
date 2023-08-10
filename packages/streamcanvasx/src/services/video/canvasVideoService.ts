@@ -464,6 +464,24 @@ class CanvasVideoService {
         // this.drawTrasform(videoFrame, this.playerService.config.degree);
 
         // ctx.restore();
+        this.renderOriginCanvas(videoFrame);
+    }
+
+    // 录制原始高清视频
+    renderOriginCanvas(videoFrame: VideoFrame | HTMLVideoElement) {
+      let video = videoFrame as HTMLVideoElement;
+      if (this.playerService.canvasToVideoSerivce.recording === true) {
+        let video_height = video.videoHeight;
+        let video_width = video.videoWidth;
+        if (!this.canvas_context2) {
+          this.canvas_context2 = this.canvas_el2.getContext('2d');
+          this.setCanvas2Size({ width: video_width, height: video_height });
+        }
+        this.canvas_context2.clearRect(0, 0, video_width, video_height);
+
+        // this.drawTrasform(30);
+        this.canvas_context2.drawImage(videoFrame, 0, 0, video_width, video_height);
+      }
     }
 
     getCanvas2dEl() {
