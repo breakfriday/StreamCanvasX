@@ -23,6 +23,7 @@ class AudioProcessingService {
     clear: boolean;
     timeId: any;
     canvasWorker: Worker;
+    medialEl: HTMLVideoElement;
 
 
     constructor() {
@@ -32,16 +33,25 @@ class AudioProcessingService {
 
     init(playerService: PlayerService, option: {media_el: HTMLVideoElement}) {
         let { media_el } = option;
+
+        // window.video = media_el;
+        // 用来读取 音频轨道
+        this.medialEl = media_el;
+
+        // return false
+
         this.playerService = playerService;
          this.createAudioContext();
          this.setMediaSource_el(media_el);
          this.audioContextConnect();
 
 
-         if (playerService.config.showAudio === true && playerService.config.useOffScreen === true) {
-          this.update_buffer_worker();
-         } else {
-          this.updateBufferData();
+         if (playerService.config.showAudio === true) {
+          if (playerService.config.useOffScreen === true) {
+            this.update_buffer_worker();
+           } else {
+            this.updateBufferData();
+           }
          }
 
 
@@ -385,7 +395,7 @@ class AudioProcessingService {
   }
 
     createAudioContext() {
-      let { fftsize } = this.playerService.config;
+      let { fftsize = 128 } = this.playerService.config;
         this.context.audioContext = new AudioContext();
         this.context.analyserNode = this.context.audioContext.createAnalyser();
 

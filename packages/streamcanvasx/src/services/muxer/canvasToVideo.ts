@@ -13,7 +13,7 @@ enum OutputFormat {
   }
 @injectable()
 class canvasToVideo {
-     recording: boolean;
+    public recording: boolean;
     private videoEncoder: VideoEncoder | null;
     private audioEncoder: AudioEncoder | null;
     private intervalId: ReturnType<typeof setInterval>;
@@ -27,6 +27,7 @@ class canvasToVideo {
     private recordTextContent: string;
     private player: PlayerService;
     private outputFormat: OutputFormat;
+    private hasAudioConfigure: boolean;
     constructor() {
        console.log('');
     }
@@ -35,7 +36,7 @@ class canvasToVideo {
         //     this.canvas = parm.canvas;
         // }
 
-        this.outputFormat = OutputFormat.WebM;
+        this.outputFormat = OutputFormat.MP4;
 
         this.player = playerService;
         // this.canvas = this.player.canvasVideoService.canvas_el;
@@ -45,28 +46,46 @@ class canvasToVideo {
         if (parm && parm.canvas) {
             this.canvas = parm.canvas;
         } else {
-            this.canvas = this.player.canvasVideoService.canvas_el2;
+            if (this.player.config.showAudio === true) {
+                this.canvas = this.player.canvasVideoService.canvas_el;
+            } else {
+                this.canvas = this.player.canvasVideoService.canvas_el2;
+            }
         }
     }
 
     async getAudioTrack() {
-        if (typeof AudioEncoder !== 'undefined') {
-            try {
-                let userMedia = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
-                this.audioTrack = userMedia.getAudioTracks()[0];
-            } catch (e) {}
-        } else {
-            console.log('no support AudioEncoder');
-        }
-        this.audioSampleRate = this.audioTrack?.getCapabilities().sampleRate.max;
+        // if (typeof AudioEncoder !== 'undefined') {
+        //     try {
+        //         let userMedia = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
+        //         this.audioTrack = userMedia.getAudioTracks()[0];
+        //     } catch (e) {}
+        // } else {
+        //     console.log('no support AudioEncoder');
+        // }
+
+        // const stream = video.captureStream();
+        // const audioTrack = stream.getAudioTracks()[0];
+        // this.audioTrack = audioTrack;
+        // this.audioSampleRate = 48000;
     }
 
     createMuxer() {
-        let { canvas, audioTrack, audioSampleRate, outputFormat } = this;
+        let { canvas, outputFormat } = this;
+
+        let audioTrack = '';
+        try {
+            const stream = this.player.audioProcessingService.medialEl.captureStream();
+            audioTrack = stream.getAudioTracks()[0];
+        } catch (e) {
+            console.error(e);
+        }
+
         let muxerVideoCodec = '';
         let muxerAudioCodec = '';
         let encodeVideoCodec = '';
         let encodeAudioCodec = '';
+        let audioSampleRate = 48000;
         let audioBitrate: number;
         if (outputFormat === OutputFormat.WebM) {
             muxerVideoCodec = 'V_VP9';
@@ -128,34 +147,64 @@ class canvasToVideo {
             bitrate: 1e6,
         });
 
-        if (this.audioTrack) {
+        if (audioTrack) {
             this.audioEncoder = new AudioEncoder({
                 output: (chunk, meta) => muxer.addAudioChunk(chunk, meta),
-                error: e => console.error(e),
-            });
-            this.audioEncoder.configure({
-                codec: encodeAudioCodec,
-                numberOfChannels: 1,
-                sampleRate: audioSampleRate,
-                bitrate: audioBitrate,
-            });
-
-            // Create a MediaStreamTrackProcessor to get AudioData chunks from the audio track
-            let trackProcessor = new MediaStreamTrackProcessor({ track: audioTrack });
-            let $this = this;
-            let consumer = new WritableStream({
-                write(audioData) {
-                    if (!$this.recording) return;
-                    $this.audioEncoder.encode(audioData);
-                    audioData.close();
+                error: (e) => {
+                   console.error(e);
                 },
             });
-            trackProcessor.readable.pipeTo(consumer);
+
+            // let h = this.player.audioProcessingService.context.audioContext.sampleRate;
+            // let pp = this.player.audioProcessingService.context.audioSourceNode.channelCount;
+            // debugger;
+
+            let $this = this;
+
+
+            const trackProcessor = new MediaStreamTrackProcessor({ track: audioTrack });
+            const reader = trackProcessor.readable.getReader();
+
+            let { audioEncoder, recording } = this;
+
+            reader.read().then(function process({ done, value }) {
+                if (done || recording === false) return;
+
+                let { numberOfChannels, sampleRate } = value;
+
+                if (!$this.hasAudioConfigure) {
+                    $this.audioEncoder.configure({
+                        codec: encodeAudioCodec,
+                        numberOfChannels: numberOfChannels,
+                        sampleRate: sampleRate,
+                        bitrate: audioBitrate,
+                    });
+                    $this.hasAudioConfigure = true;
+                }
+
+
+                audioEncoder.encode(value);
+                value.close();
+
+                reader.read().then(process);
+                });
+            // Create a MediaStreamTrackProcessor to get AudioData chunks from the audio track
+            // let trackProcessor = new MediaStreamTrackProcessor({ track: audioTrack });
+            // let $this = this;
+            // let consumer = new WritableStream({
+            //     write(audioData) {
+            //         if (!$this.recording) return;
+            //         $this.audioEncoder.encode(audioData);
+            //         audioData.close();
+            //     },
+            // });
+            // trackProcessor.readable.pipeTo(consumer);
         }
     }
 
     async startRecord(parm: {canvas?: HTMLCanvasElement; outputFormat?: OutputFormat}) {
         this.setCanvas();
+        this.recording = true;
         if (parm) {
             let { outputFormat } = parm;
             if (outputFormat) {
@@ -166,7 +215,6 @@ class canvasToVideo {
             alert('no Support  VideoEncoder / WebCodecs API  use Https');
             return;
         }
-        await this.getAudioTrack();
 
 
         this.createMuxer();
