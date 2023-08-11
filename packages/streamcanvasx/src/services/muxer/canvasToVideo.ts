@@ -109,6 +109,7 @@ class canvasToVideo {
                 firstTimestampBehavior: 'offset', // Because we're directly piping a MediaStreamTrack's data into it
             });
         }
+        let $this = this;
         if (outputFormat === OutputFormat.MP4) {
             muxerVideoCodec = 'avc';
             muxerAudioCodec = 'aac';
@@ -117,11 +118,11 @@ class canvasToVideo {
             audioBitrate = 128000;
             this.muxer = new MuxerMp4({
                 target: new ArrayBufferTargetMp4(),
-                video: {
+                video: $this.player.config.showAudio != true ? {
                     codec: 'avc',
                     width: canvas.width,
                     height: canvas.height,
-                },
+                } : undefined,
                 audio: audioTrack ? {
                     codec: 'aac',
                     sampleRate: audioSampleRate,
@@ -136,8 +137,12 @@ class canvasToVideo {
 
 
         this.videoEncoder = new VideoEncoder({
-            output: (chunk, meta) => {},
-            // output: (chunk, meta) => muxer.addVideoChunk(chunk, meta),
+            // output: (chunk, meta) => {},
+            output: (chunk, meta) => {
+                if ($this.player.config.showAudio != true) {
+                    return muxer.addVideoChunk(chunk, meta);
+                }
+            },
             error: e => console.error(e),
         });
 
