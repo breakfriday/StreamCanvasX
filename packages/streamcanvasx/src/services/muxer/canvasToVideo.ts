@@ -136,7 +136,8 @@ class canvasToVideo {
 
 
         this.videoEncoder = new VideoEncoder({
-            output: (chunk, meta) => muxer.addVideoChunk(chunk, meta),
+            output: (chunk, meta) => {},
+            // output: (chunk, meta) => muxer.addVideoChunk(chunk, meta),
             error: e => console.error(e),
         });
 
