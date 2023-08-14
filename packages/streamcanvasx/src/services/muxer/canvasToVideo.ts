@@ -6,6 +6,7 @@ import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 // import { Muxer, ArrayBufferTarget } from 'mp4-muxer';
 import Emitter from '../../utils/emitter';
 import PlayerService from '../player';
+import { videoCodecs, videoBitrate as defaultVideoBitrate } from './config';
 
 enum OutputFormat {
     MP4 = 'MP4',
@@ -28,6 +29,13 @@ class canvasToVideo {
     private player: PlayerService;
     private outputFormat: OutputFormat;
     private hasAudioConfigure: boolean;
+    private _recordConfig: {
+        videoCodec?: string;
+        audioCodec?: string;
+        audioChannelCount?: number;
+        audioSampleRate?: number;
+        videoBitrate?: number;
+    };
     constructor() {
        console.log('');
     }
@@ -70,8 +78,25 @@ class canvasToVideo {
         // this.audioSampleRate = 48000;
     }
 
+    getRecordConfig() {
+        if (!this._recordConfig) {
+          this.setRecordConfig();
+        }
+        return this._recordConfig;
+    }
+    setRecordConfig() {
+        let { videoCodec, audioCodec, audioChannelCount, audioSampleRate } = this.player.mediaInfo;
+        let config = Object.assign({}, { videoCodec, audioCodec, audioChannelCount, audioSampleRate, videoBitrate: defaultVideoBitrate });
+        this._recordConfig = config;
+        debugger;
+    }
+
+
     createMuxer() {
         let { canvas, outputFormat } = this;
+
+        let recordConfig = this.getRecordConfig();
+        let { audioChannelCount, audioCodec, videoBitrate, videoCodec, audioSampleRate } = recordConfig;
 
         let audioTrack = '';
         try {
@@ -85,7 +110,6 @@ class canvasToVideo {
         let muxerAudioCodec = '';
         let encodeVideoCodec = '';
         let encodeAudioCodec = '';
-        let audioSampleRate = 48000;
         let audioBitrate: number;
         if (outputFormat === OutputFormat.WebM) {
             muxerVideoCodec = 'V_VP9';
@@ -147,12 +171,11 @@ class canvasToVideo {
         });
 
 
-        let { videoCodec } = this.player.mediaInfo;
         this.videoEncoder.configure({
             codec: videoCodec,
             width: canvas.width,
             height: canvas.height,
-            bitrate: 9e6,
+            bitrate: videoBitrate,
         });
 
         if (audioTrack) {
@@ -162,13 +185,16 @@ class canvasToVideo {
                    console.error(e);
                 },
             });
+            this.audioEncoder.configure({
+                codec: audioCodec,
+                numberOfChannels: audioChannelCount,
+                sampleRate: audioSampleRate,
+                bitrate: audioBitrate,
+            });
 
             // let h = this.player.audioProcessingService.context.audioContext.sampleRate;
             // let pp = this.player.audioProcessingService.context.audioSourceNode.channelCount;
             // debugger;
-
-            let $this = this;
-
 
             const trackProcessor = new MediaStreamTrackProcessor({ track: audioTrack });
             const reader = trackProcessor.readable.getReader();
@@ -178,17 +204,7 @@ class canvasToVideo {
             reader.read().then(function process({ done, value }) {
                 if (done || recording === false) return;
 
-                let { numberOfChannels, sampleRate } = value;
-
-                if (!$this.hasAudioConfigure) {
-                    $this.audioEncoder.configure({
-                        codec: encodeAudioCodec,
-                        numberOfChannels: numberOfChannels,
-                        sampleRate: sampleRate,
-                        bitrate: audioBitrate,
-                    });
-                    $this.hasAudioConfigure = true;
-                }
+                // let { numberOfChannels, sampleRate } = value;
 
 
                 audioEncoder.encode(value);
@@ -211,6 +227,7 @@ class canvasToVideo {
     }
 
     async startRecord(parm: {canvas?: HTMLCanvasElement; outputFormat?: OutputFormat}) {
+        this.getRecordConfig();
         this.setCanvas();
         this.recording = true;
         if (parm) {

@@ -1,9 +1,10 @@
 
 import React, { useRef, useEffect, useState } from 'react';
-import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
+import { Divider, Space, Button, Checkbox, Form, Input, InputNumber } from 'antd';
 import { createPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
 import { PlayCircleFilled } from '@ant-design/icons';
 // import records from '../canvasToVideo/mp4';
+import RecodDialog from './recordDialog';
 
 interface IVideoComponent {
   url: string;
@@ -34,6 +35,8 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
   const [degree, setDegree] = useState<any>();
 
   const [recordTextContent, setRecordTextContent] = useState('');
+  const [recordDialogState, setRecordDialogState] = useState(false);
+
 
   useEffect(() => {
     // setTimeout(() => {
@@ -127,20 +130,32 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
       }}
       >DD</Button>
       <div>
-        <Button
-          id="start-recording"
-          onClick={() => {
+        <RecodDialog
+          open={recordDialogState}
+          handleClose={() => {
+            setRecordDialogState(false);
+        }}
+          handleOk={() => {
             let player = streamPlayer.current;
-           player.canvasToVideoSerivce.startRecord({ });
-          }}
-        >start Recording</Button>
+            player.canvasToVideoSerivce.startRecord({ });
+            setRecordDialogState(false);
+        }}
+        />
+
+        <Button onClick={() => {
+          setRecordDialogState(true);
+        }}
+        >
+          start Recording
+        </Button>
+
         <Button
           id="end-recording"
           onClick={() => {
             let player = streamPlayer.current;
             player.canvasToVideoSerivce.endRecording();
 		  }}
-        >strop Recording</Button>
+        >stop Recording</Button>
         <p id="recording-status" >{recordTextContent}</p>
       </div>
       <br />
