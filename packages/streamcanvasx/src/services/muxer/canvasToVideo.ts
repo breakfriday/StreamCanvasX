@@ -146,11 +146,13 @@ class canvasToVideo {
             error: e => console.error(e),
         });
 
+
+        let { videoCodec } = this.player.mediaInfo;
         this.videoEncoder.configure({
-            codec: encodeVideoCodec,
+            codec: videoCodec,
             width: canvas.width,
             height: canvas.height,
-            bitrate: 1e6,
+            bitrate: 9e6,
         });
 
         if (audioTrack) {

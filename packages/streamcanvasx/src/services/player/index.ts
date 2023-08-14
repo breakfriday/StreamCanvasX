@@ -64,6 +64,14 @@ class PlayerService extends Emitter {
     wasmDecoderService: WasmDecoderService;
     player2: any;
     canvasToVideoSerivce: CanvasToVideoSerivce;
+    mediaInfo: {
+        audioChannelCount?: number;
+        audioCodec?: string;
+        audioSampleRate?: number;
+        videoCodec?: string;
+        mimeType?: string;
+
+    };
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -226,6 +234,10 @@ class PlayerService extends Emitter {
             let video_width = parm.metadata.width;
             let video_height = parm.metadata.height;
 
+            this.mediaInfo = parm;
+
+            // debugger
+
 
             // this.metadata = {
             //   video_height, video_width,
@@ -295,6 +307,7 @@ class PlayerService extends Emitter {
             let { mseLivePlayback, mseH265Playback } = mpegts.getFeatureList();
 
 
+            // 12 是H265 , FLV的 解码器id
             if (parm.videocodecid == 12 && mseH265Playback === false) {
                 this.destroy();
 
