@@ -89,11 +89,15 @@ class canvasToVideo {
         }
         return this._recordConfig;
     }
-    setRecordConfig() {
+    setRecordConfig(data?: {}) {
         let { videoCodec = 'avc1.4d4029', audioCodec, audioChannelCount, audioSampleRate } = this.player.mediaInfo || {};
         videoCodec = videoCodec == null ? 'avc1.4d4029' : videoCodec;
+        let config = { videoCodec, audioCodec, audioChannelCount, audioSampleRate, videoBitrate: 9e6 };
+        if (data) {
+            config = Object.assign({}, config, data);
+        }
 
-        let config = Object.assign({}, { videoCodec, audioCodec, audioChannelCount, audioSampleRate, videoBitrate: 9e6 });
+        debugger;
         this._recordConfig = config;
     }
 
@@ -232,16 +236,14 @@ class canvasToVideo {
         }
     }
 
-    async startRecord(parm: {canvas?: HTMLCanvasElement; outputFormat?: OutputFormat}) {
-        this.getRecordConfig();
+    async startRecord(parm?: {}) {
+        // this.getRecordConfig();
+
+        this.setRecordConfig(parm);
+
         this.setCanvas();
         this.recording = true;
-        if (parm) {
-            let { outputFormat } = parm;
-            if (outputFormat) {
-                this.outputFormat = outputFormat;
-            }
-        }
+
         if (typeof VideoEncoder === 'undefined') {
             alert('no Support  VideoEncoder / WebCodecs API  use Https');
             return;

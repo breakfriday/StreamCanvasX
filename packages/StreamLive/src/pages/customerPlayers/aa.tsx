@@ -138,9 +138,9 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
           handleClose={() => {
             setRecordDialogState(false);
         }}
-          handleOk={() => {
+          handleOk={(data = {}) => {
             let player = streamPlayer.current;
-            player.canvasToVideoSerivce.startRecord({ });
+            player.canvasToVideoSerivce.startRecord(data);
             setRecordDialogState(false);
         }}
         />
