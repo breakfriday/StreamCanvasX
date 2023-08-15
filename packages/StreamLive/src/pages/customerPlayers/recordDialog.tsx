@@ -18,6 +18,7 @@ interface IProps{
 }
 const RecodDialog = (props: IProps) => {
     const { open, handleOk, handleClose, options } = props;
+    const [form_ref] = Form.useForm();
 
     useEffect(() => {
 
@@ -33,16 +34,17 @@ const RecodDialog = (props: IProps) => {
           open={open}
           width={1000}
           onOk={() => {
-            handleOk();
+            let data = form_ref.getFieldsValue();
+            handleOk(data);
           }}
           onCancel={() => {
             handleClose();
           }}
         >
-          <Form>
+          <Form form={form_ref}>
             <Row>
               <Col span={8}>
-                <Form.Item label="videoCodecs" initialValue={'avc1.4d4029'} name="videoCodecs" style={{ width: 200 }}>
+                <Form.Item label="videoCodec" initialValue={'avc1.4d4029'} name="videoCodec" style={{ width: 200 }}>
                   <Select
                     style={{ width: 200 }}
                     options={options && options.videoCodecs ? options.videoCodecs : []}
@@ -50,7 +52,7 @@ const RecodDialog = (props: IProps) => {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="videoBitrates" initialValue={9e6} name="videoBitrates" style={{ width: 90 }}>
+                <Form.Item label="videoBitrate" initialValue={9e6} name="videoBitrate" style={{ width: 90 }}>
                   <Select
                     style={{ width: 90 }}
                     options={options && options.videoBitrates ? options.videoBitrates : []}
@@ -59,7 +61,7 @@ const RecodDialog = (props: IProps) => {
               </Col>
 
               <Col span={6}>
-                <Form.Item label="fileTypes" initialValue={'mp4'} name="fileTypes" style={{ width: 90 }}>
+                <Form.Item label="fileType" initialValue={'mp4'} name="fileType" style={{ width: 90 }}>
                   <Select
                     style={{ width: 90 }}
                     options={options && options.fileTypes ? options.fileTypes : []}
