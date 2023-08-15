@@ -72,6 +72,7 @@ class PlayerService extends Emitter {
         mimeType?: string;
 
     };
+    meidiaEl: HTMLVideoElement;
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -170,6 +171,7 @@ class PlayerService extends Emitter {
         let { type = 'flv', isLive = true } = parms;
         let { url } = this.httpFlvStreamService;
         let videoEl = document.createElement('video');
+        this.meidiaEl = videoEl;
         // document.getElementById('cont').append(videoEl);
         // videoEl.controls = true;
         // videoEl.width = 300;
