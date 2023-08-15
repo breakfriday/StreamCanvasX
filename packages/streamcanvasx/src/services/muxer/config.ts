@@ -20,8 +20,8 @@ const videoBitrates = [
 ];
 
 const fileTypes = [
-    { value: 'mp4', label: 'mp4' },
-    { value: 'webm', label: 'webm' },
+    { value: 'MP4', label: 'MP4' },
+    { value: 'WebM', label: 'WebM' },
 ];
 
 

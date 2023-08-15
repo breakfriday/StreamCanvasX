@@ -92,12 +92,15 @@ class canvasToVideo {
     setRecordConfig(data?: {}) {
         let { videoCodec = 'avc1.4d4029', audioCodec, audioChannelCount, audioSampleRate } = this.player.mediaInfo || {};
         videoCodec = videoCodec == null ? 'avc1.4d4029' : videoCodec;
-        let config = { videoCodec, audioCodec, audioChannelCount, audioSampleRate, videoBitrate: 9e6 };
+        let config = { videoCodec, audioCodec, audioChannelCount, audioSampleRate, videoBitrate: 9e6, outputFormat: OutputFormat.MP4 };
         if (data) {
             config = Object.assign({}, config, data);
         }
+        // this.outputFormat = config.outputFormat;
 
-        debugger;
+
+        this.outputFormat = config.outputFormat;
+
         this._recordConfig = config;
     }
 
