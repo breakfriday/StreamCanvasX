@@ -1,8 +1,28 @@
 
 const videoCodecs = [
-'avc1.4d4029', // level 4.1
+{ value: 'avc1.4d4029', label: ' H.264 avc1.4d4029' },
+{ value: 'vp8', label: 'VP8' },
+{ value: 'vp09.00.10.08', label: 'VP9 vp09.00.10.08' },
 ];
 
-const videoBitrate = 9e6;
+const videoBitrates = [
+    { value: 1e6, label: ' 1e6' },
+    { value: 2e6, label: ' 2e6' },
+    { value: 3e6, label: ' 3e6' },
+    { value: 4e6, label: ' 4e6' },
+    { value: 5e6, label: ' 5e6' },
+    { value: 6e6, label: ' 6e6' },
+    { value: 7e6, label: ' 7e6' },
+    { value: 8e6, label: ' 8e6' },
+    { value: 9e6, label: ' 9e6' },
+    { value: 10e6, label: '10e6' },
+    { value: 11e6, label: '11e6' },
+];
 
-export { videoCodecs, videoBitrate };
+const fileTypes = [
+    { value: 'mp4', label: 'mp4' },
+    { value: 'webm', label: 'webm' },
+];
+
+
+export { videoCodecs, videoBitrates, fileTypes };

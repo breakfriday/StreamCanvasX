@@ -1,9 +1,14 @@
 
 import React, { useRef, useEffect, useState } from 'react';
-import { Divider, Space, Button, Checkbox, Form, Input, InputNumber, Modal, Col, Row } from 'antd';
+import { Divider, Space, Button, Checkbox, Form, Input, InputNumber, Modal, Col, Row, Select } from 'antd';
 
 interface IProps{
     open: boolean;
+    options: {
+        videoBitrates: Array<{value: number | string; label: string}>;
+        fileTypes: Array<{value: number | string; label: string}>;
+        videoCodecs: Array<{value: number | string; label: string}>;
+    };
     config?: {
         videoBitrate?: number;
         videoCodec?: string;
@@ -12,7 +17,13 @@ interface IProps{
     handleClose: Function;
 }
 const RecodDialog = (props: IProps) => {
-    const { open, handleOk, handleClose } = props;
+    const { open, handleOk, handleClose, options } = props;
+
+    useEffect(() => {
+
+   }, [open]);
+
+
     return (
       <>
 
@@ -30,14 +41,29 @@ const RecodDialog = (props: IProps) => {
         >
           <Form>
             <Row>
-              <Col span={6}>
-                <Form.Item label="videoBitrate" initialValue={9e6} name="videoBitrate" style={{ width: 120 }}>
-                  <InputNumber />
+              <Col span={8}>
+                <Form.Item label="videoCodecs" initialValue={'avc1.4d4029'} name="videoCodecs" style={{ width: 200 }}>
+                  <Select
+                    style={{ width: 200 }}
+                    options={options && options.videoCodecs ? options.videoCodecs : []}
+                  />
                 </Form.Item>
               </Col>
-              <Col>
-                <Form.Item label="videoCodec" initialValue={'avc1.4d4029'} name="videoCodec">
-                  <Input />
+              <Col span={6}>
+                <Form.Item label="videoBitrates" initialValue={9e6} name="videoBitrates" style={{ width: 90 }}>
+                  <Select
+                    style={{ width: 90 }}
+                    options={options && options.videoBitrates ? options.videoBitrates : []}
+                  />
+                </Form.Item>
+              </Col>
+
+              <Col span={6}>
+                <Form.Item label="fileTypes" initialValue={'mp4'} name="fileTypes" style={{ width: 90 }}>
+                  <Select
+                    style={{ width: 90 }}
+                    options={options && options.fileTypes ? options.fileTypes : []}
+                  />
                 </Form.Item>
               </Col>
             </Row>
