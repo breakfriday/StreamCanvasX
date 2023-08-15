@@ -61,7 +61,7 @@ const RecodDialog = (props: IProps) => {
               </Col>
 
               <Col span={6}>
-                <Form.Item label="fileType" initialValue={'mp4'} name="fileType" style={{ width: 90 }}>
+                <Form.Item label="outputFormat " initialValue={'MP4'} name="outputFormat" style={{ width: 90 }}>
                   <Select
                     style={{ width: 90 }}
                     options={options && options.fileTypes ? options.fileTypes : []}
