@@ -6,7 +6,7 @@ import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 // import { Muxer, ArrayBufferTarget } from 'mp4-muxer';
 import Emitter from '../../utils/emitter';
 import PlayerService from '../player';
-import { videoCodecs, videoBitrate as defaultVideoBitrate } from './config';
+import { videoCodecs, videoBitrates, fileTypes } from './config';
 
 enum OutputFormat {
     MP4 = 'MP4',
@@ -36,8 +36,13 @@ class canvasToVideo {
         audioSampleRate?: number;
         videoBitrate?: number;
     };
+    private options: {
+        videoBitrates: Array<{value: number | string; label: string}>;
+        fileTypes: Array<{value: number | string; label: string}>;
+        videoCodecs: Array<{value: number | string; label: string}>;
+    };
     constructor() {
-       console.log('');
+       this.options = { videoCodecs, videoBitrates, fileTypes };
     }
     init(playerService: PlayerService) {
         // if (parm.canvas) {
@@ -88,7 +93,7 @@ class canvasToVideo {
         let { videoCodec = 'avc1.4d4029', audioCodec, audioChannelCount, audioSampleRate } = this.player.mediaInfo || {};
         videoCodec = videoCodec == null ? 'avc1.4d4029' : videoCodec;
 
-        let config = Object.assign({}, { videoCodec, audioCodec, audioChannelCount, audioSampleRate, videoBitrate: defaultVideoBitrate });
+        let config = Object.assign({}, { videoCodec, audioCodec, audioChannelCount, audioSampleRate, videoBitrate: 9e6 });
         this._recordConfig = config;
     }
 

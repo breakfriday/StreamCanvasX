@@ -37,6 +37,8 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
   const [recordTextContent, setRecordTextContent] = useState('');
   const [recordDialogState, setRecordDialogState] = useState(false);
 
+  const [recordOption, setRecordOptions] = useState();
+
 
   useEffect(() => {
     // setTimeout(() => {
@@ -132,6 +134,7 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
       <div>
         <RecodDialog
           open={recordDialogState}
+          options={recordOption}
           handleClose={() => {
             setRecordDialogState(false);
         }}
@@ -143,6 +146,12 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
         />
 
         <Button onClick={() => {
+          let player = streamPlayer.current;
+          let { options } = player.canvasToVideoSerivce;
+
+          setRecordOptions(options);
+
+
           setRecordDialogState(true);
         }}
         >
