@@ -85,10 +85,11 @@ class canvasToVideo {
         return this._recordConfig;
     }
     setRecordConfig() {
-        let { videoCodec, audioCodec, audioChannelCount, audioSampleRate } = this.player.mediaInfo;
+        let { videoCodec = 'avc1.4d4029', audioCodec, audioChannelCount, audioSampleRate } = this.player.mediaInfo || {};
+        videoCodec = videoCodec == null ? 'avc1.4d4029' : videoCodec;
+
         let config = Object.assign({}, { videoCodec, audioCodec, audioChannelCount, audioSampleRate, videoBitrate: defaultVideoBitrate });
         this._recordConfig = config;
-        debugger;
     }
 
 
@@ -100,7 +101,7 @@ class canvasToVideo {
 
         let audioTrack = '';
         try {
-            const stream = this.player.audioProcessingService.medialEl.captureStream();
+            const stream = this.player.meidiaEl.captureStream();
             audioTrack = stream.getAudioTracks()[0];
         } catch (e) {
             console.error(e);
