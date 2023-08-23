@@ -19,6 +19,7 @@ class MseDecoder {
     private _mediaSourceCreatedNotify: () => void;
     private _mediaSourceOpenNotify: () => void; // 这是一个可选的函数类型
     private _mediaSourceOpen: Promise<void>;
+    private _sourceBufferQueue: Array<Uint8Array>;
 
 
     constructor() {
@@ -34,6 +35,7 @@ class MseDecoder {
         return this.state === MEDIA_SOURCE_STATE.open;
     }
    async init() {
+        this._sourceBufferQueue = [];
         this.inputMimeType = 'audio/aac';
         this.initStreamParser();
         this.createAudioEl();
@@ -70,30 +72,89 @@ class MseDecoder {
 
         this.mediaSource.addEventListener('sourceopen', () => {
           let mimeType = this.inputMimeType;
-          this.mediaSource.addSourceBuffer(mimeType).mode = 'sequence';
+          this.sourceBuffer = this.mediaSource.addSourceBuffer(mimeType);
+          this.sourceBuffer.mode = 'sequence';
+
+
+          debugger;
+
+          // this.mediaSource.sourceBuffers[0].
+
           this._mediaSourceOpenNotify();
+          this.$videoElement.play();
         });
     }
 
     createAudioEl() {
-      this.$videoElement = document.createElement('audio');
-      this.$videoElement.controls = true;
+      this.$videoElement = document.getElementById('aad');
     }
-    appendBuffer(buffer: BufferSource) {
-        let { inputMimeType } = this;
-        if (this.sourceBuffer === null) {
-            this.sourceBuffer = this.mediaSource.addSourceBuffer(inputMimeType);
+    async appendBuffer(buffer: Uint8Array) {
+      let { inputMimeType } = this;
+
+      if (this.sourceBuffer === null) {
+        this.sourceBuffer = this.mediaSource.addSourceBuffer(inputMimeType);
+        debugger;
+       }
+
+       debugger;
+      if (this.mediaSource.sourceBuffers.length) {
+        this._sourceBufferQueue.push(buffer);
+      }
+      try {
+        while (this._sourceBufferQueue.length) {
+          let $this = this;
+
+          let data = this._sourceBufferQueue.shift();
+
+
+          // if (!window.pp) {
+          //   pp = data;
+          // }
+          // if (window.pp) {
+          //   data = pp;
+          // }
+
+
+          debugger;
+          this.sourceBuffer.appendBuffer(data);
+
+          console.info('-----');
+
+          console.info(data);
+          console.log('-----------');
+          debugger;
+
+
+          await this.waitForSourceBuffer();
+          debugger;
         }
-
-        try {
-            this.sourceBuffer.appendBuffer(buffer);
-        } catch (e) {
-
-            }
+      } catch (e) {
+        let error = e;
+        debugger;
+      }
     }
 
+   async waitForSourceBuffer() {
+    return new Promise((resolve) => {
+      const sourceBuffer = this.mediaSource.sourceBuffers[0];
+     // eslint-disable-next-line no-negated-condition
+      if (!sourceBuffer.updating) {
+        debugger;
+        resolve({});
+      } else {
+        sourceBuffer.addEventListener('updateend', () => {
+          debugger;
+          resolve({});
+        }, {
+          once: true,
+        });
+      }
+    });
+    }
     async addFrames(codecFrames: IAACfames['frames']) {
-        // 将一个 Uint8Array 数组中的所有缓冲区（buffers）连接成一个单一的 Uint8Array
+       // codecFrames = codecFrames.splice(100, 200);
+       
+      // 将一个 Uint8Array 数组中的所有缓冲区（buffers）连接成一个单一的 Uint8Array
         const concatBuffers = (buffers: Array<Uint8Array>) => {
             // 计算所有缓冲区的总长度
             const buffer = new Uint8Array(
@@ -124,11 +185,11 @@ class MseDecoder {
         this.appendBuffer(buffer);
     }
 
-    attachMediaSource() {
-        this.$videoElement.loop = false;
+   async attachMediaSource() {
+       this.$videoElement.loop = false;
         let mediaUrl = URL.createObjectURL(this.mediaSource);
         this.$videoElement.src = mediaUrl;
-        return mediaUrl;
+        await this._mediaSourceOpen;
     }
 
    async start() {
@@ -140,9 +201,7 @@ class MseDecoder {
 
       await this._mediaSourceCreated;
 
-       this.attachMediaSource();
-
-       await this._mediaSourceOpen;
+      await this.attachMediaSource();
     }
 
     abortSourceBuffer() {
