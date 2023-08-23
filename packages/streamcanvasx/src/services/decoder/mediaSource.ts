@@ -7,6 +7,9 @@ const MEDIA_SOURCE_STATE = {
   closed: 'closed',
 };
 
+const BUFFER = 5; // seconds of audio to store in SourceBuffer
+const BUFFER_INTERVAL = 5; // seconds before removing from SourceBuffer
+
 @injectable()
 class MseDecoder {
     mediaSource: MediaSource;
@@ -20,10 +23,31 @@ class MseDecoder {
     private _mediaSourceOpenNotify: () => void; // 这是一个可选的函数类型
     private _mediaSourceOpen: Promise<void>;
     private _sourceBufferQueue: Array<Uint8Array>;
+    private _sourceBufferRemoved: number;
+    private bufferLength: number;
 
 
     constructor() {
+      this.bufferLength = 1;// Seconds of audio to buffer before starting playback
+    }
 
+    // 获取source buffer  最后一个已缓冲音频帧的时间位置
+    get metadataTimestamp() {
+      return (
+        (this.mediaSource &&
+          this.mediaSource.sourceBuffers.length &&
+          Math.max(
+            this.mediaSource.sourceBuffers[0].timestampOffset,
+            this.mediaSource.sourceBuffers[0].buffered.length
+              ? this.mediaSource.sourceBuffers[0].buffered.end(0)
+              : 0,
+          )) ||
+        0
+      );
+    }
+
+    get currentTime() {
+      return this.$videoElement.currentTime;
     }
 
     get state() {
@@ -75,11 +99,8 @@ class MseDecoder {
           this.sourceBuffer = this.mediaSource.addSourceBuffer(mimeType);
           this.sourceBuffer.mode = 'sequence';
 
-
-          debugger;
-
+          this._sourceBufferRemoved = 0;
           // this.mediaSource.sourceBuffers[0].
-
           this._mediaSourceOpenNotify();
           this.$videoElement.play();
         });
@@ -114,37 +135,41 @@ class MseDecoder {
           //   data = pp;
           // }
 
+          if (this.mediaSource.sourceBuffers.length > 1) {
+            debugger;
+          }
 
-          debugger;
           this.sourceBuffer.appendBuffer(data);
 
           console.info('-----');
 
           console.info(data);
           console.log('-----------');
-          debugger;
 
 
           await this.waitForSourceBuffer();
           debugger;
         }
       } catch (e) {
-        let error = e;
         debugger;
+        console.error(e);
       }
     }
 
    async waitForSourceBuffer() {
     return new Promise((resolve) => {
       const sourceBuffer = this.mediaSource.sourceBuffers[0];
-     // eslint-disable-next-line no-negated-condition
+
+       debugger;
+       // eslint-disable-next-line no-negated-condition
       if (!sourceBuffer.updating) {
         debugger;
         resolve({});
       } else {
+        debugger;
         sourceBuffer.addEventListener('updateend', () => {
           debugger;
-          resolve({});
+          resolve();
         }, {
           once: true,
         });
@@ -153,7 +178,7 @@ class MseDecoder {
     }
     async addFrames(codecFrames: IAACfames['frames']) {
        // codecFrames = codecFrames.splice(100, 200);
-       
+
       // 将一个 Uint8Array 数组中的所有缓冲区（buffers）连接成一个单一的 Uint8Array
         const concatBuffers = (buffers: Array<Uint8Array>) => {
             // 计算所有缓冲区的总长度
