@@ -157,6 +157,29 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
           play.canvasVideoService.drawWatermark({ value: '' });
         }}
       >clearWatermark</Button>
+      <br />
+      <p>invisible watermark</p>
+      <Button onClick={() => {
+          let play = streamPlayer.current;
+          play.canvasVideoService.isDrawingWatermark = true;
+        }}
+      >drawWatermark</Button>
+      <Button onClick={() => {
+          let play = streamPlayer.current;
+          play.canvasVideoService.isDrawingWatermark = false;
+        }}
+      >stopDraw</Button>
+      <Button onClick={() => {
+          let play = streamPlayer.current;
+          play.canvasVideoService.isGettingWatermark = true;
+        }}
+      >getWatermark</Button>
+      <Button onClick={() => {
+          let play = streamPlayer.current;
+          play.canvasVideoService.isGettingWatermark = false;
+        }}
+      >stopGet</Button>
+      <br />
       {
         showDownButton ? (
           <Button onClick={() => {
