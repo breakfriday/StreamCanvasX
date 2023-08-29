@@ -8,6 +8,12 @@ import WebGLYUVRenderer from './WebGLColorConverter';
 import { GPUDevice, GPUSampler, GPURenderPipeline, GPUCanvasContext } from '../../types/services/webGpu';
 
 import { UseMode } from '../../constant';
+import loadWASM from './load_wasm.js';
+let wam;
+loadWASM().then((module) => {
+    wam = module;
+  });
+
 function createContextGL($canvas: HTMLCanvasElement): WebGLRenderingContext | null {
     let gl: WebGLRenderingContext | null = null;
 
@@ -55,6 +61,8 @@ class CanvasVideoService {
     loading: boolean;
     frameInfo: VideoFrame;
     resizeObserver: ResizeObserver;
+    isDrawingWatermark: boolean;
+    isGettingWatermark: boolean;
     constructor() {
         this.canvas_el = document.createElement('canvas');
 
@@ -426,12 +434,15 @@ class CanvasVideoService {
         // let { canvas_el } = this;
         // let canvas = canvas_el;
         // ctx.save();
+
         this.canvas_context.clearRect(0, 0, width, height);
 
         // this.drawTrasform(30);
         this.canvas_context.drawImage(videoFrame, 0, 0, width, height);
         // this.drawTrasform(videoFrame, 30, ctx);
 
+        this.drawInvisibleWatermark(this.isDrawingWatermark, {});
+        this.getInvisibleWatermark(this.isGettingWatermark, {});
         // ctx.restore();
         // console.log(this.playerService.config.degree);
         // this.drawTrasform(videoFrame, this.playerService.config.degree);
@@ -720,12 +731,12 @@ class CanvasVideoService {
     //   parentDiv.appendChild(watermarkLayer);
     // }
 
-    drawWatermark(watermarkData) {
+    drawWatermark(watermarkConfig) {
       // 获得播放器的canvas
       let ctx = this.canvas_context;
       let { canvas_el } = this;
       let canvas = canvas_el;
-      let { width = 50, height = 50, value = '水印', font = '12px Microsoft Yahei', color = 'rgba(255, 255, 255, 0.3)', degree = 20, fillStyle = 1 } = watermarkData || {};
+      let { width = 50, height = 50, value = '水印', font = '12px Microsoft Yahei', color = 'rgba(255, 255, 255, 0.3)', degree = 20, fillStyle = 1 } = watermarkConfig || {};
       // 绘制水印
       const watermark = document.createElement('canvas');
       watermark.style.position = 'absolute';
@@ -759,6 +770,54 @@ class CanvasVideoService {
         parentDiv.removeChild(parentDiv.lastElementChild);
       }
       parentDiv.appendChild(watermarkLayer);
+    }
+
+    drawInvisibleWatermark(isDrawingWatermark: boolean, invisibleWatermarkConfig) {
+      let ctx = this.canvas_context;
+      let { canvas_el } = this;
+      let canvas = canvas_el;
+      let { size = 50, src = './watermark.png', count = 0 } = invisibleWatermarkConfig || {};
+      let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      if (isDrawingWatermark) {
+      const invisibleWatermark = document.createElement('canvas');
+      invisibleWatermark.style.position = 'absolute';
+      invisibleWatermark.width = size;
+      invisibleWatermark.height = size;
+      const ctxInvisibleWatermark = invisibleWatermark.getContext('2d');
+      const invisibleWatermarkImg = new Image();
+      invisibleWatermarkImg.src = src;
+      ctxInvisibleWatermark.drawImage(invisibleWatermarkImg, 0, 0);
+      let invisibleWatermarkData = ctxInvisibleWatermark.getImageData(0, 0, invisibleWatermark.width, invisibleWatermark.height);
+      let result = wam.watermarkArnoldDCT(imageData.data, canvas.width, canvas.height,
+                     invisibleWatermarkData.data, size, count);
+      for (let i = 0; i < canvas.width * canvas.height * 4; i++) {
+        imageData.data[i] = result[i];
+      }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.putImageData(imageData, 0, 0);
+      // ctx.drawImage(invisibleWatermarkImg, 0, 0, size, size);
+      // console.log('drawInvisibleWatermark');
+    }
+    }
+
+    getInvisibleWatermark(isGettingWatermark: boolean, invisibleWatermarkConfig) {
+      let ctx = this.canvas_context;
+      let { canvas_el } = this;
+      let canvas = canvas_el;
+
+      let { size = 50, count = 0 } = invisibleWatermarkConfig || {};
+      if (isGettingWatermark) {
+      let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      let invisibleWatermarkData = new ImageData(size, size);
+      let result = wam.watermarkArnoldIDCT(imageData.data, canvas.width, canvas.height,
+                      invisibleWatermarkData.data, size, count);
+      for (let i = 0; i < size * size * 4; i++) {
+        invisibleWatermarkData.data[i] = result[i];
+      }
+      // ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.putImageData(invisibleWatermarkData, canvas.width - size, 0);
+      console.log('getInvisibleWatermark');
+    }
     }
     // drawLoading() {
     //   let ctx = this.canvas_context;
