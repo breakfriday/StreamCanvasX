@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
-import mpegts from 'mpegts.js';
+import mpegts from 'streamcanvasx-core';
 import { ImainPlayerService } from '../types/services/index';
-import Mpegts from 'mpegts.js';
+import Mpegts from 'streamcanvasx-core';
 import { debug } from 'console';
 
 @injectable()
