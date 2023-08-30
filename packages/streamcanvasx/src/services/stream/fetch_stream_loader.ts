@@ -1,6 +1,10 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../player';
 import { TYPES } from '../../serviceFactories/symbol';
+
+import CodecParser from 'codec-parser';
+
+// import CodecParser from '../decoder/CodecParser/index';
 @injectable()
 class HttpFlvStreamLoader {
     private _requestAbort: boolean;
@@ -11,6 +15,7 @@ class HttpFlvStreamLoader {
     private playerService: PlayerService;
     public url: string;
     private downLoadConfig: {loading: boolean; text: string; startTime: number};
+    private streamParser: CodecParser;
 
     maxHeartTimes: number;
     hertTime: number;
@@ -23,7 +28,19 @@ class HttpFlvStreamLoader {
         this.requestAbort = false;
         this.hertTime = 0;
         this.maxHeartTimes = 10;
+
+        this.initAudioPlayer();
         // this.playerService = playerService;
+    }
+    initAudioPlayer() {
+            const mimeType = 'audio/aac';
+                const options = {
+                onCodec: () => {},
+                onCodecUpdate: () => {},
+                enableLogging: true,
+            };
+
+            this.streamParser = new CodecParser(mimeType, options);
     }
     static isSupported() {
         if (window.fetch && window.ReadableStream) {
@@ -171,7 +188,40 @@ class HttpFlvStreamLoader {
     }
 
 
+    // async processStream(reader: ReadableStreamDefaultReader): Promise<void> {
+    //     while (true) {
+    //         try {
+    //             const { done, value } = await reader.read();
+
+    //             const chunk = value?.buffer;
+    //             // console.log(chunk);
+    //             if (done) {
+    //                 console.log('Stream complete');
+    //                 return;
+    //             }
+
+    //             this.playerService.flvVDemuxService.dispatch(value);
+
+    //            // this.playerService.fLVDemuxStream.dispatch(value);
+
+    //             // Your process goes here, where you can handle each chunk of FLV data
+    //             // For example:
+    //             // this.processFlvChunk(value);
+    //         } catch (e) {
+    //             console.error('Error reading stream', e);
+    //             return;
+    //         }
+    //     }
+    // }
+
+
     async processStream(reader: ReadableStreamDefaultReader): Promise<void> {
+        if (!window.pp) {
+           await this.playerService.mseDecoderService.start();
+
+            window.pp = true;
+        }
+
         while (true) {
             try {
                 const { done, value } = await reader.read();
@@ -183,13 +233,14 @@ class HttpFlvStreamLoader {
                     return;
                 }
 
-                this.playerService.flvVDemuxService.dispatch(value);
 
-               // this.playerService.fLVDemuxStream.dispatch(value);
+                let { streamParser } = this;
 
-                // Your process goes here, where you can handle each chunk of FLV data
-                // For example:
-                // this.processFlvChunk(value);
+
+                let frames = [...streamParser.parseChunk(value)];
+
+
+                await this.playerService.mseDecoderService.onstream(frames);
             } catch (e) {
                 console.error('Error reading stream', e);
                 return;
