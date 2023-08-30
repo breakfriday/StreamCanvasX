@@ -424,7 +424,7 @@ class CanvasVideoService {
         }
         // let ctx = this.canvas_context;
         // let { canvas_el } = this;
-        // let canvas = canvas_el; 
+        // let canvas = canvas_el;
         // ctx.save();
         this.canvas_context.clearRect(0, 0, width, height);
 
@@ -436,7 +436,7 @@ class CanvasVideoService {
         // ctx.restore();
         // console.log(this.playerService.config.degree);
         // this.drawTrasform(videoFrame, this.playerService.config.degree);
-        
+
         // ctx.restore();
     }
 
@@ -575,7 +575,7 @@ class CanvasVideoService {
     // 绕中心翻转任意角度   角度制输入  通过先上下翻转然后旋转实现翻转任意角度
     // drawTrasform(videoFrame: VideoFrame | HTMLVideoElement,degree: number, ctx:any){
     //   let { canvas_el } = this;
-    //   let canvas = canvas_el; 
+    //   let canvas = canvas_el;
     //   // ctx.save();
     //   // // this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
     //   // ctx.translate(0, canvas.height);  //初版使用                                                                                                       进行翻转 但是因为 scale()实现的上下翻转 会导致后续的旋转方向相反
@@ -593,7 +593,7 @@ class CanvasVideoService {
     //   ctx.drawImage(videoFrame, 0, 0, canvas.width, canvas.height);
     //   let img1 = ctx.getImageData(0, 0, canvas.width, canvas.height);
     //   // console.log(img0);
-    //   let img2 = ctx.getImageData(0, 0, canvas.width, canvas.height);  
+    //   let img2 = ctx.getImageData(0, 0, canvas.width, canvas.height);
     //   this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
     //   // console.log(typeof img);
     //   // console.log(img);
@@ -622,21 +622,21 @@ class CanvasVideoService {
     //   // ctx.rotate((Math.PI / 180) * degree * -2);
     //   // ctx.translate(-centerX, -centerY);
     // };
-    drawTrasform(degree: number){
-      //和初版实现相似   translate()scale()rotate()和transform()应该类似
-      //那么翻转后再调用旋转操作时旋转方向改变的问题 应无法通过改变翻转方式来解决
+    drawTrasform(degree: number) {
+      // 和初版实现相似   translate()scale()rotate()和transform()应该类似
+      // 那么翻转后再调用旋转操作时旋转方向改变的问题 应无法通过改变翻转方式来解决
       let ctx = this.canvas_context;
-      // ctx.restore(); //restore(),save()重置画布  添加之后可在render中直接调用drawTrasform()
-      // ctx.save();
+      ctx.restore(); // restore(),save()重置画布  添加之后可在render中直接调用drawTrasform()
+      ctx.save();
       let { canvas_el } = this;
       let canvas = canvas_el;
-      let deg = Math.PI / 180;  //角度转化为弧度
+      let deg = Math.PI / 180; // 角度转化为弧度
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
       this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
       ctx.translate(centerX, centerY);
-      ctx.transform(Math.cos(deg*degree*2),Math.sin(deg*degree*2),-Math.sin(deg*degree*2),Math.cos(deg*degree*2), 0, 0);
-      ctx.translate(-centerX, -centerY); 
+      ctx.transform(Math.cos(deg * degree * 2), Math.sin(deg * degree * 2), -Math.sin(deg * degree * 2), Math.cos(deg * degree * 2), 0, 0);
+      ctx.translate(-centerX, -centerY);
       ctx.transform(1, 0, 0, -1, 0, canvas.height);
     }
 
@@ -645,30 +645,35 @@ class CanvasVideoService {
     // drawRotate(degree: number, ctx){
     //   // let ctx = this.canvas_context;
     //   let { canvas_el } = this;
-    //   let canvas = canvas_el; 
+    //   let canvas = canvas_el;
     //   const centerX = canvas.width / 2;
     //   const centerY = canvas.height / 2;
     //   // this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
     //   ctx.translate(centerX, centerY);
     //   ctx.rotate((Math.PI / 180) * degree);
-    //   ctx.translate(-centerX, -centerY);                                                                                                                
+    //   ctx.translate(-centerX, -centerY);
     // };
-    drawRotate(degree: number){
+    drawRotate(degree: number) {
       let ctx = this.canvas_context;
-      // ctx.restore();
-      // ctx.save();
+      ctx.restore();
+      ctx.save();
       let { canvas_el } = this;
       let canvas = canvas_el;
-      let deg = Math.PI / 180;  //角度转化为弧度
+      let deg = Math.PI / 180; // 角度转化为弧度
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
       this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
       ctx.translate(centerX, centerY);
-      ctx.transform(Math.cos(deg*degree),Math.sin(deg*degree),-Math.sin(deg*degree),Math.cos(deg*degree), 0, 0);
-      ctx.translate(-centerX, -centerY); 
+      ctx.transform(Math.cos(deg * degree), Math.sin(deg * degree), -Math.sin(deg * degree), Math.cos(deg * degree), 0, 0);
+      ctx.translate(-centerX, -centerY);
+    }
+    reset() {
+      let ctx = this.canvas_context;
+      ctx.restore();
+      ctx.save();
     }
 
-    // //翻转像素来实现图片翻转   
+    // //翻转像素来实现图片翻转
     // imagePxTrasform(sourceData: ImageData, newData: ImageData) {
     //   for (var i = 0, h = sourceData.height; i < h; i++) {
     //     for (var j = 0, w = sourceData.width; j < w; j++) {

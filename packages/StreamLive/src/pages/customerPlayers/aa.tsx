@@ -5,7 +5,6 @@ import { createPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/
 import { PlayCircleFilled } from '@ant-design/icons';
 
 
-
 interface IVideoComponent {
   url: string;
   key: string | number;
@@ -113,27 +112,38 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
         play.mpegtsPlayer.play();
       }}
       >DD</Button>
-      <br/>
+      <br />
       <Space>
-        <Input min={-180} max={180} value={degree} 
-        onChange={ e => {
+        <Input
+          min={-180}
+          max={180}
+          value={degree}
+          onChange={e => {
           setDegree(e.target.value);
           // console.log(degree);
-        }}/>
+        }}
+        />
         <Button onClick={() => {
           let play = streamPlayer.current;
-          console.log(degree);
+          // console.log(degree);
           play.canvasVideoService.drawTrasform(degree);
           // play.canvasVideoService.drawRotate(degree);
         }}
         >transform</Button>
         <Button onClick={() => {
           let play = streamPlayer.current;
-          console.log(degree);  
+          // console.log(degree);
           // play.canvasVideoService.drawTrasform(degree);
-          play.canvasVideoService.drawRotate(degree , play.canvasVideoService.canvas_context);
+          play.canvasVideoService.drawRotate(degree);
         }}
         >rotate</Button>
+        <Button onClick={() => {
+          let play = streamPlayer.current;
+          // console.log(degree);
+          // play.canvasVideoService.drawTrasform(degree);
+          play.canvasVideoService.reset();
+        }}
+        >reset</Button>
       </Space>
 
     </div>);
