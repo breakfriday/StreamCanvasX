@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import mpegts from 'mpegts.js';
+import mpegts from 'streamcanvasx-core';
 
 
 @injectable()
