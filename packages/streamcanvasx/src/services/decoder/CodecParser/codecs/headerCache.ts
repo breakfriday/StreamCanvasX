@@ -8,7 +8,16 @@ import {
   } from '../constants';
 
   export default class HeaderCache {
-    constructor(onCodecHeader, onCodecUpdate) {
+    private _onCodecHeader: Function;
+    private _onCodecUpdate: Function;
+    private _isEnabled: boolean;
+    private _headerCache: Map<any, any>;
+    private _codecUpdateData: WeakMap<any, any>;
+    private _codecHeaderSent: boolean;
+    private _codecShouldUpdate: boolean;
+    private _bitrate: number | null;
+
+    constructor(onCodecHeader: Function, onCodecUpdate: Function) {
       this._onCodecHeader = onCodecHeader;
       this._onCodecUpdate = onCodecUpdate;
       this[reset]();

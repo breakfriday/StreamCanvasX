@@ -10,6 +10,15 @@ const MEDIA_SOURCE_STATE = {
 const BUFFER = 5; // seconds of audio to store in SourceBuffer
 const BUFFER_INTERVAL = 5; // seconds before removing from SourceBuffer
 
+
+const MSEEvents = {
+  ERROR: 'error',
+  SOURCE_OPEN: 'source_open',
+  UPDATE_END: 'update_end',
+  BUFFER_FULL: 'buffer_full',
+};
+
+
 @injectable()
 class MseDecoder {
     mediaSource: MediaSource;
@@ -25,14 +34,24 @@ class MseDecoder {
     private _sourceBufferQueue: Array<Uint8Array>;
     private _sourceBufferRemoved: number;
     private bufferLength: number;
+    private _sourceBuffers: {
+      video: SourceBuffer;
+      audio: SourceBuffer;
+    };
 
 
     constructor() {
       this.bufferLength = 1;// Seconds of audio to buffer before starting playback
+
+      this._sourceBuffers = {
+        video: null,
+        audio: null,
+      };
     }
 
     // 获取source buffer  最后一个已缓冲音频帧的时间位置
     get metadataTimestamp() {
+      // this.$videoElement.buffered  這個方法也ok
       return (
         (this.mediaSource &&
           this.mediaSource.sourceBuffers.length &&
@@ -46,9 +65,24 @@ class MseDecoder {
       );
     }
 
-    get currentTime() {
-      return this.$videoElement.currentTime;
+
+    get isAudioPlayer() {
+      return true;
     }
+
+    get currentTime() {
+      if (this.$videoElement) {
+          return this.$videoElement.currentTime;
+      }
+      return 0;
+  }
+
+    get waiting() {
+      return new Promise((resolve) => {
+        this.$videoElement.addEventListener('waiting', resolve, { once: true });
+      });
+    }
+
 
     get state() {
       return this.mediaSource && this.mediaSource.readyState;
@@ -99,6 +133,10 @@ class MseDecoder {
           this.sourceBuffer = this.mediaSource.addSourceBuffer(mimeType);
           this.sourceBuffer.mode = 'sequence';
 
+          this.sourceBuffer.addEventListener('updateend', () => {
+            debugger;
+          });
+
           this._sourceBufferRemoved = 0;
           // this.mediaSource.sourceBuffers[0].
           this._mediaSourceOpenNotify();
@@ -117,7 +155,7 @@ class MseDecoder {
         debugger;
        }
 
-       debugger;
+
       if (this.mediaSource.sourceBuffers.length) {
         this._sourceBufferQueue.push(buffer);
       }
@@ -139,14 +177,14 @@ class MseDecoder {
             debugger;
           }
 
+          debugger;
           this.sourceBuffer.appendBuffer(data);
+          debugger;
 
           console.info('-----');
 
           console.info(data);
           console.log('-----------');
-
-
           await this.waitForSourceBuffer();
           debugger;
         }
@@ -154,22 +192,31 @@ class MseDecoder {
         debugger;
         console.error(e);
       }
+
+      await this.cleanSourceBuffer();
+    }
+
+    async delay() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({});
+        }, 1000);
+      });
     }
 
    async waitForSourceBuffer() {
     return new Promise((resolve) => {
-      const sourceBuffer = this.mediaSource.sourceBuffers[0];
+     // const sourceBuffer = this.mediaSource.sourceBuffers[0];
+    //  const { sourceBuffer } = this;
 
-       debugger;
+     const sourceBuffer = this.mediaSource.sourceBuffers[0];
+
        // eslint-disable-next-line no-negated-condition
       if (!sourceBuffer.updating) {
-        debugger;
         resolve({});
       } else {
-        debugger;
         sourceBuffer.addEventListener('updateend', () => {
-          debugger;
-          resolve();
+          resolve({});
         }, {
           once: true,
         });
@@ -239,8 +286,18 @@ class MseDecoder {
     }
 
 
-    removeSourceBuffer() {
-
+   async cleanSourceBuffer() {
+      if (
+        this.$videoElement.currentTime > BUFFER + this.bufferLength &&
+        this._sourceBufferRemoved + BUFFER_INTERVAL * 1000 < performance.now()
+      ) {
+        this._sourceBufferRemoved = performance.now();
+        this.mediaSource.sourceBuffers[0].remove(
+          0,
+          this.$videoElement.currentTime - BUFFER + this.bufferLength,
+        );
+        await this.waitForSourceBuffer();
+      }
     }
 
     endOfStream() {
@@ -257,6 +314,11 @@ class MseDecoder {
 
     async onstream(frames: IAACfames['frames']) {
       await this.addFrames(frames); // wait for the source buffer
+    }
+
+    inputStream() {
+
+
     }
 
    removeBuffer(start: number, end: number) {

@@ -16,6 +16,7 @@ import { IplayerConfig } from '../../types/services';
 import AudioProcessingService from '../audio/audioContextService';
 import WasmDecoderService from '../decoder/wasmDecoder';
 import CanvasToVideoSerivce from '../muxer/canvasToVideo';
+import MseDecoderService from '../decoder/mediaSource';
 
 
 mpegts.LoggingControl.applyConfig({
@@ -54,6 +55,7 @@ class PlayerService extends Emitter {
     fLVDemuxStream: FLVDemuxStream;
     mpegtsPlayer: Mpegts.Player;
     audioProcessingService: AudioProcessingService;
+    mseDecoderService: MseDecoderService;
     private _stats: Stats;
     private _startBpsTime?: number;
     _opt: any;
@@ -84,6 +86,7 @@ class PlayerService extends Emitter {
         @inject(TYPES.IAudioProcessingService) audioProcessingService: AudioProcessingService,
         @inject(TYPES.IWasmDecoderService) wasmDecoderService: WasmDecoderService,
         @inject(TYPES.ICanvasToVideoSerivce) canvasToVideoSerivce: CanvasToVideoSerivce,
+        @inject(TYPES.IMseDecoderService) mseDecoderService: MseDecoderService,
         ) {
         super();
         this.httpFlvStreamService = httpFlvStreamService;
@@ -97,6 +100,7 @@ class PlayerService extends Emitter {
         this.error_connect_times = 0;
         this.wasmDecoderService = wasmDecoderService;
         this.canvasToVideoSerivce = canvasToVideoSerivce;
+        this.mseDecoderService = mseDecoderService;
 
 
         this._times = {
@@ -152,6 +156,7 @@ class PlayerService extends Emitter {
         this.fLVDemuxStream.init(this);
         this.canvasVideoService.init(this, { model: model, contentEl, useOffScreen });
         this.canvasToVideoSerivce.init(this);
+        this.mseDecoderService.init(this);
         // this.wasmDecoderService.init();
 
 
