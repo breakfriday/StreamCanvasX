@@ -2,7 +2,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Divider, Space, Button } from 'antd';
 // import CanvasPlayerByVideos from 'streamcanvasx/canvasPlayerByVideo';
-import mpegts from 'mpegts.js';
+//import mpegts from 'mpegts.js';
 import Hls from 'hls.js';
 // import CanvasAudioProcess from 'streamcanvasx/canvasAudioProcess';
 import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/src/serviceFactories/index';
