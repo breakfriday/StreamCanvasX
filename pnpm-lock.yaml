@@ -58,6 +58,9 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
+      mp4-muxer:
+        specifier: ^2.1.3
+        version: 2.1.3
       mpegts.js:
         specifier: ^1.7.2
         version: 1.7.3
@@ -73,6 +76,9 @@ importers:
       streamcanvasx:
         specifier: workspace:^0.1.0
         version: link:../streamcanvasx
+      webm-muxer:
+        specifier: ^3.1.1
+        version: 3.1.1
     devDependencies:
       '@applint/spec':
         specifier: ^1.2.3
@@ -137,9 +143,15 @@ importers:
       '@webgpu/types':
         specifier: ^0.1.32
         version: 0.1.32
+      codec-parser:
+        specifier: ^2.4.3
+        version: 2.4.3
       hls.js:
         specifier: 1.3.5
         version: 1.3.5
+      icecast-metadata-player:
+        specifier: ^1.16.5
+        version: 1.16.5
       inversify:
         specifier: ^6.0.1
         version: 6.0.1
@@ -149,6 +161,9 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
+      mp4-muxer:
+        specifier: ^2.1.3
+        version: 2.1.3
       mpegts.js:
         specifier: ^1.7.2
         version: 1.7.3
@@ -4674,6 +4689,14 @@ packages:
     dev: true
     optional: true
 
+  /@eshaz/web-worker@1.2.0:
+    resolution: {integrity: sha512-HWobmNKFZ8eARo39vEjkviTIISudgzrTyAqab9pOB/qNfnUPIUUMZv6+eEUUfXnkqWCLS3zreTn9YzaRvO8vIA==}
+    dev: false
+
+  /@eshaz/web-worker@1.2.1:
+    resolution: {integrity: sha512-v5AKAVtM0toVD2rDCGjzhySWlXG/sG5HVialdzrxFKTAnFZNCjQelX0n2tPK0tE86jf4s3hpWlpRtOh8OObktg==}
+    dev: false
+
   /@eslint-community/eslint-utils@4.4.0(eslint@8.42.0):
     resolution: {integrity: sha512-1/sA4dwrzBAyeUoQ6oxahHKmrZvsnLCg4RfxW3ZFGGmQkSNQPFNLV9CUEFQP1x9EYXHTo5p6xdhZM1Ne9p/AfA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -6593,6 +6616,26 @@ packages:
   /@uni/env@1.1.1:
     resolution: {integrity: sha512-oQGRQg3cFVb6ByppV0WVue/BE98cw0xvAniX9L0wQtzU94RvZg9/GpkFIDwrlgcvzXlTgUPTTMG9B/riiiFQyQ==}
 
+  /@wasm-audio-decoders/common@9.0.1:
+    resolution: {integrity: sha512-s4KxPsxhD6e+EtjmHPzTmKJSJTEXHGYlBzUGGLN/plV01x3RecybW73nIMtdLLXL8k/zQ8HYFcA6d9lqCJcDjQ==}
+    dependencies:
+      '@eshaz/web-worker': 1.2.1
+    dev: false
+
+  /@wasm-audio-decoders/flac@0.1.13:
+    resolution: {integrity: sha512-Ah0hurb+qO3kBjuBrmOSIDqe8DWkd/g5feoyd8jjoM46l//OmVrsG9lW0rnDJAKMhyMeRuWwCy/kv/SswzrW8Q==}
+    dependencies:
+      '@wasm-audio-decoders/common': 9.0.1
+      codec-parser: 2.4.3
+    dev: false
+
+  /@wasm-audio-decoders/ogg-vorbis@0.1.8:
+    resolution: {integrity: sha512-YwPSxN1xqGrVpON0OvUHwBnboKMA0P7n08j2K2SgZr5MI6ODWp2viW66XLL+gpNZBqRJhw+RdnyTUkZiZ70JOA==}
+    dependencies:
+      '@wasm-audio-decoders/common': 9.0.1
+      codec-parser: 2.4.3
+    dev: false
+
   /@webassemblyjs/ast@1.11.6:
     resolution: {integrity: sha512-IN1xI7PwOvLPgjcf180gC1bqn3q/QaOCwYUahIOhbYUu8KA/3tw2RT/T0Gidi1l7Hhj5D/INhJxiICObqpMu4Q==}
     dependencies:
@@ -7852,6 +7895,10 @@ packages:
     resolution: {integrity: sha512-RpAVKQA5T63xEj6/giIbUEtZwJ4UFIc3ZtvEkiaUERylqe8xb5IvqcgOurZLahv93CLKfxcw5YI+DZcUBRyLXA==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /codec-parser@2.4.3:
+    resolution: {integrity: sha512-3dAvFtdpxn4YLstqsB2ZiJXXNg7n1j7R5ONeDuk+2kBkb39PwrCRytOFHlSWA8q5jCjW3PumeMv9q37bFHsijg==}
+    dev: false
 
   /collapse-white-space@1.0.6:
     resolution: {integrity: sha512-jEovNnrhMuqyCcjfEJA56v0Xq8SkIoPKDyaHahwo3POf4qcSXqMYuwNcOTzp74vTsR9Tn08z4MxWqAhcekogkQ==}
@@ -10756,6 +10803,25 @@ packages:
     resolution: {integrity: sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ==}
     dev: false
 
+  /icecast-metadata-js@1.2.7:
+    resolution: {integrity: sha512-ez7FTATej/YDo7va1CGK9EC2acDCiv6Hv1Ab79YsAuwBSgN15Wtid8PPKii84iDSPigcfvL57U0SEuSEk19dRA==}
+    dependencies:
+      codec-parser: 2.4.3
+    dev: false
+
+  /icecast-metadata-player@1.16.5:
+    resolution: {integrity: sha512-NsxOfnZCbFk4SwTPV3/26CINrbT738MXUjp9VgMr0vNOvO50RioafjDAhvzQspv5QKK1+D7GXHhK4G+An5Dlfg==}
+    dependencies:
+      '@wasm-audio-decoders/flac': 0.1.13
+      '@wasm-audio-decoders/ogg-vorbis': 0.1.8
+      codec-parser: 2.4.3
+      icecast-metadata-js: 1.2.7
+      mpg123-decoder: 0.4.8
+      mse-audio-wrapper: 1.4.14
+      opus-decoder: 0.7.1
+      synaudio: 0.3.4
+    dev: false
+
   /iconv-lite@0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
     engines: {node: '>=0.10.0'}
@@ -12453,6 +12519,7 @@ packages:
     resolution: {integrity: sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==}
     engines: {node: '>=4'}
     hasBin: true
+    requiresBuild: true
 
   /mimic-fn@2.1.0:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}
@@ -12633,11 +12700,24 @@ packages:
     resolution: {integrity: sha512-QNo4kEepaIBwiT8CDhP98umTetp+JNfQYBWvC1pc6/OAibuXtRcxZ58Qz8skvEHYvURne/7R8T5VoOI7rDsEUA==}
     dev: false
 
+  /mp4-muxer@2.1.3:
+    resolution: {integrity: sha512-k7T4l53XvbRHHOtV3bMk66jgqFHli/QbDn9Osglz3+wGc1CNqVwdxkdzn6r8xglh7MhdrAGjUZj1WJFJ9NTy7g==}
+    dependencies:
+      '@types/dom-webcodecs': 0.1.7
+      '@types/wicg-file-system-access': 2020.9.6
+    dev: false
+
   /mpegts.js@1.7.3:
     resolution: {integrity: sha512-kqZ1C1IsbAQN72cK8vMrzKeM7hwrwSBbFAwVAc7PPweOeoZxCANrc7fAVDKMfYUzxdNkMTnec9tVmlxmKZB0TQ==}
     dependencies:
       es6-promise: 4.2.8
       webworkify-webpack: 2.1.5
+    dev: false
+
+  /mpg123-decoder@0.4.8:
+    resolution: {integrity: sha512-HXs8vbPjiFM0NOZ45T3C5i7mpYGEYhjH37SnFA907lOb9c93DQL40cDjerxj65IMwAYyPFq1aUjtDOjyR7O0gQ==}
+    dependencies:
+      '@wasm-audio-decoders/common': 9.0.1
     dev: false
 
   /mri@1.2.0:
@@ -12657,6 +12737,12 @@ packages:
 
   /ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
+
+  /mse-audio-wrapper@1.4.14:
+    resolution: {integrity: sha512-qdy5ezIS5JwA21DUJIYypGU2WtLzqJXCK9hgFoHu3ydjL/xrEt7XjsKuKPxYAiWZVOaBXjZluxfeNF+zRz5jrw==}
+    dependencies:
+      codec-parser: 2.4.3
+    dev: false
 
   /multicast-dns@7.2.5:
     resolution: {integrity: sha512-2eznPJP8z2BFLX50tf0LuODrpINqP1RVIm/CObbTcBRITQgmC/TjcREF1NeTBzIcR5XO/ukWo+YHOjBbFwIupg==}
@@ -13011,6 +13097,12 @@ packages:
       prelude-ls: 1.2.1
       type-check: 0.4.0
       word-wrap: 1.2.3
+
+  /opus-decoder@0.7.1:
+    resolution: {integrity: sha512-AOFCMKLn7LJm8pOkksY5TsW/6+XmNyh1OQS9gxmdOGHLNYoOBrjSfc0nPNcmUMGEzOrTqZtPi8VJ/ABs2Hndvg==}
+    dependencies:
+      '@wasm-audio-decoders/common': 9.0.1
+    dev: false
 
   /ora@5.4.1:
     resolution: {integrity: sha512-5b6Y85tPxZZ7QytO+BQzysW31HJku27cRIlkbAXaNx+BdcVi+LlRFmVXzeF6a7JCwJpyw5c4b+YSVImQIrBpuQ==}
@@ -15857,6 +15949,10 @@ packages:
       is-arrayish: 0.3.2
     dev: false
 
+  /simple-yenc@1.0.1:
+    resolution: {integrity: sha512-uKrv4FXStwchPSl7HbkfIR0fMHkLD2PsLLizTst7jU+YaI4/pdUxudQZTrjlKRNO8qwC7bef2yj92L2ltVIBtQ==}
+    dev: false
+
   /sirv@1.0.19:
     resolution: {integrity: sha512-JuLThK3TnZG1TAKDwNIqNq6QA2afLOCcm+iE8D1Kj3GA40pSPsxQjjJl0J8X3tsR7T+CP1GavpzLwYkgVLWrZQ==}
     engines: {node: '>= 10'}
@@ -16428,6 +16524,13 @@ packages:
     dependencies:
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
+
+  /synaudio@0.3.4:
+    resolution: {integrity: sha512-D0ztws1w4Sytmx6um7VRtlzMDWmH42RYnZ00QkyJyMFU521bgXh18YpmQElJ1hw7dhTKO6l8D33IYxS3CZL/YQ==}
+    dependencies:
+      '@eshaz/web-worker': 1.2.0
+      simple-yenc: 1.0.1
     dev: false
 
   /table-layout@1.0.2:

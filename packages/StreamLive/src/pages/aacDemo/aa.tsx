@@ -10,7 +10,7 @@ const LiveVideo = (props) => {
 
     const playerRef = useRef();
 
-    const runplayer1 = () => {
+    const runplayer = () => {
       let { url } = props;
       // fetchflv.fetchStream(url);
       let showAudio = false,
@@ -29,32 +29,19 @@ const LiveVideo = (props) => {
     };
 
 
-    const runplayer2 = () => {
-      let { url } = props;
-      const player = new window.Jessibuca({
-        container: containerRef.current!,
-        videoBuffer: 0.2, // 缓存时长
-        isResize: false,
-        text: '',
-        loadingText: '加载中',
-        debug: true,
-        forceNoOffscreen: true,
-        isNotMute: false,
-        useWCS: false,
-        useMSE: false,
-
-    });
-    player.play(url);
-    };
-
     useEffect(() => {
-      runplayer1();
+      runplayer();
     }, []);
 
     return (
       <>
         <div>test</div>
+        <audio id="aad" controls >
+          <span > Download audio </span>
+        </audio>
         <div ref={containerRef} style={{ width: '400px', height: '200px', border: '1px' }} />
+
+
       </>
     );
 };

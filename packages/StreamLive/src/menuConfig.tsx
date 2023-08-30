@@ -46,6 +46,14 @@ const asideMenuConfig: MenuDataItem[] = [
         name: 'whis&whep',
         path: 'whipwhep',
       },
+      {
+        name: 'canvasToVideo',
+        path: 'canvasToVideo',
+      },
+      {
+        name: 'aacDemo',
+        path: 'aacDemo',
+      },
     ],
   },
   {

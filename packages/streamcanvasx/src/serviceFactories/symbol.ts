@@ -11,6 +11,8 @@ const TYPES = {
     IDebugLogService: Symbol.for('IDebugLogService'),
     IFLVDemuxStream: Symbol.for('IFLVDemuxStream'),
     IWasmDecoderService: Symbol.for('IWasmDecoderService'),
+    ICanvasToVideoSerivce: Symbol.for('ICanvasToVideoSerivce'),
+    IMseDecoderService: Symbol.for('MseDecoderService'),
 
   };
 
