@@ -670,8 +670,8 @@ class CanvasVideoService {
       // 和初版实现相似   translate()scale()rotate()和transform()应该类似
       // 那么翻转后再调用旋转操作时旋转方向改变的问题 应无法通过改变翻转方式来解决
       let ctx = this.canvas_context;
-      // ctx.restore(); //restore(),save()重置画布  添加之后可在render中直接调用drawTrasform()
-      // ctx.save();
+      ctx.restore(); // restore(),save()重置画布  添加之后可在render中直接调用drawTrasform()
+      ctx.save();
       let { canvas_el } = this;
       let canvas = canvas_el;
       let deg = Math.PI / 180; // 角度转化为弧度
@@ -699,8 +699,8 @@ class CanvasVideoService {
     // };
     drawRotate(degree: number) {
       let ctx = this.canvas_context;
-      // ctx.restore();
-      // ctx.save();
+      ctx.restore();
+      ctx.save();
       let { canvas_el } = this;
       let canvas = canvas_el;
       let deg = Math.PI / 180; // 角度转化为弧度
@@ -710,6 +710,11 @@ class CanvasVideoService {
       ctx.translate(centerX, centerY);
       ctx.transform(Math.cos(deg * degree), Math.sin(deg * degree), -Math.sin(deg * degree), Math.cos(deg * degree), 0, 0);
       ctx.translate(-centerX, -centerY);
+    }
+    reset() {
+      let ctx = this.canvas_context;
+      ctx.restore();
+      ctx.save();
     }
 
     // //翻转像素来实现图片翻转

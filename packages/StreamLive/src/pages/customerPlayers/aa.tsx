@@ -180,18 +180,25 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
         />
         <Button onClick={() => {
           let play = streamPlayer.current;
-          console.log(degree);
+          // console.log(degree);
           play.canvasVideoService.drawTrasform(degree);
           // play.canvasVideoService.drawRotate(degree);
         }}
         >transform</Button>
         <Button onClick={() => {
           let play = streamPlayer.current;
-          console.log(degree);
+          // console.log(degree);
           // play.canvasVideoService.drawTrasform(degree);
-          play.canvasVideoService.drawRotate(degree, play.canvasVideoService.canvas_context);
+          play.canvasVideoService.drawRotate(degree);
         }}
         >rotate</Button>
+        <Button onClick={() => {
+          let play = streamPlayer.current;
+          // console.log(degree);
+          // play.canvasVideoService.drawTrasform(degree);
+          play.canvasVideoService.reset();
+        }}
+        >reset</Button>
       </Space>
 
       {
