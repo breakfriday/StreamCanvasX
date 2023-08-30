@@ -16,6 +16,7 @@ import { IplayerConfig } from '../../types/services';
 import AudioProcessingService from '../audio/audioContextService';
 import WasmDecoderService from '../decoder/wasmDecoder';
 import CanvasToVideoSerivce from '../muxer/canvasToVideo';
+import MseDecoderService from '../decoder/mediaSource';
 
 
 mpegts.LoggingControl.applyConfig({
@@ -54,6 +55,7 @@ class PlayerService extends Emitter {
     fLVDemuxStream: FLVDemuxStream;
     mpegtsPlayer: Mpegts.Player;
     audioProcessingService: AudioProcessingService;
+    mseDecoderService: MseDecoderService;
     private _stats: Stats;
     private _startBpsTime?: number;
     _opt: any;
@@ -64,6 +66,15 @@ class PlayerService extends Emitter {
     wasmDecoderService: WasmDecoderService;
     player2: any;
     canvasToVideoSerivce: CanvasToVideoSerivce;
+    mediaInfo: {
+        audioChannelCount?: number;
+        audioCodec?: string;
+        audioSampleRate?: number;
+        videoCodec?: string;
+        mimeType?: string;
+
+    };
+    meidiaEl: HTMLVideoElement;
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -75,6 +86,7 @@ class PlayerService extends Emitter {
         @inject(TYPES.IAudioProcessingService) audioProcessingService: AudioProcessingService,
         @inject(TYPES.IWasmDecoderService) wasmDecoderService: WasmDecoderService,
         @inject(TYPES.ICanvasToVideoSerivce) canvasToVideoSerivce: CanvasToVideoSerivce,
+        @inject(TYPES.IMseDecoderService) mseDecoderService: MseDecoderService,
         ) {
         super();
         this.httpFlvStreamService = httpFlvStreamService;
@@ -88,6 +100,7 @@ class PlayerService extends Emitter {
         this.error_connect_times = 0;
         this.wasmDecoderService = wasmDecoderService;
         this.canvasToVideoSerivce = canvasToVideoSerivce;
+        this.mseDecoderService = mseDecoderService;
 
 
         this._times = {
@@ -142,6 +155,8 @@ class PlayerService extends Emitter {
         if (typeof VideoDecoder != 'undefined') this.webcodecsDecoderService.init(this);
         this.fLVDemuxStream.init(this);
         this.canvasVideoService.init(this, { model: model, contentEl, useOffScreen });
+        this.canvasToVideoSerivce.init(this);
+        this.mseDecoderService.init(this);
         // this.wasmDecoderService.init();
 
 
@@ -161,6 +176,7 @@ class PlayerService extends Emitter {
         let { type = 'flv', isLive = true } = parms;
         let { url } = this.httpFlvStreamService;
         let videoEl = document.createElement('video');
+        this.meidiaEl = videoEl;
         // document.getElementById('cont').append(videoEl);
         // videoEl.controls = true;
         // videoEl.width = 300;
@@ -224,6 +240,10 @@ class PlayerService extends Emitter {
           this.mpegtsPlayer.on(mpegts.Events.MEDIA_INFO, (parm) => {
             let video_width = parm.metadata.width;
             let video_height = parm.metadata.height;
+
+            this.mediaInfo = parm;
+
+            // debugger
 
 
             // this.metadata = {
@@ -294,6 +314,7 @@ class PlayerService extends Emitter {
             let { mseLivePlayback, mseH265Playback } = mpegts.getFeatureList();
 
 
+            // 12 是H265 , FLV的 解码器id
             if (parm.videocodecid == 12 && mseH265Playback === false) {
                 this.destroy();
 

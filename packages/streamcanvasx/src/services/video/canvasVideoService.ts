@@ -38,8 +38,10 @@ function createContextGL($canvas: HTMLCanvasElement): WebGLRenderingContext | nu
 @injectable()
 class CanvasVideoService {
     canvas_el: HTMLCanvasElement;
+    canvas_el2: HTMLCanvasElement;
     offscreen_canvas: OffscreenCanvas;
     canvas_context: CanvasRenderingContext2D;
+    canvas_context2: CanvasRenderingContext2D;
     offscreen_canvas_context: OffscreenCanvasRenderingContext2D;
     context2D: CanvasRenderingContext2D;
     playerService: PlayerService;
@@ -55,8 +57,12 @@ class CanvasVideoService {
     loading: boolean;
     frameInfo: VideoFrame;
     resizeObserver: ResizeObserver;
+    videoFrame: VideoFrame;
     constructor() {
         this.canvas_el = document.createElement('canvas');
+
+        // canvas_el2 用于录制原始高清视频
+        this.canvas_el2 = document.createElement('canvas');
 
         this.canvas_el.style.position = 'absolute';
         // this._initContext2D();
@@ -352,6 +358,11 @@ class CanvasVideoService {
         this.canvas_el.width = width;
         this.canvas_el.height = height;
     }
+    setCanvas2Size(parm: {width: number; height: number}) {
+       let { width, height } = parm;
+      this.canvas_el2.width = width;
+      this.canvas_el2.height = height;
+    }
 
     _initContextGl() {
         this.contextGl = createContextGL(this.canvas_el);
@@ -362,6 +373,7 @@ class CanvasVideoService {
 
 
     render(videoFrame: VideoFrame | HTMLVideoElement) {
+      this.videoFrame = videoFrame as VideoFrame;
         switch (this.useMode) {
             case UseMode.UseCanvas:
                 this.renderCanvas2d(videoFrame);
@@ -414,6 +426,7 @@ class CanvasVideoService {
     renderCanvas2d(videoFrame: VideoFrame | HTMLVideoElement) {
         // let video_width = videoFrame.codedHeight;
         // let video_height = videoFrame.codedHeight;
+        let video = videoFrame as HTMLVideoElement;
 
         let width = 400;
         let height = 200;
@@ -424,20 +437,51 @@ class CanvasVideoService {
         }
         // let ctx = this.canvas_context;
         // let { canvas_el } = this;
-        // let canvas = canvas_el; 
+        // let canvas = canvas_el;
         // ctx.save();
         this.canvas_context.clearRect(0, 0, width, height);
 
         // this.drawTrasform(30);
         this.canvas_context.drawImage(videoFrame, 0, 0, width, height);
 
+
+        let video_height = video.videoHeight;
+        let video_width = video.videoWidth;
+        if (!this.canvas_context2) {
+          this.canvas_context2 = this.canvas_el2.getContext('2d');
+          this.setCanvas2Size({ width: video_width, height: video_height });
+        }
+        this.canvas_context2.clearRect(0, 0, video_width, video_height);
+
+        // this.drawTrasform(30);
+        this.canvas_context2.drawImage(videoFrame, 0, 0, video_width, video_height);
+
+
         // this.drawTrasform(videoFrame, 30, ctx);
 
         // ctx.restore();
         // console.log(this.playerService.config.degree);
         // this.drawTrasform(videoFrame, this.playerService.config.degree);
-        
+
         // ctx.restore();
+        this.renderOriginCanvas(videoFrame);
+    }
+
+    // 录制原始高清视频
+    renderOriginCanvas(videoFrame: VideoFrame | HTMLVideoElement) {
+      let video = videoFrame as HTMLVideoElement;
+      if (this.playerService.canvasToVideoSerivce.recording === true) {
+        let video_height = video.videoHeight;
+        let video_width = video.videoWidth;
+        if (!this.canvas_context2) {
+          this.canvas_context2 = this.canvas_el2.getContext('2d');
+          this.setCanvas2Size({ width: video_width, height: video_height });
+        }
+        this.canvas_context2.clearRect(0, 0, video_width, video_height);
+
+        // this.drawTrasform(30);
+        this.canvas_context2.drawImage(videoFrame, 0, 0, video_width, video_height);
+      }
     }
 
     getCanvas2dEl() {
@@ -575,7 +619,7 @@ class CanvasVideoService {
     // 绕中心翻转任意角度   角度制输入  通过先上下翻转然后旋转实现翻转任意角度
     // drawTrasform(videoFrame: VideoFrame | HTMLVideoElement,degree: number, ctx:any){
     //   let { canvas_el } = this;
-    //   let canvas = canvas_el; 
+    //   let canvas = canvas_el;
     //   // ctx.save();
     //   // // this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
     //   // ctx.translate(0, canvas.height);  //初版使用                                                                                                       进行翻转 但是因为 scale()实现的上下翻转 会导致后续的旋转方向相反
@@ -593,7 +637,7 @@ class CanvasVideoService {
     //   ctx.drawImage(videoFrame, 0, 0, canvas.width, canvas.height);
     //   let img1 = ctx.getImageData(0, 0, canvas.width, canvas.height);
     //   // console.log(img0);
-    //   let img2 = ctx.getImageData(0, 0, canvas.width, canvas.height);  
+    //   let img2 = ctx.getImageData(0, 0, canvas.width, canvas.height);
     //   this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
     //   // console.log(typeof img);
     //   // console.log(img);
@@ -622,21 +666,21 @@ class CanvasVideoService {
     //   // ctx.rotate((Math.PI / 180) * degree * -2);
     //   // ctx.translate(-centerX, -centerY);
     // };
-    drawTrasform(degree: number){
-      //和初版实现相似   translate()scale()rotate()和transform()应该类似
-      //那么翻转后再调用旋转操作时旋转方向改变的问题 应无法通过改变翻转方式来解决
+    drawTrasform(degree: number) {
+      // 和初版实现相似   translate()scale()rotate()和transform()应该类似
+      // 那么翻转后再调用旋转操作时旋转方向改变的问题 应无法通过改变翻转方式来解决
       let ctx = this.canvas_context;
       // ctx.restore(); //restore(),save()重置画布  添加之后可在render中直接调用drawTrasform()
       // ctx.save();
       let { canvas_el } = this;
       let canvas = canvas_el;
-      let deg = Math.PI / 180;  //角度转化为弧度
+      let deg = Math.PI / 180; // 角度转化为弧度
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
       this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
       ctx.translate(centerX, centerY);
-      ctx.transform(Math.cos(deg*degree*2),Math.sin(deg*degree*2),-Math.sin(deg*degree*2),Math.cos(deg*degree*2), 0, 0);
-      ctx.translate(-centerX, -centerY); 
+      ctx.transform(Math.cos(deg * degree * 2), Math.sin(deg * degree * 2), -Math.sin(deg * degree * 2), Math.cos(deg * degree * 2), 0, 0);
+      ctx.translate(-centerX, -centerY);
       ctx.transform(1, 0, 0, -1, 0, canvas.height);
     }
 
@@ -645,30 +689,30 @@ class CanvasVideoService {
     // drawRotate(degree: number, ctx){
     //   // let ctx = this.canvas_context;
     //   let { canvas_el } = this;
-    //   let canvas = canvas_el; 
+    //   let canvas = canvas_el;
     //   const centerX = canvas.width / 2;
     //   const centerY = canvas.height / 2;
     //   // this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
     //   ctx.translate(centerX, centerY);
     //   ctx.rotate((Math.PI / 180) * degree);
-    //   ctx.translate(-centerX, -centerY);                                                                                                                
+    //   ctx.translate(-centerX, -centerY);
     // };
-    drawRotate(degree: number){
+    drawRotate(degree: number) {
       let ctx = this.canvas_context;
       // ctx.restore();
       // ctx.save();
       let { canvas_el } = this;
       let canvas = canvas_el;
-      let deg = Math.PI / 180;  //角度转化为弧度
+      let deg = Math.PI / 180; // 角度转化为弧度
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
       this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
       ctx.translate(centerX, centerY);
-      ctx.transform(Math.cos(deg*degree),Math.sin(deg*degree),-Math.sin(deg*degree),Math.cos(deg*degree), 0, 0);
-      ctx.translate(-centerX, -centerY); 
+      ctx.transform(Math.cos(deg * degree), Math.sin(deg * degree), -Math.sin(deg * degree), Math.cos(deg * degree), 0, 0);
+      ctx.translate(-centerX, -centerY);
     }
 
-    // //翻转像素来实现图片翻转   
+    // //翻转像素来实现图片翻转
     // imagePxTrasform(sourceData: ImageData, newData: ImageData) {
     //   for (var i = 0, h = sourceData.height; i < h; i++) {
     //     for (var j = 0, w = sourceData.width; j < w; j++) {

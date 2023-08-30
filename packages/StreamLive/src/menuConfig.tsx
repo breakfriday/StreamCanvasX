@@ -50,6 +50,10 @@ const asideMenuConfig: MenuDataItem[] = [
         name: 'canvasToVideo',
         path: 'canvasToVideo',
       },
+      {
+        name: 'aacDemo',
+        path: 'aacDemo',
+      },
     ],
   },
   {
