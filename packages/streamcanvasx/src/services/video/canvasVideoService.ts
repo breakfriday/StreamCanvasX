@@ -38,8 +38,10 @@ function createContextGL($canvas: HTMLCanvasElement): WebGLRenderingContext | nu
 @injectable()
 class CanvasVideoService {
     canvas_el: HTMLCanvasElement;
+    canvas_el2: HTMLCanvasElement;
     offscreen_canvas: OffscreenCanvas;
     canvas_context: CanvasRenderingContext2D;
+    canvas_context2: CanvasRenderingContext2D;
     offscreen_canvas_context: OffscreenCanvasRenderingContext2D;
     context2D: CanvasRenderingContext2D;
     playerService: PlayerService;
@@ -55,11 +57,15 @@ class CanvasVideoService {
     loading: boolean;
     frameInfo: VideoFrame;
     resizeObserver: ResizeObserver;
+    videoFrame: VideoFrame;
     transformCount: number;
     transformDegreeSum: number;
     rotateDegreeSum: number;
     constructor() {
         this.canvas_el = document.createElement('canvas');
+
+        // canvas_el2 用于录制原始高清视频
+        this.canvas_el2 = document.createElement('canvas');
 
         this.canvas_el.style.position = 'absolute';
         // this._initContext2D();
@@ -355,6 +361,11 @@ class CanvasVideoService {
         this.canvas_el.width = width;
         this.canvas_el.height = height;
     }
+    setCanvas2Size(parm: {width: number; height: number}) {
+       let { width, height } = parm;
+      this.canvas_el2.width = width;
+      this.canvas_el2.height = height;
+    }
 
     _initContextGl() {
         this.contextGl = createContextGL(this.canvas_el);
@@ -365,6 +376,7 @@ class CanvasVideoService {
 
 
     render(videoFrame: VideoFrame | HTMLVideoElement) {
+      this.videoFrame = videoFrame as VideoFrame;
         switch (this.useMode) {
             case UseMode.UseCanvas:
                 this.renderCanvas2d(videoFrame);
@@ -417,6 +429,7 @@ class CanvasVideoService {
     renderCanvas2d(videoFrame: VideoFrame | HTMLVideoElement) {
         // let video_width = videoFrame.codedHeight;
         // let video_height = videoFrame.codedHeight;
+        let video = videoFrame as HTMLVideoElement;
 
         let width = 400;
         let height = 200;
@@ -434,6 +447,19 @@ class CanvasVideoService {
         // this.drawTrasform(30);
         this.canvas_context.drawImage(videoFrame, 0, 0, width, height);
 
+
+        let video_height = video.videoHeight;
+        let video_width = video.videoWidth;
+        if (!this.canvas_context2) {
+          this.canvas_context2 = this.canvas_el2.getContext('2d');
+          this.setCanvas2Size({ width: video_width, height: video_height });
+        }
+        this.canvas_context2.clearRect(0, 0, video_width, video_height);
+
+        // this.drawTrasform(30);
+        this.canvas_context2.drawImage(videoFrame, 0, 0, video_width, video_height);
+
+
         // this.drawTrasform(videoFrame, 30, ctx);
 
         // ctx.restore();
@@ -441,6 +467,24 @@ class CanvasVideoService {
         // this.drawTrasform(videoFrame, this.playerService.config.degree);
 
         // ctx.restore();
+        this.renderOriginCanvas(videoFrame);
+    }
+
+    // 录制原始高清视频
+    renderOriginCanvas(videoFrame: VideoFrame | HTMLVideoElement) {
+      let video = videoFrame as HTMLVideoElement;
+      if (this.playerService.canvasToVideoSerivce.recording === true) {
+        let video_height = video.videoHeight;
+        let video_width = video.videoWidth;
+        if (!this.canvas_context2) {
+          this.canvas_context2 = this.canvas_el2.getContext('2d');
+          this.setCanvas2Size({ width: video_width, height: video_height });
+        }
+        this.canvas_context2.clearRect(0, 0, video_width, video_height);
+
+        // this.drawTrasform(30);
+        this.canvas_context2.drawImage(videoFrame, 0, 0, video_width, video_height);
+      }
     }
 
     getCanvas2dEl() {
