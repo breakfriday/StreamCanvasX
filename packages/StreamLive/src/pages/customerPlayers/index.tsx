@@ -26,6 +26,7 @@ function loadScript(url: string): Promise<void> {
   return new Promise((resolve, reject) => {
       // 创建一个新的 script 元素
       const script = document.createElement('script');
+      script.crossOrigin = 'anonymous';
       script.src = url;
 
       // 当脚本加载并执行成功时，解析 Promise
@@ -44,15 +45,15 @@ function loadScript(url: string): Promise<void> {
 }
 
 
-loadScript('/jessibuca.js');
+// loadScript('/jessibuca.js');
 
 
-let url = `${location.origin}/ffmpeg.min.js`;
-loadScript(url).then(() => {
-  let { createFFmpeg } = window.FFmpeg;
-  let core_path = new URL('ffmpeg_core.js', document.location).href;
-  window.ffmpeg = createFFmpeg({ log: true, corePath: core_path });
-});
+// let url = `${location.origin}/ffmpeg.min.js`;
+// loadScript(url).then(() => {
+//   let { createFFmpeg } = window.FFmpeg;
+//   let core_path = new URL('ffmpeg_core.js', document.location).href;
+//   window.ffmpeg = createFFmpeg({ log: true, corePath: core_path });
+// });
 
 //  window.pp = () => {
 //   window.ffmpeg.load(() => {
@@ -91,15 +92,42 @@ const HlsDemo = () => {
           initialValue={'http://localhost:8080/live/livestream.flv'}
           label="url"
           name="url"
+          initialValue={'ws://172.21.58.51/live/0.live.flv'}
         >
           <Input />
         </Form.Item>
+
+        <Form.Item
+          label="media"
+          name="media"
+          initialValue={['hasVideo', 'hasAudio']}
+        >
+          <Checkbox.Group>
+            <Checkbox value="hasAudio" >hasAudio</Checkbox>
+            <Checkbox value="hasVideo" >hasVideo</Checkbox>
+          </Checkbox.Group>
+
+        </Form.Item>
+
         <Form.Item label="type" name="type" initialValue={'1'}>
           <Radio.Group>
             <Radio value="1"> 视频 </Radio>
             <Radio value="2"> 音频 </Radio>
           </Radio.Group>
         </Form.Item>
+
+
+        {
+          (<Form.Item label="decodeType" valuePropName="decodeType" name="decodeType" >
+            <Radio.Group>
+              <Radio value=""> AUTO </Radio>
+              <Radio value="1"> WEBCODECS </Radio>
+              <Radio value="2">MSE</Radio>
+              <Radio value="3">WASM FFMPEG</Radio>
+            </Radio.Group>
+          </Form.Item>)
+          }
+
 
         <Row>
           <Col span={6}>
@@ -214,10 +242,12 @@ const HlsDemo = () => {
 
         {
           data.map((item, inx) => {
-            let { url, type, useOffScreen, audioDrawType } = item;
+            let { url, type, useOffScreen, audioDrawType, media } = item;
             let showAudio = false;
-            let hasAudio = false;
+
+            let hasAudio = media.includes('hasAudio');
             let hasVideo = true;
+
 
             if (type == 2) {
                  showAudio = true;

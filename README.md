@@ -1,11 +1,14 @@
 ## ✨ Quick Start
 
 ```
-pnpm install 
+pnpm install  //安装
+
+pnpm start    //http 启动
+pnpm run starts  //https 启动
 
 pnpm run docs:streamcanvasx"
 
-pnpm start
+
 ```
 
 build

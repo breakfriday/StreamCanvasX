@@ -1,12 +1,22 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../player';
 import { TYPES } from '../../serviceFactories/symbol';
+
+import CodecParser from 'codec-parser';
+
+// import CodecParser from '../decoder/CodecParser/index';
 @injectable()
 class HttpFlvStreamLoader {
     private _requestAbort: boolean;
     private _abortController: AbortController;
+    private _abortController2: AbortController;
+    private _requestAbort2: boolean;
+    private _chunks2: Array<Uint8Array>;
     private playerService: PlayerService;
     public url: string;
+    private downLoadConfig: {loading: boolean; text: string; startTime: number};
+    private streamParser: CodecParser;
+
     maxHeartTimes: number;
     hertTime: number;
     constructor(
@@ -18,7 +28,19 @@ class HttpFlvStreamLoader {
         this.requestAbort = false;
         this.hertTime = 0;
         this.maxHeartTimes = 10;
+
+        this.initAudioPlayer();
         // this.playerService = playerService;
+    }
+    initAudioPlayer() {
+            const mimeType = 'audio/aac';
+                const options = {
+                onCodec: () => {},
+                onCodecUpdate: () => {},
+                enableLogging: true,
+            };
+
+            this.streamParser = new CodecParser(mimeType, options);
     }
     static isSupported() {
         if (window.fetch && window.ReadableStream) {
@@ -91,8 +113,115 @@ class HttpFlvStreamLoader {
         this.abortController.abort();
     }
 
+    downLoadBlob(blob: Blob) {
+        let url = window.URL.createObjectURL(blob);
+        let a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'canvaToVideo.flv';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+
+    async downLoad() {
+        const controller = new AbortController();
+        this._abortController2 = controller;
+        const { signal } = controller;
+        let { url } = this;
+        let tempUrl = new URL(url);
+        let downUrl = `${location.protocol}//${tempUrl.host}${tempUrl.pathname}`;
+        this._requestAbort2 = false;
+        let requestAbort = this._requestAbort2;
+
+
+        const downloadBlob = (blob: Blob) => {
+            let url = window.URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'canvaToVideo.flv';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        };
+
+
+    try {
+        const response: Response = await fetch(downUrl, { signal });
+        // if (requestAbort === true) {
+        //     response.body.cancel();
+        //     return;
+        // }
+        const stream = response.body;
+        const reader = stream?.getReader();
+        const chunks = this._chunks2 = [];
+        if (reader) {
+            while (true) {
+                const { value, done } = await reader.read();
+
+                if (done || requestAbort) {
+                  break;
+                }
+
+                chunks.push(value);
+            }
+        }
+    } catch (e) {
+        if (e.name === 'AbortError') {
+            const chunks = this._chunks2;
+            const blob = new Blob(chunks, { type: 'video/x-flv' });
+            this.downLoadBlob(blob);
+        }
+    }
+    }
+
+    abortDownLoad() {
+        let controller = this._abortController2;
+        let chunks = this._chunks2;
+        if (controller) {
+            controller.abort();
+            // const blob = new Blob(chunks, { type: 'video/x-flv' });
+            // this.downLoadBlob(blob);
+            this._requestAbort2 = true;
+        }
+    }
+
+
+    // async processStream(reader: ReadableStreamDefaultReader): Promise<void> {
+    //     while (true) {
+    //         try {
+    //             const { done, value } = await reader.read();
+
+    //             const chunk = value?.buffer;
+    //             // console.log(chunk);
+    //             if (done) {
+    //                 console.log('Stream complete');
+    //                 return;
+    //             }
+
+    //             this.playerService.flvVDemuxService.dispatch(value);
+
+    //            // this.playerService.fLVDemuxStream.dispatch(value);
+
+    //             // Your process goes here, where you can handle each chunk of FLV data
+    //             // For example:
+    //             // this.processFlvChunk(value);
+    //         } catch (e) {
+    //             console.error('Error reading stream', e);
+    //             return;
+    //         }
+    //     }
+    // }
+
 
     async processStream(reader: ReadableStreamDefaultReader): Promise<void> {
+        if (!window.pp) {
+           await this.playerService.mseDecoderService.start();
+
+            window.pp = true;
+        }
+
         while (true) {
             try {
                 const { done, value } = await reader.read();
@@ -104,13 +233,14 @@ class HttpFlvStreamLoader {
                     return;
                 }
 
-                this.playerService.flvVDemuxService.dispatch(value);
 
-               // this.playerService.fLVDemuxStream.dispatch(value);
+                let { streamParser } = this;
 
-                // Your process goes here, where you can handle each chunk of FLV data
-                // For example:
-                // this.processFlvChunk(value);
+
+                let frames = [...streamParser.parseChunk(value)];
+
+
+                await this.playerService.mseDecoderService.onstream(frames);
             } catch (e) {
                 console.error('Error reading stream', e);
                 return;
