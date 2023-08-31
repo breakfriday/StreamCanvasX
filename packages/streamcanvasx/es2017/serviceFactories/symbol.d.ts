@@ -10,5 +10,8 @@ declare const TYPES: {
     ICanvasVideoService: symbol;
     IDebugLogService: symbol;
     IFLVDemuxStream: symbol;
+    IWasmDecoderService: symbol;
+    ICanvasToVideoSerivce: symbol;
+    IMseDecoderService: symbol;
 };
 export { TYPES };

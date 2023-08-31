@@ -99,7 +99,7 @@ const WCS_ERROR = {
 let WebcodecsDecoder = class WebcodecsDecoder extends Emitter {
     init(playerService) {
         this.player = playerService;
-    // this.initDecoder();
+        this.initDecoder();
     }
     destroy() {
         if (this.decoder) {
@@ -181,6 +181,8 @@ let WebcodecsDecoder = class WebcodecsDecoder extends Emitter {
             codedWidth 和 codedHeight：视频的宽度和高度。
              other fields：可能还包含其他一些信息，例如比特率、帧率等，具体的内容可能会根据编码格式和实际的需求有所不同。
               */ const config = formatVideoDecoderConfigure(payload.slice(5));
+                let h = this.decoder;
+                debugger;
                 this.decoder.configure(config);
                 // hasInit 视频解码器是否已经初始化
                 this.hasInit = true;

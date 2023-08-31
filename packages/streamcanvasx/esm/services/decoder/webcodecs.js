@@ -125,7 +125,7 @@ var WebcodecsDecoder = /*#__PURE__*/ function(Emitter) {
             key: "init",
             value: function init(playerService) {
                 this.player = playerService;
-            // this.initDecoder();
+                this.initDecoder();
             }
         },
         {
@@ -222,6 +222,8 @@ var WebcodecsDecoder = /*#__PURE__*/ function(Emitter) {
             codedWidth 和 codedHeight：视频的宽度和高度。
              other fields：可能还包含其他一些信息，例如比特率、帧率等，具体的内容可能会根据编码格式和实际的需求有所不同。
               */ var config = formatVideoDecoderConfigure(payload.slice(5));
+                        var h = this.decoder;
+                        debugger;
                         this.decoder.configure(config);
                         // hasInit 视频解码器是否已经初始化
                         this.hasInit = true;

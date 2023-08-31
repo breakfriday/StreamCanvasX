@@ -1,7 +1,7 @@
 import { _ as _define_property } from "@swc/helpers/_/_define_property";
 import { _ as _ts_decorate } from "@swc/helpers/_/_ts_decorate";
 import { injectable } from 'inversify';
-import mpegts from 'mpegts.js';
+import mpegts from 'streamcanvasx-core';
 let mainPlayerService = class mainPlayerService {
     get _vedio() {
         return this.video;

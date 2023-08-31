@@ -140,7 +140,15 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   hasVideo?: boolean;
   hasAudio?: boolean;
   contentEl?: HTMLElement;
-
+  showAudio?: boolean;
+  errorUrl?: string;
+  useOffScreen?: boolean;
+  audioDraw?: number;
+  renderPerSecond?: number;
+  updataBufferPerSecond?: number;
+  fftsize?: number;
+  bufferSize?: number;
+  degree?: number;
 
 }
 

@@ -6,7 +6,7 @@ import { _ as _sliced_to_array } from "@swc/helpers/_/_sliced_to_array";
 import { _ as _ts_decorate } from "@swc/helpers/_/_ts_decorate";
 import { _ as _ts_generator } from "@swc/helpers/_/_ts_generator";
 import { injectable } from "inversify";
-import mpegts from "mpegts.js";
+import mpegts from "streamcanvasx-core";
 var mainPlayerService = /*#__PURE__*/ function() {
     "use strict";
     function mainPlayerService(parmams) {

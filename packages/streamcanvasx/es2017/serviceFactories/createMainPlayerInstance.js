@@ -1,6 +1,7 @@
 import { container1 } from '../container';
 import mainPlayerService from '../services/mainCanvasPlayer';
 import { TYPES } from './symbol';
+// const worker = new Worker(new URL('work.js', import.meta.url));
 container1.bind(TYPES.IMainPlayerService).toFactory((context)=>{
     return (parmams)=>{
         let instance = new mainPlayerService(parmams);
