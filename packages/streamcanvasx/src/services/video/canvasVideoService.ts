@@ -61,6 +61,7 @@ class CanvasVideoService {
     transformCount: number;
     transformDegreeSum: number;
     rotateDegreeSum: number;
+    cover: boolean;
     constructor() {
         this.canvas_el = document.createElement('canvas');
 
@@ -426,6 +427,36 @@ class CanvasVideoService {
         });
     }
 
+    setCover(cover: boolean = false) {
+     this.cover = cover;
+    }
+    drawCenteredScaledVideoFrame(videoFrame: VideoFrame | HTMLVideoElement) {
+      let video = videoFrame as HTMLVideoElement;
+      let video_height = video.videoHeight;
+      let video_width = video.videoWidth;
+
+
+      let width = 400;
+      let height = 200;
+
+      if (this.contentEl) {
+        width = this.contentEl.clientWidth;
+        height = this.contentEl.clientHeight;
+      }
+      // Calculate scale ratio for the video
+      let scaleRatio = Math.min(width / video_width, height / video_height);
+
+      // Calculate the target video dimensions after scaling
+      let targetVideoWidth = video_width * scaleRatio;
+      let targetVideoHeight = video_height * scaleRatio;
+
+
+      // Calculate the position to center the video frame on the canvas
+      let offsetX = (width - targetVideoWidth) / 2;
+      let offsetY = (height - targetVideoHeight) / 2;
+
+      this.canvas_context.drawImage(videoFrame, offsetX, offsetY, targetVideoWidth, targetVideoHeight);
+    }
     renderCanvas2d(videoFrame: VideoFrame | HTMLVideoElement) {
         // let video_width = videoFrame.codedHeight;
         // let video_height = videoFrame.codedHeight;
@@ -444,8 +475,12 @@ class CanvasVideoService {
         // ctx.save();
         this.canvas_context.clearRect(0, 0, width, height);
 
+        if (this.cover === true) {
+          this.canvas_context.drawImage(videoFrame, 0, 0, width, height);
+        } else {
+            this.drawCenteredScaledVideoFrame(videoFrame);
+        }
         // this.drawTrasform(30);
-        this.canvas_context.drawImage(videoFrame, 0, 0, width, height);
 
 
         let video_height = video.videoHeight;
