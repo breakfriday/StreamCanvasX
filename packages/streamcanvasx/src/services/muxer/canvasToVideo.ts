@@ -191,6 +191,50 @@ class canvasToVideo {
             bitrate: videoBitrate,
         });
 
+        if (this.player.mpegtsPlayer.audioPlayer) {
+            this.audioEncoder = new AudioEncoder({
+                output: (chunk, meta) => muxer.addAudioChunk(chunk, meta),
+                error: (e) => {
+                   console.error(e);
+                },
+            });
+
+            this.audioEncoder.configure({
+                codec: 'opus',
+                numberOfChannels: 1,
+                sampleRate: 8000,
+                bitrate: audioBitrate,
+            });
+
+            let { audioEncoder, recording } = this;
+
+            this.player.mpegtsPlayer.on('audio_segment', (audioData) => {
+                 if (audioData.length > 0) {
+                    let elapsedTime = document.timeline.currentTime - this.startTime;
+                    // const init = {
+                    //     type: 'key',
+                    //     data: audioData.buffer,
+                    //     timestamp: 23000000,
+                    //   };
+                    // let chunk = new EncodedAudioChunk(init);
+                    let audioData1 = new AudioData({
+                        data: audioData.buffer,
+                        format: 'f32',
+                        numberOfChannels: 1,
+                        timestamp: elapsedTime * 1000,
+                        sampleRate: 8000,
+                        numberOfFrames: 10,
+                    });
+                    audioEncoder.encode(audioData1);
+                    audioData1.close();
+                    audioData1 = null;
+                 }
+
+
+                // audioEncoder.encode(audioData);
+            });
+        }
+
         if (audioTrack) {
             this.audioEncoder = new AudioEncoder({
                 output: (chunk, meta) => muxer.addAudioChunk(chunk, meta),
