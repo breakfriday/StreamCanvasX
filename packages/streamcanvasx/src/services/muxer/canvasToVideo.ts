@@ -218,11 +218,11 @@ class canvasToVideo {
                     //   };
                     // let chunk = new EncodedAudioChunk(init);
                     let audioData1 = new AudioData({
-                        data: audioData.buffer,
+                        data: audioData.buffer, // arraybuffer  pcm
                         format: 'f32',
-                        numberOfChannels: 1,
+                        numberOfChannels: 1, // 通道
                         timestamp: elapsedTime * 1000,
-                        sampleRate: 8000,
+                        sampleRate: 8000, // 音頻采樣率
                         numberOfFrames: 10,
                     });
                     audioEncoder.encode(audioData1);
