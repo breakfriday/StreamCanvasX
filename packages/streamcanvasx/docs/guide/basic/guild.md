@@ -1,7 +1,7 @@
 ---
 title: 新手指南
 sidebar_label: Guild
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 ##  本地文件播放
