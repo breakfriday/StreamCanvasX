@@ -15,6 +15,32 @@ export default defineConfig({
           '@docusaurus/theme-live-codeblock',
 
         ],
+        sidebarItemsGenerator: async () => {
+          return [
+            { type: 'doc', id: 'about' },
+            { type: 'doc', id: 'index' },
+            {
+              type: 'category',
+              label: '指南',
+              collapsed: false,
+              items: [
+                { type: 'doc', id: 'guide/basic/player' },
+                { type: 'doc', id: 'guide/basic/render' },
+                { type: 'doc', id: 'guide/basic/interaction' },
+                { type: 'doc', id: 'guide/basic/guild' },
+              ],
+            },
+            {
+              type: 'category',
+              label: '进阶',
+              collapsed: true,
+              items: [
+                { type: 'doc', id: 'guide/advanced/advanced' },
+              ],
+            },
+            { type: 'doc', id: 'API' },
+          ];
+        },
       },
     ],
   ],
