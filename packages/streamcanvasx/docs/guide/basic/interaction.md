@@ -5,6 +5,7 @@ sidebar_position: 2
 ---
 
 ##  音频可视化
+通过`createAudioProcessingServiceInstance()`中的`updateBufferData()`、`drawWithBufferData()`暂存音频数据并绘制可视化图形。
 ```tsx  
 import { createAudioProcessingServiceInstance, createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 
@@ -83,6 +84,7 @@ export default SimpleDemo;
 
 
 ##  旋转 镜像
+在`createPlayerServiceInstance()`中的`canvasVideoService()`中提供了旋转、镜像的方法（如`drawTrasform()`、`drawVerticalMirror()`、`drawHorizontalMirror()`、`transformReset()`、`drawRotate()`、`rotateReset()`）。
 ```tsx
 import {  createPlayerServiceInstance } from 'streamcanvasx/es2017/serviceFactories/index';
   let play = createPlayerServiceInstance({ url, contentEl: containerRef.current! });

@@ -5,8 +5,10 @@ sidebar_position: 0
 ---
 
 ##  本地文件播放
+通过`set_blob_url()`将本地音视频文件转为blob文件之后，可通过`createMainPlayerInstance()`创建的流式播放器进行播放。
 ```tsx
 import { createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
+  const streamPlayer = createMainPlayerInstance({ root_el: veido_flv_ref?.current!, canvas_el: canvas_ref?.current! });
   streamPlayer.set_blob_url(files_data);
 ```
 ```tsx  preview
@@ -52,73 +54,17 @@ const SimpleDemo = () => {
 export default SimpleDemo;
 ```
 
-##  hls直播流播放
-```tsx
-import Hls from 'hls.js';
-  hls.loadSource(url);
-  hls.attachMedia(vedio_el);
-  hls.on(Hls.Events.MANIFEST_PARSED, () => {
-    vedio_el.play();
-  });
-
-```
-
-```tsx  preview
-import * as React from 'react';
-import { Button } from 'antd';
-import Hls from 'hls.js';
-const {useRef}=React
-
-
-const SimpleDemo = () => {
-  const vedio_hls_ref = useRef<HTMLVideoElement | null>(null);
-
-  const hls_play = () => {
-    if (Hls.isSupported()) {
-      if (vedio_hls_ref?.current) {
-        const vedio_el = vedio_hls_ref.current;
-        const hls = new Hls();
-        const url = '//localhost:8080/live/livestream.m3u8';
-        hls.loadSource(url);
-        hls.attachMedia(vedio_el);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          vedio_el.play();
-        });
-      }
-    }
-  };
-
-  return (
-    <div>
-        <div id="original-player">
-          <video
-            ref={vedio_hls_ref}
-            width="300"
-            height="300"
-            controls
-            preload="none"
-          />
-          <div>
-            <Button
-              onClick={() => {
-                hls_play();
-              }}
-            >hls 拉流
-            </Button>
-          </div>     
-        </div>
-    </div>
-  )
-}
-
-export default SimpleDemo;
-```
-
 ##  flv直播流播放
+`createPlayerServiceInstance()`中提供了`mpegts`、`m2ts`、`flv`文件格式的支持，通过`createFlvPlayer()`进行上述文件的播放。
 ```tsx
 import {  createPlayerServiceInstance } from 'streamcanvasx/es2017/serviceFactories/index';
   let player = createPlayerServiceInstance({});
-  player.createFlvPlayer({ url: '' });
+  player.createFlvPlayer({
+      type: 'flv', // could also be mpegts, m2ts, flv
+      isLive: true,
+      url: url,
+    });
+  
 ```
 
 ```tsx  preview

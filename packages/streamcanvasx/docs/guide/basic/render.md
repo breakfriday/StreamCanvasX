@@ -4,7 +4,8 @@ sidebar_label: 渲染
 sidebar_position: 1
 ---
 
-## 分别使用canvas WebGpu进行渲染 
+## 分别使用canvas WebGpu进行渲染
+`createPlayerServiceInstance()`提供了`canvas`、`WebGpu`两种方式进行音视频的渲染，可以在model属性中进行`canvas`和`WebGpu`的选择。
 ```tsx
 import { createPlayerServiceInstance } from 'streamcanvasx/es2017/serviceFactories/index';
         const { type = 1 } = props;
@@ -100,9 +101,3 @@ const SimpleDemo = () => {
 export default SimpleDemo;
 ```
 
-## 
-
-```
-```
-```
-```
