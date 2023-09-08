@@ -13,6 +13,8 @@ $ npm i streamcanvasx --save
 ```
 
 ##  创建播放器
+通过`createMainPlayerInstance()`快速创建一个简易的流式播放器，可以在`createFlvPlayer()`中设置对不同格式的文件进行设置。
+
 ```js
 import { createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 
@@ -26,6 +28,7 @@ streamPlayer?.createFlvPlayer({
 ```
 
 ##  本地文件播放
+通过`set_blob_url()`将本地音视频文件转为blob文件之后，可通过`createMainPlayerInstance()`创建的流式播放器进行播放。
 ```tsx
 import { createMainPlayerInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 streamPlayer.set_blob_url(files_data)
