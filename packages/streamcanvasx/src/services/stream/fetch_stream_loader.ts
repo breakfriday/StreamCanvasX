@@ -450,21 +450,20 @@ class HttpFlvStreamLoader {
         let buffer16 = new Uint8Array(this.bufferLength); // 预设一个大小为16字节的buffer 用来解密
         let offset = 0;
         let { streamParser } = this;
-        debugger;
+
 
         let remainingBytes = new Uint8Array(0); // Buffer for bytes that overflow the current chunk
         let isFirstChunk = true;
         while (true) {
             try {
                 const { done, value } = await reader.read();
-                debugger;
+
 
                 const chunk = value?.buffer;
                 // console.log(chunk);
                 if (done) {
-                    debugger;
                     console.log('Stream complete');
-                    debugger;
+
                     return;
                 }
 
@@ -485,7 +484,10 @@ class HttpFlvStreamLoader {
                         remainingBytes = concatenated; // If the chunk is smaller than 160 bytes, store and continue
                         continue;
                     }
+                } else {
+                    remainingBytes = concatenated;
                 }
+
                 const maxMultipleOf16 = Math.floor(remainingBytes.length / 16) * 16;
 
 
