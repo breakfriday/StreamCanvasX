@@ -176,9 +176,12 @@ importers:
       regl:
         specifier: ^2.1.0
         version: 2.1.0
-      streamcanvasx-core:
-        specifier: 0.0.6
+      sm4js:
+        specifier: ^0.0.6
         version: 0.0.6
+      streamcanvasx-core:
+        specifier: 0.0.7
+        version: 0.0.7
       webm-muxer:
         specifier: ^3.1.1
         version: 3.1.1
@@ -6267,14 +6270,14 @@ packages:
     resolution: {integrity: sha512-kpqnYK4wcdm5UaWI3fLcELopqLrHgLqNsdpHauzlQktfkHL3npOSwtj1Uz9oKBAzs7lFtVkV8j83voAz2D8fhw==}
     dependencies:
       '@types/history': 4.7.11
-      '@types/react': 18.2.11
+      '@types/react': 18.2.21
       '@types/react-router': 5.1.20
 
   /@types/react-router@5.1.20:
     resolution: {integrity: sha512-jGjmu/ZqS7FjSH6owMcD5qpq19+1RS9DeVRqfl1FeBMxTDQAGwlMWOcs52NDoXaNKyG3d1cYQFMs9rCrb88o9Q==}
     dependencies:
       '@types/history': 4.7.11
-      '@types/react': 18.2.11
+      '@types/react': 18.2.21
 
   /@types/react@18.2.11:
     resolution: {integrity: sha512-+hsJr9hmwyDecSMQAmX7drgbDpyE+EgSF6t7+5QEBAn1tQK7kl1vWZ4iRf6SjQ8lk7dyEULxUmZOIpN0W5baZA==}
@@ -16011,6 +16014,12 @@ packages:
       astral-regex: 2.0.0
       is-fullwidth-code-point: 3.0.0
 
+  /sm4js@0.0.6:
+    resolution: {integrity: sha512-lKJWSaSksB4MbVpYXfb0cFRgTAjEAAZSxoMZ498BuGtwVQ5aB/23wJVxFLRIZQx9cyoVihK98FiOYH7VxIZyMg==}
+    dependencies:
+      base64-js: 1.5.1
+    dev: false
+
   /smart-buffer@4.2.0:
     resolution: {integrity: sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==}
     engines: {node: '>= 6.0.0', npm: '>= 3.0.0'}
@@ -16208,8 +16217,8 @@ packages:
       internal-slot: 1.0.5
     dev: true
 
-  /streamcanvasx-core@0.0.6:
-    resolution: {integrity: sha512-YKy5BnPtMthVkzus0dLf9I4jRDBS5PIUYXP0RK6ZnnrsK8K43xCTwPCBbmuPc9HacOCgEB4fIsea0hdPfrOhug==}
+  /streamcanvasx-core@0.0.7:
+    resolution: {integrity: sha512-ocAfZbP95igTInYTqD+iFfDnjq3E5MuNEDpwpePctJIqKCf1X+mt3bVBVUIaFtf19IAbklHaqV1qNRqdZqiCbw==}
     dependencies:
       es6-promise: 4.2.8
       webworkify-webpack: 2.1.5

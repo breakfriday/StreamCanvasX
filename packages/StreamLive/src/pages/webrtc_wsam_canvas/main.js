@@ -100,6 +100,7 @@ const main_player = async () => {
   function setFilter(evt) {
     const filter = wam[evt.target.getAttribute('filter')];
     gFilter = filter || wam.grayScale;
+    debugger
   }
 
   const frameNumDom = document.getElementById('frameNum');
