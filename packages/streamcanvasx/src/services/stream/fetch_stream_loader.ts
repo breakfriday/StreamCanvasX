@@ -473,12 +473,16 @@ class HttpFlvStreamLoader {
 
                 if (isFirstChunk) {
                     if (concatenated.length >= 160) {
-                        let firstChunk = concatenated.subarray(0, 160);
+                      //  let firstChunk = concatenated.subarray(0, 160);
+
+                        let firstChunk = new Uint8Array(concatenated.buffer.slice(0, 160));
 
 
-                        remainingBytes = concatenated.subarray(160);
+                        // remainingBytes = concatenated.subarray(160);
+
+                        remainingBytes = new Uint8Array(concatenated.buffer.slice(160));
                         debugger;
-                        $this.sm4Instance.init(firstChunk, 'ideteck_chenxuejian_test');
+                        $this.sm4Instance.init(firstChunk, 'ideteck_chenxuejian_test1');
                         isFirstChunk = false;
                     } else {
                         remainingBytes = concatenated; // If the chunk is smaller than 160 bytes, store and continue
@@ -492,10 +496,13 @@ class HttpFlvStreamLoader {
 
 
                 if (maxMultipleOf16 > 0) {
-                    let chunk = remainingBytes.subarray(0, maxMultipleOf16);
+                    // let chunk = remainingBytes.subarray(0, maxMultipleOf16);
+                    let chunkToDecode = remainingBytes.buffer.slice(0, maxMultipleOf16);
                     debugger;
-                    this.sm4Instance.decode(chunk);
-                    remainingBytes = remainingBytes.subarray(maxMultipleOf16);
+                    this.sm4Instance.decode(chunkToDecode);
+                    // remainingBytes = remainingBytes.subarray(maxMultipleOf16);
+
+                    remainingBytes = new Uint8Array(remainingBytes.buffer.slice(maxMultipleOf16));
 
                     debugger;
                 }
