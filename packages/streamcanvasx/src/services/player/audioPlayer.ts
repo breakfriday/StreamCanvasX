@@ -2,7 +2,7 @@
 class AudioPlayer {
     private option: any;
     private samples: Float32Array;
-    
+
     constructor() {
 
     }
