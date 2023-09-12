@@ -61,8 +61,59 @@ class Decrypt {
     }
 
 
-    streamOn() {
+   async processStream(reader: ReadableStreamDefaultReader) {
+        let $this = this;
+        let remainingBytes = new Uint8Array(0); // Buffer for bytes that overflow the current chunk
+        let isFirstChunk = true;
+        while (true) {
+            try {
+                const { done, value } = await reader.read();
 
+                const chunk = value?.buffer;
+                // console.log(chunk);
+                if (done) {
+                    console.log('Stream complete');
+
+                    return;
+                }
+                let concatenated = new Uint8Array(remainingBytes.length + value.length);
+                concatenated.set(remainingBytes);
+                concatenated.set(value, remainingBytes.length);
+
+                if (isFirstChunk) {
+                    if (concatenated.length >= 160) {
+                      //  let firstChunk = concatenated.subarray(0, 160);
+
+                        let firstChunk = new Uint8Array(concatenated.buffer.slice(0, 160));
+
+
+                        // remainingBytes = concatenated.subarray(160);
+
+                        remainingBytes = new Uint8Array(concatenated.buffer.slice(160));
+
+                        $this.sm4Instance.init(firstChunk, 'ideteck_chenxuejian_test');
+                        isFirstChunk = false;
+                    } else {
+                        remainingBytes = concatenated; // If the chunk is smaller than 160 bytes, store and continue
+                        continue;
+                    }
+                } else {
+                    remainingBytes = concatenated;
+                }
+
+                const maxMultipleOf16 = Math.floor(remainingBytes.length / 16) * 16;
+
+                if (maxMultipleOf16 > 0) {
+                    // let chunk = remainingBytes.subarray(0, maxMultipleOf16);
+                    let chunkToDecode = remainingBytes.buffer.slice(0, maxMultipleOf16);
+                    this.sm4Instance.decode(chunkToDecode);
+                    // remainingBytes = remainingBytes.subarray(maxMultipleOf16);
+                    remainingBytes = new Uint8Array(remainingBytes.buffer.slice(maxMultipleOf16));
+                }
+            } catch (e) {
+
+            }
+        }
     }
 }
 
