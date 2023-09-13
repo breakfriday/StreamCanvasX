@@ -149,6 +149,17 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   fftsize?: number;
   bufferSize?: number;
   degree?: number;
+  crypto?: {
+    enable: boolean;
+    key: string;
+    useWasm?: boolean;
+    wasmModulePath: string;
+    wamFunctions?: {
+      'encrypt': string;
+      'decrypt': string;
+    };
+  } | null;
+  streamType?: string;// 其他可能的值: "PCM", "MP4", "FLV"
 
 }
 

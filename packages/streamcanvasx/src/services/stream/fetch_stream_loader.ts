@@ -58,74 +58,74 @@ class HttpFlvStreamLoader {
         this.bufferLength = 160;
 
 
-        this.beforInit();
+        // this.beforInit();
 
 
         // this.playerService = playerService;
     }
-    async beforInit() {
-        await addScript2('gmssl_zb/gmssl_zb.js');
+    // async beforInit() {
+    //     await addScript2('gmssl_zb/gmssl_zb.js');
 
-        Module.onRuntimeInitialized = () => {
-            this._runtimeInitializedNotify();
-        };
-
-
-        await this._runtimeInitialized();
+    //     Module.onRuntimeInitialized = () => {
+    //         this._runtimeInitializedNotify();
+    //     };
 
 
-        this.createSm4();
+    //     await this._runtimeInitialized();
 
 
-        this.initAudioPlayer();
+    //     this.createSm4();
 
 
-        this._initAlldNotify();
-    }
-
-    createSm4() {
-        let $this = this;
-        let gmssl = {
-
-            ondata: function (chunk, size) {
-                const asyncProcess = async (chunk, size) => {
-                    let vdata = new Uint8Array(Module.HEAPU8.buffer, chunk, size);
+    //     this.initAudioPlayer();
 
 
-                    let frames = [...$this.streamParser.parseChunk(vdata)];
+    //     this._initAlldNotify();
+    // }
+
+    // createSm4() {
+    //     let $this = this;
+    //     let gmssl = {
+
+    //         ondata: function (chunk, size) {
+    //             const asyncProcess = async (chunk, size) => {
+    //                 let vdata = new Uint8Array(Module.HEAPU8.buffer, chunk, size);
 
 
-                    try {
-                          $this.playerService.mseDecoderService.onstream(frames);
-                    } catch (e) {
-                        debugger;
-                    }
-                };
-
-                asyncProcess(chunk, size);
+    //                 let frames = [...$this.streamParser.parseChunk(vdata)];
 
 
-                // const pdata = Uint8Array.from(Module.HEAPU8.subarray(chunk, chunk + size));
-            },
+    //                 try {
+    //                       $this.playerService.mseDecoderService.onstream(frames);
+    //                 } catch (e) {
+    //                     debugger;
+    //                 }
+    //             };
 
-            onend: function () {
-                console.log('------------222222222222222-------------------------');
-            },
-        };
+    //             asyncProcess(chunk, size);
 
 
-        this.sm4Instance = new Module.GmsslZb(gmssl);
-    }
-    initAudioPlayer() {
-            const mimeType = 'audio/aac';
-                const options = {
-                onCodec: () => {},
-                onCodecUpdate: () => {},
-                enableLogging: true,
-            };
+    //             // const pdata = Uint8Array.from(Module.HEAPU8.subarray(chunk, chunk + size));
+    //         },
 
-            this.streamParser = new CodecParser(mimeType, options);
-    }
+    //         onend: function () {
+    //             console.log('------------222222222222222-------------------------');
+    //         },
+    //     };
+
+
+    //     this.sm4Instance = new Module.GmsslZb(gmssl);
+    // }
+    // initAudioPlayer() {
+    //         const mimeType = 'audio/aac';
+    //             const options = {
+    //             onCodec: () => {},
+    //             onCodecUpdate: () => {},
+    //             enableLogging: true,
+    //         };
+
+    //         this.streamParser = new CodecParser(mimeType, options);
+    // }
     static isSupported() {
         if (window.fetch && window.ReadableStream) {
              return true;
@@ -292,13 +292,14 @@ class HttpFlvStreamLoader {
         return data;
     }
     async fetchStream(): Promise<void> {
-        try {
-         await this._initAll();
-        } catch (e) {
-            console.error('error ');
-        }
-
         debugger;
+        // try {
+        //  await this._initAll();
+        // } catch (e) {
+        //     console.error('error ');
+        // }
+
+
         let { url } = this.playerService.config;
         let headers = new Headers();
         this._abortController = new AbortController();
@@ -317,7 +318,7 @@ class HttpFlvStreamLoader {
             const response: Response = await fetch(url, params);
             if (this.requestAbort === true) {
                 response.body.cancel();
-                debugger;
+
                 return;
             }
 
@@ -325,7 +326,6 @@ class HttpFlvStreamLoader {
             const stream = response.body;
             const reader = stream?.getReader();
             if (reader) {
-                debugger;
                 await this.processStream(reader);
             }
         } catch (e) {
@@ -440,6 +440,9 @@ class HttpFlvStreamLoader {
 
 
     async processStream(reader: ReadableStreamDefaultReader): Promise<void> {
+        this.playerService.preProcessing.processStream(reader);
+
+        return false;
         if (!window.pp) {
            await this.playerService.mseDecoderService.start();
 
@@ -482,7 +485,7 @@ class HttpFlvStreamLoader {
 
                         remainingBytes = new Uint8Array(concatenated.buffer.slice(160));
                         debugger;
-                        $this.sm4Instance.init(firstChunk, 'ideteck_chenxuejian_test1');
+                        $this.sm4Instance.init(firstChunk, 'ideteck_chenxuejian_test');
                         isFirstChunk = false;
                     } else {
                         remainingBytes = concatenated; // If the chunk is smaller than 160 bytes, store and continue

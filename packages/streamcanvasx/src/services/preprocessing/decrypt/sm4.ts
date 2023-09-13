@@ -3,6 +3,7 @@ import { addScript2 } from '../../../utils';
 import PlayerService from '../../player';
 import { IplayerConfig } from '../../../types/services';
 
+
 @injectable()
 class Decrypt {
     private _runtimeInitializedNotify: () => void;
@@ -27,21 +28,26 @@ class Decrypt {
     }
 
     async beforInit() {
-        await addScript2('gmssl_zb/gmssl_zb.js');
+        if (this.config.useWasm === true) {
+            await addScript2('gmssl_zb/gmssl_zb.js');
 
-        Module.onRuntimeInitialized = () => {
-            this._runtimeInitializedNotify();
-        };
+            Module.onRuntimeInitialized = () => {
+                this._runtimeInitializedNotify();
+            };
 
-        await this._runtimeInitialized();
+            await this._runtimeInitialized();
+        }
+
+
+        this.createSm4();
     }
 
     createSm4() {
         let $this = this;
         let gmssl = {
 
-            ondata: function (chunk, size) {
-                const asyncProcess = async (chunk, size) => {
+            ondata: function (chunk: number, size: number) {
+                const asyncProcess = async (chunk: number, size: number) => {
                     let vdata = new Uint8Array(Module.HEAPU8.buffer, chunk, size);
                 };
 
@@ -111,7 +117,8 @@ class Decrypt {
                     remainingBytes = new Uint8Array(remainingBytes.buffer.slice(maxMultipleOf16));
                 }
             } catch (e) {
-
+                console.error('Error reading stream', e);
+                return;
             }
         }
     }
