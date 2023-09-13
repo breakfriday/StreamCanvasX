@@ -38,8 +38,9 @@ import { Divider, Space, Button, Form, Input, Radio } from 'antd';
 
 
 const FlvDemux = () => {
- const containerRef = useRef(null);
+ const containerRef = useRef<{filesData: File}>(null);
  const playerRef = useRef(null);
+
 
  const [data, setData] = useState<any>([]);
     return (
@@ -52,11 +53,14 @@ const FlvDemux = () => {
             let { url, key, enable_crypto,
             } = value;
 
+            let fileData = containerRef.current?.filesData;
 
             let temp = Object.assign([], data);
 
+
+            temp.push({ url, key, enable_crypto, fileData });
+
             debugger;
-            temp.push({ url, key, enable_crypto });
 
 
             setData(temp);
@@ -87,6 +91,21 @@ const FlvDemux = () => {
             </Radio.Group>
           </Form.Item>
 
+          <Form.Item label="file" name="file">
+            <input
+              type="file"
+              id="file-input"
+              accept="*"
+              onChange={(event) => {
+                 // const files_data: File = event.target?.files?.[0]; // 返回file对象
+
+                  const filesData: File = event.target!.files![0];
+                  containerRef.current = {
+                    filesData: filesData,
+                  };
+        }}
+            />
+          </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button
@@ -109,7 +128,12 @@ const FlvDemux = () => {
             return (
               <div>
 
-                <LiveVideo url={item.url} key_v={item.key} enable_crypto={item.enable_crypto} />
+                <LiveVideo
+                  url={item.url}
+                  key_v={item.key}
+                  enable_crypto={item.enable_crypto}
+                  fileData={item.fileData}
+                />
 
 
               </div>
