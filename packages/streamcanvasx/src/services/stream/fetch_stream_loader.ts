@@ -139,36 +139,58 @@ class HttpFlvStreamLoader {
         // }
 
 
-        let { url } = this.playerService.config;
-        let headers = new Headers();
-        this._abortController = new AbortController();
-        let params: RequestInit = {
-            method: 'GET',
-            mode: 'cors', // cors is enabled by default
-            credentials: 'same-origin', // withCredentials is disabled by default
-            headers: headers,
-            cache: 'default',
-            referrerPolicy: 'no-referrer-when-downgrade',
-            signal: this.abortController.signal,
+        let { url, fileData } = this.playerService.config;
+        let $this = this;
 
-        };
 
-        try {
-            const response: Response = await fetch(url, params);
-            if (this.requestAbort === true) {
-                response.body.cancel();
+        if (fileData) {
+            const reader = new FileReader();
+            reader.readAsArrayBuffer(fileData);
 
-                return;
+            reader.onload = function (e) {
+                const arrayBuffer: ArrayBuffer = this.result;
+                const stream = new ReadableStream({
+                    start(controller) {
+                        controller.enqueue(new Uint8Array(arrayBuffer));
+                        controller.close();
+                    },
+                });
+                const reader = stream.getReader();
+                if (reader) {
+                     $this.processStream(reader);
+                }
+            };
+        } else {
+            let headers = new Headers();
+            this._abortController = new AbortController();
+            let params: RequestInit = {
+                method: 'GET',
+                mode: 'cors', // cors is enabled by default
+                credentials: 'same-origin', // withCredentials is disabled by default
+                headers: headers,
+                cache: 'default',
+                referrerPolicy: 'no-referrer-when-downgrade',
+                signal: this.abortController.signal,
+
+            };
+
+            try {
+                const response: Response = await fetch(url, params);
+                if (this.requestAbort === true) {
+                    response.body.cancel();
+
+                    return;
+                }
+
+                // fetch API 的 Response 对象的 body 属性是一个 ReadableStream 流。
+                const stream = response.body;
+                const reader = stream?.getReader();
+                if (reader) {
+                    await this.processStream(reader);
+                }
+            } catch (e) {
+
             }
-
-            // fetch API 的 Response 对象的 body 属性是一个 ReadableStream 流。
-            const stream = response.body;
-            const reader = stream?.getReader();
-            if (reader) {
-                await this.processStream(reader);
-            }
-        } catch (e) {
-
         }
     }
 
