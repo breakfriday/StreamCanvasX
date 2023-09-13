@@ -2,23 +2,30 @@ import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import { addScript2 } from '../../../utils';
 import PlayerService from '../../player';
 import { IplayerConfig } from '../../../types/services';
-
+import PreProcessing from '..';
 
 @injectable()
 class Decrypt {
+    private _runtimeInitializationPromise: Promise<void> | null = null;
     private _runtimeInitializedNotify: () => void;
     private _runtimeInitialized(): Promise<void> {
-        return new Promise((resolve) => {
-            this._runtimeInitializedNotify = resolve;
-        });
+        if (!this._runtimeInitializationPromise) {
+            this._runtimeInitializationPromise = new Promise((resolve) => {
+                this._runtimeInitializedNotify = resolve;
+            });
+        }
+        return this._runtimeInitializationPromise;
     }
     private sm4Instance: any;
     player: PlayerService;
     config: IplayerConfig['crypto'];
+    preProcessing: PreProcessing;
 
-    constructor(config: IplayerConfig['crypto']) {
+
+    constructor(config: IplayerConfig['crypto'], preProcessingService) {
         this.config = config;
         this.init();
+        this.preProcessing = preProcessingService;
     }
 
 
@@ -49,6 +56,11 @@ class Decrypt {
             ondata: function (chunk: number, size: number) {
                 const asyncProcess = async (chunk: number, size: number) => {
                     let vdata = new Uint8Array(Module.HEAPU8.buffer, chunk, size);
+
+
+                    let frames = [...$this.preProcessing.streamParser.parseChunk(vdata)];
+
+                    $this.preProcessing.player.mseDecoderService.onstream(frames);
                 };
 
                 asyncProcess(chunk, size);
@@ -71,6 +83,9 @@ class Decrypt {
         let $this = this;
         let remainingBytes = new Uint8Array(0); // Buffer for bytes that overflow the current chunk
         let isFirstChunk = true;
+
+        await this._runtimeInitialized();
+
         while (true) {
             try {
                 const { done, value } = await reader.read();

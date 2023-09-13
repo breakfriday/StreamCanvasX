@@ -54,6 +54,8 @@ const FlvDemux = () => {
 
 
             let temp = Object.assign([], data);
+
+            debugger;
             temp.push({ url, key, enable_crypto });
 
 
@@ -107,7 +109,7 @@ const FlvDemux = () => {
             return (
               <div>
 
-                <LiveVideo url={item.url} />
+                <LiveVideo url={item.url} key_v={item.key} enable_crypto={item.enable_crypto} />
 
 
               </div>

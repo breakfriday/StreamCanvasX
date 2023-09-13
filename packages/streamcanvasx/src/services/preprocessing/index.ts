@@ -10,7 +10,7 @@ import CodecParser from 'codec-parser';
 class PreProcessing {
     player: PlayerService;
     decrypt: Decrypt;
-    private streamParser: CodecParser;
+    streamParser: CodecParser;
 
     constructor() {
 
@@ -31,7 +31,7 @@ class PreProcessing {
 
 
         if (this.player?.config?.crypto?.enable === true) {
-            this.decrypt = new Decrypt(this.player.config.crypto);
+            this.decrypt = new Decrypt(this.player.config.crypto, this);
         }
         if (this.player.config.streamType = 'ACC') {
             this.initAccStreamParser();
