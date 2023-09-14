@@ -10,7 +10,7 @@ export function addScript(scriptName: string) {
     script.type = 'module';
 
 
-    debugger;
+    // debugger;
     // 设置script的src属性
     script.src = `${baseURL}${scriptName}`;
 

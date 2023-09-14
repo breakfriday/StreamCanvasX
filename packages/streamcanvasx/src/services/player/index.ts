@@ -160,7 +160,9 @@ class PlayerService extends Emitter {
         this.fLVDemuxStream.init(this);
         this.canvasVideoService.init(this, { model: model, contentEl, useOffScreen });
         this.canvasToVideoSerivce.init(this);
-        this.mseDecoderService.init(this);
+        if (config.streamType) {
+            this.mseDecoderService.init(this);
+        }
         // this.wasmDecoderService.init();
 
         this.preProcessing.init(this);
@@ -196,6 +198,8 @@ class PlayerService extends Emitter {
 
         if (hasAudio === true) {
             this.audioProcessingService.init(this, { media_el: videoEl });
+
+            // 此處默認靜音
             this.audioProcessingService.mute(true);
         }
 

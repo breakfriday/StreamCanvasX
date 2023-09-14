@@ -43,7 +43,6 @@ class Decrypt {
             } else {
                 await addScript2('gmssl_zb/gmssl_zb.js');
                 Module.onRuntimeInitialized = () => {
-                    debugger;
                     window.gmssl_zb_install = true;
                     this._runtimeInitializedNotify();
                 };
@@ -91,7 +90,7 @@ class Decrypt {
         let remainingBytes = new Uint8Array(0); // Buffer for bytes that overflow the current chunk
         let isFirstChunk = true;
 
-        debugger;
+        // debugger;
         await this._runtimeInitialized();
 
         while (true) {
