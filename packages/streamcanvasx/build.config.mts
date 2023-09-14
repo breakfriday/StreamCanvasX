@@ -6,7 +6,7 @@ export default defineConfig({
     [
       '@ice/pkg-plugin-docusaurus', {
         title: 'streamcanvasx',
-        baseUrl: 'StreamCanvasX',
+        baseUrl: '/',
         navBarTitle: 'streamcanvasx',
         // remarkPlugins: [
         //   "require('@ice/remark-react-docgen-docusaurus')",
@@ -15,6 +15,31 @@ export default defineConfig({
           '@docusaurus/theme-live-codeblock',
 
         ],
+        sidebarItemsGenerator: async () => {
+          return [
+            { type: 'doc', id: 'about' },
+            { type: 'doc', id: 'index' },
+            {
+              type: 'category',
+              label: '指南',
+              collapsed: false,
+              items: [
+                { type: 'doc', id: 'guide/basic/player' },
+                { type: 'doc', id: 'guide/basic/render' },
+                { type: 'doc', id: 'guide/basic/interaction' },
+              ],
+            },
+            {
+              type: 'category',
+              label: '进阶',
+              collapsed: true,
+              items: [
+                { type: 'doc', id: 'guide/advanced/advanced' },
+              ],
+            },
+            { type: 'doc', id: 'API' },
+          ];
+        },
       },
     ],
   ],
