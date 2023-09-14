@@ -13,6 +13,7 @@ const TYPES = {
     IWasmDecoderService: Symbol.for('IWasmDecoderService'),
     ICanvasToVideoSerivce: Symbol.for('ICanvasToVideoSerivce'),
     IMseDecoderService: Symbol.for('MseDecoderService'),
+    IPreProcessing: Symbol.for('PreProcessing'),
 
   };
 

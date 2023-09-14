@@ -1,5 +1,6 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import CodecParser from 'codec-parser';
+import PlayerService from '../player';
 
 const MEDIA_SOURCE_STATE = {
   ended: 'ended',
@@ -77,6 +78,7 @@ class MseDecoder {
       video: SourceBuffer;
       audio: SourceBuffer;
     };
+    private playerService: PlayerService;
 
 
     constructor() {
@@ -131,9 +133,10 @@ class MseDecoder {
     get isStateOpen() {
         return this.state === MEDIA_SOURCE_STATE.open;
     }
-   async init() {
+   async init(playerService: PlayerService) {
         this._sourceBufferQueue = [];
         this.inputMimeType = 'audio/aac';
+        this.playerService = playerService;
         this.initStreamParser();
         this.createAudioEl();
 
@@ -173,8 +176,11 @@ class MseDecoder {
           this.sourceBuffer.mode = 'sequence';
 
           this.sourceBuffer.addEventListener('updateend', () => {
-            debugger;
+          //  debugger;
+
+          this.appendNextBuffer();
           });
+
 
           this._sourceBufferRemoved = 0;
           // this.mediaSource.sourceBuffers[0].
@@ -183,56 +189,44 @@ class MseDecoder {
         });
     }
 
-    createAudioEl() {
-      this.$videoElement = document.getElementById('aad');
+    // 检查_sourceBufferQueue 从中找一条 插入
+    appendNextBuffer() {
+      if (!this.sourceBuffer.updating && this._sourceBufferQueue.length) {
+        let data = this._sourceBufferQueue.shift();
+        this.sourceBuffer.appendBuffer(data);
+      }
     }
-    async appendBuffer(buffer: Uint8Array) {
+
+    createAudioEl() {
+     // this.$videoElement = document.getElementById('aad');
+
+     let { contentEl } = this.playerService.config;
+
+      this.$videoElement = document.createElement('audio');
+      this.$videoElement.controls = true;
+      // debugger;
+      contentEl.append(this.$videoElement);
+    }
+   appendBuffer(buffer: Uint8Array) {
       let { inputMimeType } = this;
 
       if (this.sourceBuffer === null) {
         this.sourceBuffer = this.mediaSource.addSourceBuffer(inputMimeType);
-        debugger;
+        // debugger;
        }
 
+       this._sourceBufferQueue.push(buffer);
 
-      if (this.mediaSource.sourceBuffers.length) {
-        this._sourceBufferQueue.push(buffer);
-      }
-      try {
-        while (this._sourceBufferQueue.length) {
-          let $this = this;
+      // if (this.mediaSource.sourceBuffers.length) {
+      //   // this._sourceBufferQueue.push(buffer);
+      // } else {
+      // }
 
-          let data = this._sourceBufferQueue.shift();
+      // if (this.mediaSource.sourceBuffers.length > 1) {
+      //    debugger;
+      // }
 
-
-          // if (!window.pp) {
-          //   pp = data;
-          // }
-          // if (window.pp) {
-          //   data = pp;
-          // }
-
-          if (this.mediaSource.sourceBuffers.length > 1) {
-            debugger;
-          }
-
-          debugger;
-          this.sourceBuffer.appendBuffer(data);
-          debugger;
-
-          console.info('-----');
-
-          console.info(data);
-          console.log('-----------');
-          await this.waitForSourceBuffer();
-          debugger;
-        }
-      } catch (e) {
-        debugger;
-        console.error(e);
-      }
-
-      await this.cleanSourceBuffer();
+      this.appendNextBuffer();
     }
 
     async delay() {
@@ -252,6 +246,7 @@ class MseDecoder {
 
        // eslint-disable-next-line no-negated-condition
       if (!sourceBuffer.updating) {
+        // debugger;
         resolve({});
       } else {
         sourceBuffer.addEventListener('updateend', () => {
@@ -262,7 +257,7 @@ class MseDecoder {
       }
     });
     }
-    async addFrames(codecFrames: IAACfames['frames']) {
+     addFrames(codecFrames: IAACfames['frames']) {
        // codecFrames = codecFrames.splice(100, 200);
 
       // 将一个 Uint8Array 数组中的所有缓冲区（buffers）连接成一个单一的 Uint8Array
@@ -292,8 +287,8 @@ class MseDecoder {
         this._appendSourceBuffer(buffer);
     }
 
-    async _appendSourceBuffer(buffer: Uint8Array) {
-        this.appendBuffer(buffer);
+     _appendSourceBuffer(buffer: Uint8Array) {
+     this.appendBuffer(buffer);
     }
 
    async attachMediaSource() {
@@ -301,11 +296,14 @@ class MseDecoder {
         let mediaUrl = URL.createObjectURL(this.mediaSource);
         this.$videoElement.src = mediaUrl;
         await this._mediaSourceOpen;
+
+        // debugger;
     }
 
    async start() {
       if (!this.mediaSource) {
-        this.init();
+        // debugger;
+        // this.init();
       }
 
       this.createMediaSource();
@@ -351,8 +349,8 @@ class MseDecoder {
     }
 
 
-    async onstream(frames: IAACfames['frames']) {
-      await this.addFrames(frames); // wait for the source buffer
+    onstream(frames: IAACfames['frames']) {
+       this.addFrames(frames); // wait for the source buffer
     }
 
     inputStream() {

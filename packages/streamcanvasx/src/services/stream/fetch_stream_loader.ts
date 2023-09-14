@@ -3,6 +3,10 @@ import PlayerService from '../player';
 import { TYPES } from '../../serviceFactories/symbol';
 
 import CodecParser from 'codec-parser';
+import Sm4js from 'sm4js';
+
+import { addScript, addScript2 } from '../../utils';
+
 
 // import CodecParser from '../decoder/CodecParser/index';
 @injectable()
@@ -17,6 +21,12 @@ class HttpFlvStreamLoader {
     private downLoadConfig: {loading: boolean; text: string; startTime: number};
     private streamParser: CodecParser;
 
+
+    private sm4Instance: any;
+
+
+    private bufferLength: number; // 初始缓冲区长度
+
     maxHeartTimes: number;
     hertTime: number;
     constructor(
@@ -29,19 +39,16 @@ class HttpFlvStreamLoader {
         this.hertTime = 0;
         this.maxHeartTimes = 10;
 
-        this.initAudioPlayer();
+        this.bufferLength = 160;
+
+
+        // this.beforInit();
+
+
         // this.playerService = playerService;
     }
-    initAudioPlayer() {
-            const mimeType = 'audio/aac';
-                const options = {
-                onCodec: () => {},
-                onCodecUpdate: () => {},
-                enableLogging: true,
-            };
 
-            this.streamParser = new CodecParser(mimeType, options);
-    }
+
     static isSupported() {
         if (window.fetch && window.ReadableStream) {
              return true;
@@ -76,36 +83,114 @@ class HttpFlvStreamLoader {
     destroy() {
         this.abort();
     }
+
+   bufferToBase64(buffer: ArrayBuffer) {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+   }
+
+   base64tobuffer(base64: any) {
+    const binary_string = window.atob(base64);
+    const len = binary_string.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+        bytes[i] = binary_string.charCodeAt(i);
+    }
+    return bytes.buffer;
+   }
+
+    concatUint8Arrays(arrays: Uint8Array[]): Uint8Array {
+        let totalLength = 0;
+        for (const arr of arrays) {
+            totalLength += arr.length;
+        }
+
+        const result = new Uint8Array(totalLength);
+        let offset = 0;
+        for (const arr of arrays) {
+            result.set(arr, offset);
+            offset += arr.length;
+        }
+
+        return result;
+    }
+
+
+    bufferToString(buffer: ArrayBuffer) {
+        let decoder = new TextDecoder('utf-8');
+        return decoder.decode(buffer);
+    }
+    stringToUint8arry(str: string) {
+        const encoder = new TextEncoder(); // TextEncoder 的默认字符集是 'utf-8'
+        return encoder.encode(str);
+    }
+
+
     async fetchStream(): Promise<void> {
-        let { url } = this.playerService.config;
-        let headers = new Headers();
-        this._abortController = new AbortController();
-        let params: RequestInit = {
-            method: 'GET',
-            mode: 'cors', // cors is enabled by default
-            credentials: 'same-origin', // withCredentials is disabled by default
-            headers: headers,
-            cache: 'default',
-            referrerPolicy: 'no-referrer-when-downgrade',
-            signal: this.abortController.signal,
+        // try {
+        //  await this._initAll();
+        // } catch (e) {
+        //     console.error('error ');
+        // }
 
-        };
 
-        try {
-            const response: Response = await fetch(url, params);
-            if (this.requestAbort === true) {
-                response.body.cancel();
-                return;
+        let { url, fileData } = this.playerService.config;
+        let $this = this;
+
+
+        if (fileData) {
+            const reader = new FileReader();
+            reader.readAsArrayBuffer(fileData);
+
+            reader.onload = function (e) {
+                const arrayBuffer: ArrayBuffer = this.result;
+                const stream = new ReadableStream({
+                    start(controller) {
+                        controller.enqueue(new Uint8Array(arrayBuffer));
+                        controller.close();
+                    },
+                });
+                const reader = stream.getReader();
+                if (reader) {
+                     $this.processStream(reader);
+                }
+            };
+        } else {
+            let headers = new Headers();
+            this._abortController = new AbortController();
+            let params: RequestInit = {
+                method: 'GET',
+                mode: 'cors', // cors is enabled by default
+                credentials: 'same-origin', // withCredentials is disabled by default
+                headers: headers,
+                cache: 'default',
+                referrerPolicy: 'no-referrer-when-downgrade',
+                signal: this.abortController.signal,
+
+            };
+
+            try {
+                const response: Response = await fetch(url, params);
+                if (this.requestAbort === true) {
+                    response.body.cancel();
+
+                    return;
+                }
+
+                // fetch API 的 Response 对象的 body 属性是一个 ReadableStream 流。
+                const stream = response.body;
+                const reader = stream?.getReader();
+                if (reader) {
+                    await this.processStream(reader);
+                }
+            } catch (e) {
+
             }
-
-            // fetch API 的 Response 对象的 body 属性是一个 ReadableStream 流。
-            const stream = response.body;
-            const reader = stream?.getReader();
-            if (reader) {
-                await this.processStream(reader);
-            }
-        } catch (e) {
-
         }
     }
 
@@ -216,36 +301,7 @@ class HttpFlvStreamLoader {
 
 
     async processStream(reader: ReadableStreamDefaultReader): Promise<void> {
-        if (!window.pp) {
-           await this.playerService.mseDecoderService.start();
-
-            window.pp = true;
-        }
-
-        while (true) {
-            try {
-                const { done, value } = await reader.read();
-
-                const chunk = value?.buffer;
-                // console.log(chunk);
-                if (done) {
-                    console.log('Stream complete');
-                    return;
-                }
-
-
-                let { streamParser } = this;
-
-
-                let frames = [...streamParser.parseChunk(value)];
-
-
-                await this.playerService.mseDecoderService.onstream(frames);
-            } catch (e) {
-                console.error('Error reading stream', e);
-                return;
-            }
-        }
+        this.playerService.preProcessing.processStream(reader);
     }
 
     processFlvChunk(chunk: Uint8Array): void {

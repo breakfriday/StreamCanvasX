@@ -485,14 +485,17 @@ class CanvasVideoService {
 
         let video_height = video.videoHeight;
         let video_width = video.videoWidth;
-        if (!this.canvas_context2) {
-          this.canvas_context2 = this.canvas_el2.getContext('2d');
-          this.setCanvas2Size({ width: video_width, height: video_height });
-        }
-        this.canvas_context2.clearRect(0, 0, video_width, video_height);
 
-        // this.drawTrasform(30);
-        this.canvas_context2.drawImage(videoFrame, 0, 0, video_width, video_height);
+        if (this.playerService.canvasToVideoSerivce.recording === true) {
+          if (!this.canvas_context2) {
+            this.canvas_context2 = this.canvas_el2.getContext('2d');
+            this.setCanvas2Size({ width: video_width, height: video_height });
+          }
+          this.canvas_context2.clearRect(0, 0, video_width, video_height);
+
+          // this.drawTrasform(30);
+          this.canvas_context2.drawImage(videoFrame, 0, 0, video_width, video_height);
+        }
 
 
         // this.drawTrasform(videoFrame, 30, ctx);
