@@ -128,9 +128,26 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
       >destroy</Button>
       <Button onClick={() => {
         let play = streamPlayer.current;
-        play.mpegtsPlayer.play();
+        play.canvasVideoService.setCover(true);
       }}
-      >DD</Button>
+      >cover</Button>
+
+      <Button onClick={() => {
+        let play = streamPlayer.current;
+        play.canvasVideoService.setCover(false);
+      }}
+      >no cover</Button>
+
+      <Button onClick={() => {
+        let play = streamPlayer.current;
+       play.audioProcessingService.mute(true);
+      }}
+      >mute-true</Button>
+      <Button onClick={() => {
+        let play = streamPlayer.current;
+       play.audioProcessingService.mute(false);
+      }}
+      >mute-false</Button>
       <div>
         <RecodDialog
           open={recordDialogState}
