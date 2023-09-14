@@ -33,9 +33,9 @@ const LiveVideo = (props) => {
         } : null,
         };
 
-        debugger;
 
       const player = createPlayerServiceInstance(config);
+
 
       player.createBetaPlayer();
     };
@@ -48,9 +48,9 @@ const LiveVideo = (props) => {
     return (
       <>
         <div>test</div>
-        <audio id="aad" controls >
+        {/* <audio id="aad" controls >
           <span > Download audio </span>
-        </audio>
+        </audio> */}
         <div ref={containerRef} style={{ width: '400px', height: '200px', border: '1px' }} />
 
 

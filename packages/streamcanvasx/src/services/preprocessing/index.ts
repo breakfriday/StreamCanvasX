@@ -27,6 +27,7 @@ class PreProcessing {
     }
     init(playerService: PlayerService) {
         this.player = playerService;
+        debugger;
         this.player.mseDecoderService.start();
 
 
@@ -59,7 +60,6 @@ class PreProcessing {
 
 
                     let frames = [...streamParser.parseChunk(value)];
-                    debugger;
 
 
                      this.player.mseDecoderService.onstream(frames);
