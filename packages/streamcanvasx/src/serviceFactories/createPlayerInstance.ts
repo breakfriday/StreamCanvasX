@@ -1,4 +1,4 @@
-import { containerPlayer } from '../container';
+import { container1, containerPlayer } from '../container';
 
  import HttpFlvStreamLoader from '../services/stream/fetch_stream_loader';
 import { TYPES } from './symbol';
@@ -25,6 +25,7 @@ import WasmDecoderService from '../services/decoder/wasmDecoder';
 import CanvasToVideoSerivce from '../services/muxer/canvasToVideo';
 
 import MseDecoderService from '../services/decoder/mediaSource';
+import PreProcessing from '../services/preprocessing';
 
 
 // const worker = new Worker(new URL('work.js', import.meta.url));
@@ -48,6 +49,9 @@ containerPlayer.bind<CanvasToVideoSerivce>(TYPES.ICanvasToVideoSerivce).to(Canva
 containerPlayer.bind<MseDecoderService>(TYPES.IMseDecoderService).to(MseDecoderService);
 
 containerPlayer.bind<FLVDemuxStream>(TYPES.IFLVDemuxStream).to(FLVDemuxStream);
+
+containerPlayer.bind<PreProcessing>(TYPES.IPreProcessing).to(PreProcessing);
+
  function createPlayerServiceInstance(config: IplayerConfig): PlayerService {
   let playerInstance = containerPlayer.get<PlayerService>(TYPES.IPlayerService);
   playerInstance.init(config || {});

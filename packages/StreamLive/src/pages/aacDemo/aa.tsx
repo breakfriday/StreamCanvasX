@@ -11,21 +11,33 @@ const LiveVideo = (props) => {
     const playerRef = useRef();
 
     const runplayer = () => {
-      let { url } = props;
+      let { url, key_v = '', enable_crypto = false, fileData } = props;
       // fetchflv.fetchStream(url);
       let showAudio = false,
       hasVideo = true,
       hasAudio = true;
 
 
-      const player = createPlayerServiceInstance({ url,
+      let config = { url,
         showAudio,
         hasVideo,
         hasAudio,
         contentEl: containerRef.current!,
-        });
+        streamType: 'ACC',
+        fileData,
+        crypto: enable_crypto === '1' ? {
+          key: key_v,
+          enable: true,
+          wasmModulePath: '',
+          useWasm: true,
+        } : null,
+        };
 
-        player.createBetaPlayer();
+
+      const player = createPlayerServiceInstance(config);
+
+
+      player.createBetaPlayer();
     };
 
 
@@ -36,9 +48,9 @@ const LiveVideo = (props) => {
     return (
       <>
         <div>test</div>
-        <audio id="aad" controls >
+        {/* <audio id="aad" controls >
           <span > Download audio </span>
-        </audio>
+        </audio> */}
         <div ref={containerRef} style={{ width: '400px', height: '200px', border: '1px' }} />
 
 

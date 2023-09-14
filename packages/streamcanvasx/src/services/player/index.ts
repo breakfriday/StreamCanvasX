@@ -17,6 +17,7 @@ import AudioProcessingService from '../audio/audioContextService';
 import WasmDecoderService from '../decoder/wasmDecoder';
 import CanvasToVideoSerivce from '../muxer/canvasToVideo';
 import MseDecoderService from '../decoder/mediaSource';
+import PreProcessing from '../preprocessing';
 
 
 mpegts.LoggingControl.applyConfig({
@@ -56,6 +57,7 @@ class PlayerService extends Emitter {
     mpegtsPlayer: Mpegts.Player;
     audioProcessingService: AudioProcessingService;
     mseDecoderService: MseDecoderService;
+    preProcessing: PreProcessing;
     private _stats: Stats;
     private _startBpsTime?: number;
     _opt: any;
@@ -87,6 +89,7 @@ class PlayerService extends Emitter {
         @inject(TYPES.IWasmDecoderService) wasmDecoderService: WasmDecoderService,
         @inject(TYPES.ICanvasToVideoSerivce) canvasToVideoSerivce: CanvasToVideoSerivce,
         @inject(TYPES.IMseDecoderService) mseDecoderService: MseDecoderService,
+        @inject(TYPES.IPreProcessing) preProcessing: PreProcessing,
         ) {
         super();
         this.httpFlvStreamService = httpFlvStreamService;
@@ -101,6 +104,7 @@ class PlayerService extends Emitter {
         this.wasmDecoderService = wasmDecoderService;
         this.canvasToVideoSerivce = canvasToVideoSerivce;
         this.mseDecoderService = mseDecoderService;
+        this.preProcessing = preProcessing;
 
 
         this._times = {
@@ -156,8 +160,12 @@ class PlayerService extends Emitter {
         this.fLVDemuxStream.init(this);
         this.canvasVideoService.init(this, { model: model, contentEl, useOffScreen });
         this.canvasToVideoSerivce.init(this);
-        this.mseDecoderService.init(this);
+        if (config.streamType) {
+            this.mseDecoderService.init(this);
+        }
         // this.wasmDecoderService.init();
+
+        this.preProcessing.init(this);
 
 
         // const decode_worker = new Worker(new URL('../decoder/decode_worker.js', import.meta.url));
@@ -190,6 +198,8 @@ class PlayerService extends Emitter {
 
         if (hasAudio === true) {
             this.audioProcessingService.init(this, { media_el: videoEl });
+
+            // 此處默認靜音
             this.audioProcessingService.mute(true);
         }
 
