@@ -36,11 +36,18 @@ class Decrypt {
 
     async beforInit() {
         if (this.config.useWasm === true) {
-            await addScript2('gmssl_zb/gmssl_zb.js');
-
-            Module.onRuntimeInitialized = () => {
+            if (window.gmssl_zb_install === true) {
+                setTimeout(() => {
                 this._runtimeInitializedNotify();
-            };
+                }, 400);
+            } else {
+                await addScript2('gmssl_zb/gmssl_zb.js');
+                Module.onRuntimeInitialized = () => {
+                    debugger;
+                    window.gmssl_zb_install = true;
+                    this._runtimeInitializedNotify();
+                };
+            }
 
             await this._runtimeInitialized();
         }
@@ -84,6 +91,7 @@ class Decrypt {
         let remainingBytes = new Uint8Array(0); // Buffer for bytes that overflow the current chunk
         let isFirstChunk = true;
 
+        debugger;
         await this._runtimeInitialized();
 
         while (true) {

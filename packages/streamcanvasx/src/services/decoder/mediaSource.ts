@@ -1,5 +1,6 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import CodecParser from 'codec-parser';
+import PlayerService from '../player';
 
 const MEDIA_SOURCE_STATE = {
   ended: 'ended',
@@ -77,6 +78,7 @@ class MseDecoder {
       video: SourceBuffer;
       audio: SourceBuffer;
     };
+    private playerService: PlayerService;
 
 
     constructor() {
@@ -131,9 +133,10 @@ class MseDecoder {
     get isStateOpen() {
         return this.state === MEDIA_SOURCE_STATE.open;
     }
-   async init() {
+   async init(playerService: PlayerService) {
         this._sourceBufferQueue = [];
         this.inputMimeType = 'audio/aac';
+        this.playerService = playerService;
         this.initStreamParser();
         this.createAudioEl();
 
@@ -195,7 +198,13 @@ class MseDecoder {
     }
 
     createAudioEl() {
-      this.$videoElement = document.getElementById('aad');
+     // this.$videoElement = document.getElementById('aad');
+
+     let { contentEl } = this.playerService.config;
+
+      this.$videoElement = document.createElement('audio');
+      this.$videoElement.controls = true;
+      contentEl.append(this.$videoElement);
     }
    appendBuffer(buffer: Uint8Array) {
       let { inputMimeType } = this;
@@ -292,7 +301,8 @@ class MseDecoder {
 
    async start() {
       if (!this.mediaSource) {
-        this.init();
+        // debugger;
+        // this.init();
       }
 
       this.createMediaSource();
