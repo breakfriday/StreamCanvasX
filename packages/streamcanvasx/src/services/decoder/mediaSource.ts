@@ -204,6 +204,7 @@ class MseDecoder {
 
       this.$videoElement = document.createElement('audio');
       this.$videoElement.controls = true;
+      // debugger;
       contentEl.append(this.$videoElement);
     }
    appendBuffer(buffer: Uint8Array) {
