@@ -32,7 +32,7 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.42';
+window.streamCanvasX = '0.1.44';
 
 function now() {
     return new Date().getTime();
@@ -162,10 +162,9 @@ class PlayerService extends Emitter {
         this.canvasToVideoSerivce.init(this);
         if (config.streamType) {
             this.mseDecoderService.init(this);
+            this.preProcessing.init(this);
         }
         // this.wasmDecoderService.init();
-
-        this.preProcessing.init(this);
 
 
         // const decode_worker = new Worker(new URL('../decoder/decode_worker.js', import.meta.url));
