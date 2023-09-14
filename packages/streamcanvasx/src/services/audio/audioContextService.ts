@@ -423,10 +423,18 @@ class AudioProcessingService {
       }
 
       mute(parm?: boolean) {
-        if (parm === true) {
-          this.context.analyserNode!.disconnect(this.context.audioContext!.destination);
+        if (this.playerService.mpegtsPlayer?.audioPlayer) {
+          if (parm === true) {
+            this.playerService.mpegtsPlayer?.audioPlayer?.mute(true);
+          } else {
+            this.playerService.mpegtsPlayer?.audioPlayer?.mute(false);
+          }
         } else {
-          this.context.analyserNode!.connect(this.context.audioContext!.destination);
+          if (parm === true) {
+            this.context.analyserNode!.disconnect(this.context.audioContext!.destination);
+          } else {
+            this.context.analyserNode!.connect(this.context.audioContext!.destination);
+          }
         }
       }
 

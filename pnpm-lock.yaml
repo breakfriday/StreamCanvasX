@@ -180,8 +180,8 @@ importers:
         specifier: ^0.0.6
         version: 0.0.6
       streamcanvasx-core:
-        specifier: 0.0.7
-        version: 0.0.7
+        specifier: 0.0.8
+        version: 0.0.8
       webm-muxer:
         specifier: ^3.1.1
         version: 3.1.1
@@ -16217,8 +16217,8 @@ packages:
       internal-slot: 1.0.5
     dev: true
 
-  /streamcanvasx-core@0.0.7:
-    resolution: {integrity: sha512-ocAfZbP95igTInYTqD+iFfDnjq3E5MuNEDpwpePctJIqKCf1X+mt3bVBVUIaFtf19IAbklHaqV1qNRqdZqiCbw==}
+  /streamcanvasx-core@0.0.8:
+    resolution: {integrity: sha512-Dd12snIGmhiD5cIZKkWlTu85FdVFjlB4LtYnb5FP/xQyld4bzy48Zkj/ftCWZTHXTQiah+BQGFjYwsO48LRK/A==}
     dependencies:
       es6-promise: 4.2.8
       webworkify-webpack: 2.1.5
