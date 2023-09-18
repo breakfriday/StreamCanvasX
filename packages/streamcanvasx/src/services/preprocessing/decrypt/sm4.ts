@@ -119,7 +119,9 @@ class Decrypt {
 
                         remainingBytes = new Uint8Array(concatenated.buffer.slice(160));
 
-                        $this.sm4Instance.init(firstChunk, 'ideteck_chenxuejian_test');
+                        let { key } = $this.config;
+
+                        $this.sm4Instance.init(firstChunk, key);
                         isFirstChunk = false;
                     } else {
                         remainingBytes = concatenated; // If the chunk is smaller than 160 bytes, store and continue

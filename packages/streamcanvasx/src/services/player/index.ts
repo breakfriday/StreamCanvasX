@@ -174,6 +174,26 @@ class PlayerService extends Emitter {
 
     createBetaPlayer() {
         this.httpFlvStreamService.fetchStream();
+
+         let { hasAudio, showAudio } = this.config;
+
+
+        if (hasAudio === true) {
+            let media_el = this.mseDecoderService.$videoElement;
+
+            // debugger;
+            this.audioProcessingService.init(this, { media_el: media_el });
+
+            if (showAudio === true) {
+                this.canvasVideoService.loading = false;
+
+                this.audioProcessingService.drawSymmetricWaveform();
+            }
+
+
+            // 此處默認靜音
+            // this.audioProcessingService.mute(false);
+        }
     }
     createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
         if (window.wasmDebug) {
@@ -354,7 +374,7 @@ class PlayerService extends Emitter {
                         this.audioProcessingService.drawSymmetricWaveform();
                         break;
                     case 2:
-                        this, this.audioProcessingService.visulizerDraw1();
+                         this.audioProcessingService.visulizerDraw1();
                         break;
                     default:
                         this.audioProcessingService.drawSymmetricWaveform();

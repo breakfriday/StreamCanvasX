@@ -36,6 +36,10 @@ import { Divider, Space, Button, Form, Input, Radio } from 'antd';
 
 //    });
 
+function generateRandomId(length) { // length是你的id的长度，可自定义
+  return Math.random().toString(36).substr(3, length);
+}
+
 
 const FlvDemux = () => {
  const containerRef = useRef<{filesData: File}>(null);
@@ -60,7 +64,7 @@ const FlvDemux = () => {
 
             temp.push({ url, key, enable_crypto, fileData });
 
-            debugger;
+            // debugger;
 
 
             setData(temp);
@@ -126,7 +130,7 @@ const FlvDemux = () => {
           (() => {
           return data.map((item) => {
             return (
-              <div>
+              <div key={generateRandomId(10)}>
 
                 <LiveVideo
                   url={item.url}
