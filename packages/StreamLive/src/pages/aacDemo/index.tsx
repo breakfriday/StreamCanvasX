@@ -54,7 +54,7 @@ const FlvDemux = () => {
           name="basic"
           autoComplete="off"
           onFinish={(value) => {
-            let { url, key, enable_crypto,
+            let { url, key, enable_crypto, showAudio,
             } = value;
 
             let fileData = containerRef.current?.filesData;
@@ -62,7 +62,7 @@ const FlvDemux = () => {
             let temp = Object.assign([], data);
 
 
-            temp.push({ url, key, enable_crypto, fileData });
+            temp.push({ url, key, enable_crypto, fileData, showAudio });
 
             // debugger;
 
@@ -92,6 +92,13 @@ const FlvDemux = () => {
             <Radio.Group>
               <Radio value="1"> true </Radio>
               <Radio value="2"> false</Radio>
+            </Radio.Group>
+          </Form.Item>
+
+          <Form.Item label="showAudio" name="showAudio" initialValue>
+            <Radio.Group>
+              <Radio value> true </Radio>
+              <Radio value={false}> false</Radio>
             </Radio.Group>
           </Form.Item>
 
@@ -128,15 +135,16 @@ const FlvDemux = () => {
 
         {
           (() => {
-          return data.map((item) => {
+          return data.map((item, inx) => {
             return (
-              <div key={generateRandomId(10)}>
+              <div key={inx}>
 
                 <LiveVideo
                   url={item.url}
                   key_v={item.key}
                   enable_crypto={item.enable_crypto}
                   fileData={item.fileData}
+                  showAudio={item.showAudio}
                 />
 
 

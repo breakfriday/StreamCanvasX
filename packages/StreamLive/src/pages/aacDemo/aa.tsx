@@ -11,10 +11,10 @@ const LiveVideo = (props) => {
     const playerRef = useRef();
 
     const runplayer = () => {
-      let { url, key_v = '', enable_crypto = false, fileData } = props;
+      let { url, key_v = '', enable_crypto = false, fileData, showAudio = false } = props;
       // fetchflv.fetchStream(url);
-      let showAudio = true,
-      hasVideo = false,
+
+     let hasVideo = false,
       hasAudio = true;
 
 
