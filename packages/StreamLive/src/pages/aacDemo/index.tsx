@@ -61,7 +61,7 @@ const FlvDemux = () => {
           }}
         >
           <Form.Item
-            initialValue={'http://localhost:3001/out.aac'}
+            initialValue={'http://localhost:3000/out.aac'}
             label="url"
             name="url"
           >
