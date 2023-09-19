@@ -85,6 +85,7 @@ class Decrypt {
     }
 
 
+    // 读取流，第一个数据块取160字节，溢出的数据合并到下一个数据块，后续每次从当前数据块中读取与16字节的最大整数倍 decode，溢出数据合并到下一个数据块
    async processStream(reader: ReadableStreamDefaultReader) {
         let $this = this;
         let remainingBytes = new Uint8Array(0); // Buffer for bytes that overflow the current chunk
