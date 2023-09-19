@@ -1,30 +1,33 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
-import Emitter from '../../utils/emitter';
-import PlayerService from '../player';
 
-import CodecParser from 'codec-parser';
-import { arrayBuffer, buffer } from 'stream/consumers';
-
+import AudioContextPlayer from '../player/audioContextPlayer';
 
 @injectable()
-class WebcodecsAudioDecoder extends Emitter {
+class WebcodecsAudioDecoder {
     // private player: PlayerService;
     // private hasInit: boolean;
-    private isInitInfo: boolean;
+    // private isInitInfo: boolean;
     private audioDecoder: any | null;
-    private _audioSourceBuffers = [];
+    _audioSourceBuffers: any[];
+    private config: any;
+    audioContextPlayer: AudioContextPlayer;
 
-    // audioDecoderConfig;
     constructor() {
-        super();
-
-        this.hasInit = false;
-        this.isInitInfo = false;
         this.audioDecoder = null;
+        this._audioSourceBuffers = [];
     }
-    init(playerService: PlayerService) {
-        this.player = playerService;
-        this.initDecoder();
+    init(audioContextPlayer?, config?) {
+        if (!audioContextPlayer) {
+            this.audioContextPlayer = new AudioContextPlayer();
+        }
+
+        const default_config = {
+            codec: 'mp4a.40.2',
+            sampleRate: 32000,
+            numberOfChannels: 1,
+        };
+        this.config = Object.assign(default_config, config);
+        this.initDecoder(this.config);
     }
     destroy() {
         if (this.audioDecoder) {
@@ -33,12 +36,10 @@ class WebcodecsAudioDecoder extends Emitter {
             }
             this.audioDecoder = null;
         }
-
-        this.hasInit = false;
-        this.isInitInfo = false;
-        this.off();
+        // this.hasInit = false;
+        // this.isInitInfo = false;
     }
-    initDecoder() {
+    initDecoder(audioDecoderConfig) {
         const _this = this;
         this.audioDecoder = new AudioDecoder({
             output(audioData) {
@@ -49,39 +50,22 @@ class WebcodecsAudioDecoder extends Emitter {
                 _this.handleError(error);
             },
         });
+        this.audioDecoder.configure(audioDecoderConfig);
+    }
+    decode(audiochunk: EncodedAudioChunk) {
+        this.audioDecoder.decode(audiochunk);
     }
     handleDecode(audioData: AudioData) {
-        // console.log(audioData);
         const audioBuffer = new ArrayBuffer(audioData.numberOfFrames * 4);
         audioData.copyTo(audioBuffer, { planeIndex: 0 });
-        // console.log('123465798', audioBuffer);
         this._audioSourceBuffers.push(audioData);
-        // console.log(audioData);
-        const audioContext = new AudioContext({
-            sampleRate: 32000,
-        });
-
-
-        audioContext.createMediaStreamDestination;
-        const audioSource = audioContext.createBufferSource();
-        // debugger;
-        const buffer = audioContext.createBuffer(
-            1,
-            audioData.numberOfFrames * 4,
-            audioContext.sampleRate,
-        );
-        let nowBuffering = buffer.getChannelData(0);
-        for (let i = 0; i < audioData.numberOfFrames * 4; i++) {
-            nowBuffering[i] = audioBuffer[i];
-        }
-        // nowBuffering = new Float32Array(audioBuffer);
-        audioSource.buffer = buffer;
-        audioSource.connect(audioContext.destination);
-        audioSource.start();
+        this.audioContextPlayer.audioContextScriptProcessor(audioData, audioBuffer);
     }
     handleError(error: Error) {
         console.error(error);
-        // this.player.debug.error('Webcodecs', 'VideoDecoder handleError', error);
+    }
+    getAudioDecoderState() {
+        return this.audioDecoder.state;
     }
 }
 export default WebcodecsAudioDecoder;
