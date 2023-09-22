@@ -16,7 +16,7 @@ class WebcodecsAudioDecoder {
         this.audioDecoder = null;
         this._audioSourceBuffers = [];
     }
-    init(audioContextPlayer?, config?) {
+    init(config?, audioContextPlayer?) {
         if (!audioContextPlayer) {
             this.audioContextPlayer = new AudioContextPlayer();
         }
@@ -32,7 +32,7 @@ class WebcodecsAudioDecoder {
     destroy() {
         if (this.audioDecoder) {
             if (this.audioDecoder.state !== 'closed') {
-                this.audioDecoder.close();
+                // this.audioDecoder.close();
             }
             this.audioDecoder = null;
         }
@@ -59,6 +59,9 @@ class WebcodecsAudioDecoder {
         const audioBuffer = new ArrayBuffer(audioData.numberOfFrames * 4);
         audioData.copyTo(audioBuffer, { planeIndex: 0 });
         this._audioSourceBuffers.push(audioData);
+        // console.log('decode:', audioData);
+        // console.log('audioBuffer:', audioBuffer);
+        // console.log('decode:', this._audioSourceBuffers.slice(-1));
         this.audioContextPlayer.audioContextScriptProcessor(audioData, audioBuffer);
     }
     handleError(error: Error) {

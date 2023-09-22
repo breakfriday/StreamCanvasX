@@ -77,8 +77,8 @@ class PreProcessing {
                     // console.log(typeof frames[0]);
                     this.audioContextPlayer.audioContextPlayer(frames);
                     // debugger;
-                    // console.log('decode:', frames);
-                    console.log('decode:', this.webcodecsAudioDecoder._audioSourceBuffers);
+                    // console.log('decode:', this.webcodecsAudioDecoder._audioSourceBuffers);
+                    // console.log('decode:', this.webcodecsAudioDecoder._audioSourceBuffers.slice(-1));
                     // debugger;
 
 
