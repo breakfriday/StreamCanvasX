@@ -469,13 +469,24 @@ class CanvasVideoService {
           width = this.contentEl.clientWidth;
           height = this.contentEl.clientHeight;
         }
+        const centerX = width / 2;
+        const centerY = height / 2;
         // let ctx = this.canvas_context;
         // let { canvas_el } = this;
         // let canvas = canvas_el;
         // ctx.save();
-        this.canvas_context.clearRect(0, 0, width, height);
 
-        if (this.cover === true) {
+        // this.canvas_context.clearRect(0, 0, width, height);
+        // 取消cover后使用clearRect(0, 0, width, height)不能完全清除
+        this.canvas_context.clearRect(0, centerY - centerX, width, width); // 当 width > height 时，有效
+        // let clearStart = -Math.abs(centerX - centerY);
+        // let clearSize = Math.max(3 * centerX - centerY, 3 * centerY - centerX);
+        // this.canvas_context.clearRect(clearStart, clearStart, clearSize, clearSize); // 无需讨论 width height的大小关系，均有效
+
+        if (this.cover === true && (this.rotateDegreeSum === 90 || this.rotateDegreeSum === 270)) {
+          // this.canvas_context.drawImage(videoFrame, centerX - centerY, centerY - centerX, centerX + centerY, centerX + centerY);
+          this.canvas_context.drawImage(videoFrame, centerX - centerY, centerY - centerX, height, width);
+        } else if (this.cover === true) {
           this.canvas_context.drawImage(videoFrame, 0, 0, width, height);
         } else {
             this.drawCenteredScaledVideoFrame(videoFrame);
