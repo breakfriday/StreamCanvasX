@@ -137,6 +137,9 @@ importers:
       '@swc/helpers':
         specifier: ^0.5.1
         version: 0.5.1
+      '@types/dom-mediacapture-transform':
+        specifier: ^0.1.6
+        version: 0.1.6
       '@types/dom-webcodecs':
         specifier: ^0.1.7
         version: 0.1.7
@@ -6071,6 +6074,12 @@ packages:
     dependencies:
       '@types/ms': 0.7.31
     dev: true
+
+  /@types/dom-mediacapture-transform@0.1.6:
+    resolution: {integrity: sha512-sl2o+PVeciAozjEmj6UOnxOB3n4qv9bs2mw7PFYWYxpUKTHRIpDvm8TTfsWoRI86byQXWjQKecckaGSx/ExDPA==}
+    dependencies:
+      '@types/dom-webcodecs': 0.1.7
+    dev: false
 
   /@types/dom-webcodecs@0.1.7:
     resolution: {integrity: sha512-1euwRyJ7rQrddOa24d5ZcoDRMp68xEIwyb7PKb3Wpc2OullUxHQ4a63WPa5V8R+KtCWISKjgS+f83HCUVhXS/w==}

@@ -47,6 +47,7 @@
     "@ice/jsx-runtime": "^0.2.0",
     "@ice/remark-react-docgen-docusaurus": "^1.0.1",
     "@swc/helpers": "^0.5.1",
+    "@types/dom-mediacapture-transform": "^0.1.6",
     "@types/dom-webcodecs": "^0.1.7",
     "@webgpu/types": "^0.1.32",
     "codec-parser": "^2.4.3",

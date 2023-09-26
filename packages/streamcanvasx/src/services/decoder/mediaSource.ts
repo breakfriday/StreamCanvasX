@@ -356,6 +356,21 @@ class MseDecoder {
    removeBuffer(start: number, end: number) {
     this.sourceBuffer.remove(start, end);
    }
+
+
+   processMediaStream() {
+    const stream = this.$videoElement.captureStream();
+    const audioTrack = stream.getAudioTracks()[0];
+
+
+    const trackProcessor = new MediaStreamTrackProcessor({ track: audioTrack });
+
+    const reader = trackProcessor.readable.getReader();
+
+    reader.read().then(function process({ done, value }) {
+      reader.read().then(process);
+      });
+   }
 }
 
 
