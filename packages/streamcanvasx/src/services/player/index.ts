@@ -32,7 +32,7 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.44';
+window.streamCanvasX = '0.1.46';
 
 function now() {
     return new Date().getTime();
