@@ -54,7 +54,7 @@ const FlvDemux = () => {
           name="basic"
           autoComplete="off"
           onFinish={(value) => {
-            let { url, key, enable_crypto, showAudio,
+            let { url, key, enable_crypto, showAudio, streamType,
             } = value;
 
             let fileData = containerRef.current?.filesData;
@@ -62,9 +62,7 @@ const FlvDemux = () => {
             let temp = Object.assign([], data);
 
 
-            temp.push({ url, key, enable_crypto, fileData, showAudio });
-
-            // debugger;
+            temp.push({ url, key, enable_crypto, fileData, showAudio, streamType });
 
 
             setData(temp);
@@ -85,6 +83,15 @@ const FlvDemux = () => {
             name="key"
           >
             <Input />
+          </Form.Item>
+
+          <Form.Item label="streamType" name="streamType" initialValue={'ACC'}>
+            <Radio.Group>
+              <Radio value="ACC"> ACC</Radio>
+              <Radio value="FLV"> FLV</Radio>
+              <Radio value="MPEG-TS"> MPEG-TS</Radio>
+              <Radio value="MP4"> MP4</Radio>
+            </Radio.Group>
           </Form.Item>
 
 
@@ -145,6 +152,7 @@ const FlvDemux = () => {
                   enable_crypto={item.enable_crypto}
                   fileData={item.fileData}
                   showAudio={item.showAudio}
+                  streamType={item.streamType}
                 />
 
 

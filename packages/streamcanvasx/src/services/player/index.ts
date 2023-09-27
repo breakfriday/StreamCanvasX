@@ -152,7 +152,15 @@ class PlayerService extends Emitter {
         };
 
         this.config = Object.assign(default_config, config);
-        let { model, url, contentEl, useOffScreen } = this.config;
+        let { model, url, contentEl, useOffScreen, fileData } = this.config;
+
+        if (fileData) {
+            let blobUrl = URL.createObjectURL(fileData);
+            url = blobUrl;
+        }
+
+
+        debugger;
 
         this.httpFlvStreamService.init(this, url);
         this.flvVDemuxService.init(this);
@@ -160,7 +168,7 @@ class PlayerService extends Emitter {
         this.fLVDemuxStream.init(this);
         this.canvasVideoService.init(this, { model: model, contentEl, useOffScreen });
         this.canvasToVideoSerivce.init(this);
-        if (config.streamType) {
+        if (config.streamType === 'AAC') {
             this.mseDecoderService.init(this);
             this.preProcessing.init(this);
         }
@@ -200,8 +208,15 @@ class PlayerService extends Emitter {
             this.createBetaPlayer2();
             return false;
         }
-        let { type = 'flv', isLive = true } = parms;
-        let { url } = this.httpFlvStreamService;
+        let { type = 'flv' } = parms;
+
+        let { isLive, url, fileData } = this.config;
+        if (fileData) {
+            let blobUrl = URL.createObjectURL(fileData);
+            url = blobUrl;
+        }
+
+
         let videoEl = document.createElement('video');
         this.meidiaEl = videoEl;
         // document.getElementById('cont').append(videoEl);
