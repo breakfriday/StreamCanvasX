@@ -230,7 +230,45 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
         }}
         >HorizontalMirror</Button>
       </Space>
-
+      <br />
+      <Button onClick={() => {
+          let play = streamPlayer.current;
+          play.canvasVideoService.drawWatermark({ fillStyle: 0 });
+        }}
+      >drawWatermark1</Button>
+      <Button onClick={() => {
+          let play = streamPlayer.current;
+          play.canvasVideoService.drawWatermark({ fillStyle: 1 });
+        }}
+      >drawWatermark2</Button>
+      <Button onClick={() => {
+          let play = streamPlayer.current;
+          play.canvasVideoService.drawWatermark({ value: '' });
+        }}
+      >clearWatermark</Button>
+      <br />
+      <p>invisible watermark</p>
+      <Button onClick={() => {
+          let play = streamPlayer.current;
+          play.canvasVideoService.isDrawingWatermark = true;
+        }}
+      >drawWatermark</Button>
+      <Button onClick={() => {
+          let play = streamPlayer.current;
+          play.canvasVideoService.isDrawingWatermark = false;
+        }}
+      >stopDraw</Button>
+      <Button onClick={() => {
+          let play = streamPlayer.current;
+          play.canvasVideoService.isGettingWatermark = true;
+        }}
+      >getWatermark</Button>
+      <Button onClick={() => {
+          let play = streamPlayer.current;
+          play.canvasVideoService.isGettingWatermark = false;
+        }}
+      >stopGet</Button>
+      <br />
       {
         showDownButton ? (
           <Button onClick={() => {
