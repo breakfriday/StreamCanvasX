@@ -8,6 +8,8 @@ class AudioContextPlayer {
 	audioContext: AudioContext;
 	audioSource: AudioBufferSourceNode;
 	scriptNode: ScriptProcessorNode;
+	hasInitScriptNode: boolean;
+	bufferList;
 	count: number;
 	// context: {
 	// 	audioContext?: AudioContext;
@@ -19,6 +21,8 @@ class AudioContextPlayer {
 	constructor() {
 		this.audioContext = null;
 		this.count = 0;
+		this.hasInitScriptNode = false;
+		this.bufferList = [];
 	}
 
 	init(webcodecsAudioDecoder?) {
@@ -26,12 +30,21 @@ class AudioContextPlayer {
 			this.webcodecsAudioDecoder = new WebcodecsAudioDecoder();
 		}
 	}
+	destroy() {
+		this.audioContext = null;
+		if (this.audioSource) {
+			this.audioSource && this.audioSource.disconnect();
+		}
+		if (this.scriptNode) {
+			this.scriptNode && this.scriptNode.disconnect();
+		}
+	}
 	audioContextPlayer(frames) {
 		for (let i in frames) {
 			const audiochunk = new EncodedAudioChunk({
 				type: 'key',
-				timestamp: frames[i].totalSamples - frames[i - 1]?.totalSamples ? frames[i - 1].totalSamples : 0,
-				duration: frames[i].totalDuration - frames[i - 1]?.totalDuration ? frames[i - 1].totalDuration : 0,
+				timestamp: frames[i].totalSamples,
+				duration: 1 / 32000 * frames[i].data.length / 4 * 1000,
 				data: new Uint8Array(frames[i].data),
 			});
 
@@ -45,71 +58,63 @@ class AudioContextPlayer {
 				sampleRate: audioData.sampleRate,
 			});
 		}
-		// audioContext.createMediaStreamDestination;
 		this.audioSource = this.audioContext.createBufferSource();
-		this.scriptNode = this.audioContext.createScriptProcessor(1024, 1, 1);
-		// console.log(this.scriptNode.bufferSize);
-
-		// debugger;
 		const buffer = this.audioContext.createBuffer(
 			audioData.numberOfChannels,		// 1	 number of channels
-			audioData.numberOfFrames, // frameCount
+			audioData.numberOfFrames, // 1024  frameCount
 			this.audioContext.sampleRate, //  audioContext.sampleRate
 		);
 		let Float32Array_audioBuffer = new Float32Array(audioBuffer);
+		this.bufferList.push(Float32Array_audioBuffer);
 		let nowBuffering = buffer.getChannelData(0);
-		// console.log('nowBuffering_1', nowBuffering);
-		for (let i = 0; i < audioData.numberOfFrames; i++) {
-			// 可以添加 fade_in  fade_out
-			nowBuffering[i] = Float32Array_audioBuffer[i];
-		}
-		// console.log('Float32Array_audioBuffer', Float32Array_audioBuffer);
-		// console.log('nowBuffering_2', nowBuffering);
-
-
-		this.scriptNode.onaudioprocess = (audioProcessingEvent) => {
-			// The input buffer is the song we loaded earlier
-			// const { inputBuffer } = audioProcessingEvent;
-
-			// The output buffer contains the samples that will be modified and played
-			const { outputBuffer } = audioProcessingEvent;
-
-			// Loop through the output channels (in this case there is only one)
-			for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
-				const inputData = buffer.getChannelData(channel);
-				// console.log('inputData', inputData);
-				this.count = this.count + 1;
-				// console.log('count', this.count);
-				console.log(this.audioContext.currentTime);
-				const outputData = outputBuffer.getChannelData(channel);
-
-				// Loop through the 4096 samples
-				for (let sample = 0; sample < buffer.length; sample++) {
-				// make output equal to the same as the input
-				outputData[sample] = inputData[sample];
-				}
+		for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
+			for (let i = 0; i < audioData.numberOfFrames; i++) {
+				nowBuffering[i] = Float32Array_audioBuffer[i] || 0;
 			}
-		};
-
+		}
 		if (this.count === 0) {
 			this.audioSource.buffer = buffer;
-			this.audioSource.connect(this.scriptNode);
-			this.scriptNode.connect(this.audioContext.destination);
-			// nowBuffering = new Float32Array(audioBuffer);
-			// audioSource.connect(audioContext.destination);
-			// audioSource.start();
+			this.audioSource.connect(this.audioContext.destination);
+
+			this.count = this.count + 1;
 
 			this.audioSource.start();
 		}
+		this.initScriptNode();
+	}
+	initScriptNode() {
+		if (this.hasInitScriptNode) {
+				return;
+		}
+		// debugger;
+		const scriptNode = this.audioContext.createScriptProcessor(1024, 0, this.audioSource.buffer.numberOfChannels);
+		// tips: if audio isStateSuspended  onaudioprocess method not working
+		scriptNode.onaudioprocess = (audioProcessingEvent) => {
+				const { outputBuffer } = audioProcessingEvent;
 
+				if (this.bufferList.length) {
+						if (this.bufferList.length === 0) {
+								return;
+						}
+						const bufferItem = this.bufferList.shift();
 
-		// this.audioSource.onended = () => {
-		// 	// if (this.scriptNode && this.audioSource) {
-		// 	// 	this.audioSource.disconnect(this.scriptNode);
-		// 	// 	this.scriptNode.disconnect(this.audioContext.destination);
-		// 	// }
-		// 	console.log('this.audioSource.onended');
-		// };
+						// update audio time stamp
+						// if (bufferItem && bufferItem.ts) {
+						// 		this.player.audioTimestamp = bufferItem.ts;
+						// }
+
+						for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
+								const nowBuffering = outputBuffer.getChannelData(channel);
+								for (let i = 0; i < 1024; i++) {
+										nowBuffering[i] = bufferItem[i] || 0;
+								}
+						}
+				}
+		};
+
+		this.scriptNode = scriptNode;
+		this.scriptNode.connect(this.audioContext.destination);
+		this.hasInitScriptNode = true;
 	}
 }
 

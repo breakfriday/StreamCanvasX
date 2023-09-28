@@ -11,12 +11,11 @@ const LiveVideo = (props) => {
     const playerRef = useRef();
 
     const runplayer = () => {
-      let { url, key = '', enable_crypto = false } = props;
+      let { url, key = '', enable_crypto = false, playMethod } = props;
       // fetchflv.fetchStream(url);
       let showAudio = false,
       hasVideo = true,
       hasAudio = true;
-
 
       let config = { url,
         showAudio,
@@ -24,6 +23,9 @@ const LiveVideo = (props) => {
         hasAudio,
         contentEl: containerRef.current!,
         streamType: 'ACC',
+        audioPlayback: {
+          method: playMethod, // 'MSE' 或 'AudioContext'
+        },
         crypto: enable_crypto === true ? {
           key: '',
           enable: true,

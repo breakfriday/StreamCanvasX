@@ -5,16 +5,14 @@ import AudioContextPlayer from '../player/audioContextPlayer';
 @injectable()
 class WebcodecsAudioDecoder {
     // private player: PlayerService;
-    // private hasInit: boolean;
-    // private isInitInfo: boolean;
     private audioDecoder: any | null;
-    _audioSourceBuffers: any[];
+    // _audioSourceBuffers: any[];
     private config: any;
     audioContextPlayer: AudioContextPlayer;
 
     constructor() {
         this.audioDecoder = null;
-        this._audioSourceBuffers = [];
+        // this._audioSourceBuffers = [];
     }
     init(config?, audioContextPlayer?) {
         if (!audioContextPlayer) {
@@ -25,6 +23,7 @@ class WebcodecsAudioDecoder {
             codec: 'mp4a.40.2',
             sampleRate: 32000,
             numberOfChannels: 1,
+            aac: { format: 'adts' },
         };
         this.config = Object.assign(default_config, config);
         this.initDecoder(this.config);
@@ -32,7 +31,7 @@ class WebcodecsAudioDecoder {
     destroy() {
         if (this.audioDecoder) {
             if (this.audioDecoder.state !== 'closed') {
-                // this.audioDecoder.close();
+                this.audioDecoder.close();
             }
             this.audioDecoder = null;
         }
@@ -58,13 +57,13 @@ class WebcodecsAudioDecoder {
     handleDecode(audioData: AudioData) {
         const audioBuffer = new ArrayBuffer(audioData.numberOfFrames * 4);
         audioData.copyTo(audioBuffer, { planeIndex: 0 });
-        this._audioSourceBuffers.push(audioData);
+        // this._audioSourceBuffers.push(audioData);
+        // debugger;
         // console.log('decode:', audioData);
-        // console.log('audioBuffer:', audioBuffer);
-        // console.log('decode:', this._audioSourceBuffers.slice(-1));
         this.audioContextPlayer.audioContextScriptProcessor(audioData, audioBuffer);
     }
     handleError(error: Error) {
+        // debugger;
         console.error(error);
     }
     getAudioDecoderState() {

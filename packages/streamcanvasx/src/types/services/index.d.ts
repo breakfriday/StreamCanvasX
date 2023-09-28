@@ -160,7 +160,9 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
     };
   } | null;
   streamType?: string;// 其他可能的值: "PCM", "MP4", "FLV"
-  audioPlayerType?: string;// MSE audioContext
+  audioPlayback?: {
+    'method': string; // "MSE" 或 "AudioContext"
+  };
 
 }
 

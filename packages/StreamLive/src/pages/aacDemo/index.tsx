@@ -49,12 +49,12 @@ const FlvDemux = () => {
           name="basic"
           autoComplete="off"
           onFinish={(value) => {
-            let { url, key, enable_crypto,
+            let { url, key, enable_crypto, playMethod,
             } = value;
 
 
             let temp = Object.assign([], data);
-            temp.push({ url, key, enable_crypto });
+            temp.push({ url, key, enable_crypto, playMethod });
 
 
             setData(temp);
@@ -85,6 +85,13 @@ const FlvDemux = () => {
             </Radio.Group>
           </Form.Item>
 
+          <Form.Item label="audioPlayback method" name="playMethod" initialValue={'MSE'}>
+            <Radio.Group>
+              <Radio value="MSE"> MSE </Radio>
+              <Radio value="AudioContext"> AudioContext</Radio>
+            </Radio.Group>
+          </Form.Item>
+
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button
@@ -107,7 +114,7 @@ const FlvDemux = () => {
             return (
               <div>
 
-                <LiveVideo url={item.url} />
+                <LiveVideo url={item.url} playMethod={item.playMethod} />
 
 
               </div>
