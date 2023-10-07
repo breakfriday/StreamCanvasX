@@ -94,11 +94,9 @@ const Player: React.FC<Iplayer> = (props) => {
           // Start publishing
           whip.publish(pc, url, token);
 
-          debugger;
 
           let temp = Object.assign({}, buttonStatus, { whep: true });
 
-          debugger;
 
           setButtonStatus(temp);
          };
@@ -121,19 +119,23 @@ const Player: React.FC<Iplayer> = (props) => {
           >
             fetch whep
           </Button>
-          <Button onClick={() => {
+          <Button
+            disabled={buttonStatus.whep}
+            onClick={() => {
             let { whep } = playerRef.current;
             whep.close();
           }}
           >
-            CLOSE
+            whep CLOSE
           </Button>
-          <Button onClick={() => {
+          <Button
+            disabled={buttonStatus.whep}
+            onClick={() => {
             let { whep } = playerRef.current;
             whep.restart();
           }}
           >
-            RESTART
+            whep RESTART
           </Button>
         </div>
       </>);
