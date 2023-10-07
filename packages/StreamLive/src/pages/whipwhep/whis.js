@@ -69,7 +69,7 @@ export class WHIPClient {
 		});
 
 		if (!fetched.ok) throw new Error(`Request rejected with status ${fetched.status}`);
-		if (!fetched.headers.get('location')) throw new Error('Response missing location header');
+		// if (!fetched.headers.get('location')) throw new Error('Response missing location header');
 
 		// Get the resource url
 		this.resourceURL = new URL(fetched.headers.get('location'), url);
@@ -278,6 +278,11 @@ params = {};
 		// If token is set
 		if (this.token) headers['Authorization'] = `Bearer ${this.token}`;
 
+
+		let b = this.resourceURL;
+
+		debugger;
+
 		// Do the post request to the WHIP resource
 		const fetched = await fetch(this.resourceURL, {
 			method: 'PATCH',
@@ -315,6 +320,8 @@ params = {};
 		// If token is set
 		if (this.token) headers['Authorization'] = `Bearer ${this.token}`;
 
+
+		debugger;
 		// Do the post request to the WHIP resource
 		const fetched = await fetch(this.resourceURL, {
 			method: 'POST',

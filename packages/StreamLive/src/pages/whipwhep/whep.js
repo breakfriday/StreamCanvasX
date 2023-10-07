@@ -69,7 +69,7 @@ export class WHEPClient extends EventTarget {
 		});
 
 		if (!fetched.ok) throw new Error(`Request rejected with status ${fetched.status}`);
-		if (!fetched.headers.get('location')) throw new Error('Response missing location header');
+		// if (!fetched.headers.get('location')) throw new Error('Response missing location header');
 
 		// Get the resource url
 		this.resourceURL = new URL(fetched.headers.get('location'), url);
