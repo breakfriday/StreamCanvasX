@@ -1,5 +1,8 @@
 import _ from 'lodash';
-class webRtcPlayer {
+
+import { WHIPClient } from './whip.js';
+import { WHEPClient } from './whep.js';
+class RTCPlayer {
     private mediaStream: MediaStream;
     private deviceList: {
         videoInputs: MediaDeviceInfo[];
@@ -68,8 +71,39 @@ class webRtcPlayer {
         video.srcObject = this.mediaStream;
     }
 
-    runwhip() {
+    check_permission() {
+        navigator.permissions.query({ name: 'camera' }).then(permissionStatus => {
+            if (permissionStatus.state === 'granted') {
+              console.log('Camera access granted.');
+            } else if (permissionStatus.state === 'denied') {
+              alert('Camera access denied.');
+            } else {
+              alert('Camera permission not determined.');
+            }
+          });
+    }
 
+    runwhip(value: {url?: string; token?: string}) {
+        let { url = '', token = '' } = value;
+        let stream = this.mediaStream;
+
+        // Create peerconnection
+        const pc = new RTCPeerConnection();
+
+        // Send all tracks
+        for (const track of stream.getTracks()) {
+            // You could add simulcast too here
+            pc.addTrack(track);
+        }
+
+        // Create whip client
+        const whip = new WHIPClient();
+
+        // const url = 'https://whip.test/whip/endpoint';
+        // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IndoaXAgdGVzdCIsImlhdCI6MTUxNjIzOTAyMn0.jpM01xu_vnSXioxQ3I7Z45bRh5eWRBEY2WJPZ6FerR8';
+
+        // Start publishing
+        whip.publish(pc, url, token);
     }
     runwhep() {
 
@@ -77,4 +111,4 @@ class webRtcPlayer {
 }
 
 
-export default webRtcPlayer;
+export default RTCPlayer;
