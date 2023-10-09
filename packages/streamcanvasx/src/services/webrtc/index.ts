@@ -1,7 +1,15 @@
 import _ from 'lodash';
+import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
+
+import { TYPES } from '../../serviceFactories/symbol';
 
 import { WHIPClient } from './whip.js';
 import { WHEPClient } from './whep.js';
+
+import { IRTCPlayerConfig } from '../../types/services';
+import VideoService from '../video/videoService';
+
+@injectable()
 class RTCPlayer {
     private mediaStream: MediaStream;
     private deviceList: {
@@ -11,13 +19,24 @@ class RTCPlayer {
     };
     audioSource?: string;
     videoSource?: string;
-    constructor() {
 
+    meidiaEl: HTMLVideoElement;
+    config?: IRTCPlayerConfig;
+    contentEl?: HTMLDivElement;
+    videoService?: VideoService;
+    constructor(
+      @inject(TYPES.IVideoService) videoService: VideoService,
+    ) {
+      this.videoService = videoService;
     }
+    createVideo() {
+      this.meidiaEl = document.createElement('video');
+    }
+    async init(config: IRTCPlayerConfig) {
+      this.config = config;
+      let { contentEl } = this.config;
 
-
-    async init() {
-
+      this.videoService.init(this);
     }
 
     async getMedia() {
@@ -66,7 +85,7 @@ class RTCPlayer {
 
 
     localPlay() {
-        let video: HTMLVideoElement = '';
+        let video: HTMLVideoElement = this.meidiaEl;
         video.autoplay = true;
         video.srcObject = this.mediaStream;
     }

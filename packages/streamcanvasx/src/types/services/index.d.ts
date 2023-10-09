@@ -165,5 +165,18 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
 
 }
 
+interface IRTCPlayerConfig{
+  contentEl?: HTMLElement;
+  url?: string;
+  pushToken?: string;
+  fetchToken?: string;
+  token?: string;
+  renderType?: string;
+}
+
 
 export type IplayerConfig = Partial<IplayerConfig>;
+
+
+export type IRTCPlayerConfig = Partial<IRTCPlayerConfig>;
+
