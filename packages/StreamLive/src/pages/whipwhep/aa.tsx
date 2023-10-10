@@ -1,8 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row } from 'antd';
+import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Select } from 'antd';
 // import { HttpFlvStreamLoader } from 'streamcanvasx/es2017/services/stream/fetch_stream_loader';
 import { WHIPClient } from './whis.js';
 import { WHEPClient } from './whep.js';
+import _ from 'lodash';
 
 interface Iplayer{
     url: string;
@@ -15,6 +16,30 @@ const Player: React.FC<Iplayer> = (props) => {
     const [options, setOptions] = useState<{url: string; token: string}>({ url: '', token: '' });
 
     const [buttonStatus, setButtonStatus] = useState({ whip: false, whep: false });
+
+    const [deviceList, setDevicesList] = useState<{audioInputs: MediaDeviceInfo[]; videoInputs: MediaDeviceInfo[]}>();
+
+    const getVideoList = (devices: MediaDeviceInfo[]) => {
+      let data = devices;
+
+      let videoInputs = _.filter(data, { kind: 'videoinput' });
+      let audioInputs = _.filter(data, { kind: 'audioinput' });
+
+      debugger;
+
+      videoInputs = _.map(videoInputs, (item) => {
+        item.value = item.deviceId;
+        return item;
+      });
+
+      audioInputs = _.map(audioInputs, (item) => {
+        item.value = item.deviceId;
+        return item;
+      });
+
+
+      return { videoInputs, audioInputs };
+    };
 
     const runWhep = async (value) => {
         // Create peerconnection
@@ -38,10 +63,41 @@ const Player: React.FC<Iplayer> = (props) => {
     playerRef.current = { whep: whep };
 };
 
+   let getMedia = () => {
+    const constraints = {
+      audio: {
+        optional: [{
+          sourceId: '',
+        }],
+      },
+      video: {
+        optional: [{
+          sourceId: '',
+        }],
+      },
+    };
+   };
+
     return (
       <>
         <div>
           <video ref={videoRef} height={300} width="100%" controls />
+          <div>
+            videoInputs:
+            <Select
+              style={{ width: 400 }}
+              options={deviceList?.videoInputs}
+            />
+          </div>
+
+          <div>
+            audioInputs:
+            <Select
+              style={{ width: 400 }}
+              options={deviceList?.audioInputs}
+            />
+          </div>
+
           <Input
             defaultValue=""
             addonBefore="url"
@@ -67,7 +123,25 @@ const Player: React.FC<Iplayer> = (props) => {
             onClick={() => {
           const runWhip = async (value) => {
               // Get mic+cam
+
+              navigator.permissions.query({ name: 'camera' }).then(permissionStatus => {
+                if (permissionStatus.state === 'granted') {
+                  console.log('Camera access granted.');
+                } else if (permissionStatus.state === 'denied') {
+                  alert('Camera access denied.');
+                } else {
+                  alert('Camera permission not determined.');
+                }
+              });
+
+
           const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+
+          let devices = await navigator.mediaDevices.enumerateDevices();
+
+         let { videoInputs, audioInputs } = getVideoList(devices);
+          setDevicesList({ videoInputs: videoInputs, audioInputs: audioInputs });
+
 
           let video = videoRef.current!;
           video.autoplay = true;

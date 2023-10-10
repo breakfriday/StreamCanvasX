@@ -160,7 +160,7 @@ class PlayerService extends Emitter {
         }
 
 
-        debugger;
+        // debugger;
 
         this.httpFlvStreamService.init(this, url);
         this.flvVDemuxService.init(this);
