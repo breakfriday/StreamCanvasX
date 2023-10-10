@@ -7,7 +7,20 @@ const RTCPlayer = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalOpen1, setIsModalOpen1] = useState(false);
     const [form_ref] = Form.useForm();
+    const [form_ref1] = Form.useForm();
     const containerRef = useRef();
+
+    const [deviceList, setDeviceList] = useState({ videoInputs: [], audioInputs: [] });
+
+   const playerRef = useRef<RTCPlayer>(null);
+
+   const controlHandle = async () => {
+    let player = playerRef.current;
+    let data = await player.getDeviceLIst();
+    let { videoInputs, audioInputs } = data;
+
+    setDeviceList(data);
+   };
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -20,6 +33,8 @@ const RTCPlayer = () => {
             contentEl: containerRef.current!,
         });
         player.getMedia();
+
+        playerRef.current = player;
       };
 
       const handleCancel = () => {
@@ -27,13 +42,14 @@ const RTCPlayer = () => {
       };
 
 
-    return (<div>
+    return (<div ref={containerRef}>
       <Button onClick={() => {
         showModal();
       }}
       >RTCPlayer</Button>
       <Button onClick={() => {
       setIsModalOpen1(true);
+      controlHandle();
       }}
       >control</Button>
       <Modal title="RTCPlayer" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
@@ -77,15 +93,22 @@ const RTCPlayer = () => {
             setIsModalOpen1(false);
         }}
       >
+        <Button onClick={() => {
+        let player = playerRef.current;
+        player.stopStream();
+        }}
+        >stopStream</Button>
         <Form
           name="basic"
-          form={form_ref}
+          form={form_ref1}
           autoComplete="off"
           onFieldsChange={(value) => {
-           let data = form_ref.getFieldsValue();
+           let data = form_ref1.getFieldsValue();
         }}
           onFinish={(value) => {
-
+            let { audioInput, videoInput } = value;
+            let player = playerRef.current;
+            player.getMedia({ audioSource: audioInput, videoSource: videoInput });
           }}
         >
           <Form.Item
@@ -94,7 +117,7 @@ const RTCPlayer = () => {
             name="videoInput"
           >
             <Select
-              options={[]}
+              options={deviceList.videoInputs}
             />
           </Form.Item>
           <Form.Item
@@ -103,8 +126,18 @@ const RTCPlayer = () => {
             name="audioInput"
           >
             <Select
-              options={[]}
+              options={deviceList.audioInputs}
             />
+          </Form.Item>
+
+
+          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Button
+              type="primary"
+              htmlType="submit"
+            >
+              set_media
+            </Button>
           </Form.Item>
         </Form>
       </Modal>

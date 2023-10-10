@@ -10,7 +10,7 @@ WebRTCInjectionContainer.bind<RTCPlayerService>(TYPES.IRTCPlayerService).to(RTCP
 WebRTCInjectionContainer.bind<VideoService>(TYPES.IVideoService).to(VideoService);
 
 function createRTCPlayerServiceInstance(config: IRTCPlayerConfig): RTCPlayerService {
-    let playerInstance = WebRTCInjectionContainer.get<RTCPlayerService>(TYPES.IPlayerService);
+    let playerInstance = WebRTCInjectionContainer.get<RTCPlayerService>(TYPES.IRTCPlayerService);
     playerInstance.init(config || {});
      return playerInstance;
    }

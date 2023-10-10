@@ -39,35 +39,50 @@ class RTCPlayer {
       this.videoService.init(this);
     }
 
-    async getMedia() {
-        const getVideoList = (devices: MediaDeviceInfo[]) => {
-            let data = devices;
+    async getMedia(parm?: {audioSource?: string; videoSource?: string}) {
+        this.stopStream();
 
-            let videoInputs = _.filter(data, { kind: 'videoinput' });
-            let audioInputs = _.filter(data, { kind: 'audioinput' });
+        let { audioSource = '', videoSource = '' } = parm || {};
 
-
-            videoInputs = _.map(videoInputs, (item: MediaDeviceInfo & { value?: string }) => {
-              item.value = item.deviceId;
-              return item;
-            });
-
-            audioInputs = _.map(audioInputs, (item: MediaDeviceInfo & { value?: string }) => {
-              item.value = item.deviceId;
-              return item;
-            });
+        const constraints = {
+          audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
+          video: { deviceId: videoSource ? { exact: videoSource } : undefined },
+  };
 
 
-            return { videoInputs, audioInputs };
-          };
-        this.mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+        this.mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
 
-        let devices = await navigator.mediaDevices.enumerateDevices();
-
-        let { videoInputs, audioInputs } = getVideoList(devices);
-        this.deviceList = { videoInputs, audioInputs };
 
         this.localPlay();
+    }
+
+    async getDeviceLIst() {
+      const getVideoList = (devices: MediaDeviceInfo[]) => {
+        let data = devices;
+
+        let videoInputs = _.filter(data, { kind: 'videoinput' });
+        let audioInputs = _.filter(data, { kind: 'audioinput' });
+
+
+        videoInputs = _.map(videoInputs, (item: MediaDeviceInfo & { value?: string }) => {
+          item.value = item.deviceId;
+          return item;
+        });
+
+        audioInputs = _.map(audioInputs, (item: MediaDeviceInfo & { value?: string }) => {
+          item.value = item.deviceId;
+          return item;
+        });
+
+
+        return { videoInputs, audioInputs };
+      };
+      let devices = await navigator.mediaDevices.enumerateDevices();
+
+
+      let { videoInputs, audioInputs } = getVideoList(devices);
+
+      return { videoInputs, audioInputs };
     }
 
     async changeMedia(parm: {audioSource?: string; videoSource?: string}) {
@@ -85,7 +100,7 @@ class RTCPlayer {
 
 
     localPlay() {
-        let video: HTMLVideoElement = this.meidiaEl;
+        let video: HTMLVideoElement = this.videoService.meidiaEl;
         video.autoplay = true;
         video.srcObject = this.mediaStream;
     }
@@ -126,6 +141,14 @@ class RTCPlayer {
     }
     runwhep() {
 
+    }
+
+    stopStream() {
+      if (this.mediaStream) {
+        this.mediaStream.getTracks().forEach(track => {
+          track.stop();
+        });
+      }
     }
 }
 
