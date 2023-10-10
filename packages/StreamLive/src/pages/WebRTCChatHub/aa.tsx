@@ -14,6 +14,14 @@ const RTCPlayer = () => {
 
    const playerRef = useRef<RTCPlayer>(null);
 
+   useEffect(() => {
+    let player = createRTCPlayerServiceInstance({
+      contentEl: containerRef.current!,
+    });
+
+    playerRef.current = player;
+   }, []);
+
    const controlHandle = async () => {
     let player = playerRef.current;
     let data = await player.getDeviceLIst();
@@ -29,9 +37,7 @@ const RTCPlayer = () => {
       const handleOk = () => {
         setIsModalOpen(false);
 
-        let player = createRTCPlayerServiceInstance({
-            contentEl: containerRef.current!,
-        });
+        let player = playerRef.current;
         player.getMedia();
 
         playerRef.current = player;
@@ -46,7 +52,15 @@ const RTCPlayer = () => {
       <Button onClick={() => {
         showModal();
       }}
-      >RTCPlayer</Button>
+      >cameraMedia</Button>
+      <Button onClick={() => {
+        let player = playerRef.current;
+
+        player.getdisplaymedia();
+      }}
+      >
+        screenMedia
+      </Button>
       <Button onClick={() => {
       setIsModalOpen1(true);
       controlHandle();

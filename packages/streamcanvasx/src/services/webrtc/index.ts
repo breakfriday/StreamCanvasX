@@ -8,6 +8,7 @@ import { WHEPClient } from './whep.js';
 
 import { IRTCPlayerConfig } from '../../types/services';
 import VideoService from '../video/videoService';
+import { debug } from 'console';
 
 @injectable()
 class RTCPlayer {
@@ -54,6 +55,19 @@ class RTCPlayer {
 
 
         this.localPlay();
+    }
+
+    async getdisplaymedia() {
+      this.stopStream();
+      const options = { audio: true, video: true };
+      try {
+        this.mediaStream = await navigator.mediaDevices.getDisplayMedia(options);
+
+
+        this.localPlay();
+      } catch (err) {
+        console.error(err);
+      }
     }
 
     async getDeviceLIst() {
