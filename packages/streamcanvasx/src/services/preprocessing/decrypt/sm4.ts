@@ -1,8 +1,8 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
-import { addScript2 } from '../../../utils';
 import PlayerService from '../../player';
 import { IplayerConfig } from '../../../types/services';
 import PreProcessing from '..';
+import { loadWASM } from '../../../utils';
 
 @injectable()
 class Decrypt {
@@ -20,12 +20,13 @@ class Decrypt {
     player: PlayerService;
     config: IplayerConfig['crypto'];
     preProcessing: PreProcessing;
-
-
+    GmsslModule;
+    gmssl_zb_install: boolean;
     constructor(config: IplayerConfig['crypto'], preProcessingService) {
         this.config = config;
         this.init();
         this.preProcessing = preProcessingService;
+        this.gmssl_zb_install = false;
     }
 
 
@@ -36,16 +37,14 @@ class Decrypt {
 
     async beforInit() {
         if (this.config.useWasm === true) {
-            if (window.gmssl_zb_install === true) {
+            if (this.gmssl_zb_install === true) {
                 setTimeout(() => {
                 this._runtimeInitializedNotify();
                 }, 400);
             } else {
-                await addScript2('gmssl_zb/gmssl_zb.js');
-                Module.onRuntimeInitialized = () => {
-                    window.gmssl_zb_install = true;
-                    this._runtimeInitializedNotify();
-                };
+                this.GmsslModule = await loadWASM('gmssl_zb/gmssl_zb.js', 'createGmssl', this.GmsslModule);
+                this.gmssl_zb_install = true;
+                this._runtimeInitializedNotify();
             }
 
             await this._runtimeInitialized();
@@ -61,7 +60,7 @@ class Decrypt {
 
             ondata: function (chunk: number, size: number) {
                 const asyncProcess = async (chunk: number, size: number) => {
-                    let vdata = new Uint8Array(Module.HEAPU8.buffer, chunk, size);
+                    let vdata = new Uint8Array($this.GmsslModule.HEAPU8.buffer, chunk, size);
 
 
                     let frames = [...$this.preProcessing.streamParser.parseChunk(vdata)];
@@ -81,7 +80,7 @@ class Decrypt {
         };
 
 
-        this.sm4Instance = new Module.GmsslZb(gmssl);
+        this.sm4Instance = new this.GmsslModule.GmsslZb(gmssl);
     }
 
 

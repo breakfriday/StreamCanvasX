@@ -8,11 +8,7 @@ import WebGLYUVRenderer from './WebGLColorConverter';
 import { GPUDevice, GPUSampler, GPURenderPipeline, GPUCanvasContext } from '../../types/services/webGpu';
 
 import { UseMode } from '../../constant';
-import loadWASM from './load_wasm.js';
-let wam;
-loadWASM().then((module) => {
-    wam = module;
-  });
+import { loadWASM } from '../../utils';
 
 function createContextGL($canvas: HTMLCanvasElement): WebGLRenderingContext | null {
     let gl: WebGLRenderingContext | null = null;
@@ -68,6 +64,7 @@ class CanvasVideoService {
     transformDegreeSum: number;
     rotateDegreeSum: number;
     cover: boolean;
+    WatermarkModule;
     isDrawingWatermark: boolean;
     isGettingWatermark: boolean;
     constructor() {
@@ -186,8 +183,37 @@ class CanvasVideoService {
         this.canvas_context = this.canvas_el.getContext('2d');
       }
        // this.canvas_context = this.canvas_el.getContext('2d');
+      this._initWatermark();
     }
-
+    async _initWatermark() {
+      // 获取wasm Module
+      let $this = this;
+      this.WatermarkModule = await loadWASM('watermark.js', 'createWatermark', this.WatermarkModule);
+      // debugger;
+      this.WatermarkModule['watermarkArnoldDCT'] = function (pixelData: Uint8ClampedArray, width: number, height: number, watermarkData: Uint8ClampedArray, size: number, count: number) {
+        const len = pixelData.length;
+        const len2 = watermarkData.length;
+        const mem = $this.WatermarkModule._malloc(len + len2);
+        $this.WatermarkModule.HEAPU8.set(pixelData, mem);
+        $this.WatermarkModule.HEAPU8.set(watermarkData, mem + len);
+        $this.WatermarkModule._watermarkArnoldDCT(mem, width, height, mem + len, size, count);
+        const filtered = $this.WatermarkModule.HEAPU8.subarray(mem, mem + len);
+        $this.WatermarkModule._free(mem);
+        return filtered;
+      };
+      this.WatermarkModule['watermarkArnoldIDCT'] = function (pixelData: Uint8ClampedArray, width: number, height: number, watermarkData: Uint8ClampedArray, size: number, count: number) {
+        const len = pixelData.length;
+        const len2 = size * size * 4;
+        const mem = $this.WatermarkModule._malloc(len + len2);
+        $this.WatermarkModule.HEAPU8.set(pixelData, mem);
+        $this.WatermarkModule.HEAPU8.set(watermarkData, mem + len);
+        $this.WatermarkModule._watermarkArnoldIDCT(mem, width, height, mem + len, size, count);
+        // const filtered = HEAPU8.subarray(mem, mem+len);  // 返回图像
+        const filtered2 = $this.WatermarkModule.HEAPU8.subarray(mem + len, mem + len + len2); // 返回水印
+        $this.WatermarkModule._free(mem);
+        return filtered2;
+      };
+    }
     // _initOffScreen() {
     //   let offscreenCanvas = this.canvas_el.transferControlToOffscreen();
     //   this.canvas_context = offscreenCanvas.getContext('2d');
@@ -939,7 +965,7 @@ class CanvasVideoService {
       invisibleWatermarkImg.src = src;
       ctxInvisibleWatermark.drawImage(invisibleWatermarkImg, 0, 0);
       let invisibleWatermarkData = ctxInvisibleWatermark.getImageData(0, 0, invisibleWatermark.width, invisibleWatermark.height);
-      let result = wam.watermarkArnoldDCT(imageData.data, canvas.width, canvas.height,
+      let result = this.WatermarkModule.watermarkArnoldDCT(imageData.data, canvas.width, canvas.height,
                      invisibleWatermarkData.data, size, count);
       for (let i = 0; i < canvas.width * canvas.height * 4; i++) {
         imageData.data[i] = result[i];
@@ -960,7 +986,7 @@ class CanvasVideoService {
       if (isGettingWatermark) {
       let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       let invisibleWatermarkData = new ImageData(size, size);
-      let result = wam.watermarkArnoldIDCT(imageData.data, canvas.width, canvas.height,
+      let result = this.WatermarkModule.watermarkArnoldIDCT(imageData.data, canvas.width, canvas.height,
                       invisibleWatermarkData.data, size, count);
       for (let i = 0; i < size * size * 4; i++) {
         invisibleWatermarkData.data[i] = result[i];
