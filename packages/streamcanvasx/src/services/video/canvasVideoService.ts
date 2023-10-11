@@ -578,9 +578,11 @@ class CanvasVideoService {
     createVideoFramCallBack(video: HTMLVideoElement) {
       let $this = this;
 
-
+      let fpsCount = 5;
       let frame_count = 0;
       let start_time = 0.0;
+      let now_time = 0.0;
+      let fps = 0;
 
       function millisecondsToTime(ms: any) {
         // 将时间戳转换为秒并取整
@@ -602,13 +604,19 @@ class CanvasVideoService {
       let cb = () => {
         video.requestVideoFrameCallback((now) => {
             // $this.renderFrameByWebgpu(video);
+            let last_time = now_time;
             if (start_time == 0.0) {
               start_time = now;
             }
-            let last_time = performance.now();
+            now_time = now;
+            // let last_time = performance.now();
 
-            let elapsed = (now - start_time) / 1000.0;
-            let fps = (++frame_count / elapsed).toFixed(3);
+            let elapsed = (now_time - last_time) / 1000.0;
+            // 每经过fpsCount帧后，输出一次当前的瞬时帧率
+            if (!(frame_count % fpsCount)) {
+              fps = (1 / elapsed).toFixed(3);
+            }
+            frame_count++;
 
             let performanceInfo = { fps: fps, duringtime: millisecondsToTime(now - start_time) };
             // console.info(performanceInfo);
