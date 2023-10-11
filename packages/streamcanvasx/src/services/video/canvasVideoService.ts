@@ -188,7 +188,7 @@ class CanvasVideoService {
     async _initWatermark() {
       // 获取wasm Module
       let $this = this;
-      this.WatermarkModule = await loadWASM('watermark.js', 'createWatermark', this.WatermarkModule);
+      this.WatermarkModule = await loadWASM('watermark.js', 'createWatermark');
       // debugger;
       this.WatermarkModule['watermarkArnoldDCT'] = function (pixelData: Uint8ClampedArray, width: number, height: number, watermarkData: Uint8ClampedArray, size: number, count: number) {
         const len = pixelData.length;

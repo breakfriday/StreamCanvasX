@@ -60,11 +60,9 @@ export function addScript2(scriptName: string): Promise<void> {
         document.head.appendChild(script);
     });
 }
-export async function loadWASM(jsPath: string, exportName: string, Module: {}) {
-    // debugger;
+export async function loadWASM(jsPath: string, exportName: string) {
     await addScript2(jsPath);
-    // debugger;
-    Module = await eval(`${exportName}()`);
-    // debugger;
+    // console.log(exportName);
+    let Module = await eval(`${exportName}()`);
     return Module;
   }

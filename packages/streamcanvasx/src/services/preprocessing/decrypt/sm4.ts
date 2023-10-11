@@ -42,7 +42,8 @@ class Decrypt {
                 this._runtimeInitializedNotify();
                 }, 400);
             } else {
-                this.GmsslModule = await loadWASM('gmssl_zb/gmssl_zb.js', 'createGmssl', this.GmsslModule);
+                // debugger;
+                this.GmsslModule = await loadWASM('gmssl_zb/gmssl_zb.js', 'createGmssl');
                 this.gmssl_zb_install = true;
                 this._runtimeInitializedNotify();
             }
