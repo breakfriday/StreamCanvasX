@@ -17,7 +17,7 @@ const main_player = async () => {
   let gFilter;
   const canvas = document.getElementById('canvas');
   const context = canvas.getContext('2d');
-  webdsp_cModule = await loadWASM('webdsp_c.js', 'createWebdsp_c', webdsp_cModule);
+  webdsp_cModule = await loadWASM('webdsp_c.js', 'createWebdsp_c');
   model = await cocoSsd.load();
 
   const outlineStuff = (predictions) => {
