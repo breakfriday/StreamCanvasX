@@ -1,22 +1,23 @@
 
 // 假设当前模块的URL是 http://example.com/path/to/my/module.js
 
-export function addScript(scriptName: string) {
-    // 获取当前模块的base URL
-    const baseURL = new URL('.', import.meta.url).href;
+// export function addScript(scriptName: string) {
+//     // 获取当前模块的base URL
+//     // const baseURL = new URL('.', import.meta.url).href;
+//     // const baseURL = new URL(import.meta.url).href;
 
-    // 创建一个新的script标签
-    const script = document.createElement('script');
-    script.type = 'module';
+//     // 创建一个新的script标签
+//     const script = document.createElement('script');
+//     script.type = 'module';
 
 
-    // debugger;
-    // 设置script的src属性
-    script.src = `${baseURL}${scriptName}`;
+//     // debugger;
+//     // 设置script的src属性
+//     script.src = `${baseURL}${scriptName}`;
 
-    // 将script添加到页面中
-    document.head.appendChild(script);
-}
+//     // 将script添加到页面中
+//     document.head.appendChild(script);
+// }
 
 // 使用方法
 // 这将会加载 http://example.com/path/to/my/anotherModule.js
