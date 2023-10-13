@@ -265,13 +265,13 @@ class PlayerService extends Emitter {
                   }, { enableStashBuffer: false,
                        enableWorker: true,
                        liveBufferLatencyChasing: true,
-                        liveBufferLatencyMaxLatency: 1, // seconds.
-                        autoCleanupSourceBuffer: true,
-                        // autoCleanupMaxBackwardDuration: 5, // seconds.
-                         autoCleanupMinBackwardDuration: 5,
-                        lazyLoad: false,
-                        liveBufferLatencyMinRemain: 0.1,
-                        lazyLoadMaxDuration: 4, // seconds.
+                       liveBufferLatencyMaxLatency: 1.5, // seconds.
+                        // autoCleanupSourceBuffer: true,
+                        // // autoCleanupMaxBackwardDuration: 5, // seconds.
+                        //  autoCleanupMinBackwardDuration: 5,
+                        // lazyLoad: false,
+                        // liveBufferLatencyMinRemain: 0.1,
+                        // lazyLoadMaxDuration: 4, // seconds.
                  });
             }
 
