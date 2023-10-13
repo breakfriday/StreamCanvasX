@@ -161,8 +161,22 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   } | null;
   streamType?: string;// 其他可能的值: "PCM", "MP4", "FLV"
   fileData?: File;
+  isLive?: boolean;
 
+}
+
+interface IRTCPlayerConfig{
+  contentEl?: HTMLElement;
+  url?: string;
+  pushToken?: string;
+  fetchToken?: string;
+  token?: string;
+  renderType?: string;
 }
 
 
 export type IplayerConfig = Partial<IplayerConfig>;
+
+
+export type IRTCPlayerConfig = Partial<IRTCPlayerConfig>;
+

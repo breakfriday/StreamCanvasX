@@ -3,7 +3,8 @@ import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, C
 // import { HttpFlvStreamLoader } from 'streamcanvasx/es2017/services/stream/fetch_stream_loader';
 import { WHIPClient } from './whis.js';
 import { WHEPClient } from './whep.js';
-
+import Player from './aa.tsx';
+import styles from './index.module.less';
 const Whip = () => {
  const containerRef = useRef(null);
  const playerRef = useRef(null);
@@ -116,6 +117,17 @@ const Whip = () => {
 
 
         <video width={400} controls />
+
+
+        <div className={styles['grid_container']}>
+          <Player />
+          <Player />
+          <Player />
+          <Player />
+          <Player />
+          <Player />
+        </div>
+
 
       </>
 

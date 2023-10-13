@@ -11,13 +11,14 @@ const LiveVideo = (props) => {
     const playerRef = useRef();
 
     const runplayer = () => {
-      let { url, key_v = '', enable_crypto = false, fileData } = props;
+      let { url, key_v = '', enable_crypto = false, fileData, showAudio = false } = props;
       // fetchflv.fetchStream(url);
-      let showAudio = false,
-      hasVideo = true,
+
+     let hasVideo = false,
       hasAudio = true;
 
 
+      let auduo1 = { fftsize: 128, updataBufferPerSecond: 15, renderPerSecond: 15, audioDrawType: '1', bufferSize: 0.2 };
       let config = { url,
         showAudio,
         hasVideo,
@@ -31,7 +32,11 @@ const LiveVideo = (props) => {
           wasmModulePath: '',
           useWasm: true,
         } : null,
-        };
+       };
+
+       config = Object.assign(config, auduo1);
+
+       debugger;
 
 
       const player = createPlayerServiceInstance(config);

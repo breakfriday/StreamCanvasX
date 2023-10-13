@@ -14,6 +14,8 @@ const TYPES = {
     ICanvasToVideoSerivce: Symbol.for('ICanvasToVideoSerivce'),
     IMseDecoderService: Symbol.for('MseDecoderService'),
     IPreProcessing: Symbol.for('PreProcessing'),
+    IRTCPlayerService: Symbol.for('RTCPlayerService'),
+    IVideoService: Symbol.for('VideoService'),
 
   };
 
