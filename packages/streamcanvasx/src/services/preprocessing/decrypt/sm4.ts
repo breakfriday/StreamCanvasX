@@ -36,6 +36,7 @@ class Decrypt {
     }
 
     async beforInit() {
+        this._runtimeInitialized();
         if (this.config.useWasm === true) {
             if (this.gmssl_zb_install === true) {
                 setTimeout(() => {
@@ -47,8 +48,6 @@ class Decrypt {
                 this.gmssl_zb_install = true;
                 this._runtimeInitializedNotify();
             }
-
-            await this._runtimeInitialized();
         }
 
 

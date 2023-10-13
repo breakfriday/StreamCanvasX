@@ -24,7 +24,7 @@ const LiveVideo = (props) => {
         hasVideo,
         hasAudio,
         contentEl: containerRef.current!,
-        streamType: 'ACC',
+        streamType: 'AAC',
         fileData,
         crypto: enable_crypto === '1' ? {
           key: key_v,

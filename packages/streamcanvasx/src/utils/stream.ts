@@ -6,7 +6,7 @@ export class createRateLimitedReadableStream {
     residualBuffer: Uint8Array; // 用于存储溢出的数据
     delayTime: number;
     finish: boolean;
-    constructor(parm: { chunk_size: number }) {
+    constructor(parm?: { chunk_size: number }) {
         let $this = this;
         this.CHUNK_SIZE = 640;
         this.delayTime = 10;
