@@ -55,6 +55,8 @@ class AudioProcessingService {
          }
 
 
+         this.render();
+
          this.canvasWorker = new Worker(new URL('./worker.js', import.meta.url));
     }
 
@@ -460,6 +462,33 @@ class AudioProcessingService {
         setTimeout(() => {
         this.playerService.emit('audioInfo', { realTime });
         }, 900);
+      }
+
+      render() {
+        let { config } = this.playerService;
+
+        let { showAudio, useOffScreen } = config;
+
+
+        if (showAudio === true) {
+          this.playerService.canvasVideoService.loading = false;
+          if (useOffScreen === true) {
+            this.visulizerDraw2();
+          } else {
+            switch (config.audioDraw * 1) {
+              case 1:
+                  this.drawSymmetricWaveform();
+                  break;
+              case 2:
+                   this.visulizerDraw1();
+                  break;
+              default:
+                  this.drawSymmetricWaveform();
+
+              break;
+            }
+          }
+        }
       }
 }
 

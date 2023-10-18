@@ -147,13 +147,18 @@ const HlsDemo = () => {
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item
-          initialValue={'ideteck_chenxuejian_test'}
-          label="key"
-          name="key"
-        >
-          <Input />
-        </Form.Item>
+        {
+           formState['enable_crypto'] === '1' ? (
+             <Form.Item
+               initialValue={'ideteck_chenxuejian_test'}
+               label="key"
+               name="key"
+             >
+               <Input />
+             </Form.Item>
+           ) : ''
+        }
+
 
         <Form.Item label="showAudio" name="showAudio" initialValue>
           <Radio.Group>

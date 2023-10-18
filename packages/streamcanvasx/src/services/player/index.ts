@@ -169,7 +169,7 @@ class PlayerService extends Emitter {
         this.canvasVideoService.init(this, { model: model, contentEl, useOffScreen });
         this.canvasToVideoSerivce.init(this);
 
-        if (config.streamType === 'AAC' || config.streamType === 'MP4' || config.streamType === 'Mpegts') {
+        if (config.streamType === 'AAC' || config.streamType === 'MP4' || config.streamType === 'MpegTs') {
             this.mseDecoderService.init(this);
             this.preProcessing.init(this);
         }
@@ -192,12 +192,6 @@ class PlayerService extends Emitter {
 
             // debugger;
             this.audioProcessingService.init(this, { media_el: media_el });
-
-            if (showAudio === true) {
-                this.canvasVideoService.loading = false;
-
-                this.audioProcessingService.drawSymmetricWaveform();
-            }
 
 
             // 此處默認靜音
@@ -383,25 +377,7 @@ class PlayerService extends Emitter {
 
 
         if (showAudio === false) {
-            // this.canvasVideoService.render(videoEl);
             this.canvasVideoService.createVideoFramCallBack(videoEl);
-        } else {
-            if (this.config.useOffScreen === true) {
-            this.audioProcessingService.visulizerDraw2();
-            } else {
-                switch (this.config.audioDraw * 1) {
-                    case 1:
-                        this.audioProcessingService.drawSymmetricWaveform();
-                        break;
-                    case 2:
-                         this.audioProcessingService.visulizerDraw1();
-                        break;
-                    default:
-                        this.audioProcessingService.drawSymmetricWaveform();
-
-                    break;
-                }
-            }
         }
       }
 
