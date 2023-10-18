@@ -168,7 +168,8 @@ class PlayerService extends Emitter {
         this.fLVDemuxStream.init(this);
         this.canvasVideoService.init(this, { model: model, contentEl, useOffScreen });
         this.canvasToVideoSerivce.init(this);
-        if (config.streamType === 'AAC') {
+
+        if (config.streamType === 'AAC' || config.streamType === 'MP4' || config.streamType === 'Mpegts') {
             this.mseDecoderService.init(this);
             this.preProcessing.init(this);
         }
@@ -210,7 +211,11 @@ class PlayerService extends Emitter {
         }
         let { type = 'flv' } = parms;
 
-        let { isLive, url, fileData } = this.config;
+        let { isLive, url, fileData, streamType } = this.config;
+        if (streamType === 'AAC' || streamType === 'MP4') {
+            this.createBetaPlayer();
+            return false;
+        }
         if (fileData) {
             let blobUrl = URL.createObjectURL(fileData);
             url = blobUrl;
