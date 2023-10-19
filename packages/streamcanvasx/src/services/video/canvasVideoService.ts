@@ -183,7 +183,6 @@ class CanvasVideoService {
         this.canvas_context = this.canvas_el.getContext('2d');
       }
        // this.canvas_context = this.canvas_el.getContext('2d');
-      this._initWatermark();
     }
     async _initWatermark() {
       // 获取wasm Module
@@ -544,15 +543,17 @@ class CanvasVideoService {
 
 
         // this.drawTrasform(videoFrame, 30, ctx);
+        if (this.isDrawingWatermark) {
+          this.drawInvisibleWatermark(this.isDrawingWatermark, {});
+          this.getInvisibleWatermark(this.isGettingWatermark, {});
+        }
 
-        this.drawInvisibleWatermark(this.isDrawingWatermark, {});
-        this.getInvisibleWatermark(this.isGettingWatermark, {});
         // ctx.restore();
         // console.log(this.playerService.config.degree);
         // this.drawTrasform(videoFrame, this.playerService.config.degree);
 
         // ctx.restore();
-        this.renderOriginCanvas(videoFrame);
+        // this.renderOriginCanvas(videoFrame);
     }
 
     // 录制原始高清视频
@@ -958,6 +959,9 @@ class CanvasVideoService {
     }
 
     drawInvisibleWatermark(isDrawingWatermark: boolean, invisibleWatermarkConfig) {
+      if (!this.WatermarkModule) {
+        this._initWatermark();
+      }
       let ctx = this.canvas_context;
       let { canvas_el } = this;
       let canvas = canvas_el;
@@ -986,6 +990,9 @@ class CanvasVideoService {
     }
 
     getInvisibleWatermark(isGettingWatermark: boolean, invisibleWatermarkConfig) {
+      if (!this.WatermarkModule) {
+        this._initWatermark();
+      }
       let ctx = this.canvas_context;
       let { canvas_el } = this;
       let canvas = canvas_el;
@@ -1001,7 +1008,7 @@ class CanvasVideoService {
       }
       // ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.putImageData(invisibleWatermarkData, canvas.width - size, 0);
-      console.log('getInvisibleWatermark');
+      // console.log('getInvisibleWatermark');
     }
     }
     // drawLoading() {
