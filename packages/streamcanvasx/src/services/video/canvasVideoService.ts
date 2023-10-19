@@ -553,7 +553,7 @@ class CanvasVideoService {
         // this.drawTrasform(videoFrame, this.playerService.config.degree);
 
         // ctx.restore();
-        // this.renderOriginCanvas(videoFrame);
+        this.renderOriginCanvas(videoFrame);
     }
 
     // 录制原始高清视频
