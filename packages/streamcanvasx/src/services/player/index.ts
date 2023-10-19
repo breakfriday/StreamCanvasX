@@ -168,7 +168,8 @@ class PlayerService extends Emitter {
         this.fLVDemuxStream.init(this);
         this.canvasVideoService.init(this, { model: model, contentEl, useOffScreen });
         this.canvasToVideoSerivce.init(this);
-        if (config.streamType === 'AAC') {
+
+        if (config.streamType === 'AAC' || config.streamType === 'MP4' || config.streamType === 'MpegTs') {
             this.mseDecoderService.init(this);
             this.preProcessing.init(this);
         }
@@ -192,12 +193,6 @@ class PlayerService extends Emitter {
             // debugger;
             this.audioProcessingService.init(this, { media_el: media_el });
 
-            if (showAudio === true) {
-                this.canvasVideoService.loading = false;
-
-                this.audioProcessingService.drawSymmetricWaveform();
-            }
-
 
             // 此處默認靜音
             // this.audioProcessingService.mute(false);
@@ -210,7 +205,11 @@ class PlayerService extends Emitter {
         }
         let { type = 'flv' } = parms;
 
-        let { isLive, url, fileData } = this.config;
+        let { isLive, url, fileData, streamType } = this.config;
+        if (streamType === 'AAC' || streamType === 'MP4') {
+            this.createBetaPlayer();
+            return false;
+        }
         if (fileData) {
             let blobUrl = URL.createObjectURL(fileData);
             url = blobUrl;
@@ -378,25 +377,7 @@ class PlayerService extends Emitter {
 
 
         if (showAudio === false) {
-            // this.canvasVideoService.render(videoEl);
             this.canvasVideoService.createVideoFramCallBack(videoEl);
-        } else {
-            if (this.config.useOffScreen === true) {
-            this.audioProcessingService.visulizerDraw2();
-            } else {
-                switch (this.config.audioDraw * 1) {
-                    case 1:
-                        this.audioProcessingService.drawSymmetricWaveform();
-                        break;
-                    case 2:
-                         this.audioProcessingService.visulizerDraw1();
-                        break;
-                    default:
-                        this.audioProcessingService.drawSymmetricWaveform();
-
-                    break;
-                }
-            }
         }
       }
 
@@ -446,30 +427,10 @@ class PlayerService extends Emitter {
             this.player2.destroy();
         }
     }
-    log() {
-        alert(22);
-    }
-    fetchstrean(url: string) {
-        this.httpFlvStreamService.fetchStream(url);
-    }
+
 
     play(url: string) {
         this.httpFlvStreamService.fetchStream(url);
-    }
-
-    // viedeo render 使用webGpu
-    video_render(video: HTMLVideoElement) {
-        if ('requestVideoFrameCallback' in video) {
-            video.requestVideoFrameCallback(() => {
-                this.canvasVideoService.renderFrameByWebgpu(video);
-            });
-
-
-            // video.requestVideoFrameCallback(frame);
-          } else {
-
-            // requestAnimationFrame(frame);
-          }
     }
 
 
@@ -487,46 +448,6 @@ class PlayerService extends Emitter {
       }
 
 
-        //
-    updateStats(options: any) {
-            options = options || {};
-
-            if (!this._startBpsTime) {
-                this._startBpsTime = now();
-            }
-
-            // if (isNotEmpty(options.ts)) {
-            //     this._stats.ts = options.ts;
-            // }
-
-            // if (isNotEmpty(options.buf)) {
-            //     this._stats.buf = options.buf;
-            // }
-
-            if (options.fps) {
-                this._stats.fps += 1;
-            }
-            if (options.abps) {
-                this._stats.abps += options.abps;
-            }
-            if (options.vbps) {
-                this._stats.vbps += options.vbps;
-            }
-
-            const _nowTime = now();
-            const timestamp = _nowTime - this._startBpsTime;
-
-            if (timestamp < 1 * 1000) {
-                return;
-            }
-
-            // this.emit(EVENTS.stats, this._stats);
-            // this.emit(EVENTS.performance, fpsStatus(this._stats.fps));
-            this._stats.fps = 0;
-            this._stats.abps = 0;
-            this._stats.vbps = 0;
-            this._startBpsTime = _nowTime;
-        }
         retry() {
            if (this.mpegtsPlayer) {
              this.mpegtsPlayer.destroy();
@@ -584,18 +505,6 @@ class PlayerService extends Emitter {
                 // $this.mpegtsPlayer.play();
             }, 15 * 1000);
         }
-
-        // reload() {
-        //     let $this = this;
-        //     debugger;
-        //     let debounceReload = fpdebounce(() => {
-        //         $this.mpegtsPlayer.unload();
-        //         $this.mpegtsPlayer.load();
-        //         $this.mpegtsPlayer.play();
-        //     })(10 * 1000);
-        //     debugger;
-        //     return debounceReload;
-        // }
 }
 
 export default PlayerService;

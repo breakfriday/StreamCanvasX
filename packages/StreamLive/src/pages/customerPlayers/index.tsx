@@ -22,6 +22,8 @@ interface IFormData{
   isLive?: boolean;
   streamType?: string;
   fileData?: File;
+  key?: string;
+  enable_crypto?: string;
 
 }
 
@@ -131,10 +133,37 @@ const HlsDemo = () => {
 
         <Form.Item label="streamType" name="streamType" initialValue={'ACC'}>
           <Radio.Group>
-            <Radio value="ACC"> ACC</Radio>
+            <Radio value="AAC"> ACC</Radio>
             <Radio value="FLV"> FLV</Radio>
             <Radio value="MPEG-TS"> MPEG-TS</Radio>
             <Radio value="MP4"> MP4</Radio>
+          </Radio.Group>
+        </Form.Item>
+
+        <Form.Item label="enable crypto" name="enable_crypto" initialValue={'2'}>
+          <Radio.Group>
+            <Radio value="1"> true </Radio>
+            <Radio value="2"> false</Radio>
+          </Radio.Group>
+        </Form.Item>
+
+        {
+           formState['enable_crypto'] === '1' ? (
+             <Form.Item
+               initialValue={'ideteck_chenxuejian_test'}
+               label="key"
+               name="key"
+             >
+               <Input />
+             </Form.Item>
+           ) : ''
+        }
+
+
+        <Form.Item label="showAudio" name="showAudio" initialValue>
+          <Radio.Group>
+            <Radio value> true </Radio>
+            <Radio value={false}> false</Radio>
           </Radio.Group>
         </Form.Item>
 
@@ -323,6 +352,8 @@ const HlsDemo = () => {
               isLive={item.isLive}
               streamType={item.streamType}
               fileData={item.fileData}
+              key_v={item.key}
+              enable_crypto={item.enable_crypto}
               // degree={}
             />);
           })

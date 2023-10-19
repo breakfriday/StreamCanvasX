@@ -87,7 +87,7 @@ const FlvDemux = () => {
 
           <Form.Item label="streamType" name="streamType" initialValue={'ACC'}>
             <Radio.Group>
-              <Radio value="ACC"> ACC</Radio>
+              <Radio value="AAC"> ACC</Radio>
               <Radio value="FLV"> FLV</Radio>
               <Radio value="MPEG-TS"> MPEG-TS</Radio>
               <Radio value="MP4"> MP4</Radio>
