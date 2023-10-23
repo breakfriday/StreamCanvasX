@@ -162,7 +162,9 @@ class HttpFlvStreamLoader {
                 // });
 
                 const stream = new createRateLimitedReadableStream();
-                stream.enqueue(new Uint8Array(arrayBuffer));
+               // stream.enqueue(new Uint8Array(arrayBuffer));
+
+                stream.equeneAll(new Uint8Array(arrayBuffer));
 
                 const reader = stream.stream.getReader();
                 if (reader) {

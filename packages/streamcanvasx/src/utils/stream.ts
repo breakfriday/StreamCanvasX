@@ -18,6 +18,12 @@ export class createRateLimitedReadableStream {
         this.residualBuffer = new Uint8Array(0);
     }
 
+    async equeneAll(data: Uint8Array) {
+        let dataUint8 = data;
+        this.controller.enqueue(dataUint8);
+        this.controller.close();
+    }
+
     async enqueue(chunk: Uint8Array) {
         let { controller, CHUNK_SIZE, residualBuffer, delayTime } = this;
         if (this.CHUNK_SIZE && this.CHUNK_SIZE > 0) {

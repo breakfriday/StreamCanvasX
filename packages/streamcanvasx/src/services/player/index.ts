@@ -169,7 +169,7 @@ class PlayerService extends Emitter {
         this.canvasVideoService.init(this, { model: model, contentEl, useOffScreen });
         this.canvasToVideoSerivce.init(this);
 
-        if (config.streamType === 'AAC' || config.streamType === 'MP4' || config.streamType === 'MpegTs') {
+        if (config.streamType === 'AAC' || config.streamType === 'MP4' || config.streamType === 'MpegTs' || config.streamType === 'MPEG-TS') {
             this.mseDecoderService.init(this);
             this.preProcessing.init(this);
         }
@@ -182,13 +182,18 @@ class PlayerService extends Emitter {
     }
 
     createBetaPlayer() {
+        // let videoEl = document.createElement('video');
+        // this.meidiaEl = videoEl;
+        // this.meidiaEl.autoplay = true;
+        // this.meidiaEl.controls = false;
+
         this.httpFlvStreamService.fetchStream();
 
          let { hasAudio, showAudio } = this.config;
 
 
-        if (hasAudio === true) {
             let media_el = this.mseDecoderService.$videoElement;
+            this.meidiaEl = media_el;
 
             // debugger;
             this.audioProcessingService.init(this, { media_el: media_el });
@@ -196,7 +201,6 @@ class PlayerService extends Emitter {
 
             // 此處默認靜音
             // this.audioProcessingService.mute(false);
-        }
     }
     createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
         if (window.wasmDebug) {
@@ -206,10 +210,11 @@ class PlayerService extends Emitter {
         let { type = 'flv' } = parms;
 
         let { isLive, url, fileData, streamType } = this.config;
-        if (streamType === 'AAC' || streamType === 'MP4') {
+        if (streamType === 'AAC' || streamType === 'MP4' || streamType === 'MPEG-TS') {
             this.createBetaPlayer();
             return false;
         }
+
         if (fileData) {
             let blobUrl = URL.createObjectURL(fileData);
             url = blobUrl;

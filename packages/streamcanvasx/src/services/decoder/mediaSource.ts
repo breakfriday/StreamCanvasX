@@ -65,7 +65,7 @@ class MseDecoder {
     sourceBuffer: SourceBuffer;
     mediaStream: MediaStream;
     inputMimeType: string;
-    $videoElement: HTMLAudioElement;
+    $videoElement: HTMLAudioElement | HTMLVideoElement;
     streamParser: CodecParser;
     private _mediaSourceCreatedPromise: Promise<void> | null = null;
     private _mediaSourceCreated(): Promise<void> {
@@ -157,7 +157,8 @@ class MseDecoder {
         this.inputMimeType = 'audio/aac';
         this.playerService = playerService;
         this.initStreamParser();
-        this.createAudioEl();
+        // this.createAudioEl();
+        this.createMeidalEL();
 
         // this._mediaSourceCreated = new Promise((resolve) => {
         //   this._mediaSourceCreatedNotify = resolve;
@@ -218,15 +219,36 @@ class MseDecoder {
       }
     }
 
-    createAudioEl() {
-     // this.$videoElement = document.getElementById('aad');
+    // createAudioEl() {
+    //  // this.$videoElement = document.getElementById('aad');
+    //  let { streamType } = this.playerService.config;
 
-     let { contentEl } = this.playerService.config;
+    //  if (streamType === 'AAC') {
+    //   let { contentEl } = this.playerService.config;
 
-      this.$videoElement = document.createElement('audio');
-      this.$videoElement.controls = true;
-      // debugger;
-      contentEl.append(this.$videoElement);
+    //   this.$videoElement = document.createElement('audio');
+    //   this.$videoElement.controls = true;
+    //   // debugger;
+    //   contentEl.append(this.$videoElement);
+    //  }
+    // }
+    createMeidalEL() {
+      let { streamType } = this.playerService.config;
+      if (streamType === 'AAC') {
+        let { contentEl } = this.playerService.config;
+
+        this.$videoElement = document.createElement('audio');
+        this.$videoElement.controls = true;
+
+        contentEl.append(this.$videoElement);
+      } else {
+        let videoEl = document.createElement('video');
+
+        videoEl.autoplay = true;
+        videoEl.controls = false;
+
+        this.$videoElement = videoEl;
+      }
     }
    appendBuffer(buffer: Uint8Array) {
       let { inputMimeType } = this;
