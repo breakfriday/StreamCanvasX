@@ -58,6 +58,7 @@
     "konva": "^8.3.13",
     "lodash": "^4.17.21",
     "mp4-muxer": "^2.1.3",
+    "mux.js": "^6.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "reflect-metadata": "^0.1.13",

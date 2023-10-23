@@ -6,6 +6,8 @@ import Decrypt from './decrypt/sm4';
 
 import CodecParser from 'codec-parser';
 
+import muxjs from 'mux.js';
+
 @injectable()
 class PreProcessing {
     player: PlayerService;
@@ -28,17 +30,29 @@ class PreProcessing {
     init(playerService: PlayerService) {
         this.player = playerService;
         // debugger;
-        this.player.mseDecoderService.start();
 
 
         if (this.player?.config?.crypto?.enable === true) {
             this.decrypt = new Decrypt(this.player.config.crypto, this);
         }
         if (this.player.config.streamType === 'AAC') {
+            this.player.mseDecoderService.start();
+
             this.initAccStreamParser();
         }
     }
-    async processStream(reader: ReadableStreamDefaultReader) {
+    streamMp4(reader: ReadableStreamDefaultReader) {
+        let { fileData } = this.player.config;
+
+        let { meidiaEl } = this.player;
+        let BlobuRL = URL.createObjectURL(fileData);
+        this.player.meidiaEl.src = BlobuRL;
+
+
+        this.player.canvasVideoService.createVideoFramCallBack(meidiaEl);
+    }
+
+    async streamAAC(reader: ReadableStreamDefaultReader) {
         if (this.player?.config?.crypto?.enable === true) {
             // 加密的acc 音频
             this.decrypt.processStream(reader);
@@ -69,6 +83,50 @@ class PreProcessing {
                 }
             }
         }
+    }
+    async streamMPEGTS(reader: ReadableStreamDefaultReader) {
+        let { fileData } = this.player.config;
+        let { meidiaEl } = this.player;
+        let transmuxer = new muxjs.mp4.Transmuxer();
+        transmuxer.on('data', (segment) => {
+            let combined = new Uint8Array(segment.initSegment.byteLength + segment.data.byteLength);
+            combined.set(segment.initSegment, 0);
+            combined.set(segment.data, segment.initSegment.byteLength);
+
+            let blob = new Blob([combined], { type: 'video/mp4' });
+            let BlobuRL = URL.createObjectURL(blob);
+
+           // let aaa = muxjs.mp4.tools.inspect(segment);
+
+            meidiaEl.src = BlobuRL;
+
+            this.player.canvasVideoService.createVideoFramCallBack(meidiaEl);
+        });
+
+
+        debugger;
+        const { done, value } = await reader.read();
+
+        debugger;
+        transmuxer.push(new Uint8Array(value.buffer));
+        transmuxer.flush();
+    }
+    async processStream(reader: ReadableStreamDefaultReader) {
+        let { streamType } = this.player.config;
+        debugger;
+        switch (streamType) {
+            case 'AAC':
+              this.streamAAC(reader);
+              break;
+            case 'MP4':
+                this.streamMp4(reader);
+                break;
+            case 'MPEG-TS':
+                  this.streamMPEGTS(reader);
+                  debugger;
+            default:
+               console.log('no streamType');
+          }
     }
 }
 
