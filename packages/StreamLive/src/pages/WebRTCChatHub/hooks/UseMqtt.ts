@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
-import mqtt, { Client, IClientPublishOptions, IClientSubscribeOptions } from 'mqtt';
+import * as mqtt from 'mqtt/dist/mqtt.min';
+
+
+import { Client, IClientPublishOptions, IClientSubscribeOptions } from 'mqtt';
 
 interface Message {
     topic: string;
