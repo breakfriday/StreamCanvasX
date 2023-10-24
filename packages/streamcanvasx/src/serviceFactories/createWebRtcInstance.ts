@@ -15,4 +15,4 @@ function createRTCPlayerServiceInstance(config: IRTCPlayerConfig): RTCPlayerServ
      return playerInstance;
    }
 
- export { createRTCPlayerServiceInstance };
+ export { createRTCPlayerServiceInstance, RTCPlayerService };

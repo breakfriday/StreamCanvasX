@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row } from 'antd';
 import RTCPlayer from './aa';
 import styles from './index.module.less';
+import UseRTCPlayer from './hooks/UseRTCPlayer';
 let classNames = require('classnames');
 
 
@@ -9,6 +10,8 @@ let getNames = () => {
 
 };
 const WebRTCChatHub = () => {
+  const [playerRef, createPlayer] = UseRTCPlayer();
+  let containerRef = useRef(null);
     return (
       <div>
         {/* <div >
@@ -63,16 +66,28 @@ const WebRTCChatHub = () => {
           </div>
 
           {/* 第二行 */}
-          <div className={styles['grid-large-has-right']}>large_caputre</div>
+          <div className={styles['grid-large-has-right']} ref={containerRef}>large_caputre</div>
 
           {/* 第三行 */}
           <div className={styles['grid-bottom']}>
-            <button className={styles['icon-button']}>
+            <button
+              className={styles['icon-button']}
+              onClick={() => {
+                createPlayer(containerRef);
+                playerRef.current?.getMedia();
+            }}
+            >
               <i className="icon-camera">打开摄像头</i>
             </button>
           </div>
           <div className={styles['grid-bottom']}>
-            <button className={styles['icon-button']}>
+            <button
+              className={styles['icon-button']}
+              onClick={() => {
+                createPlayer(containerRef);
+                playerRef.current?.getdisplaymedia();
+            }}
+            >
               <i className="icon-camera">共享-屏幕</i>
             </button>
           </div>
