@@ -11,6 +11,7 @@ let getNames = () => {
 };
 const WebRTCChatHub = () => {
   const [playerRef, createPlayer] = UseRTCPlayer();
+  const [showGridRight, setShowGridRight] = useState(true);
   let containerRef = useRef(null);
     return (
       <div>
@@ -49,7 +50,7 @@ const WebRTCChatHub = () => {
           📞
         </div>
 
-        <div className={classNames(styles['grid-container-has-right'])}>
+        <div className={showGridRight ? styles['grid-container-has-right'] : styles['grid-container']}>
 
           {/* 第一行 */}
           <div className={styles['grid-item']}>
@@ -66,7 +67,7 @@ const WebRTCChatHub = () => {
           </div>
 
           {/* 第二行 */}
-          <div className={styles['grid-large-has-right']} ref={containerRef}>large_caputre</div>
+          <div className={showGridRight ? styles['grid-large-has-right'] : styles['grid-large']} ref={containerRef}>large_caputre</div>
 
           {/* 第三行 */}
           <div className={styles['grid-bottom']}>
@@ -102,18 +103,26 @@ const WebRTCChatHub = () => {
             </button>
           </div>
           <div className={styles['grid-bottom']}>
-            <button className={styles['icon-button']}>
+            <button
+              className={styles['icon-button']}
+              onClick={() => {
+              setShowGridRight(false);
+            }}
+            >
               <i className="icon-members">聊天</i>
             </button>
           </div>
 
           {/* 最右边列 */}
-          <div className={styles['gird-right']}>
-            <div style={{ width: '100px' }}>
-              chat
-            </div>
+          {showGridRight ? (
+            <div className={styles['gird-right']}>
+              <div style={{ width: '100px' }}>
+                chat
+              </div>
 
-          </div>
+            </div>
+          ) : null}
+
 
         </div>
       </div>
