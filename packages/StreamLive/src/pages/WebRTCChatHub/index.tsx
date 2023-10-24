@@ -42,14 +42,25 @@ const WebRTCChatHub = () => {
           </button>
 
         </div> */}
+        <div className={styles['phone']}>
+          📞
+        </div>
 
         <div className={classNames(styles['grid-container-has-right'])}>
 
           {/* 第一行 */}
-          <div className={styles['grid-item']}>1</div>
-          <div className={styles['grid-item']}>2</div>
-          <div className={styles['grid-item']}>3</div>
-          <div className={styles['grid-item']}>4</div>
+          <div className={styles['grid-item']}>
+            <div className={styles['grid-item-box']} >1</div>
+          </div>
+          <div className={styles['grid-item']}>
+            <div className={styles['grid-item-box']} >1</div>
+          </div>
+          <div className={styles['grid-item']}>
+            <div className={styles['grid-item-box']} >1</div>
+          </div>
+          <div className={styles['grid-item']}>
+            <div className={styles['grid-item-box']} >1</div>
+          </div>
 
           {/* 第二行 */}
           <div className={styles['grid-large-has-right']}>large_caputre</div>
