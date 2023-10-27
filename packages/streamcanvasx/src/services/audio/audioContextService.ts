@@ -135,7 +135,7 @@ class AudioProcessingService {
       //   canvasContext.lineWidth = 5;
       //   canvasContext.strokeStyle = '#7f0';
       // }, 400);
-
+      debugger;
       const AnimationFrame = () => {
          dataArray = this.bufferData;
           if (this.clear === true) {
@@ -351,7 +351,7 @@ class AudioProcessingService {
 
       // 取到 0 数据不更新 bufferdata
       let hasZero = dataArray.some(value => value === 0);
-
+      debugger;
       if (hasZero === false) {
         bufferData.copyWithin(0, dataArray.length);
         // Add new data to the end of the buffer
