@@ -34,15 +34,7 @@ class CanvasWaveService {
         this.regGl = createREGL({ gl: this.glContext, extensions: ['OES_texture_float'] });
     }
 
-    _initContext2D() {
-        this.canvas_context = this.canvas_el.getContext('2d');
-         // this.canvas_context = this.canvas_el.getContext('2d');
-      }
 
-
-      updataBufferByanalyserNode() {
-
-      }
       updateBuffer() {
         const points = this.bufferData;
       }
