@@ -2,9 +2,11 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 
 import PlayerService from '../player';
-import waveForm from './webgl-waveform-visualization';
+import WaveGl from './webgl-waveform-visualization';
 
 import { IRTCPlayerConfig } from '../../types/services';
+import { TYPES } from '../../serviceFactories/symbol';
+
 
 @injectable()
 class BaseRenderEnging {
@@ -15,8 +17,12 @@ class BaseRenderEnging {
     resizeObserver: ResizeObserver;
     contentEl?: HTMLElement;
     config?: IRTCPlayerConfig;
-    constructor() {
+    waveGl: WaveGl;
+    constructor(
+      @inject(TYPES.IWaveGl) waveGl: WaveGl,
 
+    ) {
+      this.waveGl = waveGl;
     }
     init(config: IRTCPlayerConfig) {
       this.config = config;
@@ -25,6 +31,8 @@ class BaseRenderEnging {
       this.contentEl?.append(this.canvas_el);
       this.event();
       this.initgl();
+
+      this.waveGl.init(this);
     }
 
     _initContext2D() {
@@ -71,9 +79,7 @@ class BaseRenderEnging {
           this.canvas_el.height = height;
     }
     waveService() {
-      let glWave = new waveForm(this);
 
-      return glWave;
     }
 }
 

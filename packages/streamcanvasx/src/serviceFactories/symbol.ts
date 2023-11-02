@@ -17,6 +17,7 @@ const TYPES = {
     IRTCPlayerService: Symbol.for('RTCPlayerService'),
     IVideoService: Symbol.for('VideoService'),
     IRenderEngine: Symbol.for('RenderEngine'),
+    IWaveGl: Symbol.for('WaveGl'),
 
   };
 

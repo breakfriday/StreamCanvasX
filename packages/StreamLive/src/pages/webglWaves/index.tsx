@@ -15,11 +15,13 @@ const waveDemo = () => {
         let wavePlayer = createWaveAudioServiceInstance({ contentEl: containerRef.current! });
         waveRef.current = wavePlayer;
     }, []);
-    return (<div >ss
+    return (<div >
 
       <div onClick={() => {
                 alert(12);
                 let wave = waveRef.current;
+                let wave1 = wave?.waveService();
+                
         }}
       >update</div>
 

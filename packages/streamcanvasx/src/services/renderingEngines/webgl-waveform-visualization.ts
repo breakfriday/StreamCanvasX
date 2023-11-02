@@ -4,7 +4,7 @@ import PlayerService from '../player';
 import createREGL from 'regl';
 import BaseRenderEnging from './baseEngine';
 
-
+@injectable()
 class CanvasWaveService {
     canvas_el: HTMLCanvasElement;
     regGl: createREGL.Regl;
@@ -13,16 +13,18 @@ class CanvasWaveService {
     dataArray: Float32Array;
     playerService: PlayerService;
     glContext: WebGLRenderingContext;
+    baseEngine: BaseRenderEnging;
 
-    constructor(self: BaseRenderEnging) {
-        this.canvas_el = self.canvas_el;
-        this.glContext = self.gl_context;
+    constructor() {
 
-        this.init();
+
     }
 
-    init() {
-        this.initBufferData();
+    init(baseEngine: BaseRenderEnging) {
+       this.baseEngine = baseEngine;
+       this.canvas_el = this.baseEngine.canvas_el;
+       this.glContext = this.baseEngine.gl_context;
+       this.initBufferData();
         this.initgl();
     }
 
