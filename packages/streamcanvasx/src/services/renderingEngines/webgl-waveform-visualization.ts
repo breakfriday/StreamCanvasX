@@ -2,24 +2,23 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../player';
 import createREGL from 'regl';
+import BaseRenderEnging from './baseEngine';
 
 
-@injectable()
 class CanvasWaveService {
     canvas_el: HTMLCanvasElement;
     regGl: createREGL.Regl;
     canvas_context: CanvasRenderingContext2D;
     bufferData: Float32Array;
     dataArray: Float32Array;
-    context: {
-        audioContext?: AudioContext;
-        analyserNode?: AnalyserNode;
-        gainNode?: GainNode;
-        audioSourceNode?: MediaElementAudioSourceNode;
-        mediaSource_el?: HTMLAudioElement | HTMLVideoElement;
-    };
-    constructor() {
-        this.canvas_el = document.createElement('canvas');
+    playerService: PlayerService;
+    glContext: WebGLRenderingContext;
+
+    constructor(self: BaseRenderEnging) {
+        this.canvas_el = self.canvas_el;
+        this.glContext = self.gl_context;
+
+        this.init();
     }
 
     init() {
@@ -28,7 +27,9 @@ class CanvasWaveService {
     }
 
     initgl() {
-        this.regGl = createREGL({ canvas: this.canvas_el, extensions: ['OES_texture_float'] });
+        // this.regGl = createREGL({ canvas: this.canvas_el, extensions: ['OES_texture_float'] });
+
+        this.regGl = createREGL({ gl: this.glContext, extensions: ['OES_texture_float'] });
     }
 
     _initContext2D() {
@@ -53,6 +54,7 @@ class CanvasWaveService {
         let { dataArray } = this;
         let canvas = this.canvas_el;
         let bufferLength = 1000;
+        let scale = 1;
 
         const vertices = [];
         for (let i = 0; i < bufferLength; i++) {

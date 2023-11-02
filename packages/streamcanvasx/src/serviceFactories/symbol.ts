@@ -16,6 +16,7 @@ const TYPES = {
     IPreProcessing: Symbol.for('PreProcessing'),
     IRTCPlayerService: Symbol.for('RTCPlayerService'),
     IVideoService: Symbol.for('VideoService'),
+    IRenderEngine: Symbol.for('RenderEngine'),
 
   };
 

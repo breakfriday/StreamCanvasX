@@ -27,6 +27,8 @@ import CanvasToVideoSerivce from '../services/muxer/canvasToVideo';
 import MseDecoderService from '../services/decoder/mediaSource';
 import PreProcessing from '../services/preprocessing';
 
+import RenderEngine from '../services/renderingEngines/baseEngine';
+
 
 // const worker = new Worker(new URL('work.js', import.meta.url));
 
@@ -51,6 +53,9 @@ containerPlayer.bind<MseDecoderService>(TYPES.IMseDecoderService).to(MseDecoderS
 containerPlayer.bind<FLVDemuxStream>(TYPES.IFLVDemuxStream).to(FLVDemuxStream);
 
 containerPlayer.bind<PreProcessing>(TYPES.IPreProcessing).to(PreProcessing);
+
+containerPlayer.bind<RenderEngine>(TYPES.IRenderEngine).to(RenderEngine);
+
 
  function createPlayerServiceInstance(config: IplayerConfig): PlayerService {
   let playerInstance = containerPlayer.get<PlayerService>(TYPES.IPlayerService);

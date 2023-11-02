@@ -19,6 +19,8 @@ import CanvasToVideoSerivce from '../muxer/canvasToVideo';
 import MseDecoderService from '../decoder/mediaSource';
 import PreProcessing from '../preprocessing';
 
+import RenderEngine from '../renderingEngines/baseEngine';
+
 
 mpegts.LoggingControl.applyConfig({
     forceGlobalTag: true,
@@ -58,6 +60,7 @@ class PlayerService extends Emitter {
     audioProcessingService: AudioProcessingService;
     mseDecoderService: MseDecoderService;
     preProcessing: PreProcessing;
+    renderEngine: RenderEngine;
     private _stats: Stats;
     private _startBpsTime?: number;
     _opt: any;
@@ -90,6 +93,7 @@ class PlayerService extends Emitter {
         @inject(TYPES.ICanvasToVideoSerivce) canvasToVideoSerivce: CanvasToVideoSerivce,
         @inject(TYPES.IMseDecoderService) mseDecoderService: MseDecoderService,
         @inject(TYPES.IPreProcessing) preProcessing: PreProcessing,
+        @inject(TYPES.IRenderEngine) renderEngine: RenderEngine,
         ) {
         super();
         this.httpFlvStreamService = httpFlvStreamService;
@@ -105,6 +109,7 @@ class PlayerService extends Emitter {
         this.canvasToVideoSerivce = canvasToVideoSerivce;
         this.mseDecoderService = mseDecoderService;
         this.preProcessing = preProcessing;
+        this.renderEngine = renderEngine;
 
 
         this._times = {

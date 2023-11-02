@@ -1,8 +1,8 @@
 
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
-import { GPUDevice, GPUSampler, GPURenderPipeline, GPUCanvasContext } from '../../types/services/webGpu';
 
 import PlayerService from '../player';
+import waveForm from './webgl-waveform-visualization';
 
 @injectable()
 class BaseRenderEnging {
@@ -10,7 +10,6 @@ class BaseRenderEnging {
     canvas_context: CanvasRenderingContext2D;
     gl_context: WebGLRenderingContext;
     playerService: PlayerService;
-    GpuContext: GPUCanvasContext;
     resizeObserver: ResizeObserver;
     contentEl?: HTMLElement;
     constructor() {
@@ -34,8 +33,8 @@ class BaseRenderEnging {
     }
 
     initWebgpu() {
-      let GpuContext = this.canvas_el.getContext('webgpu');
-      this.GpuContext = GPUCanvasContext;
+      // let GpuContext = this.canvas_el.getContext('webgpu');
+      // this.GpuContext = GPUCanvasContext;
     }
 
     event() {
@@ -65,6 +64,11 @@ class BaseRenderEnging {
 
           this.canvas_el.width = width;
           this.canvas_el.height = height;
+    }
+    waveService() {
+      let glWave = new waveForm(this);
+
+      return glWave;
     }
 }
 
