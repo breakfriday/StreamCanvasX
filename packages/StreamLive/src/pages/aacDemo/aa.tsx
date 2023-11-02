@@ -1,7 +1,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input } from 'antd';
-import { createPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
+import { createPlayerServiceInstance } from 'streamcanvasx/es2017/serviceFactories/index';
 import { PlayCircleFilled } from '@ant-design/icons';
 
 

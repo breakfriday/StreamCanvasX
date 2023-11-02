@@ -1,7 +1,8 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input, InputNumber } from 'antd';
-import { createPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
+// import { createPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
+import { createPlayerServiceInstance } from 'streamcanvasx/src/index';
 import { PlayCircleFilled } from '@ant-design/icons';
 // import records from '../canvasToVideo/mp4';
 import RecodDialog from './recordDialog';
