@@ -10,8 +10,9 @@ type ICreateWaveAudioServiceInstance = ReturnType<typeof createWaveAudioServiceI
 
 const waveDemo = () => {
     const waveRef = useRef<ICreateWaveAudioServiceInstance | null>(null);
+    const containerRef = useRef(null);
     useEffect(() => {
-        let wavePlayer = createWaveAudioServiceInstance({});
+        let wavePlayer = createWaveAudioServiceInstance({ contentEl: containerRef.current! });
         waveRef.current = wavePlayer;
     }, []);
     return (<div >ss
@@ -22,7 +23,7 @@ const waveDemo = () => {
         }}
       >update</div>
 
-      <div className={styles['box']}> sws</div>
+      <div className={styles['box']} ref={containerRef}> </div>
     </div>);
 };
 
