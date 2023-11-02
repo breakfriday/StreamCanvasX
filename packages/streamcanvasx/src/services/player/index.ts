@@ -238,13 +238,10 @@ class PlayerService extends Emitter {
         console.info(this.config);
         console.log('------player config-------');
 
-
-        if (hasAudio === true) {
             this.audioProcessingService.init(this, { media_el: videoEl });
 
             // 此處默認靜音
             this.audioProcessingService.mute(true);
-        }
 
 
         // this.audioProcessingService.init(this, { media_el: videoEl });
