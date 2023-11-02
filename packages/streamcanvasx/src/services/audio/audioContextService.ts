@@ -135,7 +135,7 @@ class AudioProcessingService {
       //   canvasContext.lineWidth = 5;
       //   canvasContext.strokeStyle = '#7f0';
       // }, 400);
-      debugger;
+      // debugger;
       const AnimationFrame = () => {
          dataArray = this.bufferData;
           if (this.clear === true) {
@@ -310,6 +310,8 @@ class AudioProcessingService {
 
           x += barWidth + 1;
         }
+
+        console.log(dataArray);
       };
       AnimationFrame();
     }
@@ -351,7 +353,7 @@ class AudioProcessingService {
 
       // 取到 0 数据不更新 bufferdata
       let hasZero = dataArray.some(value => value === 0);
-      debugger;
+      // debugger;
       if (hasZero === false) {
         bufferData.copyWithin(0, dataArray.length);
         // Add new data to the end of the buffer
@@ -480,7 +482,7 @@ class AudioProcessingService {
                   this.drawSymmetricWaveform();
                   break;
               case 2:
-                   this.visulizerDraw1();
+                   this.visulizerDraw();
                   break;
               default:
                   this.drawSymmetricWaveform();
