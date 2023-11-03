@@ -18,6 +18,9 @@ const TYPES = {
     IVideoService: Symbol.for('VideoService'),
     IAudioWaveService: Symbol.for('IAudioWaveService'),
     IWavePlayerService: Symbol.for('IWavePlayerService'),
+    IRenderEngine: Symbol.for('RenderEngine'),
+    IWaveGl: Symbol.for('WaveGl'),
+
   };
 
   export { TYPES };
