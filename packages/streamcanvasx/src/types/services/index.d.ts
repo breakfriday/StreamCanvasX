@@ -183,7 +183,8 @@ interface IWavePlayerConfig{
   updateArrayLength?: number;
   width?: number;
   height?: number;
-
+  updateArrayTimes?: number;
+  renderTimes?: number;
 }
 
 export type IplayerConfig = Partial<IplayerConfig>;

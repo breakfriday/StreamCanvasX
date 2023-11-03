@@ -15,7 +15,7 @@ class WavePlayer {
   }
 
   init(config?: IWavePlayerConfig) {
-    this.audioWaveService.init(config);
+    // this.audioWaveService.init(config);
   }
 }
 export default WavePlayer;

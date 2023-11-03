@@ -6,13 +6,10 @@ import { createWavePlayerServiceInstance } from 'streamcanvasx/src/serviceFactor
 const Wave = () => {
   // debugger;
   const containerRef = useRef();
-  const playerRef = useRef();
+  const playerRef = useRef<>();
 
   useEffect(() => {
-    let player = createWavePlayerServiceInstance({
-      contentEl: containerRef.current!,
-      routes: 32,
-    });
+    let player = createWavePlayerServiceInstance({});
 
     playerRef.current = player;
 
@@ -21,8 +18,9 @@ const Wave = () => {
     // let contentEl = document.getElementById('canvasContainer');
 
     // audioWave.init({ routes: routes });
-    player.audioWaveService.init({ routes: routes });
-    player.audioWaveService.initCanvas(containerRef.current);
+    debugger;
+    player.audioWaveService.init({ routes: routes, contentEl: containerRef.current });
+    // player.audioWaveService.initCanvas(containerRef.current);
 
     const ws = new WebSocket('ws://123.56.228.244:26003/audio');
 
@@ -50,15 +48,16 @@ const Wave = () => {
           if (channelid) {
             updatearray.push(channeldata);
           }
+            // debugger;
+            // console.log(channelid);
+          }
           // debugger;
-          // console.log(channelid);
-        }
-        // debugger;
-        console.log('onmessage');
-        player.audioWaveService.updateArrayData(updatearray);
-        // debugger;
-      });
-    };
+          console.log('onmessage');
+          player.audioWaveService.updateArrayData(updatearray);
+          // debugger;
+        });
+      };
+
     // function initCanvas() {
     //   let contentEl = document.getElementById('canvasContainer');
 
@@ -84,10 +83,10 @@ const Wave = () => {
       >initCanvas</Button> */}
       <Button onClick={() => {
       let player = playerRef.current;
-      player.audioWaveService.start();
+      player.audioWaveService.updateArrayData();
       //   audioWave.start();
       }}
-      >startDraw</Button>
+      >updateArrayData</Button>
 
 
       <div ref={containerRef} id="canvasContainer" />
