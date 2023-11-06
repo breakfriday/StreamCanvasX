@@ -16,6 +16,7 @@ class CanvasWaveService {
     baseEngine: BaseRenderEnging;
     drawCommand: createREGL.DrawCommand;
     vertBuffer: number[][];
+    glBuffer: createREGL.Buffer;
 
 
     constructor() {
@@ -27,20 +28,21 @@ class CanvasWaveService {
        this.baseEngine = baseEngine;
        this.canvas_el = this.baseEngine.canvas_el;
        this.glContext = this.baseEngine.gl_context;
-       this.initBufferData();
+
         this.initgl();
     }
 
     initgl() {
          this.regGl = createREGL({ canvas: this.canvas_el });
-
-        // this.regGl = createREGL({ gl: this.glContext, extensions: ['OES_texture_float'] });
+         let regl = this.regGl;
+         this.vertBuffer = [[]];
+         this.glBuffer = this.regGl.buffer(this.vertBuffer);
          this.drawCommand = this.regGl({
           frag: `
           precision mediump float;
           uniform vec4 color;
           void main() {
-            gl_FragColor = vec4(1,1,1,1);
+            gl_FragColor = vec4(0.47, 1.0, 0.0, 1.0);
           }`,
 
           vert: `
@@ -49,19 +51,45 @@ class CanvasWaveService {
           void main() {
             gl_Position = vec4(position, 0, 1);
           }`,
-
           attributes: {
-            position: this.vertBuffer,
+            position: this.glBuffer,
           },
 
-          count: this.vertBuffer.length,
+          count: this.regGl.prop('count'),
           depth: { enable: false },
           primitive: 'line strip',
-        });
+
+         });
+
+        // this.regGl = createREGL({ gl: this.glContext, extensions: ['OES_texture_float'] });
+        //  this.drawCommand = this.regGl({
+        //   frag: `
+        //   precision mediump float;
+        //   uniform vec4 color;
+        //   void main() {
+        //     gl_FragColor = vec4(1,1,1,1);
+        //   }`,
+
+        //   vert: `
+        //   precision mediump float;
+        //   attribute vec2 position;
+        //   void main() {
+        //     gl_Position = vec4(position, 0, 1);
+        //   }`,
+
+        //   attributes: {
+        //     position: this.vertBuffer,
+        //   },
+
+        //   count: this.vertBuffer.length,
+        //   depth: { enable: false },
+        //   primitive: 'line strip',
+        // });
     }
 
 
       updateVertBuffer() {
+        this.dataArray = this.generateSineWave();
         let pcmData = this.dataArray;
         const points = Array.from({ length: pcmData.length }, (_, i) => ({
           position: [
@@ -71,24 +99,40 @@ class CanvasWaveService {
         }));
 
          this.vertBuffer = points.map(p => p.position);
+         this.glBuffer(this.vertBuffer);
+         debugger;
       }
 
-
-      initBufferData() {
-       let dataLength = 40000;
-       this.bufferData = new Float32Array(dataLength);
-      }
 
       drawWaveByGl() {
-        let pcmData = this.dataArray;
-        const points = Array.from({ length: pcmData.length }, (_, i) => ({
-          position: [
-            (i / pcmData.length) * 2 - 1, // x坐标，归一化到 [-1, 1]
-            pcmData[i], // y坐标
-          ],
-        }));
+        // let command = this.regGl({
+        //   frag: `
+        //   precision mediump float;
+        //   uniform vec4 color;
+        //   void main() {
+        //     gl_FragColor = vec4(0.47, 1.0, 0.0, 1.0);
+        //   }`,
 
-        this.drawCommand();
+        //   vert: `
+        //   precision mediump float;
+        //   attribute vec2 position;
+        //   void main() {
+        //     gl_Position = vec4(position, 0, 1);
+        //   }`,
+
+        //   attributes: {
+        //     position: this.vertBuffer,
+        //   },
+
+        //   count: this.vertBuffer.length,
+        //   depth: { enable: false },
+        //   primitive: 'line strip',
+        // });
+
+
+        // command();
+
+        this.drawCommand({ count: 441000 });
       }
 
 
@@ -117,9 +161,10 @@ class CanvasWaveService {
 
 
       render() {
-        this.dataArray = this.generateSineWave();
+        // this.dataArray = this.generateSineWave();
         let regl = this.regGl;
         regl.frame(() => {
+          this.updateVertBuffer();
           regl.clear({
             color: [0, 0, 0, 1],
             depth: 1,
