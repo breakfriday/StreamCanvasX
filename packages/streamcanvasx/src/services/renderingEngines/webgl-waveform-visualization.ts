@@ -60,31 +60,6 @@ class CanvasWaveService {
           primitive: 'line strip',
 
          });
-
-        // this.regGl = createREGL({ gl: this.glContext, extensions: ['OES_texture_float'] });
-        //  this.drawCommand = this.regGl({
-        //   frag: `
-        //   precision mediump float;
-        //   uniform vec4 color;
-        //   void main() {
-        //     gl_FragColor = vec4(1,1,1,1);
-        //   }`,
-
-        //   vert: `
-        //   precision mediump float;
-        //   attribute vec2 position;
-        //   void main() {
-        //     gl_Position = vec4(position, 0, 1);
-        //   }`,
-
-        //   attributes: {
-        //     position: this.vertBuffer,
-        //   },
-
-        //   count: this.vertBuffer.length,
-        //   depth: { enable: false },
-        //   primitive: 'line strip',
-        // });
     }
 
 
@@ -105,58 +80,30 @@ class CanvasWaveService {
 
 
       drawWaveByGl() {
-        // let command = this.regGl({
-        //   frag: `
-        //   precision mediump float;
-        //   uniform vec4 color;
-        //   void main() {
-        //     gl_FragColor = vec4(0.47, 1.0, 0.0, 1.0);
-        //   }`,
-
-        //   vert: `
-        //   precision mediump float;
-        //   attribute vec2 position;
-        //   void main() {
-        //     gl_Position = vec4(position, 0, 1);
-        //   }`,
-
-        //   attributes: {
-        //     position: this.vertBuffer,
-        //   },
-
-        //   count: this.vertBuffer.length,
-        //   depth: { enable: false },
-        //   primitive: 'line strip',
-        // });
-
-
-        // command();
-
         this.drawCommand({ count: 441000 });
       }
 
 
       generateSineWave() {
-        const frequency = 440; // 频率, 440Hz 是音乐A4音
-        const sampleRate = 44100; // 采样率
-        const duration = 4000 / sampleRate; // 根据采样点数计算持续时间
+        const sampleRate = 44100; // Standard CD-quality sample rate
+        const duration = 1; // 1 second of audio
 
 
-        function generatePCMData(frequency: number, duration: number, sampleRate: number): Float32Array {
-          const numSamples: number = sampleRate * duration;
-          const buffer: Float32Array = new Float32Array(numSamples);
+        function generateRandomPCMData(duration, sampleRate) {
+          const numSamples = sampleRate * duration;
+          const buffer = new Float32Array(numSamples);
 
           for (let i = 0; i < numSamples; i++) {
-            buffer[i] = Math.sin(2 * Math.PI * frequency * i / sampleRate);
+              // Math.random() returns a value between 0 and 1, so we adjust it to range between -1 and 1
+              buffer[i] = Math.random() * 2 - 1;
           }
 
           return buffer;
-        }
-
+      }
         // 例如：生成440Hz音频的PCM数据，持续1秒，样本率为44100Hz
-        const pcmData: Float32Array = generatePCMData(440, 1, 44100);
+        const randomPCMData = generateRandomPCMData(duration, sampleRate);
 
-        return pcmData;
+        return randomPCMData;
       }
 
 
@@ -164,13 +111,12 @@ class CanvasWaveService {
         // this.dataArray = this.generateSineWave();
         let regl = this.regGl;
         regl.frame(() => {
-          this.updateVertBuffer();
           regl.clear({
             color: [0, 0, 0, 1],
             depth: 1,
           });
-           this.drawWaveByGl();
-           debugger;
+          this.updateVertBuffer();
+          this.drawWaveByGl();
         });
       }
 }
