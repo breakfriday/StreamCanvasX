@@ -5,27 +5,16 @@ import { createWaveAudioServiceInstance } from 'streamcanvasx/src/serviceFactori
 
 import styles from './index.module.css';
 
+import AA from './aa';
+
 
 type ICreateWaveAudioServiceInstance = ReturnType<typeof createWaveAudioServiceInstance>;
 
 const waveDemo = () => {
-    const waveRef = useRef<ICreateWaveAudioServiceInstance | null>(null);
-    const containerRef = useRef(null);
-    useEffect(() => {
-        let wavePlayer = createWaveAudioServiceInstance({ contentEl: containerRef.current! });
-        waveRef.current = wavePlayer;
-    }, []);
     return (<div >
 
-      <div onClick={() => {
-                alert(12);
-                let wave = waveRef.current;
+      <AA />
 
-                 wave?.waveGl.render();
-        }}
-      >update</div>
-
-      <div className={styles['box']} ref={containerRef}> </div>
     </div>);
 };
 
