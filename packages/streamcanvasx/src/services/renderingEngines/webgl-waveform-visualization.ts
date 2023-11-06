@@ -85,7 +85,7 @@ class CanvasWaveService {
 
 
       generateSineWave() {
-        const sampleRate = 44100; // Standard CD-quality sample rate
+        const sampleRate = 48000; // Standard CD-quality sample rate
         const duration = 1; // 1 second of audio
 
 
@@ -94,13 +94,13 @@ class CanvasWaveService {
           const buffer = new Float32Array(numSamples);
 
           for (let i = 0; i < numSamples; i++) {
-              // Math.random() returns a value between 0 and 1, so we adjust it to range between -1 and 1
+              // Math.random()  between -1 and 1
               buffer[i] = Math.random() * 2 - 1;
           }
 
           return buffer;
       }
-        // 例如：生成440Hz音频的PCM数据，持续1秒，样本率为44100Hz
+        // 生成440Hz音频的PCM数据，持续1秒，样本率为44100Hz
         const randomPCMData = generateRandomPCMData(duration, sampleRate);
 
         return randomPCMData;
