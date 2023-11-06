@@ -35,7 +35,7 @@ class CanvasWaveService {
     initgl() {
          this.regGl = createREGL({ canvas: this.canvas_el });
          let regl = this.regGl;
-         this.vertBuffer = [[]];
+
          this.glBuffer = this.regGl.buffer(this.vertBuffer);
          this.drawCommand = this.regGl({
           frag: `
@@ -66,8 +66,13 @@ class CanvasWaveService {
 
 
       updateVertBuffer() {
-        this.dataArray = this.generateSineWave();
-        let pcmData = this.dataArray;
+        let pcmData = this.generateSineWave();
+        let vertPoints = this.translatePointe(pcmData);
+       this.glBuffer(vertPoints);
+      }
+
+      // 将数据点转换为顶点数据
+      translatePointe(pcmData: Float32Array) {
         const points = Array.from({ length: pcmData.length }, (_, i) => ({
           position: [
             (i / pcmData.length) * 2 - 1, // x坐标，归一化到 [-1, 1]
@@ -75,11 +80,9 @@ class CanvasWaveService {
           ],
         }));
 
-         this.vertBuffer = points.map(p => p.position);
-         this.glBuffer(this.vertBuffer);
-         debugger;
+        let vertPoints = points.map(p => p.position);
+        return vertPoints;
       }
-
 
       drawWaveByGl() {
         this.drawCommand({ count: 441000 });
