@@ -3,6 +3,7 @@ import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../player';
 import createREGL from 'regl';
 import BaseRenderEnging from './baseEngine';
+import { debug } from 'console';
 
 @injectable()
 class CanvasWaveService {
@@ -16,7 +17,7 @@ class CanvasWaveService {
     baseEngine: BaseRenderEnging;
     drawCommand: createREGL.DrawCommand;
     vertBuffer: number[][];
-    glBuffer: createREGL.Buffer;
+    glBuffer: Array<createREGL.Buffer>;
 
 
     constructor() {
@@ -68,17 +69,44 @@ class CanvasWaveService {
 
       updateVertBuffer() {
         let pcmData = this.generateSineWave();
-        let vertPoints = this.translatePointe(pcmData);
 
         if (!this.glBuffer) {
-          this.glBuffer = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: pcmData.length });
+          this.glBuffer = [];
+          this.glBuffer[0] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: pcmData.length });
+          this.glBuffer[1] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: pcmData.length });
+          this.glBuffer[2] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: pcmData.length });
+          this.glBuffer[3] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: pcmData.length });
+          this.glBuffer[4] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: pcmData.length });
         }
 
-        this.glBuffer(vertPoints);
+        const totalWaveforms = 32;
+        const heightPerWaveform = 2 / (totalWaveforms + 1); // 分配给每一路的高度空间
+        const heightScale = heightPerWaveform * 0.8; // 实际波形的高度缩放，留出空间以避免相互重叠
+        const verticalOffsetIncrement = heightPerWaveform;
+        let verticalOffset = 1 - verticalOffsetIncrement; // 从最顶部的波形开始计算垂直偏移
+
+        for (let i = 0; i < 5; i++) {
+          let data = this.translatePointe(pcmData, heightScale, verticalOffset);
+          this.glBuffer[i](data);
+          verticalOffset -= verticalOffsetIncrement; // 更新偏移量，为下一路波形准备
+        }
+
+        // let vertPoints1 = this.translatePointe(pcmData, 0.1, 0.9);
+        // let vertPoints2 = this.translatePointe(pcmData, 0.09, 0.5);
+        // let vertPoints3 = this.translatePointe(pcmData, 0.1, 0.7);
+        // let vertPoints4 = this.translatePointe(pcmData, 0.1, 0.6);
+        // let vertPoints5 = this.translatePointe(pcmData, 0.1, 0.5);
+
+        // this.glBuffer[0](vertPoints1);
+        // this.glBuffer[1](vertPoints2);
+        // this.glBuffer[2](vertPoints3);
+        // this.glBuffer[3](vertPoints4);
+        // this.glBuffer[4](vertPoints5);
       }
 
       translatePointe(data: Float32Array, heightScale = 0.2, verticalOffset = 0.8) {
         const translatedPoints = new Float32Array(data.length * 2); // 创建一个新的Float32Array，长度是原数组的两倍，因为每个点需要两个坐标值
+
 
         for (let index = 0; index < data.length; index++) {
           // 归一化X坐标到[-1, 1]
@@ -94,18 +122,18 @@ class CanvasWaveService {
         return translatedPoints;
       }
 
-      // 将数据点转换为顶点数据
-      translatePointe11(pcmData: Float32Array) {
-        const points = Array.from({ length: pcmData.length }, (_, i) => ({
-          position: [
-            (i / pcmData.length) * 2 - 1, // x坐标，归一化到 [-1, 1]
-            pcmData[i], // y坐标
-          ],
-        }));
+      // // 将数据点转换为顶点数据
+      // translatePointe11(pcmData: Float32Array) {
+      //   const points = Array.from({ length: pcmData.length }, (_, i) => ({
+      //     position: [
+      //       (i / pcmData.length) * 2 - 1, // x坐标，归一化到 [-1, 1]
+      //       pcmData[i], // y坐标
+      //     ],
+      //   }));
 
-        let vertPoints = points.map(p => p.position);
-        return vertPoints;
-      }
+      //   let vertPoints = points.map(p => p.position);
+      //   return vertPoints;
+      // }
 
       drawWaveByGl() {
         this.drawCommand({ count: 441000 });
@@ -144,7 +172,13 @@ class CanvasWaveService {
             depth: 1,
           });
           this.updateVertBuffer();
-          this.drawCommand({ count: 441000, buffer: this.glBuffer });
+          this.drawCommand({ count: 441000, buffer: this.glBuffer[0] });
+           // this.drawCommand({ count: 441000, buffer: this.glBuffer[1] });
+          this.drawCommand({ count: 441000, buffer: this.glBuffer[2] });
+           this.drawCommand({ count: 441000, buffer: this.glBuffer[4] });
+
+          // this.drawCommand({ count: 441000, buffer: this.glBuffer[4] });
+          // this.drawCommand({ count: 441000, buffer: this.glBuffer[5] });
          // this.drawCommand({ count: 441000, buffer: this.glBuffer });
         });
       }
