@@ -20,8 +20,8 @@ const waveDemo = () => {
       <div onClick={() => {
                 alert(12);
                 let wave = waveRef.current;
-                let wave1 = wave?.waveService();
-                
+
+                 wave?.waveGl.render();
         }}
       >update</div>
 

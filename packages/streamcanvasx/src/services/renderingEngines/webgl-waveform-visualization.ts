@@ -29,9 +29,10 @@ class CanvasWaveService {
     }
 
     initgl() {
-        // this.regGl = createREGL({ canvas: this.canvas_el, extensions: ['OES_texture_float'] });
+         this.regGl = createREGL({ canvas: this.canvas_el });
 
-        this.regGl = createREGL({ gl: this.glContext, extensions: ['OES_texture_float'] });
+        // this.regGl = createREGL({ gl: this.glContext, extensions: ['OES_texture_float'] });
+        debugger;
     }
 
 
@@ -45,21 +46,14 @@ class CanvasWaveService {
       }
 
       drawWaveByGl() {
-        let { dataArray } = this;
-        let canvas = this.canvas_el;
-        let bufferLength = 1000;
-        let scale = 1;
+        let pcmData = this.dataArray;
+        const points = Array.from({ length: pcmData.length }, (_, i) => ({
+          position: [
+            (i / pcmData.length) * 2 - 1, // x坐标，归一化到 [-1, 1]
+            pcmData[i], // y坐标
+          ],
+        }));
 
-        const vertices = [];
-        for (let i = 0; i < bufferLength; i++) {
-            let v = dataArray[i];
-            let x = (i / bufferLength) * 2 - 1; // Convert x to WebGL clip space (-1 to 1)
-
-            let y_upper = (v * scale + canvas.height / 2) / canvas.height * 2 - 1;
-            let y_lower = (-v * scale + canvas.height / 2) / canvas.height * 2 - 1;
-
-            vertices.push(x, y_upper, x, y_lower);
-        }
 
         const vertexShader = `
                               precision mediump float;
@@ -75,29 +69,57 @@ class CanvasWaveService {
             gl_FragColor = vec4(0.47, 1.0, 0.0, 1.0); // Color #77ff00
           }
         `;
-        const drawTriangle = this.regGl({
+         this.regGl({
             frag: fragmentShader,
 
             vert: vertexShader,
 
             attributes: {
-              position: vertices,
+              position: points.map(p => p.position),
             },
 
-            count: vertices.length / 2,
-            primitive: 'lines',
+            count: points.length,
+            depth: { enable: false },
           });
+
+          debugger;
+      }
+
+      generateSineWave() {
+        const frequency = 440; // 频率, 440Hz 是音乐A4音
+        const sampleRate = 44100; // 采样率
+        const duration = 4000 / sampleRate; // 根据采样点数计算持续时间
+
+
+        function generatePCMData(frequency: number, duration: number, sampleRate: number): Float32Array {
+          const numSamples: number = sampleRate * duration;
+          const buffer: Float32Array = new Float32Array(numSamples);
+
+          for (let i = 0; i < numSamples; i++) {
+            buffer[i] = Math.sin(2 * Math.PI * frequency * i / sampleRate);
+          }
+
+          return buffer;
+        }
+
+        // 例如：生成440Hz音频的PCM数据，持续1秒，样本率为44100Hz
+        const pcmData: Float32Array = generatePCMData(440, 1, 44100);
+
+        return pcmData;
       }
 
 
       render() {
-        this.regGl.clear({ color: [0, 0, 0, 1] });
-        this.drawWaveByGl();
-
-
-        setTimeout(() => {
-          this.render();
-        }, 10);
+        this.dataArray = this.generateSineWave();
+        let regl = this.regGl;
+        regl.frame(() => {
+          regl.clear({
+            color: [0, 0, 0, 1],
+            depth: 1,
+          });
+           this.drawWaveByGl();
+           debugger;
+        });
       }
 }
 

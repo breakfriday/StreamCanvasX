@@ -32,6 +32,9 @@ class BaseRenderEnging {
       this.event();
       this.initgl();
 
+
+      debugger;
+
       this.waveGl.init(this);
     }
 
