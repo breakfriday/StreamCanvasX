@@ -14,6 +14,9 @@ class CanvasWaveService {
     playerService: PlayerService;
     glContext: WebGLRenderingContext;
     baseEngine: BaseRenderEnging;
+    drawCommand: createREGL.DrawCommand;
+    vertBuffer: number[][];
+
 
     constructor() {
 
@@ -32,13 +35,44 @@ class CanvasWaveService {
          this.regGl = createREGL({ canvas: this.canvas_el });
 
         // this.regGl = createREGL({ gl: this.glContext, extensions: ['OES_texture_float'] });
-        debugger;
+         this.drawCommand = this.regGl({
+          frag: `
+          precision mediump float;
+          uniform vec4 color;
+          void main() {
+            gl_FragColor = vec4(1,1,1,1);
+          }`,
+
+          vert: `
+          precision mediump float;
+          attribute vec2 position;
+          void main() {
+            gl_Position = vec4(position, 0, 1);
+          }`,
+
+          attributes: {
+            position: this.vertBuffer,
+          },
+
+          count: this.vertBuffer.length,
+          depth: { enable: false },
+          primitive: 'line strip',
+        });
     }
 
 
-      updateBuffer() {
-        const points = this.bufferData;
+      updateVertBuffer() {
+        let pcmData = this.dataArray;
+        const points = Array.from({ length: pcmData.length }, (_, i) => ({
+          position: [
+            (i / pcmData.length) * 2 - 1, // x坐标，归一化到 [-1, 1]
+            pcmData[i], // y坐标
+          ],
+        }));
+
+         this.vertBuffer = points.map(p => p.position);
       }
+
 
       initBufferData() {
        let dataLength = 40000;
@@ -54,36 +88,9 @@ class CanvasWaveService {
           ],
         }));
 
-
-        const vertexShader = `
-                              precision mediump float;
-                              attribute vec2 position;
-                              void main() {
-                                gl_Position = vec4(position, 0, 1);
-                              }
-                            `;
-
-        const fragmentShader = `
-          precision mediump float;
-          void main() {
-            gl_FragColor = vec4(0.47, 1.0, 0.0, 1.0); // Color #77ff00
-          }
-        `;
-         this.regGl({
-            frag: fragmentShader,
-
-            vert: vertexShader,
-
-            attributes: {
-              position: points.map(p => p.position),
-            },
-
-            count: points.length,
-            depth: { enable: false },
-          });
-
-          debugger;
+        this.drawCommand();
       }
+
 
       generateSineWave() {
         const frequency = 440; // 频率, 440Hz 是音乐A4音
