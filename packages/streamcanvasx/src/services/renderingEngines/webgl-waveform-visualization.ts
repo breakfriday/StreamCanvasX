@@ -18,6 +18,7 @@ class CanvasWaveService {
     drawCommand: createREGL.DrawCommand;
     vertBuffer: number[][];
     glBuffer: Array<createREGL.Buffer>;
+    totalWaveforms: number;
 
 
     constructor() {
@@ -29,6 +30,8 @@ class CanvasWaveService {
        this.baseEngine = baseEngine;
        this.canvas_el = this.baseEngine.canvas_el;
        this.glContext = this.baseEngine.gl_context;
+       this.totalWaveforms = 32;
+
 
         this.initgl();
     }
@@ -72,11 +75,9 @@ class CanvasWaveService {
 
         if (!this.glBuffer) {
           this.glBuffer = [];
-          this.glBuffer[0] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: pcmData.length });
-          this.glBuffer[1] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: pcmData.length });
-          this.glBuffer[2] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: pcmData.length });
-          this.glBuffer[3] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: pcmData.length });
-          this.glBuffer[4] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: pcmData.length });
+          for (let i = 0; i < this.totalWaveforms; i++) {
+            this.glBuffer[i] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: pcmData.length });
+          }
         }
 
         const totalWaveforms = 32;
@@ -85,7 +86,7 @@ class CanvasWaveService {
         const verticalOffsetIncrement = heightPerWaveform;
         let verticalOffset = 1 - verticalOffsetIncrement; // 从最顶部的波形开始计算垂直偏移
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < this.totalWaveforms; i++) {
           let data = this.translatePointe(pcmData, heightScale, verticalOffset);
           this.glBuffer[i](data);
           verticalOffset -= verticalOffsetIncrement; // 更新偏移量，为下一路波形准备
@@ -115,7 +116,7 @@ class CanvasWaveService {
 
       // 生成pcm mock 数据
       generateSineWave() {
-        const sampleRate = 48000; // Standard CD-quality sample rate
+        const sampleRate = 4000; // Standard CD-quality sample rate
         const duration = 1; // 1 second of audio
 
 
@@ -146,11 +147,19 @@ class CanvasWaveService {
             depth: 1,
           });
           this.updateVertBuffer();
-          this.drawCommand({ count: 48000, buffer: this.glBuffer[0] });
-          this.drawCommand({ count: 48000, buffer: this.glBuffer[1] });
-          this.drawCommand({ count: 48000, buffer: this.glBuffer[2] });
-          this.drawCommand({ count: 48000, buffer: this.glBuffer[3] });
-          this.drawCommand({ count: 48000, buffer: this.glBuffer[4] });
+
+          for (let i = 0; i < this.totalWaveforms; i++) {
+            this.drawCommand({ count: 48000, buffer: this.glBuffer[i] });
+          }
+
+          // this.drawCommand({ count: 48000, buffer: this.glBuffer[1] });
+          // this.drawCommand({ count: 48000, buffer: this.glBuffer[2] });
+          // this.drawCommand({ count: 48000, buffer: this.glBuffer[3] });
+          // this.drawCommand({ count: 48000, buffer: this.glBuffer[4] });
+          // this.drawCommand({ count: 48000, buffer: this.glBuffer[5] });
+          // this.drawCommand({ count: 48000, buffer: this.glBuffer[6] });
+          // this.drawCommand({ count: 48000, buffer: this.glBuffer[7] });
+          // this.drawCommand({ count: 48000, buffer: this.glBuffer[8] });
 
           // this.drawCommand({ count: 441000, buffer: this.glBuffer[4] });
           // this.drawCommand({ count: 441000, buffer: this.glBuffer[5] });
