@@ -90,23 +90,12 @@ class CanvasWaveService {
           this.glBuffer[i](data);
           verticalOffset -= verticalOffsetIncrement; // 更新偏移量，为下一路波形准备
         }
-
-        // let vertPoints1 = this.translatePointe(pcmData, 0.1, 0.9);
-        // let vertPoints2 = this.translatePointe(pcmData, 0.09, 0.5);
-        // let vertPoints3 = this.translatePointe(pcmData, 0.1, 0.7);
-        // let vertPoints4 = this.translatePointe(pcmData, 0.1, 0.6);
-        // let vertPoints5 = this.translatePointe(pcmData, 0.1, 0.5);
-
-        // this.glBuffer[0](vertPoints1);
-        // this.glBuffer[1](vertPoints2);
-        // this.glBuffer[2](vertPoints3);
-        // this.glBuffer[3](vertPoints4);
-        // this.glBuffer[4](vertPoints5);
       }
 
-      translatePointe(data: Float32Array, heightScale = 0.2, verticalOffset = 0.8) {
+      translatePointe(data: Float32Array, heightScale: number, verticalOffset: number) {
         const translatedPoints = new Float32Array(data.length * 2); // 创建一个新的Float32Array，长度是原数组的两倍，因为每个点需要两个坐标值
 
+        debugger
 
         for (let index = 0; index < data.length; index++) {
           // 归一化X坐标到[-1, 1]
