@@ -28,6 +28,7 @@ import MseDecoderService from '../services/decoder/mediaSource';
 import PreProcessing from '../services/preprocessing';
 
 import RenderEngine from '../services/renderingEngines/baseEngine';
+import WaveGl from '../services/renderingEngines/webgl-waveform-visualization';
 
 
 // const worker = new Worker(new URL('work.js', import.meta.url));
@@ -55,6 +56,7 @@ containerPlayer.bind<FLVDemuxStream>(TYPES.IFLVDemuxStream).to(FLVDemuxStream);
 containerPlayer.bind<PreProcessing>(TYPES.IPreProcessing).to(PreProcessing);
 
 containerPlayer.bind<RenderEngine>(TYPES.IRenderEngine).to(RenderEngine);
+containerPlayer.bind<WaveGl>(TYPES.IWaveGl).to(WaveGl);
 
 
  function createPlayerServiceInstance(config: IplayerConfig): PlayerService {
