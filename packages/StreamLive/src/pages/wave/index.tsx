@@ -18,7 +18,7 @@ const Wave = () => {
     // let contentEl = document.getElementById('canvasContainer');
 
     // audioWave.init({ routes: routes });
-    debugger;
+    // debugger;
     player.audioWaveService.init({ routes: routes, contentEl: containerRef.current });
     // player.audioWaveService.initCanvas(containerRef.current);
 

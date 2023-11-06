@@ -29,10 +29,10 @@ class AudioWave {
   init(config: IWavePlayerConfig) {
     // debugger;
     // this.updateDataTimeId = '';
-    let { routes, contentEl, isMocking = false, renderType = 1, arrayLength = 8000 * 5, updateArrayLength = 160, width = 1600, height = 50 * 32, updateArrayTimes = 20, renderTimes = 20 } = config;
+    let { routes, contentEl, isMocking = false, renderType = 1, arrayLength = 8000 * 6, updateArrayLength = 160, width = 3000 * 1, height = 50 * 32, updateArrayTimes = 20, renderTimes = 20 } = config;
     this.renderType = renderType;
     this.routes = routes;
-    this.isMocking = !isMocking;
+    this.isMocking = isMocking;
     this.width = width;
     this.height = height;
     this.arrayLength = arrayLength;
@@ -138,8 +138,9 @@ class AudioWave {
 
       timeId = setTimeout(() => {
         // console.log('监听到了尺寸变化了...', entries);
-        // this.canvas.style.width = `${entries[0].contentRect.width}px`; // css 缩放目前可以解决模糊问题，但是对后续绘制影响有待研究
-        this.canvas.width = entries[0].contentRect.width;
+        this.canvas.style.width = `${entries[0].contentRect.width}px`; // css 缩放目前可以解决模糊问题，但是对后续绘制影响有待研究
+        this.canvas.style.height = `${this.canvas.height}px`;
+        // this.canvas.width = entries[0].contentRect.width;
         this.hasSetSize = true;
       }, 200);
     });
@@ -312,6 +313,8 @@ class AudioWave {
         // let v = $this.audioArray[i][j];
         // let v = Math.sqrt(Math.abs(array[(head + j) % size]));
         let v = array[(head + j) % size];
+        // let v = array[(head + j) % size] * 20;
+        // let v = Math.pow(array[(head + j) % size], 8);
         // let v = (array[(head + j) % size] - 128) / 128;
 
         // debugger;
@@ -356,15 +359,20 @@ class AudioWave {
       let Y = i * canvas.height / this.routes;
       // let Y = 0;
       const sliceWidth = canvas.width / this.arrayLength;
+      // let x = Math.floor((this.arrayLength - this.updateArrayLength - 1) * sliceWidth);
       let x = (this.arrayLength - this.updateArrayLength) * sliceWidth;
+      // let x;
       let gap = 1;
       let scale = canvas.height / 2 / this.routes;
       let array = this.bufferMap.get(i).buffer;
       let { size, head } = this.bufferMap.get(i);
       for (let j = this.arrayLength - this.updateArrayLength; j < this.arrayLength; j++) {
+        // x = Math.floor((j - 1) * sliceWidth) + 0.5;
         // let v = $this.audioArray[i][j];
         // let v = Math.sqrt(Math.abs(array[(head + j) % size]));
+        // let v = Math.pow(array[(head + j) % size], 8);
         let v = array[(head + j) % size];
+        // let v = array[(head + j) % size] * 20;
         // let v = (array[(head + j) % size] - 128) / 128;
 
         // debugger;
@@ -435,6 +443,7 @@ class AudioWave {
   updateArrayData(updateArray?: []) {
     // debugger;
     if (!this.isMocking && updateArray) {
+      // debugger;
       for (let i = 0; i < this.routes; i++) {
         let array = [];
         let buffer = this.bufferMap.get(i);
