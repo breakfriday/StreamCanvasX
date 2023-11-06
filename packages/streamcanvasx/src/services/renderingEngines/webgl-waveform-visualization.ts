@@ -115,7 +115,7 @@ class CanvasWaveService {
       }
 
 
-      // 将PCM数据点转换为对称顶点数据
+      // PCM数据点转换为对称于X轴的两组顶点数据
       convertPCMToVertices(pcmData: Float32Array, heightScale: number, verticalOffset: number) {
         const sampleCount = pcmData.length;
         const vertices = [];
