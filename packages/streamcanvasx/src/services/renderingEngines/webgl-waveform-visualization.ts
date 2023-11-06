@@ -92,10 +92,11 @@ class CanvasWaveService {
         }
       }
 
+      // 将数据点转换为顶点数据
       translatePointe(data: Float32Array, heightScale: number, verticalOffset: number) {
         const translatedPoints = new Float32Array(data.length * 2); // 创建一个新的Float32Array，长度是原数组的两倍，因为每个点需要两个坐标值
 
-        debugger
+        debugger;
 
         for (let index = 0; index < data.length; index++) {
           // 归一化X坐标到[-1, 1]
@@ -111,24 +112,8 @@ class CanvasWaveService {
         return translatedPoints;
       }
 
-      // // 将数据点转换为顶点数据
-      // translatePointe11(pcmData: Float32Array) {
-      //   const points = Array.from({ length: pcmData.length }, (_, i) => ({
-      //     position: [
-      //       (i / pcmData.length) * 2 - 1, // x坐标，归一化到 [-1, 1]
-      //       pcmData[i], // y坐标
-      //     ],
-      //   }));
 
-      //   let vertPoints = points.map(p => p.position);
-      //   return vertPoints;
-      // }
-
-      drawWaveByGl() {
-        this.drawCommand({ count: 441000 });
-      }
-
-
+      // 生成pcm mock 数据
       generateSineWave() {
         const sampleRate = 48000; // Standard CD-quality sample rate
         const duration = 1; // 1 second of audio
@@ -161,10 +146,11 @@ class CanvasWaveService {
             depth: 1,
           });
           this.updateVertBuffer();
-          this.drawCommand({ count: 441000, buffer: this.glBuffer[0] });
-           // this.drawCommand({ count: 441000, buffer: this.glBuffer[1] });
-          this.drawCommand({ count: 441000, buffer: this.glBuffer[2] });
-           this.drawCommand({ count: 441000, buffer: this.glBuffer[4] });
+          this.drawCommand({ count: 48000, buffer: this.glBuffer[0] });
+          this.drawCommand({ count: 48000, buffer: this.glBuffer[1] });
+          this.drawCommand({ count: 48000, buffer: this.glBuffer[2] });
+          this.drawCommand({ count: 48000, buffer: this.glBuffer[3] });
+          this.drawCommand({ count: 48000, buffer: this.glBuffer[4] });
 
           // this.drawCommand({ count: 441000, buffer: this.glBuffer[4] });
           // this.drawCommand({ count: 441000, buffer: this.glBuffer[5] });
