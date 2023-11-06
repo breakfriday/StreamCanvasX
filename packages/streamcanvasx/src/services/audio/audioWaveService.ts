@@ -29,18 +29,19 @@ class AudioWave {
   init(config: IWavePlayerConfig) {
     // debugger;
     // this.updateDataTimeId = '';
-    let { routes, contentEl, isMocking = false, renderType = 1, arrayLength = 8000 * 6, updateArrayLength = 160, width = 3000 * 1, height = 50 * 32, updateArrayTimes = 20, renderTimes = 20 } = config;
+    // let { routes, contentEl, isMocking = false, renderType = 1, arrayLength = 8000 * 6, updateArrayLength = 160, width = 3000 * 1, height = 50 * 32, updateArrayTimes = 20, renderTimes = 20 } = config;
+    let { routes, contentEl, isMocking = false, renderType = 1, duration = 6, updateArrayLength = 160, width = 3000 * 1, height = 50 * 32, updateArrayTimes = 20, renderTimes = 20 } = config;
     this.renderType = renderType;
     this.routes = routes;
     this.isMocking = isMocking;
     this.width = width;
     this.height = height;
-    this.arrayLength = arrayLength;
+    this.arrayLength = duration * updateArrayLength * 1000 / updateArrayTimes;
     this.updateArrayLength = updateArrayLength;
     this.updateArrayTimes = updateArrayTimes;
     this.renderTimes = renderTimes;
     const element = contentEl;
-    let i = arrayLength;
+    let i = this.arrayLength;
     let array = [];
     while (i > 0) {
       array.push(0);
