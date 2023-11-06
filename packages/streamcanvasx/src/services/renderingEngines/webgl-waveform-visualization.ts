@@ -30,7 +30,7 @@ class CanvasWaveService {
        this.baseEngine = baseEngine;
        this.canvas_el = this.baseEngine.canvas_el;
        this.glContext = this.baseEngine.gl_context;
-       this.totalWaveforms = 1;
+       this.totalWaveforms = 32;
 
 
         this.initgl();
@@ -82,13 +82,13 @@ class CanvasWaveService {
 
         const { totalWaveforms } = this;
         const heightPerWaveform = 2 / (totalWaveforms); // 分配给每一路的高度空间
-        const heightScale = heightPerWaveform * 0.5; // 实际波形的高度缩放，留出空间以避免相互重叠
+        const heightScale = heightPerWaveform * 0.3; // 实际波形的高度缩放，留出空间以避免相互重叠,最大不能超过0.5，否则放大会导致波形重叠
         const verticalOffsetIncrement = heightPerWaveform;
         let verticalOffset = 1 - verticalOffsetIncrement / 2; // 从最顶部的波形开始计算垂直偏移
 
         for (let i = 0; i < this.totalWaveforms; i++) {
-         let data = this.translatePointe(pcmData, heightScale, verticalOffset);
-       // let data = this.convertPCMToVertices(pcmData, heightScale, verticalOffset);
+        // let data = this.translatePointe(pcmData, heightScale, verticalOffset);
+       let data = this.convertPCMToVertices(pcmData, heightScale, verticalOffset);
           this.glBuffer[i](data);
           verticalOffset -= verticalOffsetIncrement; // 更新偏移量，为下一路波形准备
         }
@@ -114,18 +114,20 @@ class CanvasWaveService {
         return translatedPoints;
       }
 
+
+      // 将PCM数据点转换为对称顶点数据
       convertPCMToVertices(pcmData: Float32Array, heightScale: number, verticalOffset: number) {
         const sampleCount = pcmData.length;
         const vertices = [];
 
         for (let index = 0; index < sampleCount; index++) {
           const x = (index / (sampleCount - 1)) * 2 - 1; // 将索引规范化到[-1, 1]
-          const y = pcmData[index];
+          const y = (pcmData[index] * heightScale) + verticalOffset;
 
           // 添加原始点
           vertices.push(x, y);
           // 添加沿x轴对称的点
-          vertices.push(x, -y);
+          vertices.push(x, -y + 2 * verticalOffset);
         }
 
         return vertices;
