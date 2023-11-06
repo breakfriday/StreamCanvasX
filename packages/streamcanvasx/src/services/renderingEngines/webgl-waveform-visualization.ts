@@ -30,7 +30,7 @@ class CanvasWaveService {
        this.baseEngine = baseEngine;
        this.canvas_el = this.baseEngine.canvas_el;
        this.glContext = this.baseEngine.gl_context;
-       this.totalWaveforms = 32;
+       this.totalWaveforms = 1;
 
 
         this.initgl();
@@ -80,14 +80,15 @@ class CanvasWaveService {
           }
         }
 
-        const totalWaveforms = 32;
+        const { totalWaveforms } = this;
         const heightPerWaveform = 2 / (totalWaveforms + 1); // 分配给每一路的高度空间
         const heightScale = heightPerWaveform * 0.4; // 实际波形的高度缩放，留出空间以避免相互重叠
         const verticalOffsetIncrement = heightPerWaveform;
         let verticalOffset = 1 - verticalOffsetIncrement; // 从最顶部的波形开始计算垂直偏移
 
         for (let i = 0; i < this.totalWaveforms; i++) {
-          let data = this.translatePointe(pcmData, heightScale, verticalOffset);
+        //  let data = this.translatePointe(pcmData, heightScale, verticalOffset);
+        let data = this.convertPCMToVertices(pcmData);
           this.glBuffer[i](data);
           verticalOffset -= verticalOffsetIncrement; // 更新偏移量，为下一路波形准备
         }
@@ -111,6 +112,23 @@ class CanvasWaveService {
 
 
         return translatedPoints;
+      }
+
+      convertPCMToVertices(pcmData: Float32Array) {
+        const sampleCount = pcmData.length;
+        const vertices = [];
+
+        for (let index = 0; index < sampleCount; index++) {
+          const x = (index / (sampleCount - 1)) * 2 - 1; // 将索引规范化到[-1, 1]
+          const y = pcmData[index];
+
+          // 添加原始点
+          vertices.push(x, y);
+          // 添加沿x轴对称的点
+          vertices.push(x, -y);
+        }
+
+        return vertices;
       }
 
 
@@ -151,19 +169,6 @@ class CanvasWaveService {
           for (let i = 0; i < this.totalWaveforms; i++) {
             this.drawCommand({ count: 48000, buffer: this.glBuffer[i] });
           }
-
-          // this.drawCommand({ count: 48000, buffer: this.glBuffer[1] });
-          // this.drawCommand({ count: 48000, buffer: this.glBuffer[2] });
-          // this.drawCommand({ count: 48000, buffer: this.glBuffer[3] });
-          // this.drawCommand({ count: 48000, buffer: this.glBuffer[4] });
-          // this.drawCommand({ count: 48000, buffer: this.glBuffer[5] });
-          // this.drawCommand({ count: 48000, buffer: this.glBuffer[6] });
-          // this.drawCommand({ count: 48000, buffer: this.glBuffer[7] });
-          // this.drawCommand({ count: 48000, buffer: this.glBuffer[8] });
-
-          // this.drawCommand({ count: 441000, buffer: this.glBuffer[4] });
-          // this.drawCommand({ count: 441000, buffer: this.glBuffer[5] });
-         // this.drawCommand({ count: 441000, buffer: this.glBuffer });
         });
       }
 }
