@@ -81,14 +81,14 @@ class CanvasWaveService {
         }
 
         const { totalWaveforms } = this;
-        const heightPerWaveform = 2 / (totalWaveforms + 1); // 分配给每一路的高度空间
-        const heightScale = heightPerWaveform * 0.4; // 实际波形的高度缩放，留出空间以避免相互重叠
+        const heightPerWaveform = 2 / (totalWaveforms); // 分配给每一路的高度空间
+        const heightScale = heightPerWaveform * 0.5; // 实际波形的高度缩放，留出空间以避免相互重叠
         const verticalOffsetIncrement = heightPerWaveform;
-        let verticalOffset = 1 - verticalOffsetIncrement; // 从最顶部的波形开始计算垂直偏移
+        let verticalOffset = 1 - verticalOffsetIncrement / 2; // 从最顶部的波形开始计算垂直偏移
 
         for (let i = 0; i < this.totalWaveforms; i++) {
-        //  let data = this.translatePointe(pcmData, heightScale, verticalOffset);
-        let data = this.convertPCMToVertices(pcmData);
+         let data = this.translatePointe(pcmData, heightScale, verticalOffset);
+       // let data = this.convertPCMToVertices(pcmData, heightScale, verticalOffset);
           this.glBuffer[i](data);
           verticalOffset -= verticalOffsetIncrement; // 更新偏移量，为下一路波形准备
         }
@@ -114,7 +114,7 @@ class CanvasWaveService {
         return translatedPoints;
       }
 
-      convertPCMToVertices(pcmData: Float32Array) {
+      convertPCMToVertices(pcmData: Float32Array, heightScale: number, verticalOffset: number) {
         const sampleCount = pcmData.length;
         const vertices = [];
 
