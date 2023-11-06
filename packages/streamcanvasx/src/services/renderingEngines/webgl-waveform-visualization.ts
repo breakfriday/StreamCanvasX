@@ -48,6 +48,8 @@ class CanvasWaveService {
           vert: `
           precision mediump float;
           attribute vec2 position;
+          uniform float yOffset; // 波形的垂直偏移
+          uniform float yScale;  // 波形的垂直缩放
           void main() {
             gl_Position = vec4(position, 0, 1);
           }`,
