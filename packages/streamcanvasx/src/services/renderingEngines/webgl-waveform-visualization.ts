@@ -81,7 +81,7 @@ class CanvasWaveService {
 
         const totalWaveforms = 32;
         const heightPerWaveform = 2 / (totalWaveforms + 1); // 分配给每一路的高度空间
-        const heightScale = heightPerWaveform * 0.8; // 实际波形的高度缩放，留出空间以避免相互重叠
+        const heightScale = heightPerWaveform * 0.4; // 实际波形的高度缩放，留出空间以避免相互重叠
         const verticalOffsetIncrement = heightPerWaveform;
         let verticalOffset = 1 - verticalOffsetIncrement; // 从最顶部的波形开始计算垂直偏移
 
