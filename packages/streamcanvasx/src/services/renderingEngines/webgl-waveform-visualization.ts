@@ -36,7 +36,7 @@ class CanvasWaveService {
          this.regGl = createREGL({ canvas: this.canvas_el });
          let regl = this.regGl;
 
-         this.glBuffer = this.regGl.buffer(this.vertBuffer);
+
          this.drawCommand = this.regGl({
           frag: `
           precision mediump float;
@@ -54,12 +54,13 @@ class CanvasWaveService {
             gl_Position = vec4(position, 0, 1);
           }`,
           attributes: {
-            position: this.glBuffer,
+            // position: this.glBuffer,
+            position: regl.prop('buffer'),
           },
 
           count: this.regGl.prop('count'),
           depth: { enable: false },
-          primitive: 'line strip',
+          primitive: 'lines',
 
          });
     }
@@ -68,11 +69,33 @@ class CanvasWaveService {
       updateVertBuffer() {
         let pcmData = this.generateSineWave();
         let vertPoints = this.translatePointe(pcmData);
-       this.glBuffer(vertPoints);
+
+        if (!this.glBuffer) {
+          this.glBuffer = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: pcmData.length });
+        }
+
+        this.glBuffer(vertPoints);
+      }
+
+      translatePointe(data: Float32Array, heightScale = 0.2, verticalOffset = 0.8) {
+        const translatedPoints = new Float32Array(data.length * 2); // 创建一个新的Float32Array，长度是原数组的两倍，因为每个点需要两个坐标值
+
+        for (let index = 0; index < data.length; index++) {
+          // 归一化X坐标到[-1, 1]
+          const x = (index / (data.length - 1)) * 2 - 1;
+          // 应用高度缩放和垂直偏移
+          const y = (data[index] * heightScale) + verticalOffset;
+
+          translatedPoints[index * 2] = x; // 储存x坐标
+          translatedPoints[index * 2 + 1] = y; // 储存y坐标
+        }
+
+
+        return translatedPoints;
       }
 
       // 将数据点转换为顶点数据
-      translatePointe(pcmData: Float32Array) {
+      translatePointe11(pcmData: Float32Array) {
         const points = Array.from({ length: pcmData.length }, (_, i) => ({
           position: [
             (i / pcmData.length) * 2 - 1, // x坐标，归一化到 [-1, 1]
@@ -121,7 +144,8 @@ class CanvasWaveService {
             depth: 1,
           });
           this.updateVertBuffer();
-          this.drawWaveByGl();
+          this.drawCommand({ count: 441000, buffer: this.glBuffer });
+         // this.drawCommand({ count: 441000, buffer: this.glBuffer });
         });
       }
 }
