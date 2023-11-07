@@ -33,7 +33,7 @@ class BaseRenderEnging {
       this.initgl();
 
 
-      debugger;
+      // debugger;
 
       this.waveGl.init(this);
     }

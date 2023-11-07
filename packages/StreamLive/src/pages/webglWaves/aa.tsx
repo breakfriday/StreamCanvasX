@@ -106,6 +106,12 @@ const WAVEM = () => {
         }}
       >update by websocket</div>
 
+      <div onClick={() => {
+            let wave = waveRef.current;
+            wave?.waveGl.destroy();
+      }}
+      >destroy</div>
+
       <div className={styles['box']} ref={containerRef}> </div>
     </div>);
 };
