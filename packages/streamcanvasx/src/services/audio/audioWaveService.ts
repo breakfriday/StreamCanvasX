@@ -434,17 +434,13 @@ class AudioWave {
   //   this.updateDataTimeId = setTimeout(this.updateArrayData.bind(this), updateArrayTimes);
   // }
 
-  updateArrayData(updateArray?: []) {
+  updateArrayData(updateArray?: Array<Float32Array>) {
     // debugger;
     if (!this.isMocking && updateArray) {
       // debugger;
       for (let i = 0; i < this.routes; i++) {
-        let array = [];
         let buffer = this.bufferMap.get(i);
-        for (let j = 0; j < updateArray[i].length; j++) {
-          array[j] = (updateArray[i][j] / 32678);
-        }
-        buffer.enqueueBulk(array);
+        buffer.enqueueBulk(updateArray[i]);
         // this.audioArray[i] = _.concat(this.audioArray[i], array);
         // this.audioArray[i] = _.drop(this.audioArray[i], this.updateArrayLength);
       }

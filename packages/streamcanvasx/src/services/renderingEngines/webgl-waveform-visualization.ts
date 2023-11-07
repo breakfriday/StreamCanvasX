@@ -1,8 +1,9 @@
 
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
-import PlayerService from '../player';
+// import PlayerService from '../player';
 import createREGL from 'regl';
-import BaseRenderEnging from './baseEngine';
+// import BaseRenderEnging from './baseEngine';
+import WavePlayerService from '../audio/wavePlayer';
 import { debug } from 'console';
 
 @injectable()
@@ -11,9 +12,9 @@ class CanvasWaveService {
     regGl: createREGL.Regl;
     canvas_context: CanvasRenderingContext2D;
     dataArray: Float32Array;
-    playerService: PlayerService;
+    // playerService: PlayerService;
     glContext: WebGLRenderingContext;
-    baseEngine: BaseRenderEnging;
+    wavePlayerService: WavePlayerService;
     drawCommand: createREGL.DrawCommand;
     vertBuffer: number[][];
     glBuffer: Array<createREGL.Buffer>;
@@ -26,10 +27,10 @@ class CanvasWaveService {
 
     }
 
-    init(baseEngine: BaseRenderEnging) {
-       this.baseEngine = baseEngine;
-       this.canvas_el = this.baseEngine.canvas_el;
-       this.glContext = this.baseEngine.gl_context;
+    init(wavePlayerService: WavePlayerService) {
+       this.wavePlayerService = wavePlayerService;
+       this.canvas_el = this.wavePlayerService.canvas_el;
+       this.glContext = this.wavePlayerService.gl_context;
        this.totalWaveforms = 32;
        this.bufferLength = 24000;
 

@@ -26,8 +26,22 @@ class WaveVisualization {
   }
 
   init(config?: IWavePlayerConfig) {
-    let { routes, contentEl, isMocking = false, renderType = 1, duration = 4, updateArrayLength = 160, width = 3000 * 1, height = 50 * 32, updateArrayTimes = 20, renderTimes = 20, arrayLength = duration * 1000 / updateArrayTimes } = config;
-    this.config = config;
+    const defaultconfig = {
+      routes: 32,
+      contentEl: '',
+      isMocking: false,
+      renderType: 3,
+      duration: 4,
+      updateArrayLength: 160,
+      width: 3000 * 1,
+      height: 50 * 32,
+      updateArrayTimes: 20,
+      renderTimes: 20,
+      arrayLength: 8000 * 4,
+    };
+    // let { routes, contentEl, isMocking = false, renderType = 1, duration = 4, updateArrayLength = 160, width = 3000 * 1, height = 50 * 32, updateArrayTimes = 20, renderTimes = 20, arrayLength = duration * 1000 / updateArrayTimes } = defaultconfig;
+    this.config = Object.assign(defaultconfig, config);
+    const { renderType } = this.config;
     this.renderType = renderType;
     this.canvas_el = document.createElement('canvas');
     this.contentEl = this.config.contentEl;

@@ -1,7 +1,7 @@
 
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 
-import PlayerService from '../player';
+// import PlayerService from '../player';
 import WaveGl from './webgl-waveform-visualization';
 
 import { IRTCPlayerConfig } from '../../types/services';
@@ -19,7 +19,7 @@ class BaseRenderEnging {
     config?: IRTCPlayerConfig;
     waveGl: WaveGl;
     constructor(
-      @inject(TYPES.IWaveGl) waveGl: WaveGl,
+      // @inject(TYPES.IWaveGl) waveGl: WaveGl,
 
     ) {
       this.waveGl = waveGl;

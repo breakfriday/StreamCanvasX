@@ -3,7 +3,7 @@ import { TYPES } from '../../serviceFactories/symbol';
 import AudioWaveService from './audioWaveService';
 import WaveGl from '../renderingEngines/webgl-waveform-visualization';
 import WaveVisualization from '../waveVisualization/waveVisualization';
-import { IWavePlayerConfig } from '../../types/services';
+// import { IWavePlayerConfig } from '../../types/services';
 
 
 @injectable()
@@ -16,6 +16,7 @@ class WavePlayer {
   // config?: IWavePlayerConfig;
   waveVisualization: WaveVisualization;
   waveGl: WaveGl;
+  updateBuffer: Float32Array;
   audioWaveService: AudioWaveService;
   renderType: number;
 
@@ -103,6 +104,50 @@ class WavePlayer {
   setCanvasSize2(entries) {
         this.canvas_el.style.width = `${entries[0].contentRect.width}px`; // css 缩放目前可以解决模糊问题，但是对后续绘制影响有待研究
         this.canvas_el.style.height = `${this.canvas_el.height}px`;
+  }
+  update(data: Array<Float32Array>) {
+    // debugger;
+    switch (this.renderType) {
+      case 1: // canvas2d
+        this.audioWaveService.updateArrayData(data);
+        // this.audioWaveService.updateArrayData(); // mock
+          break;
+      case 2: // audioContext
+          break;
+      case 3: // webGL
+        this.waveGl.inputData(data);
+        // this.waveGl.render();
+          break;
+      default:
+          break;
+    }
+  }
+
+  hexArrayToFloat32Array(hexArray: Int16Array) {
+    // 创建一个足够大的buffer来存放16位的PCM数据
+    const buffer = new ArrayBuffer(hexArray.length * 2);
+     // 使用一个DataView来操作ArrayBuffer
+     const view = new DataView(buffer);
+
+     // 16进制 转16位10进制整数
+     hexArray.forEach((hex, i) => {
+       const intValue = parseInt(hex, 16);
+       // 将16位整数（假定为有符号）写入DataView
+       view.setInt16(i * 2, intValue, true);
+     });
+
+     // 现在我们有了一个包含16位PCM数据的ArrayBuffer，创建一个16位整数数组来读取它
+     const int16Array = new Int16Array(buffer);
+
+     // 创建一个Float32Array来存放-1到1之间的浮点数
+     const float32Array = new Float32Array(int16Array.length);
+
+     // 归1化，转换16位整数范围到-1到1的浮点数
+     for (let i = 0; i < int16Array.length; i++) {
+       float32Array[i] = int16Array[i] / 32768;
+     }
+
+     return float32Array;
   }
 }
 export default WavePlayer;

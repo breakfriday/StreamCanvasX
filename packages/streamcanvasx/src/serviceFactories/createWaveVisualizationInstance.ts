@@ -9,12 +9,13 @@ import WaveGl from '../services/renderingEngines/webgl-waveform-visualization';
 
 import { IWavePlayerConfig } from '../types/services';
 
+waveVisualizationContainer.bind<WaveVisualization>(TYPES.IWaveVisualization).to(WaveVisualization);
 waveVisualizationContainer.bind<WavePlayerService>(TYPES.IWavePlayerService).to(WavePlayerService);
 waveVisualizationContainer.bind<AudioWaveService>(TYPES.IAudioWaveService).to(AudioWaveService);
 waveVisualizationContainer.bind<WaveGl>(TYPES.IWaveGl).to(WaveGl);
 
 function createWaveVisualizationInstance(config: IWavePlayerConfig): WaveVisualization {
-  let playerInstance = waveVisualizationContainer.get<WaveVisualization>(TYPES.IRenderEngine);
+  let playerInstance = waveVisualizationContainer.get<WaveVisualization>(TYPES.IWaveVisualization);
   playerInstance.init(config || {});
    return playerInstance;
  }

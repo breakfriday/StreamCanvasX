@@ -9,17 +9,14 @@ const Wave = () => {
   const waveVisualizationRef = useRef();
 
   useEffect(() => {
-    let waveVisualization = createWaveVisualizationInstance({});
-
-    waveVisualizationRef.current = waveVisualization;
-
-
     const routes = 32;
     // let contentEl = document.getElementById('canvasContainer');
 
     // audioWave.init({ routes: routes });
     // debugger;
-    waveVisualization.init({ routes: routes, contentEl: containerRef.current, renderType: 1 });
+    let waveVisualization = createWaveVisualizationInstance({ routes: routes, contentEl: containerRef.current, renderType: 3, isMocking: true });
+    waveVisualizationRef.current = waveVisualization;
+    // waveVisualization.init({ routes: routes, contentEl: containerRef.current, renderType: 1 });
     // player.audioWaveService.initCanvas(containerRef.current);
 
     const ws = new WebSocket('ws://123.56.228.244:26003/audio');
@@ -46,14 +43,15 @@ const Wave = () => {
           const channeldata = i16a.subarray(subidx + 4, subidx + 164);
           subidx += 164;
           if (channelid) {
-            updatearray.push(channeldata);
+            const array = waveVisualization.WavePlayerService.hexArrayToFloat32Array(channeldata);
+            updatearray.push(array);
           }
             // debugger;
             // console.log(channelid);
           }
           // debugger;
           console.log('onmessage');
-          waveVisualization.audioWaveService.updateArrayData(updatearray);
+          waveVisualization.WavePlayerService.update(updatearray);
           // debugger;
         });
       };
@@ -82,8 +80,8 @@ const Wave = () => {
       }}
       >initCanvas</Button> */}
       <Button onClick={() => {
-      let player = playerRef.current;
-      player.audioWaveService.updateArrayData();
+      let waveVisualization = waveVisualizationRef.current;
+      waveVisualization.WavePlayerService.update();
       //   audioWave.start();
       }}
       >updateArrayData</Button>
