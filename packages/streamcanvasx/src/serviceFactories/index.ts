@@ -3,6 +3,7 @@ import { createAudioProcessingServiceInstance } from './createAudioProcessInstan
 import { createMainPlayerInstance } from './createMainPlayerInstance';
 import { createPlayerServiceInstance } from './createPlayerInstance';
 import { createRTCPlayerServiceInstance } from './createWebRtcInstance';
+import { createWaveAudioServiceInstance } from './createWaveAudio';
 import { createWavePlayerServiceInstance } from './createWavePlayerInstance';
 export {
         createOriginServiceInstance,
@@ -11,4 +12,5 @@ export {
         createPlayerServiceInstance,
         createRTCPlayerServiceInstance,
         createWavePlayerServiceInstance,
+        createWaveAudioServiceInstance,
 };
