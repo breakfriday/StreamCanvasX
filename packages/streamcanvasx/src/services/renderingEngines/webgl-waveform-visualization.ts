@@ -178,7 +178,6 @@ class CanvasWaveService {
       }
         // 生成440Hz音频的PCM数据，持续1秒，样本率为44100Hz
         const randomPCMData = generateRandomPCMData(duration, sampleRate);
-        debugger;
 
         return randomPCMData;
       }
@@ -227,7 +226,6 @@ class CanvasWaveService {
         }
 
         this.updateVertBuffer();
-        debugger;
       }
 }
 

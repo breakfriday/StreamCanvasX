@@ -88,7 +88,8 @@ const WAVEM = () => {
                         const channeldata = i16a.subarray(subidx + 4, subidx + 164);
                         subidx += 164;
                         if (channelid) {
-                          updatearray.push(channeldata);
+                          let channeldata1 = wave?.waveGl.hexArrayToFloat32Array(channeldata);
+                          updatearray.push(channeldata1);
                         }
                           // debugger;
                           // console.log(channelid);
