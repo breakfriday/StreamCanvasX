@@ -31,7 +31,7 @@ class CanvasWaveService {
        this.canvas_el = this.baseEngine.canvas_el;
        this.glContext = this.baseEngine.gl_context;
        this.totalWaveforms = 32;
-       this.bufferLength = 48000;
+       this.bufferLength = 24000;
 
        this.initData();
 
@@ -89,8 +89,8 @@ class CanvasWaveService {
 
         for (let i = 0; i < this.totalWaveforms; i++) {
           let pcmData = this.bufferData[i];
-        let data = this.translatePointe(pcmData, heightScale, verticalOffset);
-        // let data = this.convertPCMToVertices(pcmData, heightScale, verticalOffset);
+         // let data = this.translatePointe(pcmData, heightScale, verticalOffset);
+         let data = this.convertPCMToVertices(pcmData, heightScale, verticalOffset);
           this.glBuffer[i](data);
           verticalOffset -= verticalOffsetIncrement; // 更新偏移量，为下一路波形准备
         }
@@ -136,6 +136,32 @@ class CanvasWaveService {
       }
 
 
+    hexArrayToFloat32Array(hexArray: Int16Array) {
+     // 创建一个足够大的buffer来存放16位的PCM数据
+     const buffer = new ArrayBuffer(hexArray.length * 2);
+      // 使用一个DataView来操作ArrayBuffer
+      const view = new DataView(buffer);
+
+      // 16进制 转16位10进制整数
+      hexArray.forEach((hex, i) => {
+        const intValue = parseInt(hex, 16);
+        // 将16位整数（假定为有符号）写入DataView
+        view.setInt16(i * 2, intValue, true);
+      });
+
+      // 现在我们有了一个包含16位PCM数据的ArrayBuffer，创建一个16位整数数组来读取它
+      const int16Array = new Int16Array(buffer);
+
+      // 创建一个Float32Array来存放-1到1之间的浮点数
+      const float32Array = new Float32Array(int16Array.length);
+
+      // 归1化，转换16位整数范围到-1到1的浮点数
+      for (let i = 0; i < int16Array.length; i++) {
+        float32Array[i] = int16Array[i] / 32768;
+      }
+
+      return float32Array;
+      }
       // 生成pcm mock 数据
       generateSineWave(sampleRate = 4000, duration = 1) {
         function generateRandomPCMData(duration: number, sampleRate: number) {
@@ -152,7 +178,6 @@ class CanvasWaveService {
       }
         // 生成440Hz音频的PCM数据，持续1秒，样本率为44100Hz
         const randomPCMData = generateRandomPCMData(duration, sampleRate);
-        debugger;
 
         return randomPCMData;
       }
@@ -168,11 +193,14 @@ class CanvasWaveService {
           });
 
 
+          console.log('------');
+
+
           for (let i = 0; i < this.totalWaveforms; i++) {
             let glbuffer = this.glBuffer[i].length;
 
             let count = this.bufferData[i].length * 2;
-            this.drawCommand({ count: count, buffer: this.glBuffer[i] });
+            this.drawCommand({ count: count * 2, buffer: this.glBuffer[i] });
           }
         });
       }
@@ -188,6 +216,10 @@ class CanvasWaveService {
       }
 
 
+      destroy() {
+        this.regGl.destroy();
+      }
+
       inputData(data: Array<Float32Array>) {
         let shiftAppendTypedArray = (bufferData: Float32Array, dataArray: Float32Array) => {
           bufferData.copyWithin(0, dataArray.length);
@@ -201,7 +233,6 @@ class CanvasWaveService {
         }
 
         this.updateVertBuffer();
-        debugger;
       }
 }
 
