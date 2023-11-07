@@ -1,17 +1,17 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Divider, Space, Button, Form, Input, Radio } from 'antd';
 // import AudioWaveService from 'streamcanvasx/src/services/audio/audioWaveService';
-import { createWavePlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
+import { createWaveVisualizationInstance } from 'streamcanvasx/src/serviceFactories/index';
 
 const Wave = () => {
   // debugger;
   const containerRef = useRef();
-  const playerRef = useRef<>();
+  const waveVisualizationRef = useRef();
 
   useEffect(() => {
-    let player = createWavePlayerServiceInstance({});
+    let waveVisualization = createWaveVisualizationInstance({});
 
-    playerRef.current = player;
+    waveVisualizationRef.current = waveVisualization;
 
 
     const routes = 32;
@@ -19,7 +19,7 @@ const Wave = () => {
 
     // audioWave.init({ routes: routes });
     // debugger;
-    player.audioWaveService.init({ routes: routes, contentEl: containerRef.current });
+    waveVisualization.init({ routes: routes, contentEl: containerRef.current, renderType: 1 });
     // player.audioWaveService.initCanvas(containerRef.current);
 
     const ws = new WebSocket('ws://123.56.228.244:26003/audio');
@@ -53,7 +53,7 @@ const Wave = () => {
           }
           // debugger;
           console.log('onmessage');
-          player.audioWaveService.updateArrayData(updatearray);
+          waveVisualization.audioWaveService.updateArrayData(updatearray);
           // debugger;
         });
       };
