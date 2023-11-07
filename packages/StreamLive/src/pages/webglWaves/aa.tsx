@@ -21,6 +21,12 @@ const WAVEM = () => {
                 alert(12);
                 let wave = waveRef.current;
 
+
+                let mockdata = wave?.waveGl.generateSineWave(200, 1);
+                debugger;
+
+                 wave?.waveGl.inputData({});
+
                  wave?.waveGl.render();
         }}
       >update</div>

@@ -10,7 +10,6 @@ class CanvasWaveService {
     canvas_el: HTMLCanvasElement;
     regGl: createREGL.Regl;
     canvas_context: CanvasRenderingContext2D;
-    bufferData: Float32Array;
     dataArray: Float32Array;
     playerService: PlayerService;
     glContext: WebGLRenderingContext;
@@ -19,7 +18,8 @@ class CanvasWaveService {
     vertBuffer: number[][];
     glBuffer: Array<createREGL.Buffer>;
     totalWaveforms: number;
-
+    bufferLength: number; // 每一路音频数据的长度
+    bufferData: Array<Float32Array>;// 32 路音频数据的data
 
     constructor() {
 
@@ -30,7 +30,10 @@ class CanvasWaveService {
        this.baseEngine = baseEngine;
        this.canvas_el = this.baseEngine.canvas_el;
        this.glContext = this.baseEngine.gl_context;
-       this.totalWaveforms = 32;
+       this.totalWaveforms = 12;
+       this.bufferLength = 48000;
+
+       this.initData();
 
 
         this.initgl();
@@ -87,7 +90,7 @@ class CanvasWaveService {
         let verticalOffset = 1 - verticalOffsetIncrement / 2; // 从最顶部的波形开始计算垂直偏移
 
         for (let i = 0; i < this.totalWaveforms; i++) {
-        // let data = this.translatePointe(pcmData, heightScale, verticalOffset);
+       //  let data = this.translatePointe(pcmData, heightScale, verticalOffset);
        let data = this.convertPCMToVertices(pcmData, heightScale, verticalOffset);
           this.glBuffer[i](data);
           verticalOffset -= verticalOffsetIncrement; // 更新偏移量，为下一路波形准备
@@ -135,12 +138,8 @@ class CanvasWaveService {
 
 
       // 生成pcm mock 数据
-      generateSineWave() {
-        const sampleRate = 4000; // Standard CD-quality sample rate
-        const duration = 1; // 1 second of audio
-
-
-        function generateRandomPCMData(duration, sampleRate) {
+      generateSineWave(sampleRate = 4000, duration = 1) {
+        function generateRandomPCMData(duration: number, sampleRate: number) {
           const numSamples = sampleRate * duration;
           const buffer = new Float32Array(numSamples);
 
@@ -153,6 +152,7 @@ class CanvasWaveService {
       }
         // 生成440Hz音频的PCM数据，持续1秒，样本率为44100Hz
         const randomPCMData = generateRandomPCMData(duration, sampleRate);
+        debugger;
 
         return randomPCMData;
       }
@@ -169,9 +169,31 @@ class CanvasWaveService {
           this.updateVertBuffer();
 
           for (let i = 0; i < this.totalWaveforms; i++) {
+            let glbuffer = this.glBuffer[i].length;
+            debugger;
             this.drawCommand({ count: 48000, buffer: this.glBuffer[i] });
           }
         });
+      }
+
+
+      initData() {
+        let routes = this.totalWaveforms;
+        let length = this.bufferLength;
+        this.bufferData = [];
+        for (let i = 0; i < routes; i++) {
+          this.bufferData[i] = new Float32Array(length);
+        }
+      }
+
+
+      inputData(data: Array<Float32Array>) {
+        let shiftAppendTypedArray = (bufferData: Float32Array, dataArray: Float32Array) => {
+          bufferData.copyWithin(0, dataArray.length);
+          bufferData.set(dataArray, bufferData.length - dataArray.length);
+
+          return { data: bufferData, lenght: dataArray.length };
+        };
       }
 }
 
