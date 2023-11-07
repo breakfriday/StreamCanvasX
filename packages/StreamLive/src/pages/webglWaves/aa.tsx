@@ -21,12 +21,14 @@ const WAVEM = () => {
                 alert(12);
                 let wave = waveRef.current;
 
+                let totalWave = wave?.waveGl.totalWaveforms;
+
 
                 setInterval(() => {
                     let createMockData32 = () => {
                         let mockdata_item = wave?.waveGl.generateSineWave(200, 1);
                         let mockdata = [];
-                        for (let i = 0; i < 32; i++) {
+                        for (let i = 0; i < totalWave; i++) {
                             mockdata[i] = mockdata_item;
                         }
                         return mockdata;
