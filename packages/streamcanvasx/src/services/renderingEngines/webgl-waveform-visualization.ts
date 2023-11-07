@@ -31,7 +31,7 @@ class CanvasWaveService {
        this.canvas_el = this.baseEngine.canvas_el;
        this.glContext = this.baseEngine.gl_context;
        this.totalWaveforms = 32;
-       this.bufferLength = 48000;
+       this.bufferLength = 32000;
 
        this.initData();
 
@@ -89,8 +89,8 @@ class CanvasWaveService {
 
         for (let i = 0; i < this.totalWaveforms; i++) {
           let pcmData = this.bufferData[i];
-        let data = this.translatePointe(pcmData, heightScale, verticalOffset);
-        // let data = this.convertPCMToVertices(pcmData, heightScale, verticalOffset);
+         //let data = this.translatePointe(pcmData, heightScale, verticalOffset);
+         let data = this.convertPCMToVertices(pcmData, heightScale, verticalOffset);
           this.glBuffer[i](data);
           verticalOffset -= verticalOffsetIncrement; // 更新偏移量，为下一路波形准备
         }
