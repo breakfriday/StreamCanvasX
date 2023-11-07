@@ -136,6 +136,32 @@ class CanvasWaveService {
       }
 
 
+    hexArrayToFloat32Array(hexArray: Int16Array) {
+     // 创建一个足够大的buffer来存放16位的PCM数据
+     const buffer = new ArrayBuffer(hexArray.length * 2);
+      // 使用一个DataView来操作ArrayBuffer
+      const view = new DataView(buffer);
+
+      // 16进制 转16位10进制整数
+      hexArray.forEach((hex, i) => {
+        const intValue = parseInt(hex, 16);
+        // 将16位整数（假定为有符号）写入DataView
+        view.setInt16(i * 2, intValue, true);
+      });
+
+      // 现在我们有了一个包含16位PCM数据的ArrayBuffer，创建一个16位整数数组来读取它
+      const int16Array = new Int16Array(buffer);
+
+      // 创建一个Float32Array来存放-1到1之间的浮点数
+      const float32Array = new Float32Array(int16Array.length);
+
+      // 归1化，转换16位整数范围到-1到1的浮点数
+      for (let i = 0; i < int16Array.length; i++) {
+        float32Array[i] = int16Array[i] / 32768;
+      }
+
+      return float32Array;
+      }
       // 生成pcm mock 数据
       generateSineWave(sampleRate = 4000, duration = 1) {
         function generateRandomPCMData(duration: number, sampleRate: number) {
