@@ -22,10 +22,20 @@ const WAVEM = () => {
                 let wave = waveRef.current;
 
 
-                let mockdata = wave?.waveGl.generateSineWave(200, 1);
-                debugger;
+                setInterval(() => {
+                    let createMockData32 = () => {
+                        let mockdata_item = wave?.waveGl.generateSineWave(200, 1);
+                        let mockdata = [];
+                        for (let i = 0; i < 32; i++) {
+                            mockdata[i] = mockdata_item;
+                        }
+                        return mockdata;
+                    };
 
-                 wave?.waveGl.inputData({});
+                    let mockdata = createMockData32();
+                    wave?.waveGl.inputData(mockdata);
+                }, 60);
+
 
                  wave?.waveGl.render();
         }}
