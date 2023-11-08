@@ -32,7 +32,7 @@ class CanvasWaveService {
        this.canvas_el = this.wavePlayerService.canvas_el;
        this.glContext = this.wavePlayerService.gl_context;
        this.totalWaveforms = this.wavePlayerService.config.routes;
-       this.bufferLength = this.wavePlayerService.config.updateArrayLength;
+       this.bufferLength = this.wavePlayerService.config.arrayLength;
 
        this.initData();
 
