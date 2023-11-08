@@ -9,8 +9,11 @@ const containerPlayer = new Container();
 
 const WebRTCInjectionContainer = new Container();
 
+const WavePlayerContainer = new Container();
+const waveAudioContainer = new Container();
+
 // container.bind<Logger>(Logger).toSelf();
 // container.bind<orignClass>(orignClass).toSelf();
 
 
-export { container1, Container, containerPlayer, WebRTCInjectionContainer };
+export { container1, Container, containerPlayer, WebRTCInjectionContainer,waveAudioContainer, WavePlayerContainer };

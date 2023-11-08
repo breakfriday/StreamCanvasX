@@ -4,6 +4,7 @@ import { createRTCPlayerServiceInstance } from 'streamcanvasx/src/serviceFactori
 
 
 const RTCPlayer = () => {
+  debugger;
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalOpen1, setIsModalOpen1] = useState(false);
     const [form_ref] = Form.useForm();

@@ -174,9 +174,23 @@ interface IRTCPlayerConfig{
   renderType?: string;
 }
 
+interface IWavePlayerConfig{
+  contentEl?: HTMLElement;
+  routes?: number;
+  isMocking?: boolean;
+  renderType?: number;
+  arrayLength?: number;
+  updateArrayLength?: number;
+  width?: number;
+  height?: number;
+  updateArrayTimes?: number;
+  renderTimes?: number;
+}
 
 export type IplayerConfig = Partial<IplayerConfig>;
 
 
 export type IRTCPlayerConfig = Partial<IRTCPlayerConfig>;
+
+export type IWavePlayerConfig = Partial<IWavePlayerConfig>;
 

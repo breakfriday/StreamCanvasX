@@ -12,15 +12,15 @@
     "start:myApp": "pnpm -r --filter=./packages/myApp run start",
     "docs": "pnpm -r --filter=./packages/streamcanvasx run start",
     "buildDocs:streamcanvasx": "pnpm -r --filter=./packages/streamcanvasx run build",
-    "publish:streamcanvasx":"pnpm -r publish --filter=./packages/streamcanvasx --no-git-checks"
+    "publish:streamcanvasx": "pnpm -r publish --filter=./packages/streamcanvasx --no-git-checks"
   },
   "repository": "git@github.com:breakfriday/canvasTable.git",
   "author": "breakhappy <break_happy@163.com>",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^18.11.17",
-    "eslint": "^8.35.0",
-    "stylelint": "^15.2.0",
+    "@types/node": "^18.18.8",
+    "eslint": "^8.52.0",
+    "stylelint": "^15.11.0",
     "typescript": "^4.9.5"
   }
 }
