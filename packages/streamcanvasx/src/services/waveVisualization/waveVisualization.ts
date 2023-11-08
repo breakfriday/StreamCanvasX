@@ -41,6 +41,7 @@ class WaveVisualization {
       arrayLength: 8000 * 4,
     };
     const defaultextend = {
+      hasShowid: false,
       showAllid: false,
       terminalid: new Array(defaultConfig.routes),
       id: new Array(defaultConfig.routes),

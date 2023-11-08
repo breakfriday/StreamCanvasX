@@ -54,7 +54,6 @@ class WavePlayer {
       default:
           break;
     }
-    this.showid();
     // debugger;
     // this.audioWaveService.init(config);
   }
@@ -102,6 +101,10 @@ class WavePlayer {
 
       this.canvas_el.width = width;
       this.canvas_el.height = height;
+    if (!this.extend.hasShowId) {
+      this.showid();
+      this.extend.hasShowId = true;
+    }
       this.setidSize();
   }
   setCanvasSize2(entries) {
@@ -140,7 +143,8 @@ class WavePlayer {
       node = node.nextSibling;
     }
     while (node.nodeName === 'DIV') {
-      node.offsetTop = `${count / this.config.routes * height + this.contentEl.offsetTop}px`;
+      node.setAttribute('style', `position: absolute; color: rgb(255, 255, 255);top:${count / this.config.routes * height}px;`);
+      node = node.nextSibling;
       count++;
     }
   }

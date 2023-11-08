@@ -190,6 +190,7 @@ interface IWavePlayerConfig{
 }
 
 interface IWavePlayerExtend{
+  hasShowId?: boolean;
   showAllid?: boolean;
   terminalid?: Array<string | number>;
   id?: Array<number>;
