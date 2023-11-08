@@ -32,14 +32,14 @@ class AudioWave {
 
   init(wavePlayerService: WavePlayerService) {
     // let { routes, contentEl, isMocking = false, renderType = 1, duration = 6, updateArrayLength = 160, width = 3000 * 1, height = 50 * 32, updateArrayTimes = 20, renderTimes = 20 } = wavePlayerService.config;
-    const { config } = wavePlayerService.waveVisualization;
+    const { config } = wavePlayerService;
     this.renderType = wavePlayerService.renderType;
     this.routes = config.routes;
     this.isMocking = config.isMocking;
     this.width = config.width;
     this.height = config.height;
     this.arrayLength = config.arrayLength;
-    this.updateArrayLength = config.updateArrayLength;
+    this.updateArrayLength = config.duration * 1000 / config.updateArrayTimes;
     this.updateArrayTimes = config.updateArrayTimes;
     this.renderTimes = config.renderTimes;
     this.canvas = wavePlayerService.canvas_el;
@@ -156,19 +156,7 @@ class AudioWave {
   }
 
   start() {
-    // this.drawWave(renderTimes); // ms
-
-    switch (this.renderType) {
-      case 1: // canvas2d
-          this.renderCanvas(); // ms
-          break;
-      case 2: // audioContext
-          break;
-      case 3: // webGL
-          break;
-      default:
-          break;
-    }
+    this.renderCanvas();
   }
   // renderCanvas(renderTimes: number) {
   //   const $this = this;

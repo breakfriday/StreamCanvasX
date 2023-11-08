@@ -1,6 +1,6 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import { TYPES } from '../../serviceFactories/symbol';
-import AudioWaveService from '../audio/audioWaveService';
+// import AudioWaveService from '../audio/audioWaveService';
 import WavePlayerService from '../audio/wavePlayer';
 import WaveGl from '../renderingEngines/webgl-waveform-visualization';
 import { IWavePlayerConfig } from '../../types/services';
@@ -16,7 +16,7 @@ class WaveVisualization {
   config?: IWavePlayerConfig;
   renderType: number;
   waveGl: WaveGl;
-  audioWaveService: AudioWaveService;
+  // audioWaveService: AudioWaveService;
   WavePlayerService: WavePlayerService;
 
   constructor(

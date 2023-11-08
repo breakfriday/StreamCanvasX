@@ -3,7 +3,7 @@ import { TYPES } from '../../serviceFactories/symbol';
 import AudioWaveService from './audioWaveService';
 import WaveGl from '../renderingEngines/webgl-waveform-visualization';
 import WaveVisualization from '../waveVisualization/waveVisualization';
-// import { IWavePlayerConfig } from '../../types/services';
+import { IWavePlayerConfig } from '../../types/services';
 
 
 @injectable()
@@ -13,7 +13,7 @@ class WavePlayer {
   gl_context: WebGLRenderingContext;
   resizeObserver: ResizeObserver;
   contentEl?: HTMLElement;
-  // config?: IWavePlayerConfig;
+  config?: IWavePlayerConfig;
   waveVisualization: WaveVisualization;
   waveGl: WaveGl;
   updateBuffer: Float32Array;
@@ -32,7 +32,7 @@ class WavePlayer {
     this.waveVisualization = waveVisualization;
     const { renderType } = waveVisualization.config;
     this.renderType = renderType;
-    // this.config = waveVisualization.config;
+    this.config = waveVisualization.config;
     this.canvas_el = waveVisualization.canvas_el;
     this.contentEl = waveVisualization.contentEl;
     this.event();
@@ -91,7 +91,7 @@ class WavePlayer {
     // if (this.playerService.config.useOffScreen == true) {
     //   return false;
     // }
-
+    debugger;
 
     if (this.contentEl) {
       height = this.contentEl.clientHeight;

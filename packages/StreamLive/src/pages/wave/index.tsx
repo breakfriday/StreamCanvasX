@@ -3,6 +3,8 @@ import { Divider, Space, Button, Form, Input, Radio } from 'antd';
 // import AudioWaveService from 'streamcanvasx/src/services/audio/audioWaveService';
 import { createWaveVisualizationInstance } from 'streamcanvasx/src/serviceFactories/index';
 
+import styles from './index.module.css';
+
 const Wave = () => {
   // debugger;
   const containerRef = useRef();
@@ -14,7 +16,7 @@ const Wave = () => {
 
     // audioWave.init({ routes: routes });
     // debugger;
-    let waveVisualization = createWaveVisualizationInstance({ routes: routes, contentEl: containerRef.current, renderType: 3, isMocking: true });
+    let waveVisualization = createWaveVisualizationInstance({ routes: routes, contentEl: containerRef.current, renderType: 3, isMocking: false });
     waveVisualizationRef.current = waveVisualization;
     // waveVisualization.init({ routes: routes, contentEl: containerRef.current, renderType: 1 });
     // player.audioWaveService.initCanvas(containerRef.current);
@@ -56,6 +58,9 @@ const Wave = () => {
         });
       };
 
+      if (waveVisualization.renderType === 3) {
+        waveVisualization.WavePlayerService.waveGl.render();
+      }
     // function initCanvas() {
     //   let contentEl = document.getElementById('canvasContainer');
 
@@ -87,7 +92,7 @@ const Wave = () => {
       >updateArrayData</Button>
 
 
-      <div ref={containerRef} id="canvasContainer" />
+      <div className={styles['div1']} ref={containerRef} id="canvasContainer" />
     </>
   );
 };
