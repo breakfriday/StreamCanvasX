@@ -16,7 +16,7 @@ const Wave = () => {
 
     // audioWave.init({ routes: routes });
     // debugger;
-    let waveVisualization = createWaveVisualizationInstance({ routes: routes, contentEl: containerRef.current, renderType: 3, isMocking: false });
+    let waveVisualization = createWaveVisualizationInstance({ routes: routes, contentEl: containerRef.current, renderType: 1, isMocking: false });
     waveVisualizationRef.current = waveVisualization;
     // waveVisualization.init({ routes: routes, contentEl: containerRef.current, renderType: 1 });
     // player.audioWaveService.initCanvas(containerRef.current);
@@ -84,12 +84,12 @@ const Wave = () => {
       player.audioWaveService.initCanvas(containerRef.current);
       }}
       >initCanvas</Button> */}
-      <Button onClick={() => {
+      {/* <Button onClick={() => {
       let waveVisualization = waveVisualizationRef.current;
       waveVisualization.WavePlayerService.update();
       //   audioWave.start();
       }}
-      >updateArrayData</Button>
+      >updateArrayData</Button> */}
 
 
       <div className={styles['div1']} ref={containerRef} id="canvasContainer" />

@@ -3,7 +3,7 @@ import { TYPES } from '../../serviceFactories/symbol';
 import AudioWaveService from './audioWaveService';
 import WaveGl from '../renderingEngines/webgl-waveform-visualization';
 import WaveVisualization from '../waveVisualization/waveVisualization';
-import { IWavePlayerConfig } from '../../types/services';
+import { IWavePlayerConfig, IWavePlayerExtend } from '../../types/services';
 
 
 @injectable()
@@ -14,6 +14,7 @@ class WavePlayer {
   resizeObserver: ResizeObserver;
   contentEl?: HTMLElement;
   config?: IWavePlayerConfig;
+  extend?: IWavePlayerExtend;
   waveVisualization: WaveVisualization;
   waveGl: WaveGl;
   updateBuffer: Float32Array;
@@ -33,6 +34,7 @@ class WavePlayer {
     const { renderType } = waveVisualization.config;
     this.renderType = renderType;
     this.config = waveVisualization.config;
+    this.extend = waveVisualization.extend;
     this.canvas_el = waveVisualization.canvas_el;
     this.contentEl = waveVisualization.contentEl;
     this.event();
@@ -52,7 +54,8 @@ class WavePlayer {
       default:
           break;
     }
-
+    this.showid();
+    // debugger;
     // this.audioWaveService.init(config);
   }
 
@@ -91,7 +94,6 @@ class WavePlayer {
     // if (this.playerService.config.useOffScreen == true) {
     //   return false;
     // }
-    debugger;
 
     if (this.contentEl) {
       height = this.contentEl.clientHeight;
@@ -100,10 +102,47 @@ class WavePlayer {
 
       this.canvas_el.width = width;
       this.canvas_el.height = height;
+      this.setidSize();
   }
   setCanvasSize2(entries) {
         this.canvas_el.style.width = `${entries[0].contentRect.width}px`; // css 缩放目前可以解决模糊问题，但是对后续绘制影响有待研究
         this.canvas_el.style.height = `${this.canvas_el.height}px`;
+  }
+  showid() {
+    const { height } = this.canvas_el;
+    if (this.extend.showAllid) {
+      for (let i = 0; i < this.config.routes; i++) {
+        let div = document.createElement('div');
+        let ids = document.createTextNode(`设备-${this.extend.terminalid[i]}通道-${this.extend.id[i]}`);
+        div.appendChild(ids);
+        div.style.position = 'absolute';
+        div.style.top = `${i / this.config.routes * height + this.contentEl.offsetTop}px`;
+        div.style.color = '#ffffff';
+        this.contentEl.appendChild(div);
+      }
+    } else {
+      for (let i = 0; i < this.config.routes; i++) {
+        let div = document.createElement('div');
+        let ids = document.createTextNode(`通道-${this.extend.id[i]}`);
+        div.appendChild(ids);
+        div.style.position = 'absolute';
+        div.style.top = `${i / this.config.routes * height + this.contentEl.offsetTop}px`;
+        div.style.color = '#ffffff';
+        this.contentEl.appendChild(div);
+      }
+    }
+  }
+  setidSize() {
+    let count = 0;
+    const { height } = this.canvas_el;
+    let node = this.contentEl.firstChild;
+    while (node.nodeName !== 'DIV') {
+      node = node.nextSibling;
+    }
+    while (node.nodeName === 'DIV') {
+      node.offsetTop = `${count / this.config.routes * height + this.contentEl.offsetTop}px`;
+      count++;
+    }
   }
   update(data: Array<Float32Array>) {
     // debugger;

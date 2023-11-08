@@ -38,7 +38,7 @@ class AudioWave {
     this.isMocking = config.isMocking;
     this.width = config.width;
     this.height = config.height;
-    this.arrayLength = config.duration * 1000 / config.updateArrayTimes;
+    this.arrayLength = config.duration * 1000 * 160 / config.updateArrayTimes;
     this.updateArrayLength = config.updateArrayLength;
     this.updateArrayTimes = config.updateArrayTimes;
     this.renderTimes = config.renderTimes;
