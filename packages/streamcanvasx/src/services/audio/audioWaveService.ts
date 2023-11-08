@@ -21,7 +21,7 @@ class AudioWave {
   bufferMap: Map<number, RingBuffer>;
   analyserArrayMap: Map<number, Float32Array>;
   contextMap: Map<number, object>; // audiocontextMap
-  observer: ResizeObserver;
+  // observer: ResizeObserver;
   updateArrayTimes: number;
   hasSetSize: boolean;
   renderTimes: number;
@@ -149,10 +149,10 @@ class AudioWave {
   //   this.observer.observe(element);
   // }
 
-  destory() {
-    this.clear = true;
-    this.observer.disconnect();
-    console.log('destory');
+  destroy() {
+    // this.clear = true;
+    // this.observer.disconnect();
+    // console.log('destroy');
   }
 
   start() {

@@ -1,4 +1,4 @@
-import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
+import { injectable, inject, Container, LazyServiceIdentifer, id } from 'inversify';
 import { TYPES } from '../../serviceFactories/symbol';
 import AudioWaveService from './audioWaveService';
 import WaveGl from '../renderingEngines/webgl-waveform-visualization';
@@ -148,6 +148,19 @@ class WavePlayer {
      }
 
      return float32Array;
+  }
+  destroy() {
+    if (this.audioWaveService) {
+      this.audioWaveService.destroy();
+      this.audioWaveService = null;
+      this.canvas_context = null;
+    }
+    if (this.waveGl) {
+      this.waveGl.destroy();
+      this.waveGl = null;
+      this.gl_context = null;
+    }
+    this.resizeObserver.disconnect();
   }
 }
 export default WavePlayer;

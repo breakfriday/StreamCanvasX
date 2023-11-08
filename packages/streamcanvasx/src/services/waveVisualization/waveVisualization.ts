@@ -49,5 +49,12 @@ class WaveVisualization {
     // this.WavePlayerService.init(Object.assign(config, { canvas_el: this.canvas_el }));
     this.WavePlayerService.init(this);
   }
+  destroy() {
+    if (this.WavePlayerService) {
+      this.WavePlayerService.destroy();
+      this.WavePlayerService = null;
+    }
+    this.canvas_el = null;
+  }
 }
 export default WaveVisualization;
