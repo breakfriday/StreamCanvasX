@@ -4,7 +4,7 @@ import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import createREGL from 'regl';
 // import BaseRenderEnging from './baseEngine';
 import WavePlayerService from '../audio/wavePlayer';
-import { debug } from 'console';
+
 
 @injectable()
 class CanvasWaveService {
@@ -21,6 +21,7 @@ class CanvasWaveService {
     totalWaveforms: number;
     bufferLength: number; // 每一路音频数据的长度
     bufferData: Array<Float32Array>;// 32 路音频数据的data
+    updateLength: number; // 每次更新音频数据的长度
 
     constructor() {
 
@@ -33,7 +34,7 @@ class CanvasWaveService {
        this.glContext = this.wavePlayerService.gl_context;
        this.totalWaveforms = this.wavePlayerService.config.routes;
        this.bufferLength = this.wavePlayerService.config.arrayLength;
-
+       this.updateLength = this.wavePlayerService.config.updateArrayLength;
        this.initData();
 
 

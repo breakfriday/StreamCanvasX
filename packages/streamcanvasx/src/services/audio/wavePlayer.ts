@@ -139,10 +139,10 @@ class WavePlayer {
     let count = 0;
     const { height } = this.canvas_el;
     let node = this.contentEl.firstChild;
-    while (node.nodeName !== 'DIV') {
+    while (node && node.nodeName !== 'DIV') {
       node = node.nextSibling;
     }
-    while (node.nodeName === 'DIV') {
+    while (node?.nodeName === 'DIV') {
       node.setAttribute('style', `position: absolute; color: rgb(255, 255, 255);top:${count / this.config.routes * height}px;`);
       node = node.nextSibling;
       count++;

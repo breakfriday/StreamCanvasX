@@ -1,5 +1,6 @@
 .div1{
   border: 1px solid red;
-  width: 900px;
-  height: 1000px;
+  width: 1200px;
+  height: 3200px;
+  position: relative;
 }

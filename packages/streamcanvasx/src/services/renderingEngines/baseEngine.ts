@@ -19,7 +19,7 @@ class BaseRenderEnging {
     config?: IRTCPlayerConfig;
     waveGl: WaveGl;
     constructor(
-      // @inject(TYPES.IWaveGl) waveGl: WaveGl,
+      @inject(TYPES.IWaveGl) waveGl: WaveGl,
 
     ) {
       this.waveGl = waveGl;
@@ -61,7 +61,7 @@ class BaseRenderEnging {
            this.setCanvasSize();
         }, 20);
       });
-      debugger;
+      // debugger;
       this.resizeObserver.observe(this.contentEl);
     }
 
