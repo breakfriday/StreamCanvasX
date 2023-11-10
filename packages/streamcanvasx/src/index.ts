@@ -1,5 +1,6 @@
-export function foo(options: any) {
-  console.log('options');
-  alert(334443);
-  return true;
-}
+
+import { createPlayerServiceInstance } from './serviceFactories/createPlayerInstance';
+
+export {
+    createPlayerServiceInstance,
+};

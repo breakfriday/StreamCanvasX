@@ -43,4 +43,7 @@ export default defineConfig({
       },
     ],
   ],
+  bundle: {
+    formats: ['esm', 'es2017'],
+  },
 });

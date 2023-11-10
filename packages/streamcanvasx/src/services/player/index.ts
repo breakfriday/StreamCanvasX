@@ -34,7 +34,7 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.51';
+window.streamCanvasX = '0.1.55';
 
 function now() {
     return new Date().getTime();
@@ -154,6 +154,8 @@ class PlayerService extends Emitter {
             renderPerSecond: 15,
             fftsize: 128,
             bufferSize: 0.2,
+            streamType: 'flv',
+            isLive: true,
         };
 
         this.config = Object.assign(default_config, config);
@@ -238,10 +240,13 @@ class PlayerService extends Emitter {
         console.info(this.config);
         console.log('------player config-------');
 
+
+        if (hasAudio = true) {
             this.audioProcessingService.init(this, { media_el: videoEl });
 
             // 此處默認靜音
             this.audioProcessingService.mute(true);
+        }
 
 
         // this.audioProcessingService.init(this, { media_el: videoEl });
@@ -253,7 +258,7 @@ class PlayerService extends Emitter {
                     isLive: isLive,
                     url: url,
                     hasAudio: hasAudio,
-                    hasVideo: hasVideo,
+                    hasVideo: false,
 
                   }, {
                         enableStashBuffer: false,
@@ -265,14 +270,25 @@ class PlayerService extends Emitter {
                     type: type!, // could also be mpegts, m2ts, flv
                     isLive: isLive,
                     url: url,
-                    hasAudio: hasAudio,
-                    hasVideo: hasVideo,
+                    // hasAudio: hasAudio,
+                    // hasVideo: hasVideo,
 
-                  }, { enableStashBuffer: false,
-                       enableWorker: true,
-                       liveBufferLatencyChasing: true,
-                       liveBufferLatencyMaxLatency: 1.5, // seconds.
-                        // autoCleanupSourceBuffer: true,
+                  }, {
+
+                     enableStashBuffer: false,
+                     enableWorker: true,
+                     liveBufferLatencyChasing: false,
+                     liveBufferLatencyMaxLatency: 2,
+                     fixAudioTimestampGap: false,
+                    // autoCleanupSourceBuffer: true,
+                    // // autoCleanupMaxBackwardDuration: 5, // seconds.
+                    // autoCleanupMinBackwardDuration: 5,
+                    // lazyLoad: false,
+                    // liveBufferLatencyMinRemain: 0.1,
+                    // lazyLoadMaxDuration: 4,
+                    // enableWorker: true,
+                    // liveBufferLatencyChasing: true,
+                    // autoCleanupSourceBuffer: true,
                         // // autoCleanupMaxBackwardDuration: 5, // seconds.
                         //  autoCleanupMinBackwardDuration: 5,
                         // lazyLoad: false,
@@ -287,7 +303,7 @@ class PlayerService extends Emitter {
 
           this.canvasVideoService.drawLoading();
 
-          window.pp = this.mpegtsPlayer;
+        //   window.pp = this.mpegtsPlayer;
 
           this.mpegtsPlayer.on('audio_segment', (data) => {
             // let h = data;
