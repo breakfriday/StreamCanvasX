@@ -14,7 +14,7 @@ const Wave = () => {
 
   useEffect(() => {
     const routes = 32;
-    let waveVisualization = createWaveVisualizationInstance({ routes: routes, contentEl: containerRef.current, renderType: 3, isMocking: false }, {});
+    let waveVisualization = createWaveVisualizationInstance({ routes: routes, contentEl: containerRef.current, renderType: 3, isMocking: false, duration: 4, arrayLength: 8000 * 4 }, {});
     waveVisualizationRef.current = waveVisualization;
   }, []);
 
@@ -141,7 +141,7 @@ const Wave = () => {
 
           let mockdata = createMockData32();
           waveVisualization?.WavePlayerService.update(mockdata);
-        }, 60);
+        }, 40);
         if (waveVisualization?.renderType === 3) {
           waveVisualization?.WavePlayerService.waveGl.render();
         }
