@@ -230,7 +230,7 @@ class CanvasWaveService {
           });
 
 
-          console.log('------');
+          // console.log('------');
 
 
           for (let i = 0; i < this.totalWaveforms; i++) {
@@ -256,6 +256,10 @@ class CanvasWaveService {
 
 
       destroy() {
+        this.xglBuffer.destroy();
+        for (let i = 0; i < this.totalWaveforms; i++) {
+          this.glBuffer[i].destroy();
+        }
         this.regGl.destroy();
       }
 

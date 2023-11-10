@@ -113,26 +113,30 @@ class WavePlayer {
   }
   showid() {
     const { height } = this.canvas_el;
-    if (this.extend.showAllid) {
-      for (let i = 0; i < this.config.routes; i++) {
-        let div = document.createElement('div');
-        let ids = document.createTextNode(`设备-${this.extend.terminalid[i]}通道-${this.extend.id[i]}`);
-        div.appendChild(ids);
-        div.style.position = 'absolute';
-        div.style.top = `${i / this.config.routes * height + this.contentEl.offsetTop}px`;
-        div.style.color = '#ffffff';
-        this.contentEl.appendChild(div);
+    if (this.contentEl.hasChildNodes() && this.contentEl.firstChild.nodeName === 'CANVAS' && !this.contentEl.firstChild.nextSibling) {
+      if (this.extend.showAllid) {
+        for (let i = 0; i < this.config.routes; i++) {
+          let div = document.createElement('div');
+          let ids = document.createTextNode(`设备-${this.extend.terminalid[i]}通道-${this.extend.id[i]}`);
+          div.appendChild(ids);
+          div.style.position = 'absolute';
+          div.style.top = `${i / this.config.routes * height + this.contentEl.offsetTop}px`;
+          div.style.color = '#ffffff';
+          this.contentEl.appendChild(div);
+        }
+      } else {
+        for (let i = 0; i < this.config.routes; i++) {
+          let div = document.createElement('div');
+          let ids = document.createTextNode(`通道-${this.extend.id[i]}`);
+          div.appendChild(ids);
+          div.style.position = 'absolute';
+          div.style.top = `${i / this.config.routes * height + this.contentEl.offsetTop}px`;
+          div.style.color = '#ffffff';
+          this.contentEl.appendChild(div);
+        }
       }
     } else {
-      for (let i = 0; i < this.config.routes; i++) {
-        let div = document.createElement('div');
-        let ids = document.createTextNode(`通道-${this.extend.id[i]}`);
-        div.appendChild(ids);
-        div.style.position = 'absolute';
-        div.style.top = `${i / this.config.routes * height + this.contentEl.offsetTop}px`;
-        div.style.color = '#ffffff';
-        this.contentEl.appendChild(div);
-      }
+      return;
     }
   }
   setidSize() {
@@ -204,6 +208,22 @@ class WavePlayer {
       this.gl_context = null;
     }
     this.resizeObserver.disconnect();
+  }
+  glClear() {
+    const { contentEl } = this;
+    let ChildNode;
+    if (contentEl.hasChildNodes()) {
+        ChildNode = contentEl.firstChild;
+    } else {
+      return;
+    }
+    while (ChildNode.nodeName !== 'CANVAS' && ChildNode) {
+    //   contentEl.removeChild(contentEl.firstChild);
+        ChildNode = ChildNode.nextSibling;
+    }
+    if (ChildNode.nodeName === 'CANVAS') {
+        contentEl.removeChild(ChildNode);
+    }
   }
 }
 export default WavePlayer;
