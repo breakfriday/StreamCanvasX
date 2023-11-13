@@ -21,7 +21,8 @@
     "react-dom": "^18.2.0",
     "regl": "^2.1.0",
     "streamcanvasx": "workspace:^0.1.0",
-    "webm-muxer": "^3.1.1"
+    "webm-muxer": "^3.1.1",
+    "mux.js": "^6.3.0"
   },
   "devDependencies": {
     "@applint/spec": "^1.2.3",
@@ -38,7 +39,7 @@
   },
   "scripts": {
     "starts": "ice start --https",
-    "start": "ice start ",
+    "start": "ice start --port 3003 ",
     "build": "ice build",
     "eslint": "eslint ./src --cache --ext .js,.jsx,.ts,.tsx",
     "eslint:fix": "npm run eslint -- --fix",

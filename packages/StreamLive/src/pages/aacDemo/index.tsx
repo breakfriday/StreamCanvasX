@@ -36,10 +36,15 @@ import { Divider, Space, Button, Form, Input, Radio } from 'antd';
 
 //    });
 
+function generateRandomId(length) { // length是你的id的长度，可自定义
+  return Math.random().toString(36).substr(3, length);
+}
+
 
 const FlvDemux = () => {
- const containerRef = useRef(null);
+ const containerRef = useRef<{filesData: File}>(null);
  const playerRef = useRef(null);
+
 
  const [data, setData] = useState<any>([]);
     return (
@@ -49,13 +54,14 @@ const FlvDemux = () => {
           name="basic"
           autoComplete="off"
           onFinish={(value) => {
-            let { url, key, enable_crypto, playMethod,
+            let { url, key, enable_crypto, playMethod, showAudio, streamType,
             } = value;
 
+            let fileData = containerRef.current?.filesData;
 
             let temp = Object.assign([], data);
-            temp.push({ url, key, enable_crypto, playMethod });
 
+            temp.push({ url, key, enable_crypto, playMethod, fileData, showAudio, streamType });
 
             setData(temp);
           }}
@@ -77,6 +83,15 @@ const FlvDemux = () => {
             <Input />
           </Form.Item>
 
+          <Form.Item label="streamType" name="streamType" initialValue={'ACC'}>
+            <Radio.Group>
+              <Radio value="AAC"> AAC</Radio>
+              <Radio value="FLV"> FLV</Radio>
+              <Radio value="MPEG-TS"> MPEG-TS</Radio>
+              <Radio value="MP4"> MP4</Radio>
+            </Radio.Group>
+          </Form.Item>
+
 
           <Form.Item label="enable crypto" name="enable_crypto" initialValue={'2'}>
             <Radio.Group>
@@ -92,6 +107,28 @@ const FlvDemux = () => {
             </Radio.Group>
           </Form.Item>
 
+          <Form.Item label="showAudio" name="showAudio" initialValue>
+            <Radio.Group>
+              <Radio value> true </Radio>
+              <Radio value={false}> false</Radio>
+            </Radio.Group>
+          </Form.Item>
+
+          <Form.Item label="file" name="file">
+            <input
+              type="file"
+              id="file-input"
+              accept="*"
+              onChange={(event) => {
+                 // const files_data: File = event.target?.files?.[0]; // 返回file对象
+
+                  const filesData: File = event.target!.files![0];
+                  containerRef.current = {
+                    filesData: filesData,
+                  };
+        }}
+            />
+          </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button
@@ -110,11 +147,19 @@ const FlvDemux = () => {
 
         {
           (() => {
-          return data.map((item) => {
+          return data.map((item, inx) => {
             return (
-              <div>
+              <div key={inx}>
 
-                <LiveVideo url={item.url} playMethod={item.playMethod} />
+                <LiveVideo
+                  url={item.url}
+                  key_v={item.key}
+                  enable_crypto={item.enable_crypto}
+                  fileData={item.fileData}
+                  showAudio={item.showAudio}
+                  streamType={item.streamType}
+                  playMethod={item.playMethod}
+                />
 
 
               </div>

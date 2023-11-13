@@ -12,6 +12,7 @@ esm/
 es2017/
 
 # misc
+.docusaurus
 .idea/
 .happypack
 .DS_Store

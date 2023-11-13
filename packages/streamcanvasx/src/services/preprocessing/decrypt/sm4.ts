@@ -1,24 +1,32 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
-import { addScript2 } from '../../../utils';
 import PlayerService from '../../player';
 import { IplayerConfig } from '../../../types/services';
-
+import PreProcessing from '..';
+import { loadWASM } from '../../../utils';
 
 @injectable()
 class Decrypt {
+    private _runtimeInitializationPromise: Promise<void> | null = null;
     private _runtimeInitializedNotify: () => void;
     private _runtimeInitialized(): Promise<void> {
-        return new Promise((resolve) => {
-            this._runtimeInitializedNotify = resolve;
-        });
+        if (!this._runtimeInitializationPromise) {
+            this._runtimeInitializationPromise = new Promise((resolve) => {
+                this._runtimeInitializedNotify = resolve;
+            });
+        }
+        return this._runtimeInitializationPromise;
     }
     private sm4Instance: any;
     player: PlayerService;
     config: IplayerConfig['crypto'];
-
-    constructor(config: IplayerConfig['crypto']) {
+    preProcessing: PreProcessing;
+    GmsslModule;
+    gmssl_zb_install: boolean;
+    constructor(config: IplayerConfig['crypto'], preProcessingService) {
         this.config = config;
         this.init();
+        this.preProcessing = preProcessingService;
+        this.gmssl_zb_install = false;
     }
 
 
@@ -28,14 +36,18 @@ class Decrypt {
     }
 
     async beforInit() {
+        this._runtimeInitialized();
         if (this.config.useWasm === true) {
-            await addScript2('gmssl_zb/gmssl_zb.js');
-
-            Module.onRuntimeInitialized = () => {
+            if (this.gmssl_zb_install === true) {
+                setTimeout(() => {
                 this._runtimeInitializedNotify();
-            };
-
-            await this._runtimeInitialized();
+                }, 400);
+            } else {
+                // debugger;
+                this.GmsslModule = await loadWASM('gmssl_zb/gmssl_zb.js', 'createGmssl');
+                this.gmssl_zb_install = true;
+                this._runtimeInitializedNotify();
+            }
         }
 
 
@@ -48,7 +60,12 @@ class Decrypt {
 
             ondata: function (chunk: number, size: number) {
                 const asyncProcess = async (chunk: number, size: number) => {
-                    let vdata = new Uint8Array(Module.HEAPU8.buffer, chunk, size);
+                    let vdata = new Uint8Array($this.GmsslModule.HEAPU8.buffer, chunk, size);
+
+
+                    let frames = [...$this.preProcessing.streamParser.parseChunk(vdata)];
+
+                    $this.preProcessing.player.mseDecoderService.onstream(frames);
                 };
 
                 asyncProcess(chunk, size);
@@ -63,14 +80,19 @@ class Decrypt {
         };
 
 
-        this.sm4Instance = new Module.GmsslZb(gmssl);
+        this.sm4Instance = new this.GmsslModule.GmsslZb(gmssl);
     }
 
 
+    // 读取流，第一个数据块取160字节，溢出的数据合并到下一个数据块，后续每次从当前数据块中读取与16字节的最大整数倍 decode，溢出数据合并到下一个数据块
    async processStream(reader: ReadableStreamDefaultReader) {
         let $this = this;
         let remainingBytes = new Uint8Array(0); // Buffer for bytes that overflow the current chunk
         let isFirstChunk = true;
+
+        // debugger;
+        await this._runtimeInitialized();
+
         while (true) {
             try {
                 const { done, value } = await reader.read();
@@ -97,7 +119,9 @@ class Decrypt {
 
                         remainingBytes = new Uint8Array(concatenated.buffer.slice(160));
 
-                        $this.sm4Instance.init(firstChunk, 'ideteck_chenxuejian_test');
+                        let { key } = $this.config;
+
+                        $this.sm4Instance.init(firstChunk, key);
                         isFirstChunk = false;
                     } else {
                         remainingBytes = concatenated; // If the chunk is smaller than 160 bytes, store and continue

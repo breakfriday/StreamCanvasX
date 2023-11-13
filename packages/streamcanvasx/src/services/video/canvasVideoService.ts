@@ -8,6 +8,8 @@ import WebGLYUVRenderer from './WebGLColorConverter';
 import { GPUDevice, GPUSampler, GPURenderPipeline, GPUCanvasContext } from '../../types/services/webGpu';
 
 import { UseMode } from '../../constant';
+import { loadWASM } from '../../utils';
+
 function createContextGL($canvas: HTMLCanvasElement): WebGLRenderingContext | null {
     let gl: WebGLRenderingContext | null = null;
 
@@ -62,6 +64,9 @@ class CanvasVideoService {
     transformDegreeSum: number;
     rotateDegreeSum: number;
     cover: boolean;
+    WatermarkModule;
+    isDrawingWatermark: boolean;
+    isGettingWatermark: boolean;
     constructor() {
         this.canvas_el = document.createElement('canvas');
 
@@ -179,7 +184,35 @@ class CanvasVideoService {
       }
        // this.canvas_context = this.canvas_el.getContext('2d');
     }
-
+    async _initWatermark() {
+      // 获取wasm Module
+      let $this = this;
+      this.WatermarkModule = await loadWASM('watermark.js', 'createWatermark');
+      // debugger;
+      this.WatermarkModule['watermarkArnoldDCT'] = function (pixelData: Uint8ClampedArray, width: number, height: number, watermarkData: Uint8ClampedArray, size: number, count: number) {
+        const len = pixelData.length;
+        const len2 = watermarkData.length;
+        const mem = $this.WatermarkModule._malloc(len + len2);
+        $this.WatermarkModule.HEAPU8.set(pixelData, mem);
+        $this.WatermarkModule.HEAPU8.set(watermarkData, mem + len);
+        $this.WatermarkModule._watermarkArnoldDCT(mem, width, height, mem + len, size, count);
+        const filtered = $this.WatermarkModule.HEAPU8.subarray(mem, mem + len);
+        $this.WatermarkModule._free(mem);
+        return filtered;
+      };
+      this.WatermarkModule['watermarkArnoldIDCT'] = function (pixelData: Uint8ClampedArray, width: number, height: number, watermarkData: Uint8ClampedArray, size: number, count: number) {
+        const len = pixelData.length;
+        const len2 = size * size * 4;
+        const mem = $this.WatermarkModule._malloc(len + len2);
+        $this.WatermarkModule.HEAPU8.set(pixelData, mem);
+        $this.WatermarkModule.HEAPU8.set(watermarkData, mem + len);
+        $this.WatermarkModule._watermarkArnoldIDCT(mem, width, height, mem + len, size, count);
+        // const filtered = HEAPU8.subarray(mem, mem+len);  // 返回图像
+        const filtered2 = $this.WatermarkModule.HEAPU8.subarray(mem + len, mem + len + len2); // 返回水印
+        $this.WatermarkModule._free(mem);
+        return filtered2;
+      };
+    }
     // _initOffScreen() {
     //   let offscreenCanvas = this.canvas_el.transferControlToOffscreen();
     //   this.canvas_context = offscreenCanvas.getContext('2d');
@@ -469,13 +502,24 @@ class CanvasVideoService {
           width = this.contentEl.clientWidth;
           height = this.contentEl.clientHeight;
         }
+        const centerX = width / 2;
+        const centerY = height / 2;
         // let ctx = this.canvas_context;
         // let { canvas_el } = this;
         // let canvas = canvas_el;
         // ctx.save();
-        this.canvas_context.clearRect(0, 0, width, height);
 
-        if (this.cover === true) {
+        // this.canvas_context.clearRect(0, 0, width, height);
+        // 取消cover后使用clearRect(0, 0, width, height)不能完全清除
+        this.canvas_context.clearRect(0, centerY - centerX, width, width); // 当 width > height 时，有效
+        // let clearStart = -Math.abs(centerX - centerY);
+        // let clearSize = Math.max(3 * centerX - centerY, 3 * centerY - centerX);
+        // this.canvas_context.clearRect(clearStart, clearStart, clearSize, clearSize); // 无需讨论 width height的大小关系，均有效
+
+        if (this.cover === true && (this.rotateDegreeSum === 90 || this.rotateDegreeSum === 270)) {
+          // this.canvas_context.drawImage(videoFrame, centerX - centerY, centerY - centerX, centerX + centerY, centerX + centerY);
+          this.canvas_context.drawImage(videoFrame, centerX - centerY, centerY - centerX, height, width);
+        } else if (this.cover === true) {
           this.canvas_context.drawImage(videoFrame, 0, 0, width, height);
         } else {
             this.drawCenteredScaledVideoFrame(videoFrame);
@@ -485,17 +529,24 @@ class CanvasVideoService {
 
         let video_height = video.videoHeight;
         let video_width = video.videoWidth;
-        if (!this.canvas_context2) {
-          this.canvas_context2 = this.canvas_el2.getContext('2d');
-          this.setCanvas2Size({ width: video_width, height: video_height });
-        }
-        this.canvas_context2.clearRect(0, 0, video_width, video_height);
 
-        // this.drawTrasform(30);
-        this.canvas_context2.drawImage(videoFrame, 0, 0, video_width, video_height);
+        if (this.playerService.canvasToVideoSerivce.recording === true) {
+          if (!this.canvas_context2) {
+            this.canvas_context2 = this.canvas_el2.getContext('2d');
+            this.setCanvas2Size({ width: video_width, height: video_height });
+          }
+          this.canvas_context2.clearRect(0, 0, video_width, video_height);
+
+          // this.drawTrasform(30);
+          this.canvas_context2.drawImage(videoFrame, 0, 0, video_width, video_height);
+        }
 
 
         // this.drawTrasform(videoFrame, 30, ctx);
+        if (this.isDrawingWatermark) {
+          this.drawInvisibleWatermark(this.isDrawingWatermark, {});
+          this.getInvisibleWatermark(this.isGettingWatermark, {});
+        }
 
         // ctx.restore();
         // console.log(this.playerService.config.degree);
@@ -528,9 +579,11 @@ class CanvasVideoService {
     createVideoFramCallBack(video: HTMLVideoElement) {
       let $this = this;
 
-
+      let fpsCount = 5;
       let frame_count = 0;
       let start_time = 0.0;
+      let now_time = 0.0;
+      let fps = 0;
 
       function millisecondsToTime(ms: any) {
         // 将时间戳转换为秒并取整
@@ -552,13 +605,19 @@ class CanvasVideoService {
       let cb = () => {
         video.requestVideoFrameCallback((now) => {
             // $this.renderFrameByWebgpu(video);
+            let last_time = now_time;
             if (start_time == 0.0) {
               start_time = now;
             }
-            let last_time = performance.now();
+            now_time = now;
+            // let last_time = performance.now();
 
-            let elapsed = (now - start_time) / 1000.0;
-            let fps = (++frame_count / elapsed).toFixed(3);
+            let elapsed = (now_time - last_time) / 1000.0;
+            // 每经过fpsCount帧后，输出一次当前的瞬时帧率
+            if (!(frame_count % fpsCount)) {
+              fps = (1 / elapsed).toFixed(3);
+            }
+            frame_count++;
 
             let performanceInfo = { fps: fps, duringtime: millisecondsToTime(now - start_time) };
             // console.info(performanceInfo);
@@ -822,6 +881,136 @@ class CanvasVideoService {
     //   return newData;
     // }
 
+
+    // drawWatermark(){
+    //   //获得播放器的canvas
+    //   let ctx = this.canvas_context;
+    //   let { canvas_el } = this;
+    //   let canvas = canvas_el;
+
+    //   //绘制水印
+    //   const watermark = document.createElement('canvas');
+    //   watermark.style.position = 'absolute';
+    //   const watermarkSize = 50;
+    //   watermark.width = watermarkSize;
+    //   watermark.height = watermarkSize;
+    //   const ctxWatermark = watermark.getContext('2d');
+    //   ctxWatermark.textAlign = 'right';
+    //   ctxWatermark.textBaseline = 'top';
+    //   ctxWatermark.font = '12px Microsoft Yahei';
+    //   ctxWatermark.fillStyle = 'rgba(255, 255, 255, 0.3)';
+    //   ctxWatermark.rotate(-20 * Math.PI / 180);
+    //   ctxWatermark.fillText('水印', 10, 20);
+
+    //   //绘制水印图层
+    //   const watermarkLayer = document.createElement('canvas');
+    //   watermarkLayer.style.position = 'absolute';
+    //   watermarkLayer.width = canvas.width;
+    //   watermarkLayer.height = canvas.height;
+    //   const ctxWatermarkLayer = watermarkLayer.getContext('2d');
+    //   //ctxWatermarkLayer.drawImage(watermark,canvas.width - watermark.width, canvas.height - watermark.height);
+    //   ctxWatermarkLayer.fillStyle = ctx.createPattern(watermark,'repeat');
+    //   ctxWatermarkLayer.fillRect(0, 0, canvas.width, canvas.height);
+
+    //   //在播放器的canvas后添加绘制好的水印图层
+    //   let parentDiv = this.canvas_el.parentNode;
+    //   parentDiv.appendChild(watermarkLayer);
+    // }
+
+    drawWatermark(watermarkConfig) {
+      // 获得播放器的canvas
+      let ctx = this.canvas_context;
+      let { canvas_el } = this;
+      let canvas = canvas_el;
+      let { width = 50, height = 50, value = '水印', font = '12px Microsoft Yahei', color = 'rgba(255, 255, 255, 0.3)', degree = 20, fillStyle = 1 } = watermarkConfig || {};
+      // 绘制水印
+      const watermark = document.createElement('canvas');
+      watermark.style.position = 'absolute';
+      watermark.width = width;
+      watermark.height = height;
+      const ctxWatermark = watermark.getContext('2d');
+      ctxWatermark.textAlign = 'left';
+      ctxWatermark.textBaseline = 'top';
+      ctxWatermark.font = font;
+      ctxWatermark.fillStyle = color;
+      ctxWatermark.rotate(-degree * Math.PI / 180);
+      ctxWatermark.fillText(value, 0, 20);
+
+      // 绘制水印图层
+      const watermarkLayer = document.createElement('canvas');
+      watermarkLayer.style.position = 'absolute';
+      watermarkLayer.width = canvas.width;
+      watermarkLayer.height = canvas.height;
+      const ctxWatermarkLayer = watermarkLayer.getContext('2d');
+      if (fillStyle == 1) {
+        ctxWatermarkLayer.drawImage(watermark, canvas.width - width, 0);
+      } else {
+        ctxWatermarkLayer.fillStyle = ctx.createPattern(watermark, 'repeat');
+        ctxWatermarkLayer.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      watermarkLayer.classList.add('watermark');
+
+      // 在播放器的canvas后添加绘制好的水印图层
+      const parentDiv = this.canvas_el.parentNode;
+      if (parentDiv.lastElementChild.classList.contains('watermark')) {
+        parentDiv.removeChild(parentDiv.lastElementChild);
+      }
+      parentDiv.appendChild(watermarkLayer);
+    }
+
+    drawInvisibleWatermark(isDrawingWatermark: boolean, invisibleWatermarkConfig) {
+      if (!this.WatermarkModule) {
+        this._initWatermark();
+      }
+      let ctx = this.canvas_context;
+      let { canvas_el } = this;
+      let canvas = canvas_el;
+      let { size = 50, src = './watermark.png', count = 0 } = invisibleWatermarkConfig || {};
+      let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      if (isDrawingWatermark) {
+      const invisibleWatermark = document.createElement('canvas');
+      invisibleWatermark.style.position = 'absolute';
+      invisibleWatermark.width = size;
+      invisibleWatermark.height = size;
+      const ctxInvisibleWatermark = invisibleWatermark.getContext('2d');
+      const invisibleWatermarkImg = new Image();
+      invisibleWatermarkImg.src = src;
+      ctxInvisibleWatermark.drawImage(invisibleWatermarkImg, 0, 0);
+      let invisibleWatermarkData = ctxInvisibleWatermark.getImageData(0, 0, invisibleWatermark.width, invisibleWatermark.height);
+      let result = this.WatermarkModule.watermarkArnoldDCT(imageData.data, canvas.width, canvas.height,
+                     invisibleWatermarkData.data, size, count);
+      for (let i = 0; i < canvas.width * canvas.height * 4; i++) {
+        imageData.data[i] = result[i];
+      }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.putImageData(imageData, 0, 0);
+      // ctx.drawImage(invisibleWatermarkImg, 0, 0, size, size);
+      // console.log('drawInvisibleWatermark');
+    }
+    }
+
+    getInvisibleWatermark(isGettingWatermark: boolean, invisibleWatermarkConfig) {
+      if (!this.WatermarkModule) {
+        this._initWatermark();
+      }
+      let ctx = this.canvas_context;
+      let { canvas_el } = this;
+      let canvas = canvas_el;
+
+      let { size = 50, count = 0 } = invisibleWatermarkConfig || {};
+      if (isGettingWatermark) {
+      let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      let invisibleWatermarkData = new ImageData(size, size);
+      let result = this.WatermarkModule.watermarkArnoldIDCT(imageData.data, canvas.width, canvas.height,
+                      invisibleWatermarkData.data, size, count);
+      for (let i = 0; i < size * size * 4; i++) {
+        invisibleWatermarkData.data[i] = result[i];
+      }
+      // ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.putImageData(invisibleWatermarkData, canvas.width - size, 0);
+      // console.log('getInvisibleWatermark');
+    }
+    }
     // drawLoading() {
     //   let ctx = this.canvas_context;
     //   let { canvas_el } = this;

@@ -163,8 +163,37 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   audioPlayback?: {
     'method': string; // "MSE" 或 "AudioContext"
   };
+  fileData?: File;
+  isLive?: boolean;
 
 }
 
+interface IRTCPlayerConfig{
+  contentEl?: HTMLElement;
+  url?: string;
+  pushToken?: string;
+  fetchToken?: string;
+  token?: string;
+  renderType?: string;
+}
+
+interface IWavePlayerConfig{
+  contentEl?: HTMLElement;
+  routes?: number;
+  isMocking?: boolean;
+  renderType?: number;
+  arrayLength?: number;
+  updateArrayLength?: number;
+  width?: number;
+  height?: number;
+  updateArrayTimes?: number;
+  renderTimes?: number;
+}
 
 export type IplayerConfig = Partial<IplayerConfig>;
+
+
+export type IRTCPlayerConfig = Partial<IRTCPlayerConfig>;
+
+export type IWavePlayerConfig = Partial<IWavePlayerConfig>;
+

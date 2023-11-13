@@ -8,6 +8,7 @@ import CodecParser from 'codec-parser';
 
 import WebcodecsAudioDecoder from '../decoder/audioDecoder';
 import AudioContextPlayer from '../player/audioContextPlayer';
+import muxjs from 'mux.js';
 
 @injectable()
 class PreProcessing {
@@ -15,7 +16,7 @@ class PreProcessing {
     webcodecsAudioDecoder: WebcodecsAudioDecoder;
     audioContextPlayer: AudioContextPlayer;
     decrypt: Decrypt;
-    private streamParser: CodecParser;
+    streamParser: CodecParser;
 
     constructor() {
 
@@ -41,13 +42,26 @@ class PreProcessing {
             this.webcodecsAudioDecoder.init();
         }
         if (this.player?.config?.crypto?.enable === true) {
-            this.decrypt = new Decrypt(this.player.config.crypto);
+            this.decrypt = new Decrypt(this.player.config.crypto, this);
         }
-        if (this.player.config.streamType = 'ACC') {
+        if (this.player.config.streamType === 'AAC') {
+            this.player.mseDecoderService.start();
+
             this.initAccStreamParser();
         }
     }
-    async processStream(reader: ReadableStreamDefaultReader) {
+    streamMp4(reader: ReadableStreamDefaultReader) {
+        let { fileData } = this.player.config;
+
+        let { meidiaEl } = this.player;
+        let BlobuRL = URL.createObjectURL(fileData);
+        this.player.meidiaEl.src = BlobuRL;
+
+
+        this.player.canvasVideoService.createVideoFramCallBack(meidiaEl);
+    }
+
+    async streamAAC(reader: ReadableStreamDefaultReader) {
         if (this.player?.config?.crypto?.enable === true) {
             // 加密的acc 音频
             this.decrypt.processStream(reader);
@@ -55,11 +69,9 @@ class PreProcessing {
             // 纯acc 音频
             while (true) {
                 try {
-                    // console.log(this.webcodecsAudioDecoder.getAudioDecoderState());
-
                     const { done, value } = await reader.read();
 
-                    // const chunk = value?.buffer;
+                    const chunk = value?.buffer;
                     // console.log(chunk);
                     if (done) {
                         console.log('Stream complete');
@@ -85,6 +97,50 @@ class PreProcessing {
                 }
             }
         }
+    }
+    async streamMPEGTS(reader: ReadableStreamDefaultReader) {
+        let { fileData } = this.player.config;
+        let { meidiaEl } = this.player;
+        let transmuxer = new muxjs.mp4.Transmuxer();
+        transmuxer.on('data', (segment) => {
+            let combined = new Uint8Array(segment.initSegment.byteLength + segment.data.byteLength);
+            combined.set(segment.initSegment, 0);
+            combined.set(segment.data, segment.initSegment.byteLength);
+
+            let blob = new Blob([combined], { type: 'video/mp4' });
+            let BlobuRL = URL.createObjectURL(blob);
+
+           // let aaa = muxjs.mp4.tools.inspect(segment);
+
+            meidiaEl.src = BlobuRL;
+
+            this.player.canvasVideoService.createVideoFramCallBack(meidiaEl);
+        });
+
+
+        debugger;
+        const { done, value } = await reader.read();
+
+        debugger;
+        transmuxer.push(new Uint8Array(value.buffer));
+        transmuxer.flush();
+    }
+    async processStream(reader: ReadableStreamDefaultReader) {
+        let { streamType } = this.player.config;
+        debugger;
+        switch (streamType) {
+            case 'AAC':
+              this.streamAAC(reader);
+              break;
+            case 'MP4':
+                this.streamMp4(reader);
+                break;
+            case 'MPEG-TS':
+                  this.streamMPEGTS(reader);
+                  debugger;
+            default:
+               console.log('no streamType');
+          }
     }
 }
 

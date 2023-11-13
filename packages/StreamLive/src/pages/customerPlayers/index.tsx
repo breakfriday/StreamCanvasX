@@ -19,6 +19,11 @@ interface IFormData{
   updataBufferPerSecond?: number;
   fftsize?: number;
   bufferSize?: number;
+  isLive?: boolean;
+  streamType?: string;
+  fileData?: File;
+  key?: string;
+  enable_crypto?: string;
 
 }
 
@@ -65,7 +70,11 @@ const HlsDemo = () => {
   useEffect(() => {}, []);
   const [data, setData] = useState<Array<IFormData>>([]);
   const [form_ref] = Form.useForm();
-  const [formState, setFormState] = useState({ url: '', type: '1', useOffScreen: false, audioDrawType: '1' });
+  const [formState, setFormState] = useState({ url: '', type: '1', useOffScreen: false, audioDrawType: '1', streamType: '' });
+
+  const fileRef = useRef<{filesData: File}>(null);
+
+  const containerRef = useRef<{filesData: File}>(null);
 
   const formatter = (value: number) => `${value}ms* sampleRate (44100HZ)`;
   return (
@@ -80,9 +89,14 @@ const HlsDemo = () => {
             setFormState(data);
         }}
         onFinish={(value: IFormData) => {
-            let item = { ...value };
+          let fileData = fileRef.current?.filesData;
+            let item = { fileData, ...value };
+
             let temp = Object.assign([], data);
+
             temp.push(item);
+
+            debugger;
 
 
             setData(temp);
@@ -96,6 +110,72 @@ const HlsDemo = () => {
         >
           <Input />
         </Form.Item>
+
+        <Form.Item label="file" name="file">
+          <input
+            type="file"
+            id="file-input"
+            accept="*"
+            onChange={(event) => {
+                 // const files_data: File = event.target?.files?.[0]; // 返回file对象
+
+                  const filesData: File = event.target!.files![0];
+                  fileRef.current = {
+                    filesData: filesData,
+
+                  };
+                  // containerRef.current = {
+                  //   filesData: filesData,
+                  // };
+        }}
+          />
+        </Form.Item>
+
+        <Form.Item label="streamType" name="streamType" initialValue={'ACC'}>
+          <Radio.Group>
+            <Radio value="AAC"> ACC</Radio>
+            <Radio value="FLV"> FLV</Radio>
+            <Radio value="MPEG-TS"> MPEG-TS</Radio>
+            <Radio value="MP4"> MP4</Radio>
+          </Radio.Group>
+        </Form.Item>
+
+        <Form.Item label="enable crypto" name="enable_crypto" initialValue={'2'}>
+          <Radio.Group>
+            <Radio value="1"> true </Radio>
+            <Radio value="2"> false</Radio>
+          </Radio.Group>
+        </Form.Item>
+
+        {
+           formState['enable_crypto'] === '1' ? (
+             <Form.Item
+               initialValue={'ideteck_chenxuejian_test'}
+               label="key"
+               name="key"
+             >
+               <Input />
+             </Form.Item>
+           ) : ''
+        }
+
+
+        <Form.Item label="showAudio" name="showAudio" initialValue>
+          <Radio.Group>
+            <Radio value> true </Radio>
+            <Radio value={false}> false</Radio>
+          </Radio.Group>
+        </Form.Item>
+
+        {
+          formState.streamType === 'FLV' ? (<Form.Item label="isLive" name="isLive" initialValue>
+            <Radio.Group>
+              <Radio value> true</Radio>
+              <Radio value={false}> false</Radio>
+            </Radio.Group>
+          </Form.Item>) : ''
+        }
+
 
         <Form.Item
           label="media"
@@ -269,6 +349,11 @@ const HlsDemo = () => {
               renderPerSecond={item.renderPerSecond}
               fftsize={item.fftsize}
               bufferSize={item.bufferSize}
+              isLive={item.isLive}
+              streamType={item.streamType}
+              fileData={item.fileData}
+              key_v={item.key}
+              enable_crypto={item.enable_crypto}
               // degree={}
             />);
           })

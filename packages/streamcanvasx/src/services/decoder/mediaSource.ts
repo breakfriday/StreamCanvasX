@@ -1,5 +1,6 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import CodecParser from 'codec-parser';
+import PlayerService from '../player';
 
 const MEDIA_SOURCE_STATE = {
   ended: 'ended',
@@ -64,12 +65,31 @@ class MseDecoder {
     sourceBuffer: SourceBuffer;
     mediaStream: MediaStream;
     inputMimeType: string;
-    $videoElement: HTMLAudioElement;
+    $videoElement: HTMLAudioElement | HTMLVideoElement;
     streamParser: CodecParser;
-    private _mediaSourceCreated: Promise<void>;
+    private _mediaSourceCreatedPromise: Promise<void> | null = null;
+    private _mediaSourceCreated(): Promise<void> {
+      if (!this._mediaSourceCreatedPromise) {
+        this._mediaSourceCreatedPromise = new Promise((resolve) => {
+          this._mediaSourceCreatedNotify = resolve;
+        });
+      }
+      return this._mediaSourceCreatedPromise;
+    }
     private _mediaSourceCreatedNotify: () => void;
+
+    private _mediaSourceOpenPromise: Promise<void> | null = null;
     private _mediaSourceOpenNotify: () => void; // 这是一个可选的函数类型
-    private _mediaSourceOpen: Promise<void>;
+    private _mediaSourceOpen(): Promise<void> {
+      if (!this._mediaSourceOpenPromise) {
+        this._mediaSourceOpenPromise = new Promise((resolve) => {
+          this._mediaSourceOpenNotify = resolve;
+        });
+      }
+      return this._mediaSourceOpenPromise;
+    }
+
+
     private _sourceBufferQueue: Array<Uint8Array>;
     private _sourceBufferRemoved: number;
     private bufferLength: number;
@@ -77,6 +97,7 @@ class MseDecoder {
       video: SourceBuffer;
       audio: SourceBuffer;
     };
+    private playerService: PlayerService;
 
 
     constructor() {
@@ -131,20 +152,24 @@ class MseDecoder {
     get isStateOpen() {
         return this.state === MEDIA_SOURCE_STATE.open;
     }
-   async init() {
+   async init(playerService: PlayerService) {
         this._sourceBufferQueue = [];
         this.inputMimeType = 'audio/aac';
+        this.playerService = playerService;
         this.initStreamParser();
-        this.createAudioEl();
+        // this.createAudioEl();
+        this.createMeidalEL();
 
-        this._mediaSourceCreated = new Promise((resolve) => {
-          this._mediaSourceCreatedNotify = resolve;
-        });
+        // this._mediaSourceCreated = new Promise((resolve) => {
+        //   this._mediaSourceCreatedNotify = resolve;
+        // });
 
+        this._mediaSourceCreated();
+        this._mediaSourceOpen();
 
-        this._mediaSourceOpen = new Promise((resolve) => {
-          this._mediaSourceOpenNotify = resolve;
-        });
+        // this._mediaSourceOpen = new Promise((resolve) => {
+        //   this._mediaSourceOpenNotify = resolve;
+        // });
 
 
         // const sourceBuffer = this.mediaSoruce.addSourceBuffer('audio/aac');
@@ -194,14 +219,44 @@ class MseDecoder {
       }
     }
 
-    createAudioEl() {
-      this.$videoElement = document.getElementById('aad');
+    // createAudioEl() {
+    //  // this.$videoElement = document.getElementById('aad');
+    //  let { streamType } = this.playerService.config;
+
+    //  if (streamType === 'AAC') {
+    //   let { contentEl } = this.playerService.config;
+
+    //   this.$videoElement = document.createElement('audio');
+    //   this.$videoElement.controls = true;
+    //   // debugger;
+    //   contentEl.append(this.$videoElement);
+    //  }
+    // }
+    createMeidalEL() {
+      let { streamType } = this.playerService.config;
+      if (streamType === 'AAC') {
+        let { contentEl } = this.playerService.config;
+
+        this.$videoElement = document.createElement('audio');
+        this.$videoElement.controls = true;
+
+        contentEl.append(this.$videoElement);
+      } else {
+        let videoEl = document.createElement('video');
+
+        videoEl.autoplay = true;
+        videoEl.controls = false;
+
+        this.$videoElement = videoEl;
+      }
     }
    appendBuffer(buffer: Uint8Array) {
       let { inputMimeType } = this;
 
       if (this.sourceBuffer === null) {
         this.sourceBuffer = this.mediaSource.addSourceBuffer(inputMimeType);
+        // const sourceBuffer = this.mediaSource.sourceBuffers[0];
+
         // debugger;
        }
 
@@ -219,34 +274,7 @@ class MseDecoder {
       this.appendNextBuffer();
     }
 
-    async delay() {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({});
-        }, 1000);
-      });
-    }
 
-   async waitForSourceBuffer() {
-    return new Promise((resolve) => {
-     // const sourceBuffer = this.mediaSource.sourceBuffers[0];
-    //  const { sourceBuffer } = this;
-
-     const sourceBuffer = this.mediaSource.sourceBuffers[0];
-
-       // eslint-disable-next-line no-negated-condition
-      if (!sourceBuffer.updating) {
-        // debugger;
-        resolve({});
-      } else {
-        sourceBuffer.addEventListener('updateend', () => {
-          resolve({});
-        }, {
-          once: true,
-        });
-      }
-    });
-    }
      addFrames(codecFrames: IAACfames['frames']) {
        // codecFrames = codecFrames.splice(100, 200);
 
@@ -285,21 +313,21 @@ class MseDecoder {
        this.$videoElement.loop = false;
         let mediaUrl = URL.createObjectURL(this.mediaSource);
         this.$videoElement.src = mediaUrl;
-        await this._mediaSourceOpen;
+
 
         // debugger;
     }
 
    async start() {
-      if (!this.mediaSource) {
-        this.init();
-      }
-
       this.createMediaSource();
 
-      await this._mediaSourceCreated;
+
+      await this._mediaSourceCreated();
+
 
       await this.attachMediaSource();
+
+      // this.audioProcessingService.visulizerDraw1();
     }
 
     abortSourceBuffer() {
@@ -322,7 +350,6 @@ class MseDecoder {
           0,
           this.$videoElement.currentTime - BUFFER + this.bufferLength,
         );
-        await this.waitForSourceBuffer();
       }
     }
 
@@ -338,7 +365,8 @@ class MseDecoder {
     }
 
 
-    onstream(frames: IAACfames['frames']) {
+    async onstream(frames: IAACfames['frames']) {
+      await this._mediaSourceOpen();
        this.addFrames(frames); // wait for the source buffer
     }
 
@@ -349,6 +377,21 @@ class MseDecoder {
 
    removeBuffer(start: number, end: number) {
     this.sourceBuffer.remove(start, end);
+   }
+
+
+   processMediaStream() {
+    const stream = this.$videoElement.captureStream();
+    const audioTrack = stream.getAudioTracks()[0];
+
+
+    const trackProcessor = new MediaStreamTrackProcessor({ track: audioTrack });
+
+    const reader = trackProcessor.readable.getReader();
+
+    reader.read().then(function process({ done, value }) {
+      reader.read().then(process);
+      });
    }
 }
 

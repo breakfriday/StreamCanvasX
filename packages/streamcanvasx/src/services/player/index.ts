@@ -19,6 +19,8 @@ import CanvasToVideoSerivce from '../muxer/canvasToVideo';
 import MseDecoderService from '../decoder/mediaSource';
 import PreProcessing from '../preprocessing';
 
+import RenderEngine from '../renderingEngines/baseEngine';
+
 
 mpegts.LoggingControl.applyConfig({
     forceGlobalTag: true,
@@ -32,7 +34,7 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.42';
+window.streamCanvasX = '0.1.55';
 
 function now() {
     return new Date().getTime();
@@ -58,6 +60,7 @@ class PlayerService extends Emitter {
     audioProcessingService: AudioProcessingService;
     mseDecoderService: MseDecoderService;
     preProcessing: PreProcessing;
+    renderEngine: RenderEngine;
     private _stats: Stats;
     private _startBpsTime?: number;
     _opt: any;
@@ -90,6 +93,7 @@ class PlayerService extends Emitter {
         @inject(TYPES.ICanvasToVideoSerivce) canvasToVideoSerivce: CanvasToVideoSerivce,
         @inject(TYPES.IMseDecoderService) mseDecoderService: MseDecoderService,
         @inject(TYPES.IPreProcessing) preProcessing: PreProcessing,
+        @inject(TYPES.IRenderEngine) renderEngine: RenderEngine,
         ) {
         super();
         this.httpFlvStreamService = httpFlvStreamService;
@@ -105,6 +109,7 @@ class PlayerService extends Emitter {
         this.canvasToVideoSerivce = canvasToVideoSerivce;
         this.mseDecoderService = mseDecoderService;
         this.preProcessing = preProcessing;
+        this.renderEngine = renderEngine;
 
 
         this._times = {
@@ -149,10 +154,20 @@ class PlayerService extends Emitter {
             renderPerSecond: 15,
             fftsize: 128,
             bufferSize: 0.2,
+            streamType: 'flv',
+            isLive: true,
         };
 
         this.config = Object.assign(default_config, config);
-        let { model, url, contentEl, useOffScreen } = this.config;
+        let { model, url, contentEl, useOffScreen, fileData } = this.config;
+
+        if (fileData) {
+            let blobUrl = URL.createObjectURL(fileData);
+            url = blobUrl;
+        }
+
+
+        // debugger;
 
         this.httpFlvStreamService.init(this, url);
         this.flvVDemuxService.init(this);
@@ -160,10 +175,12 @@ class PlayerService extends Emitter {
         this.fLVDemuxStream.init(this);
         this.canvasVideoService.init(this, { model: model, contentEl, useOffScreen });
         this.canvasToVideoSerivce.init(this);
-        this.mseDecoderService.init(this);
-        // this.wasmDecoderService.init();
 
-        this.preProcessing.init(this);
+        if (config.streamType === 'AAC' || config.streamType === 'MP4' || config.streamType === 'MpegTs' || config.streamType === 'MPEG-TS') {
+            this.mseDecoderService.init(this);
+            this.preProcessing.init(this);
+        }
+        // this.wasmDecoderService.init();
 
 
         // const decode_worker = new Worker(new URL('../decoder/decode_worker.js', import.meta.url));
@@ -172,15 +189,45 @@ class PlayerService extends Emitter {
     }
 
     createBetaPlayer() {
+        // let videoEl = document.createElement('video');
+        // this.meidiaEl = videoEl;
+        // this.meidiaEl.autoplay = true;
+        // this.meidiaEl.controls = false;
+
         this.httpFlvStreamService.fetchStream();
+
+         let { hasAudio, showAudio } = this.config;
+
+
+            let media_el = this.mseDecoderService.$videoElement;
+            this.meidiaEl = media_el;
+
+            // debugger;
+            this.audioProcessingService.init(this, { media_el: media_el });
+
+
+            // 此處默認靜音
+            // this.audioProcessingService.mute(false);
     }
     createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
         if (window.wasmDebug) {
             this.createBetaPlayer2();
             return false;
         }
-        let { type = 'flv', isLive = true } = parms;
-        let { url } = this.httpFlvStreamService;
+        let { type = 'flv' } = parms;
+
+        let { isLive, url, fileData, streamType } = this.config;
+        if (streamType === 'AAC' || streamType === 'MP4' || streamType === 'MPEG-TS') {
+            this.createBetaPlayer();
+            return false;
+        }
+
+        if (fileData) {
+            let blobUrl = URL.createObjectURL(fileData);
+            url = blobUrl;
+        }
+
+
         let videoEl = document.createElement('video');
         this.meidiaEl = videoEl;
         // document.getElementById('cont').append(videoEl);
@@ -194,8 +241,10 @@ class PlayerService extends Emitter {
         console.log('------player config-------');
 
 
-        if (hasAudio === true) {
+        if (hasAudio = true) {
             this.audioProcessingService.init(this, { media_el: videoEl });
+
+            // 此處默認靜音
             this.audioProcessingService.mute(true);
         }
 
@@ -209,7 +258,7 @@ class PlayerService extends Emitter {
                     isLive: isLive,
                     url: url,
                     hasAudio: hasAudio,
-                    hasVideo: hasVideo,
+                    hasVideo: false,
 
                   }, {
                         enableStashBuffer: false,
@@ -221,19 +270,30 @@ class PlayerService extends Emitter {
                     type: type!, // could also be mpegts, m2ts, flv
                     isLive: isLive,
                     url: url,
-                    hasAudio: hasAudio,
-                    hasVideo: hasVideo,
+                    // hasAudio: hasAudio,
+                    // hasVideo: hasVideo,
 
-                  }, { enableStashBuffer: false,
-                       enableWorker: true,
-                       liveBufferLatencyChasing: true,
-                        liveBufferLatencyMaxLatency: 1, // seconds.
-                        autoCleanupSourceBuffer: true,
-                        // autoCleanupMaxBackwardDuration: 5, // seconds.
-                         autoCleanupMinBackwardDuration: 5,
-                        lazyLoad: false,
-                        liveBufferLatencyMinRemain: 0.1,
-                        lazyLoadMaxDuration: 4, // seconds.
+                  }, {
+
+                     enableStashBuffer: false,
+                     enableWorker: true,
+                     liveBufferLatencyChasing: false,
+                     liveBufferLatencyMaxLatency: 2,
+                     fixAudioTimestampGap: false,
+                    // autoCleanupSourceBuffer: true,
+                    // // autoCleanupMaxBackwardDuration: 5, // seconds.
+                    // autoCleanupMinBackwardDuration: 5,
+                    // lazyLoad: false,
+                    // liveBufferLatencyMinRemain: 0.1,
+                    // lazyLoadMaxDuration: 4,
+                    // enableWorker: true,
+                    // liveBufferLatencyChasing: true,
+                    // autoCleanupSourceBuffer: true,
+                        // // autoCleanupMaxBackwardDuration: 5, // seconds.
+                        //  autoCleanupMinBackwardDuration: 5,
+                        // lazyLoad: false,
+                        // liveBufferLatencyMinRemain: 0.1,
+                        // lazyLoadMaxDuration: 4, // seconds.
                  });
             }
 
@@ -243,7 +303,7 @@ class PlayerService extends Emitter {
 
           this.canvasVideoService.drawLoading();
 
-          window.pp = this.mpegtsPlayer;
+        //   window.pp = this.mpegtsPlayer;
 
           this.mpegtsPlayer.on('audio_segment', (data) => {
             // let h = data;
@@ -340,25 +400,7 @@ class PlayerService extends Emitter {
 
 
         if (showAudio === false) {
-            // this.canvasVideoService.render(videoEl);
             this.canvasVideoService.createVideoFramCallBack(videoEl);
-        } else {
-            if (this.config.useOffScreen === true) {
-            this.audioProcessingService.visulizerDraw2();
-            } else {
-                switch (this.config.audioDraw * 1) {
-                    case 1:
-                        this.audioProcessingService.drawSymmetricWaveform();
-                        break;
-                    case 2:
-                        this, this.audioProcessingService.visulizerDraw1();
-                        break;
-                    default:
-                        this.audioProcessingService.drawSymmetricWaveform();
-
-                    break;
-                }
-            }
         }
       }
 
@@ -408,30 +450,10 @@ class PlayerService extends Emitter {
             this.player2.destroy();
         }
     }
-    log() {
-        alert(22);
-    }
-    fetchstrean(url: string) {
-        this.httpFlvStreamService.fetchStream(url);
-    }
+
 
     play(url: string) {
         this.httpFlvStreamService.fetchStream(url);
-    }
-
-    // viedeo render 使用webGpu
-    video_render(video: HTMLVideoElement) {
-        if ('requestVideoFrameCallback' in video) {
-            video.requestVideoFrameCallback(() => {
-                this.canvasVideoService.renderFrameByWebgpu(video);
-            });
-
-
-            // video.requestVideoFrameCallback(frame);
-          } else {
-
-            // requestAnimationFrame(frame);
-          }
     }
 
 
@@ -449,46 +471,6 @@ class PlayerService extends Emitter {
       }
 
 
-        //
-    updateStats(options: any) {
-            options = options || {};
-
-            if (!this._startBpsTime) {
-                this._startBpsTime = now();
-            }
-
-            // if (isNotEmpty(options.ts)) {
-            //     this._stats.ts = options.ts;
-            // }
-
-            // if (isNotEmpty(options.buf)) {
-            //     this._stats.buf = options.buf;
-            // }
-
-            if (options.fps) {
-                this._stats.fps += 1;
-            }
-            if (options.abps) {
-                this._stats.abps += options.abps;
-            }
-            if (options.vbps) {
-                this._stats.vbps += options.vbps;
-            }
-
-            const _nowTime = now();
-            const timestamp = _nowTime - this._startBpsTime;
-
-            if (timestamp < 1 * 1000) {
-                return;
-            }
-
-            // this.emit(EVENTS.stats, this._stats);
-            // this.emit(EVENTS.performance, fpsStatus(this._stats.fps));
-            this._stats.fps = 0;
-            this._stats.abps = 0;
-            this._stats.vbps = 0;
-            this._startBpsTime = _nowTime;
-        }
         retry() {
            if (this.mpegtsPlayer) {
              this.mpegtsPlayer.destroy();
@@ -546,18 +528,6 @@ class PlayerService extends Emitter {
                 // $this.mpegtsPlayer.play();
             }, 15 * 1000);
         }
-
-        // reload() {
-        //     let $this = this;
-        //     debugger;
-        //     let debounceReload = fpdebounce(() => {
-        //         $this.mpegtsPlayer.unload();
-        //         $this.mpegtsPlayer.load();
-        //         $this.mpegtsPlayer.play();
-        //     })(10 * 1000);
-        //     debugger;
-        //     return debounceReload;
-        // }
 }
 
 export default PlayerService;

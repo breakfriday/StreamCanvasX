@@ -22,10 +22,15 @@ CPP_FUNCS="[
  '_main'
 ]" 
 
+# emcc -o ./webdsp_c.js ./main.cpp -lm -O3 -s WASM=1 \
+# -s BINARYEN_IMPRECISE=1 \
+# -s EXPORTED_FUNCTIONS="$CPP_FUNCS" \
+# -s ALLOW_MEMORY_GROWTH=1 \
+
 emcc -o ./webdsp_c.js ./main.cpp -lm -O3 -s WASM=1 \
--s BINARYEN_IMPRECISE=1 \
--s EXPORTED_FUNCTIONS="$CPP_FUNCS" \
--s ALLOW_MEMORY_GROWTH=1 \
+# -s BINARYEN_IMPRECISE=1 \
+-s EXPORT_NAME="createWebdsp_c"  -s WASM_ASYNC_COMPILATION=1 -s MODULARIZE=1  \
+-s EXPORTED_FUNCTIONS="$CPP_FUNCS" -s ALLOW_MEMORY_GROWTH=1
 
 cp ./webdsp_c.js ../../public/
 cp ./webdsp_c.wasm ../../public/
