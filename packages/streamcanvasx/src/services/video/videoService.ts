@@ -15,7 +15,7 @@ class VideoService {
     init(playerService: RTCPlayerService) {
        this.playerService = playerService;
        let { config } = this.playerService;
-       debugger
+       debugger;
        this.start();
 
 
