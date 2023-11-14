@@ -188,6 +188,15 @@ interface IWavePlayerConfig{
   height?: number;
   updateArrayTimes?: number;
   renderTimes?: number;
+  duration?: number;
+  canvas_el?: HTMLCanvasElement;
+}
+
+interface IWavePlayerExtend{
+  hasShowId?: boolean;
+  showAllid?: boolean;
+  terminalid?: Array<string | number>;
+  id?: Array<number>;
 }
 
 export type IplayerConfig = Partial<IplayerConfig>;
@@ -196,4 +205,5 @@ export type IplayerConfig = Partial<IplayerConfig>;
 export type IRTCPlayerConfig = Partial<IRTCPlayerConfig>;
 
 export type IWavePlayerConfig = Partial<IWavePlayerConfig>;
+export type IWavePlayerExtend = Partial<IWavePlayerExtend>;
 
