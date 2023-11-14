@@ -34,7 +34,7 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.55';
+window.streamCanvasX = '0.1.57';
 
 function now() {
     return new Date().getTime();
@@ -367,9 +367,11 @@ class PlayerService extends Emitter {
         //       }
         //     }, 9 * 1000);
         //   };
+        let lowSpeedStartTime: number | null = null;
 
           this.mpegtsPlayer.on(mpegts.Events.STATISTICS_INFO, (data) => {
             let { speed, decodedFrames } = data;
+
 
             // let end = this.mpegtsPlayer.buffered.end(0);
             // let delta = end - this.mpegtsPlayer.currentTime; // 获取buffered与当前播放位置的差值
@@ -381,9 +383,17 @@ class PlayerService extends Emitter {
 
 
             if (speed <= 1) {
+                if (lowSpeedStartTime === null) {
+                    lowSpeedStartTime = Date.now();
+                }
+                if (Date.now() - lowSpeedStartTime >= 8000) {
+                    this.reload2();
+                   lowSpeedStartTime = null; // 重置计时器
+                }
                 // this.reload();
-                this.reload();
+                // this.reload();
             } else {
+                lowSpeedStartTime = null;
                 if (decodedFrames > 0 || hasVideo === false) {
                     this.canvasVideoService.loading = false;
                     this.httpFlvStreamService.hertTime = 0;
@@ -506,7 +516,11 @@ class PlayerService extends Emitter {
             this.mpegtsPlayer.load();
             this.canvasVideoService.drawLoading();
             setTimeout(() => {
-                this.mpegtsPlayer.play();
+                try {
+                  this.mpegtsPlayer.play();
+                } catch (e) {
+
+                }
             }, 200);
         }
 
@@ -531,6 +545,8 @@ class PlayerService extends Emitter {
            this.reload = this.throttle(() => {
             //    this.canvasVideoService.drawLoading();
                 this.httpFlvStreamService.hertTime++;
+
+                debugger;
                 if (this.httpFlvStreamService.hertTime > this.httpFlvStreamService.maxHeartTimes) {
                     console.log('超过最大重连次数');
                     this.setError();
@@ -539,7 +555,7 @@ class PlayerService extends Emitter {
                 $this.mpegtsPlayer.unload();
                 $this.mpegtsPlayer.load();
                 setTimeout(() => {
-                    $this.mpegtsPlayer.play();
+                   // $this.mpegtsPlayer.play();
                 }, 200);
                 // $this.mpegtsPlayer.play();
             }, 15 * 1000);
