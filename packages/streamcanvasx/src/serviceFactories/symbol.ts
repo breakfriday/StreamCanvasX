@@ -20,6 +20,7 @@ const TYPES = {
     IWavePlayerService: Symbol.for('IWavePlayerService'),
     IRenderEngine: Symbol.for('RenderEngine'),
     IWaveGl: Symbol.for('WaveGl'),
+    IWaveVisualization: Symbol.for('IWaveVisualization'),
 
   };
 
