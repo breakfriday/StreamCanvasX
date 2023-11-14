@@ -156,6 +156,7 @@ class PlayerService extends Emitter {
             bufferSize: 0.2,
             streamType: 'flv',
             isLive: true,
+            splitAVBuffers: true,
         };
 
         this.config = Object.assign(default_config, config);
@@ -241,18 +242,22 @@ class PlayerService extends Emitter {
         console.log('------player config-------');
 
 
-        if (hasAudio = true) {
-            this.audioProcessingService.init(this, { media_el: videoEl });
+        // if (hasAudio = true) {
+        //     this.audioProcessingService.init(this, { media_el: videoEl });
 
-            // 此處默認靜音
-            this.audioProcessingService.mute(true);
-        }
+        //     // 此處默認靜音
+        //     this.audioProcessingService.mute(true);
+        // }
 
 
         // this.audioProcessingService.init(this, { media_el: videoEl });
 
         if (videoEl) {
             if (showAudio === true) {
+                this.audioProcessingService.init(this, { media_el: videoEl });
+
+                // 此處默認靜音
+                this.audioProcessingService.mute(true);
                 this.mpegtsPlayer = mpegts.createPlayer({
                     type: type!, // could also be mpegts, m2ts, flv
                     isLive: isLive,
@@ -265,11 +270,13 @@ class PlayerService extends Emitter {
                         enableWorker: true,
                         liveBufferLatencyChasing: true,
                  });
+                 this.mpegtsPlayer.attachMediaElement(videoEl);
             } else {
                 this.mpegtsPlayer = mpegts.createPlayer({
                     type: type!, // could also be mpegts, m2ts, flv
                     isLive: isLive,
                     url: url,
+                    splitAVBuffers: true,
                     // hasAudio: hasAudio,
                     // hasVideo: hasVideo,
 
@@ -277,10 +284,10 @@ class PlayerService extends Emitter {
 
                      enableStashBuffer: false,
                      enableWorker: true,
-                     liveBufferLatencyChasing: false,
-                     liveBufferLatencyMaxLatency: 2,
+                     liveBufferLatencyChasing: true,
+                     liveBufferLatencyMaxLatency: 1,
                      fixAudioTimestampGap: false,
-                    // autoCleanupSourceBuffer: true,
+                     autoCleanupSourceBuffer: true,
                     // // autoCleanupMaxBackwardDuration: 5, // seconds.
                     // autoCleanupMinBackwardDuration: 5,
                     // lazyLoad: false,
@@ -295,9 +302,18 @@ class PlayerService extends Emitter {
                         // liveBufferLatencyMinRemain: 0.1,
                         // lazyLoadMaxDuration: 4, // seconds.
                  });
+                 let audioEl = document.createElement('video');
+
+
+                 this.audioProcessingService.init(this, { media_el: audioEl });
+
+                 // 此處默認靜音
+                 this.audioProcessingService.mute(true);
+
+                 this.mpegtsPlayer.attachMediaElement(videoEl, audioEl);
             }
 
-          this.mpegtsPlayer.attachMediaElement(videoEl);
+
         //   this.getVideoSize();
           this.mpegtsPlayer.load();
 

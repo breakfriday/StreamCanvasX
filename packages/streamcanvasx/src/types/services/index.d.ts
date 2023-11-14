@@ -162,6 +162,7 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   streamType?: string;// 其他可能的值: "PCM", "MP4", "FLV"
   fileData?: File;
   isLive?: boolean;
+  splitAVBuffers?: boolean;
 
 }
 
