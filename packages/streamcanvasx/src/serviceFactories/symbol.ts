@@ -14,6 +14,13 @@ const TYPES = {
     ICanvasToVideoSerivce: Symbol.for('ICanvasToVideoSerivce'),
     IMseDecoderService: Symbol.for('MseDecoderService'),
     IPreProcessing: Symbol.for('PreProcessing'),
+    IRTCPlayerService: Symbol.for('RTCPlayerService'),
+    IVideoService: Symbol.for('VideoService'),
+    IAudioWaveService: Symbol.for('IAudioWaveService'),
+    IWavePlayerService: Symbol.for('IWavePlayerService'),
+    IRenderEngine: Symbol.for('RenderEngine'),
+    IWaveGl: Symbol.for('WaveGl'),
+    IWaveVisualization: Symbol.for('IWaveVisualization'),
 
   };
 

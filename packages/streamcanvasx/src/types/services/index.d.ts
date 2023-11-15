@@ -160,9 +160,50 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
     };
   } | null;
   streamType?: string;// 其他可能的值: "PCM", "MP4", "FLV"
+  audioPlayback?: {
+    'method': string; // "MSE" 或 "AudioContext"
+  };
   fileData?: File;
+  isLive?: boolean;
 
 }
 
+interface IRTCPlayerConfig{
+  contentEl?: HTMLElement;
+  url?: string;
+  pushToken?: string;
+  fetchToken?: string;
+  token?: string;
+  renderType?: string;
+}
+
+interface IWavePlayerConfig{
+  contentEl?: HTMLElement;
+  routes?: number;
+  isMocking?: boolean;
+  renderType?: number;
+  arrayLength?: number;
+  updateArrayLength?: number;
+  width?: number;
+  height?: number;
+  updateArrayTimes?: number;
+  renderTimes?: number;
+  duration?: number;
+  canvas_el?: HTMLCanvasElement;
+}
+
+interface IWavePlayerExtend{
+  hasShowId?: boolean;
+  showAllid?: boolean;
+  terminalid?: Array<string | number>;
+  id?: Array<number>;
+}
 
 export type IplayerConfig = Partial<IplayerConfig>;
+
+
+export type IRTCPlayerConfig = Partial<IRTCPlayerConfig>;
+
+export type IWavePlayerConfig = Partial<IWavePlayerConfig>;
+export type IWavePlayerExtend = Partial<IWavePlayerExtend>;
+

@@ -7,6 +7,8 @@ import Sm4js from 'sm4js';
 
 import { addScript, addScript2 } from '../../utils';
 
+import { createRateLimitedReadableStream } from '../../utils/stream';
+
 
 // import CodecParser from '../decoder/CodecParser/index';
 @injectable()
@@ -142,6 +144,9 @@ class HttpFlvStreamLoader {
         let { url, fileData } = this.playerService.config;
         let $this = this;
 
+        let stream: ReadableStream;
+        let streamReader: ReadableStreamDefaultReader<any>;
+
 
         if (fileData) {
             const reader = new FileReader();
@@ -149,13 +154,19 @@ class HttpFlvStreamLoader {
 
             reader.onload = function (e) {
                 const arrayBuffer: ArrayBuffer = this.result;
-                const stream = new ReadableStream({
-                    start(controller) {
-                        controller.enqueue(new Uint8Array(arrayBuffer));
-                        controller.close();
-                    },
-                });
-                const reader = stream.getReader();
+                // const stream = new ReadableStream({
+                //     start(controller) {
+                //         controller.enqueue(new Uint8Array(arrayBuffer));
+                //         controller.close();
+                //     },
+                // });
+
+                const stream = new createRateLimitedReadableStream();
+               // stream.enqueue(new Uint8Array(arrayBuffer));
+
+                stream.equeneAll(new Uint8Array(arrayBuffer));
+
+                const reader = stream.stream.getReader();
                 if (reader) {
                      $this.processStream(reader);
                 }
@@ -183,14 +194,20 @@ class HttpFlvStreamLoader {
                 }
 
                 // fetch API 的 Response 对象的 body 属性是一个 ReadableStream 流。
-                const stream = response.body;
-                const reader = stream?.getReader();
-                if (reader) {
-                    await this.processStream(reader);
-                }
+                 stream = response.body;
+                // streamReader = stream?.getReader();
+                // if (streamReader) {
+                //     await this.processStream(streamReader);
+                // }
             } catch (e) {
 
             }
+        }
+
+
+        streamReader = stream?.getReader();
+        if (streamReader) {
+            await this.processStream(streamReader);
         }
     }
 

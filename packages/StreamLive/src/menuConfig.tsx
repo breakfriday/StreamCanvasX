@@ -54,6 +54,14 @@ const asideMenuConfig: MenuDataItem[] = [
         name: 'aacDemo',
         path: 'aacDemo',
       },
+      {
+        name: 'WebRTCChatHub',
+        path: 'WebRTCChatHub',
+      },
+      {
+        name: 'wave',
+        path: 'wave',
+      },
     ],
   },
   {

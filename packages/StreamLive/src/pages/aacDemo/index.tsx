@@ -36,6 +36,10 @@ import { Divider, Space, Button, Form, Input, Radio } from 'antd';
 
 //    });
 
+function generateRandomId(length) { // length是你的id的长度，可自定义
+  return Math.random().toString(36).substr(3, length);
+}
+
 
 const FlvDemux = () => {
  const containerRef = useRef<{filesData: File}>(null);
@@ -50,24 +54,20 @@ const FlvDemux = () => {
           name="basic"
           autoComplete="off"
           onFinish={(value) => {
-            let { url, key, enable_crypto,
+            let { url, key, enable_crypto, playMethod, showAudio, streamType,
             } = value;
 
             let fileData = containerRef.current?.filesData;
 
             let temp = Object.assign([], data);
 
-
-            temp.push({ url, key, enable_crypto, fileData });
-
-            debugger;
-
+            temp.push({ url, key, enable_crypto, playMethod, fileData, showAudio, streamType });
 
             setData(temp);
           }}
         >
           <Form.Item
-            initialValue={'http://localhost:3001/out.aac'}
+            initialValue={'http://localhost:3000/out.aac'}
             label="url"
             name="url"
           >
@@ -83,11 +83,34 @@ const FlvDemux = () => {
             <Input />
           </Form.Item>
 
+          <Form.Item label="streamType" name="streamType" initialValue={'ACC'}>
+            <Radio.Group>
+              <Radio value="AAC"> AAC</Radio>
+              <Radio value="FLV"> FLV</Radio>
+              <Radio value="MPEG-TS"> MPEG-TS</Radio>
+              <Radio value="MP4"> MP4</Radio>
+            </Radio.Group>
+          </Form.Item>
+
 
           <Form.Item label="enable crypto" name="enable_crypto" initialValue={'2'}>
             <Radio.Group>
               <Radio value="1"> true </Radio>
               <Radio value="2"> false</Radio>
+            </Radio.Group>
+          </Form.Item>
+
+          <Form.Item label="audioPlayback method" name="playMethod" initialValue={'MSE'}>
+            <Radio.Group>
+              <Radio value="MSE"> MSE </Radio>
+              <Radio value="AudioContext"> AudioContext</Radio>
+            </Radio.Group>
+          </Form.Item>
+
+          <Form.Item label="showAudio" name="showAudio" initialValue>
+            <Radio.Group>
+              <Radio value> true </Radio>
+              <Radio value={false}> false</Radio>
             </Radio.Group>
           </Form.Item>
 
@@ -124,15 +147,18 @@ const FlvDemux = () => {
 
         {
           (() => {
-          return data.map((item) => {
+          return data.map((item, inx) => {
             return (
-              <div>
+              <div key={inx}>
 
                 <LiveVideo
                   url={item.url}
                   key_v={item.key}
                   enable_crypto={item.enable_crypto}
                   fileData={item.fileData}
+                  showAudio={item.showAudio}
+                  streamType={item.streamType}
+                  playMethod={item.playMethod}
                 />
 
 

@@ -55,6 +55,8 @@ class AudioProcessingService {
          }
 
 
+         this.render();
+
          this.canvasWorker = new Worker(new URL('./worker.js', import.meta.url));
     }
 
@@ -133,7 +135,7 @@ class AudioProcessingService {
       //   canvasContext.lineWidth = 5;
       //   canvasContext.strokeStyle = '#7f0';
       // }, 400);
-
+      // debugger;
       const AnimationFrame = () => {
          dataArray = this.bufferData;
           if (this.clear === true) {
@@ -308,6 +310,8 @@ class AudioProcessingService {
 
           x += barWidth + 1;
         }
+
+        console.log(dataArray);
       };
       AnimationFrame();
     }
@@ -349,7 +353,7 @@ class AudioProcessingService {
 
       // 取到 0 数据不更新 bufferdata
       let hasZero = dataArray.some(value => value === 0);
-
+      // debugger;
       if (hasZero === false) {
         bufferData.copyWithin(0, dataArray.length);
         // Add new data to the end of the buffer
@@ -460,6 +464,33 @@ class AudioProcessingService {
         setTimeout(() => {
         this.playerService.emit('audioInfo', { realTime });
         }, 900);
+      }
+
+      render() {
+        let { config } = this.playerService;
+
+        let { showAudio, useOffScreen } = config;
+
+
+        if (showAudio === true) {
+          this.playerService.canvasVideoService.loading = false;
+          if (useOffScreen === true) {
+            this.visulizerDraw2();
+          } else {
+            switch (config.audioDraw * 1) {
+              case 1:
+                  this.drawSymmetricWaveform();
+                  break;
+              case 2:
+                   this.visulizerDraw();
+                  break;
+              default:
+                  this.drawSymmetricWaveform();
+
+              break;
+            }
+          }
+        }
       }
 }
 
