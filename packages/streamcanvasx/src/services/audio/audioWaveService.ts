@@ -1,9 +1,13 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import RingBuffer from './ringBuffer';
+import WavePlayerService from '../audio/wavePlayer';
 import { IWavePlayerConfig } from '../../types/services';
+
 
 @injectable()
 class AudioWave {
+  wavePlayerService: WavePlayerService;
+  config: IWavePlayerConfig;
   routes: number;
   renderType: number;
   arrayLength: number;
@@ -17,7 +21,7 @@ class AudioWave {
   bufferMap: Map<number, RingBuffer>;
   analyserArrayMap: Map<number, Float32Array>;
   contextMap: Map<number, object>; // audiocontextMap
-  observer: ResizeObserver;
+  // observer: ResizeObserver;
   updateArrayTimes: number;
   hasSetSize: boolean;
   renderTimes: number;
@@ -26,21 +30,22 @@ class AudioWave {
     this.hasSetSize = false;
   }
 
-  init(config: IWavePlayerConfig) {
-    // debugger;
-    // this.updateDataTimeId = '';
-    let { routes, contentEl, isMocking = false, renderType = 1, arrayLength = 8000 * 5, updateArrayLength = 160, width = 1600, height = 50 * 32, updateArrayTimes = 20, renderTimes = 20 } = config;
-    this.renderType = renderType;
-    this.routes = routes;
-    this.isMocking = !isMocking;
-    this.width = width;
-    this.height = height;
-    this.arrayLength = arrayLength;
-    this.updateArrayLength = updateArrayLength;
-    this.updateArrayTimes = updateArrayTimes;
-    this.renderTimes = renderTimes;
-    const element = contentEl;
-    let i = arrayLength;
+  init(wavePlayerService: WavePlayerService) {
+    // let { routes, contentEl, isMocking = false, renderType = 1, duration = 6, updateArrayLength = 160, width = 3000 * 1, height = 50 * 32, updateArrayTimes = 20, renderTimes = 20 } = wavePlayerService.config;
+    const { config } = wavePlayerService;
+    this.renderType = wavePlayerService.renderType;
+    this.routes = config.routes;
+    this.isMocking = config.isMocking;
+    this.width = config.width;
+    this.height = config.height;
+    this.arrayLength = config.duration * 1000 * 160 / config.updateArrayTimes;
+    this.updateArrayLength = config.updateArrayLength;
+    this.updateArrayTimes = config.updateArrayTimes;
+    this.renderTimes = config.renderTimes;
+    this.canvas = wavePlayerService.canvas_el;
+    this.ctx = wavePlayerService.canvas_context;
+    // const element = config.contentEl;
+    let i = this.arrayLength;
     let array = [];
     while (i > 0) {
       array.push(0);
@@ -48,30 +53,30 @@ class AudioWave {
     }
 
     // debugger;
-    switch (this.renderType) {
-      case 1: // canvas2d
-          break;
-      case 2: // audioContext
-          this.analyserArrayMap = new Map();
-          this.contextMap = new Map();
-          for (let i = 0; i < this.routes; i++) {
-            this.analyserArrayMap.set(i, new Float32Array(64));
-            let context = this.initAudioContext();
-            this.contextMap.set(i, context);
-          }
-          break;
-      case 3: // webGL
-          break;
-      default:
-          break;
-    }
+    // switch (this.renderType) {
+    //   case 1: // canvas2d
+    //       break;
+    //   case 2: // audioContext
+    //       this.analyserArrayMap = new Map();
+    //       this.contextMap = new Map();
+    //       for (let i = 0; i < this.routes; i++) {
+    //         this.analyserArrayMap.set(i, new Float32Array(64));
+    //         let context = this.initAudioContext();
+    //         this.contextMap.set(i, context);
+    //       }
+    //       break;
+    //   case 3: // webGL
+    //       break;
+    //   default:
+    //       break;
+    // }
 
     this.bufferMap = new Map();
     for (let i = 0; i < this.routes; i++) {
       this.bufferMap.set(i, new RingBuffer(this.arrayLength));
       this.bufferMap.get(i).enqueueBulk(array);
     }
-    this.initCanvas(element);
+    this.initCanvas();
   }
 
   initAudioContext() {
@@ -114,58 +119,44 @@ class AudioWave {
     };
     return context;
   }
-  initCanvas(contentEl: HTMLElement) {
-    const element = contentEl;
-
-    this.canvas = document.createElement('canvas');
+  initCanvas() {
     this.canvas.height = this.height;
     this.canvas.width = this.width;
-    // this.canvas.width = this.arrayLength;
+
     this.canvas.style.display = 'block';
     this.canvas.style.position = 'relative';
-    if (element) {
-      element.append(this.canvas);
+    if (this.ctx.lineWidth != 1 || this.ctx.strokeStyle != '#77ff00' || this.ctx.fillStyle != '#000000') {
+      this.ctx.lineWidth = 1;
+      this.ctx.strokeStyle = '#77ff00';
+      this.ctx.fillStyle = '#000000';
     }
-    this.setCanvasSize(element);
-    this.ctx = this.canvas.getContext('2d');
   }
-  setCanvasSize(element: HTMLElement) {
-    let timeId: any = '';
-    this.observer = new ResizeObserver(entries => {
-      if (timeId) {
-        clearTimeout(timeId);
-      }
+  // setCanvasSize(element: HTMLElement) {
+  //   let timeId: any = '';
+  //   this.observer = new ResizeObserver(entries => {
+  //     if (timeId) {
+  //       clearTimeout(timeId);
+  //     }
 
-      timeId = setTimeout(() => {
-        // console.log('监听到了尺寸变化了...', entries);
-        // this.canvas.style.width = `${entries[0].contentRect.width}px`; // css 缩放目前可以解决模糊问题，但是对后续绘制影响有待研究
-        this.canvas.width = entries[0].contentRect.width;
-        this.hasSetSize = true;
-      }, 200);
-    });
-    this.observer.observe(element);
-  }
+  //     timeId = setTimeout(() => {
+  //       // console.log('监听到了尺寸变化了...', entries);
+  //       this.canvas.style.width = `${entries[0].contentRect.width}px`; // css 缩放目前可以解决模糊问题，但是对后续绘制影响有待研究
+  //       this.canvas.style.height = `${this.canvas.height}px`;
+  //       // this.canvas.width = entries[0].contentRect.width;
+  //       this.hasSetSize = true;
+  //     }, 200);
+  //   });
+  //   this.observer.observe(element);
+  // }
 
-  destory() {
-    this.clear = true;
-    this.observer.disconnect();
-    console.log('destory');
+  destroy() {
+    // this.clear = true;
+    // this.observer.disconnect();
+    // console.log('destroy');
   }
 
   start() {
-    // this.drawWave(renderTimes); // ms
-
-    switch (this.renderType) {
-      case 1: // canvas2d
-          this.renderCanvas(); // ms
-          break;
-      case 2: // audioContext
-          break;
-      case 3: // webGL
-          break;
-      default:
-          break;
-    }
+    this.renderCanvas();
   }
   // renderCanvas(renderTimes: number) {
   //   const $this = this;
@@ -290,11 +281,6 @@ class AudioWave {
 
   drawWave() {
     const { canvas, ctx } = this;
-    if (ctx.lineWidth != 1 || ctx.strokeStyle != '#77ff00' || ctx.fillStyle != '#000000') {
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = '#77ff00';
-      ctx.fillStyle = '#000000';
-    }
 
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -312,6 +298,8 @@ class AudioWave {
         // let v = $this.audioArray[i][j];
         // let v = Math.sqrt(Math.abs(array[(head + j) % size]));
         let v = array[(head + j) % size];
+        // let v = array[(head + j) % size] * 20;
+        // let v = Math.pow(array[(head + j) % size], 8);
         // let v = (array[(head + j) % size] - 128) / 128;
 
         // debugger;
@@ -339,10 +327,7 @@ class AudioWave {
 
   updateWave() {
     const { canvas, ctx } = this;
-    if (ctx.lineWidth != 1 || ctx.strokeStyle != '#77ff00' || ctx.fillStyle != '#000000') {
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = '#77ff00';
-    }
+
     ctx.drawImage(canvas, canvas.width / this.arrayLength * this.updateArrayLength, 0,
           canvas.width / this.arrayLength * (this.arrayLength - this.updateArrayLength), canvas.height,
           0, 0, canvas.width / this.arrayLength * (this.arrayLength - this.updateArrayLength), canvas.height);
@@ -356,15 +341,20 @@ class AudioWave {
       let Y = i * canvas.height / this.routes;
       // let Y = 0;
       const sliceWidth = canvas.width / this.arrayLength;
+      // let x = Math.floor((this.arrayLength - this.updateArrayLength - 1) * sliceWidth);
       let x = (this.arrayLength - this.updateArrayLength) * sliceWidth;
+      // let x;
       let gap = 1;
       let scale = canvas.height / 2 / this.routes;
       let array = this.bufferMap.get(i).buffer;
       let { size, head } = this.bufferMap.get(i);
       for (let j = this.arrayLength - this.updateArrayLength; j < this.arrayLength; j++) {
+        // x = Math.floor((j - 1) * sliceWidth) + 0.5;
         // let v = $this.audioArray[i][j];
         // let v = Math.sqrt(Math.abs(array[(head + j) % size]));
+        // let v = Math.pow(array[(head + j) % size], 8);
         let v = array[(head + j) % size];
+        // let v = array[(head + j) % size] * 20;
         // let v = (array[(head + j) % size] - 128) / 128;
 
         // debugger;
@@ -432,16 +422,13 @@ class AudioWave {
   //   this.updateDataTimeId = setTimeout(this.updateArrayData.bind(this), updateArrayTimes);
   // }
 
-  updateArrayData(updateArray?: []) {
+  updateArrayData(updateArray?: Array<Float32Array>) {
     // debugger;
     if (!this.isMocking && updateArray) {
+      // debugger;
       for (let i = 0; i < this.routes; i++) {
-        let array = [];
         let buffer = this.bufferMap.get(i);
-        for (let j = 0; j < updateArray[i].length; j++) {
-          array[j] = (updateArray[i][j] / 32678);
-        }
-        buffer.enqueueBulk(array);
+        buffer.enqueueBulk(updateArray[i]);
         // this.audioArray[i] = _.concat(this.audioArray[i], array);
         // this.audioArray[i] = _.drop(this.audioArray[i], this.updateArrayLength);
       }
