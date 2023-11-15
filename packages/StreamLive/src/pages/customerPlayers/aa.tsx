@@ -135,7 +135,7 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
       <div>{JSON.stringify(audioInfo)}</div>
       <Button onClick={() => {
         let play = streamPlayer.current;
-        play.reload();
+        play.reload2();
       }}
       >retry</Button>
       <Button onClick={() => {

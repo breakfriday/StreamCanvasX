@@ -435,7 +435,11 @@ class AudioProcessingService {
           }
         } else {
           if (parm === true) {
+            try {
             this.context.analyserNode!.disconnect(this.context.audioContext!.destination);
+            } catch (e) {
+
+            }
           } else {
             this.context.analyserNode!.connect(this.context.audioContext!.destination);
           }

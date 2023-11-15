@@ -165,6 +165,7 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   };
   fileData?: File;
   isLive?: boolean;
+  splitAVBuffers?: boolean;
 
 }
 
