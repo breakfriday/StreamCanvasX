@@ -41,7 +41,7 @@
   },
   "scripts": {
     "starts": "ice start --https",
-    "start": "ice start ",
+    "start": "ice start --port 3003 ",
     "build": "ice build",
     "eslint": "eslint ./src --cache --ext .js,.jsx,.ts,.tsx",
     "eslint:fix": "npm run eslint -- --fix",

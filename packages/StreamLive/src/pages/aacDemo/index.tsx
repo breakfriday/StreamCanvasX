@@ -54,22 +54,20 @@ const FlvDemux = () => {
           name="basic"
           autoComplete="off"
           onFinish={(value) => {
-            let { url, key, enable_crypto, showAudio, streamType,
+            let { url, key, enable_crypto, playMethod, showAudio, streamType,
             } = value;
 
             let fileData = containerRef.current?.filesData;
 
             let temp = Object.assign([], data);
 
-
-            temp.push({ url, key, enable_crypto, fileData, showAudio, streamType });
-
+            temp.push({ url, key, enable_crypto, playMethod, fileData, showAudio, streamType });
 
             setData(temp);
           }}
         >
           <Form.Item
-            initialValue={'http://localhost:3001/out.aac'}
+            initialValue={'http://localhost:3000/out.aac'}
             label="url"
             name="url"
           >
@@ -87,7 +85,7 @@ const FlvDemux = () => {
 
           <Form.Item label="streamType" name="streamType" initialValue={'ACC'}>
             <Radio.Group>
-              <Radio value="AAC"> ACC</Radio>
+              <Radio value="AAC"> AAC</Radio>
               <Radio value="FLV"> FLV</Radio>
               <Radio value="MPEG-TS"> MPEG-TS</Radio>
               <Radio value="MP4"> MP4</Radio>
@@ -99,6 +97,13 @@ const FlvDemux = () => {
             <Radio.Group>
               <Radio value="1"> true </Radio>
               <Radio value="2"> false</Radio>
+            </Radio.Group>
+          </Form.Item>
+
+          <Form.Item label="audioPlayback method" name="playMethod" initialValue={'MSE'}>
+            <Radio.Group>
+              <Radio value="MSE"> MSE </Radio>
+              <Radio value="AudioContext"> AudioContext</Radio>
             </Radio.Group>
           </Form.Item>
 
@@ -153,6 +158,7 @@ const FlvDemux = () => {
                   fileData={item.fileData}
                   showAudio={item.showAudio}
                   streamType={item.streamType}
+                  playMethod={item.playMethod}
                 />
 
 

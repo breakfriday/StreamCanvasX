@@ -19,6 +19,8 @@ import CanvasToVideoSerivce from '../muxer/canvasToVideo';
 import MseDecoderService from '../decoder/mediaSource';
 import PreProcessing from '../preprocessing';
 
+import RenderEngine from '../renderingEngines/baseEngine';
+
 
 mpegts.LoggingControl.applyConfig({
     forceGlobalTag: true,
@@ -32,7 +34,7 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.51';
+window.streamCanvasX = '0.1.57';
 
 function now() {
     return new Date().getTime();
@@ -58,6 +60,7 @@ class PlayerService extends Emitter {
     audioProcessingService: AudioProcessingService;
     mseDecoderService: MseDecoderService;
     preProcessing: PreProcessing;
+    renderEngine: RenderEngine;
     private _stats: Stats;
     private _startBpsTime?: number;
     _opt: any;
@@ -90,6 +93,7 @@ class PlayerService extends Emitter {
         @inject(TYPES.ICanvasToVideoSerivce) canvasToVideoSerivce: CanvasToVideoSerivce,
         @inject(TYPES.IMseDecoderService) mseDecoderService: MseDecoderService,
         @inject(TYPES.IPreProcessing) preProcessing: PreProcessing,
+        @inject(TYPES.IRenderEngine) renderEngine: RenderEngine,
         ) {
         super();
         this.httpFlvStreamService = httpFlvStreamService;
@@ -105,6 +109,7 @@ class PlayerService extends Emitter {
         this.canvasToVideoSerivce = canvasToVideoSerivce;
         this.mseDecoderService = mseDecoderService;
         this.preProcessing = preProcessing;
+        this.renderEngine = renderEngine;
 
 
         this._times = {
@@ -149,6 +154,9 @@ class PlayerService extends Emitter {
             renderPerSecond: 15,
             fftsize: 128,
             bufferSize: 0.2,
+            streamType: 'flv',
+            isLive: true,
+            splitAVBuffers: true,
         };
 
         this.config = Object.assign(default_config, config);
@@ -234,58 +242,84 @@ class PlayerService extends Emitter {
         console.log('------player config-------');
 
 
-        if (hasAudio === true) {
-            this.audioProcessingService.init(this, { media_el: videoEl });
+        // if (hasAudio = true) {
+        //     this.audioProcessingService.init(this, { media_el: videoEl });
 
-            // 此處默認靜音
-            this.audioProcessingService.mute(true);
-        }
+        //     // 此處默認靜音
+        //     this.audioProcessingService.mute(true);
+        // }
 
 
         // this.audioProcessingService.init(this, { media_el: videoEl });
 
         if (videoEl) {
             if (showAudio === true) {
+                this.audioProcessingService.init(this, { media_el: videoEl });
+
+                // 此處默認靜音
+                this.audioProcessingService.mute(true);
                 this.mpegtsPlayer = mpegts.createPlayer({
                     type: type!, // could also be mpegts, m2ts, flv
                     isLive: isLive,
                     url: url,
                     hasAudio: hasAudio,
-                    hasVideo: hasVideo,
+                    hasVideo: false,
 
                   }, {
                         enableStashBuffer: false,
                         enableWorker: true,
                         liveBufferLatencyChasing: true,
                  });
+                 this.mpegtsPlayer.attachMediaElement(videoEl);
             } else {
                 this.mpegtsPlayer = mpegts.createPlayer({
                     type: type!, // could also be mpegts, m2ts, flv
                     isLive: isLive,
                     url: url,
-                    hasAudio: hasAudio,
-                    hasVideo: hasVideo,
+                    splitAVBuffers: true,
+                    // hasAudio: hasAudio,
+                    // hasVideo: hasVideo,
 
-                  }, { enableStashBuffer: false,
-                       enableWorker: true,
-                       liveBufferLatencyChasing: true,
-                       liveBufferLatencyMaxLatency: 1.5, // seconds.
-                        // autoCleanupSourceBuffer: true,
+                  }, {
+
+                     enableStashBuffer: false,
+                     enableWorker: true,
+                     liveBufferLatencyChasing: true,
+                     liveBufferLatencyMaxLatency: 1,
+                     fixAudioTimestampGap: false,
+                     autoCleanupSourceBuffer: true,
+                    // // autoCleanupMaxBackwardDuration: 5, // seconds.
+                    // autoCleanupMinBackwardDuration: 5,
+                    // lazyLoad: false,
+                    // liveBufferLatencyMinRemain: 0.1,
+                    // lazyLoadMaxDuration: 4,
+                    // enableWorker: true,
+                    // liveBufferLatencyChasing: true,
+                    // autoCleanupSourceBuffer: true,
                         // // autoCleanupMaxBackwardDuration: 5, // seconds.
                         //  autoCleanupMinBackwardDuration: 5,
                         // lazyLoad: false,
                         // liveBufferLatencyMinRemain: 0.1,
                         // lazyLoadMaxDuration: 4, // seconds.
                  });
+                 let audioEl = document.createElement('video');
+
+
+                 this.audioProcessingService.init(this, { media_el: audioEl });
+
+                 // 此處默認靜音
+                 this.audioProcessingService.mute(true);
+
+                 this.mpegtsPlayer.attachMediaElement(videoEl, audioEl);
             }
 
-          this.mpegtsPlayer.attachMediaElement(videoEl);
+
         //   this.getVideoSize();
           this.mpegtsPlayer.load();
 
           this.canvasVideoService.drawLoading();
 
-          window.pp = this.mpegtsPlayer;
+        //   window.pp = this.mpegtsPlayer;
 
           this.mpegtsPlayer.on('audio_segment', (data) => {
             // let h = data;
@@ -333,9 +367,11 @@ class PlayerService extends Emitter {
         //       }
         //     }, 9 * 1000);
         //   };
+        let lowSpeedStartTime: number | null = null;
 
           this.mpegtsPlayer.on(mpegts.Events.STATISTICS_INFO, (data) => {
             let { speed, decodedFrames } = data;
+
 
             // let end = this.mpegtsPlayer.buffered.end(0);
             // let delta = end - this.mpegtsPlayer.currentTime; // 获取buffered与当前播放位置的差值
@@ -347,9 +383,17 @@ class PlayerService extends Emitter {
 
 
             if (speed <= 1) {
+                if (lowSpeedStartTime === null) {
+                    lowSpeedStartTime = Date.now();
+                }
+                if (Date.now() - lowSpeedStartTime >= 8000) {
+                    this.reload2();
+                   lowSpeedStartTime = null; // 重置计时器
+                }
                 // this.reload();
-                this.reload();
+                // this.reload();
             } else {
+                lowSpeedStartTime = null;
                 if (decodedFrames > 0 || hasVideo === false) {
                     this.canvasVideoService.loading = false;
                     this.httpFlvStreamService.hertTime = 0;
@@ -472,7 +516,11 @@ class PlayerService extends Emitter {
             this.mpegtsPlayer.load();
             this.canvasVideoService.drawLoading();
             setTimeout(() => {
-                this.mpegtsPlayer.play();
+                try {
+                  this.mpegtsPlayer.play();
+                } catch (e) {
+
+                }
             }, 200);
         }
 
@@ -497,6 +545,8 @@ class PlayerService extends Emitter {
            this.reload = this.throttle(() => {
             //    this.canvasVideoService.drawLoading();
                 this.httpFlvStreamService.hertTime++;
+
+                debugger;
                 if (this.httpFlvStreamService.hertTime > this.httpFlvStreamService.maxHeartTimes) {
                     console.log('超过最大重连次数');
                     this.setError();
@@ -505,7 +555,7 @@ class PlayerService extends Emitter {
                 $this.mpegtsPlayer.unload();
                 $this.mpegtsPlayer.load();
                 setTimeout(() => {
-                    $this.mpegtsPlayer.play();
+                   // $this.mpegtsPlayer.play();
                 }, 200);
                 // $this.mpegtsPlayer.play();
             }, 15 * 1000);

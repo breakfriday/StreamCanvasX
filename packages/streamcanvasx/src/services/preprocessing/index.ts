@@ -6,11 +6,15 @@ import Decrypt from './decrypt/sm4';
 
 import CodecParser from 'codec-parser';
 
+import WebcodecsAudioDecoder from '../decoder/audioDecoder';
+import AudioContextPlayer from '../player/audioContextPlayer';
 import muxjs from 'mux.js';
 
 @injectable()
 class PreProcessing {
     player: PlayerService;
+    webcodecsAudioDecoder: WebcodecsAudioDecoder;
+    audioContextPlayer: AudioContextPlayer;
     decrypt: Decrypt;
     streamParser: CodecParser;
 
@@ -29,9 +33,14 @@ class PreProcessing {
     }
     init(playerService: PlayerService) {
         this.player = playerService;
-        // debugger;
-
-
+        if (this.player?.config?.audioPlayback?.method == 'MSE') {
+            this.player.mseDecoderService.start();
+        } else if (this.player?.config?.audioPlayback?.method == 'AudioContext') {
+            this.audioContextPlayer = new AudioContextPlayer();
+            this.audioContextPlayer.init();
+            this.webcodecsAudioDecoder = this.audioContextPlayer.webcodecsAudioDecoder;
+            this.webcodecsAudioDecoder.init();
+        }
         if (this.player?.config?.crypto?.enable === true) {
             this.decrypt = new Decrypt(this.player.config.crypto, this);
         }
@@ -74,9 +83,14 @@ class PreProcessing {
 
 
                     let frames = [...streamParser.parseChunk(value)];
+                    // console.log(frames);
+                    // debugger;
 
-
-                     this.player.mseDecoderService.onstream(frames);
+                    if (this.player?.config?.audioPlayback?.method == 'MSE') {
+                        this.player.mseDecoderService.onstream(frames);
+                    } else if (this.player?.config?.audioPlayback?.method == 'AudioContext') {
+                        this.audioContextPlayer.audioContextPlayer(frames);
+                    }
                 } catch (e) {
                     console.error('Error reading stream', e);
                     return;

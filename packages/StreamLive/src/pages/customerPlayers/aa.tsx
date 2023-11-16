@@ -1,7 +1,8 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input, InputNumber } from 'antd';
-import { createPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
+// import { createPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
+import { createPlayerServiceInstance } from 'streamcanvasx/src/index';
 import { PlayCircleFilled } from '@ant-design/icons';
 // import records from '../canvasToVideo/mp4';
 import RecodDialog from './recordDialog';
@@ -134,7 +135,7 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
       <div>{JSON.stringify(audioInfo)}</div>
       <Button onClick={() => {
         let play = streamPlayer.current;
-        play.reload();
+        play.reload2();
       }}
       >retry</Button>
       <Button onClick={() => {
