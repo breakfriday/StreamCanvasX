@@ -24,6 +24,7 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
     const [error, setError] = useState<Error | null>(null);
     const [subscribedTopics, setSubscribedTopics] = useState<Set<string>>(new Set());
     const clientRef = useRef<MqttClient | null>(null);
+    const callbacksRef = useRef<Map<string, (msg: Message) => void>>(new Map()); // 维护一个函数池，存储不同 topic 对应的回调函数。
 
 
     useEffect(() => {
@@ -51,12 +52,15 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
         });
 
         mqttClient.on('message', (topic, payload) => {
-            debugger;
             const message: Message = {
                 topic,
                 payload: payload.toString(),
             };
-            debugger;
+            const callback = callbacksRef.current.get(topic);
+            if (callback) {
+                callback(message);
+            }
+
             setMessageHistory((prev) => [...prev, message]);
         });
 
@@ -69,7 +73,7 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
         };
     }, [brokerUrl]);
 
-    const subscribe = (topic: string, options?: IClientSubscribeOptions) => {
+    const subscribe = (topic: string, options?: IClientSubscribeOptions, callback?: (msg: Message) => void) => {
         if (subscribedTopics.has(topic)) {
             return false; // 判斷禁止重複訂閲
         }
@@ -79,7 +83,12 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
 
         if (client) {
             client.subscribe(topic, options, (err) => {
-                if (err) setError(err);
+                if (err) {
+                    alert('error');
+                }
+                if (callback) {
+                    callbacksRef.current.set(topic, callback);
+                }
             });
 
 
@@ -101,7 +110,9 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
         let client = clientRef.current;
         if (client && isConnected) {
             client.publish(topic, message, options, (err) => {
-                if (err) setError(err);
+                if (err) {
+                    alert(error);
+                }
             });
         }
     };

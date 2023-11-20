@@ -1,18 +1,39 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row } from 'antd';
+import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Modal } from 'antd';
 import RTCPlayer from './aa';
 import styles from './index.module.less';
 import UseRTCPlayer from './hooks/UseRTCPlayer';
+ import useMqtt from './hooks/UseMqtt';
+import { useSearchParams, useParams } from 'ice';
+import { tr } from 'date-fns/locale';
 let classNames = require('classnames');
 
-
-let getNames = () => {
-
-};
 const WebRTCChatHub = () => {
   const [playerRef, createPlayer] = UseRTCPlayer();
   const [showGridRight, setShowGridRight] = useState(true);
+  const { sendMessage, subscribe, isConnected } = useMqtt('mqtt://192.168.3.34:8883');
   let containerRef = useRef(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  // alert(JSON.stringify(searchParams))
+  const roomId = searchParams.get('roomId');
+  const deviceId = searchParams.get('deviceId');
+
+  const [call_open_state, set_call_open_state] = useState(false);
+
+  const callRing = (parm: {
+      room_id: string | null; // 房间名称
+      initator: string | null; // 发起者device_id
+      user_id: Array<string> | null; // 被邀请者device_id
+  }) => {
+    let message = JSON.stringify(parm);
+    sendMessage('v1/callsystem/OnCall/device/', message);
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+         subscribe('v1/callsystem/OnCall/device/', {}, () => {});
+    }, 1200);
+  }, []);
     return (
       <div>
         {/* <div >
@@ -46,7 +67,25 @@ const WebRTCChatHub = () => {
           </button>
 
         </div> */}
-        <div className={styles['phone']}>
+        <Modal
+          title="call_ring"
+          open={call_open_state}
+          onOk={() => {
+            set_call_open_state(false);
+          }}
+          onCancel={() => {
+            set_call_open_state(false);
+          }}
+        >
+          <p>ddd</p>
+        </Modal>
+        <div
+          className={styles['phone']}
+          onClick={() => {
+            alert(22);
+            callRing({ room_id: roomId, initator: deviceId, user_id: ['16'] });
+        }}
+        >
           📞
         </div>
 
@@ -93,7 +132,13 @@ const WebRTCChatHub = () => {
             </button>
           </div>
           <div className={styles['grid-bottom']}>
-            <button className={styles['icon-button']}>
+            <button
+              className={styles['icon-button']}
+              onClick={() => {
+                set_call_open_state(true);
+               // callRing({ room_id: roomId, initator: deviceId, user_id: ['16'] });
+            }}
+            >
               <i className="icon-camera">邀请</i>
             </button>
           </div>
