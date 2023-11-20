@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import * as mqtt from 'mqtt/dist/mqtt.min';
+import { useState, useEffect, useRef } from 'react';
+// import * as mqtt from 'mqtt/dist/mqtt.min';
+// import mqtt from 'mqtt/dist/mqtt.esm';
+import mqtt, { MqttClient, IClientPublishOptions, IClientSubscribeOptions } from 'mqtt';
 
-
-import { Client, IClientPublishOptions, IClientSubscribeOptions } from 'mqtt';
 
 interface Message {
     topic: string;
@@ -20,12 +20,27 @@ interface MqttHookResponse {
 
 function useMqtt(brokerUrl: string): MqttHookResponse {
     const [isConnected, setIsConnected] = useState<boolean>(false);
-    const [client, setClient] = useState<Client | null>(null);
     const [messageHistory, setMessageHistory] = useState<Message[]>([]);
     const [error, setError] = useState<Error | null>(null);
+    const [subscribedTopics, setSubscribedTopics] = useState<Set<string>>(new Set());
+    const clientRef = useRef<MqttClient | null>(null);
+
 
     useEffect(() => {
-        const mqttClient = mqtt.connect(brokerUrl);
+        const options = {
+
+            clientId: `mqttjs_${Math.random().toString(16).substr(2, 8)}`,
+            username: 'root',
+            password: 'root',
+            port: 8883,
+
+          };
+
+          alert(JSON.stringify(options));
+
+
+        const mqttClient = mqtt.connect(brokerUrl, options);
+
 
         mqttClient.on('connect', () => {
             setIsConnected(true);
@@ -36,14 +51,18 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
         });
 
         mqttClient.on('message', (topic, payload) => {
+            debugger;
             const message: Message = {
                 topic,
                 payload: payload.toString(),
             };
+            debugger;
             setMessageHistory((prev) => [...prev, message]);
         });
 
-        setClient(mqttClient);
+        clientRef.current = mqttClient;
+
+        // setClient(mqttClient);
 
         return () => {
             mqttClient.end();
@@ -51,14 +70,26 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
     }, [brokerUrl]);
 
     const subscribe = (topic: string, options?: IClientSubscribeOptions) => {
+        if (subscribedTopics.has(topic)) {
+            return false; // 判斷禁止重複訂閲
+        }
+
+        let client = clientRef.current;
+
+
         if (client) {
             client.subscribe(topic, options, (err) => {
                 if (err) setError(err);
             });
+
+
+            // 優雅
+            setSubscribedTopics(new Set([...subscribedTopics, topic]));
         }
     };
 
     const unsubscribe = (topic: string) => {
+        let client = clientRef.current;
         if (client) {
             client.unsubscribe(topic, (err) => {
                 if (err) setError(err);
@@ -67,6 +98,7 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
     };
 
     const sendMessage = (topic: string, message: string, options?: IClientPublishOptions) => {
+        let client = clientRef.current;
         if (client && isConnected) {
             client.publish(topic, message, options, (err) => {
                 if (err) setError(err);
