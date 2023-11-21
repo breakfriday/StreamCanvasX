@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { createRTCPlayerServiceInstance, RTCPlayerService } from 'streamcanvasx/src/serviceFactories/index';
+import { createRTCPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
 
 type IRTCPlayerService = ReturnType<typeof createRTCPlayerServiceInstance>;
 
