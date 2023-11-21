@@ -155,7 +155,8 @@ class RTCPlayer {
     }
     runwhep(value: {url?: string; token?: string }) {
       let { url = '', token = '' } = value;
-      let video = this.meidiaEl;
+      // let video = this.meidiaEl;
+      let video: HTMLVideoElement = this.videoService.meidiaEl;
       const pc = new RTCPeerConnection();
 
       // Add recv only transceivers

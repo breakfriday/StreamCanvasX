@@ -46,12 +46,15 @@ const WebRTCChatHub = () => {
 
   };
 
-  const fetch_remote_media = (url) => {
+  const fetch_remote_media = (urls) => {
     createPlayer(containerRef);
 
-    return false;
+    let whepUrl = urls[0];
 
-    playerRef.current?.runwhep({ url: url });
+
+    setTimeout(() => {
+    playerRef.current?.runwhep({ url: whepUrl.url });
+    }, 100);
   };
 
 
