@@ -6,14 +6,23 @@ import UseRTCPlayer from './hooks/UseRTCPlayer';
  import useMqtt from './hooks/UseMqtt';
 import { useSearchParams, useParams } from 'ice';
 import { tr } from 'date-fns/locale';
+import R from 'ramda';
 let classNames = require('classnames');
+
+interface ICallMessage {
+  room_id: string | null; // 房间名称
+  initator: string | null; // 发起者device_id
+  user_id: Array<string | number> | null; // 被邀请者device_id
+}
+
 
 const WebRTCChatHub = () => {
   const [playerRef, createPlayer] = UseRTCPlayer();
   const [showGridRight, setShowGridRight] = useState(true);
-  const { sendMessage, subscribe, isConnected } = useMqtt('mqtt://192.168.3.34:8883');
+  const { sendMessage, subscribe, isConnected, messageHistory } = useMqtt('mqtt://192.168.3.34:8883');
   let containerRef = useRef(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [call_form_ref] = Form.useForm();
   // alert(JSON.stringify(searchParams))
   const roomId = searchParams.get('roomId');
   const deviceId = searchParams.get('deviceId');
@@ -23,16 +32,24 @@ const WebRTCChatHub = () => {
   const callRing = (parm: {
       room_id: string | null; // 房间名称
       initator: string | null; // 发起者device_id
-      user_id: Array<string> | null; // 被邀请者device_id
+      user_id: Array<string | number> | null; // 被邀请者device_id
   }) => {
     let message = JSON.stringify(parm);
-    sendMessage('v1/callsystem/OnCall/device/', message);
+
+    sendMessage('v1/callsystem/OnCall/device/', message, { qos: 2 });
   };
 
+
+  const acceptCall = (message: ICallMessage) => {
+    let roomId = message.room_id;
+    let user_ids = message.user_id;
+  };
   useEffect(() => {
-    setTimeout(() => {
-         subscribe('v1/callsystem/OnCall/device/', {}, () => {});
-    }, 1200);
+      subscribe('v1/callsystem/OnCall/device/', { qos: 2 }, (MSG) => {
+        console.log('------');
+        console.log(`${JSON.stringify(MSG.payload)}--${new Date()}`);
+        console.log('------');
+      });
   }, []);
     return (
       <div>
@@ -71,13 +88,26 @@ const WebRTCChatHub = () => {
           title="call_ring"
           open={call_open_state}
           onOk={() => {
+            let values = call_form_ref.getFieldsValue();
+            let { ids } = values;
+
+            callRing({
+              room_id: roomId, initator: deviceId, user_id: [ids],
+            });
             set_call_open_state(false);
           }}
           onCancel={() => {
             set_call_open_state(false);
           }}
         >
-          <p>ddd</p>
+          <Form form={call_form_ref}>
+            <Form.Item
+              label="target_Ids"
+              name="ids"
+            >
+              <Input />
+            </Form.Item>
+          </Form>
         </Modal>
         <div
           className={styles['phone']}
@@ -161,8 +191,15 @@ const WebRTCChatHub = () => {
           {/* 最右边列 */}
           {showGridRight ? (
             <div className={styles['gird-right']}>
+              <div>message history</div>
               <div style={{ width: '100px' }}>
-                chat
+                {
+                  messageHistory.map((v) => {
+                    return (<div>  {JSON.stringify(v)}</div>);
+                  })
+                }
+
+
               </div>
 
             </div>

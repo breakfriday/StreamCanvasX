@@ -14,7 +14,7 @@ interface MqttHookResponse {
     error: Error | null;
     messageHistory: Message[];
     sendMessage: (topic: string, message: string, options?: IClientPublishOptions) => void;
-    subscribe: (topic: string, options?: IClientSubscribeOptions) => void;
+    subscribe: (topic: string, options?: IClientSubscribeOptions, callback?: (msg: Message) => void) => void;
     unsubscribe: (topic: string) => void;
 }
 
@@ -44,22 +44,31 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
 
 
         mqttClient.on('connect', () => {
+            debugger;
             setIsConnected(true);
         });
 
         mqttClient.on('error', (err) => {
+            debugger;
             setError(err);
         });
 
-        mqttClient.on('message', (topic, payload) => {
+        mqttClient.on('message', (topic, payload, packet) => {
+        //   console.log('--------------------------');
+        //   console.log(`${payload.toString()}    ${new Date()}`);
+        //   console.log('--------------------------');
             const message: Message = {
                 topic,
-                payload: payload.toString(),
+                payload: JSON.parse(payload.toString()),
+                cmd: packet.cmd,
             };
+
             const callback = callbacksRef.current.get(topic);
             if (callback) {
                 callback(message);
             }
+
+            debugger;
 
             setMessageHistory((prev) => [...prev, message]);
         });
@@ -69,6 +78,7 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
         // setClient(mqttClient);
 
         return () => {
+            debugger;
             mqttClient.end();
         };
     }, [brokerUrl]);
@@ -82,8 +92,10 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
 
 
         if (client) {
+            debugger;
             client.subscribe(topic, options, (err) => {
                 if (err) {
+                    debugger;
                     alert('error');
                 }
                 if (callback) {
@@ -111,7 +123,7 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
         if (client && isConnected) {
             client.publish(topic, message, options, (err) => {
                 if (err) {
-                    alert(error);
+                    alert(`${error}onmessage`);
                 }
             });
         }
