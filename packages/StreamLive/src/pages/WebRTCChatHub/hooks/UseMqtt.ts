@@ -4,9 +4,16 @@ import { useState, useEffect, useRef } from 'react';
 import mqtt, { MqttClient, IClientPublishOptions, IClientSubscribeOptions } from 'mqtt';
 
 
-interface Message {
+interface ICallMessage {
+    room_id: string | null; // 房间名称
+    initator: string | null; // 发起者device_id
+    user_id: Array<string | number> | null; // 被邀请者device_id
+    cmd?: string;
+  }
+
+interface Message<T> {
     topic: string;
-    payload: string;
+    payload: T;
 }
 
 interface MqttHookResponse {
@@ -14,17 +21,17 @@ interface MqttHookResponse {
     error: Error | null;
     messageHistory: Message[];
     sendMessage: (topic: string, message: string, options?: IClientPublishOptions) => void;
-    subscribe: (topic: string, options?: IClientSubscribeOptions, callback?: (msg: Message) => void) => void;
+    subscribe: (topic: string, options?: IClientSubscribeOptions, callback?: (msg: Message<ICallMessage>) => void) => void;
     unsubscribe: (topic: string) => void;
 }
 
 function useMqtt(brokerUrl: string): MqttHookResponse {
     const [isConnected, setIsConnected] = useState<boolean>(false);
-    const [messageHistory, setMessageHistory] = useState<Message[]>([]);
+    const [messageHistory, setMessageHistory] = useState<Message<ICallMessage>[]>([]);
     const [error, setError] = useState<Error | null>(null);
     const [subscribedTopics, setSubscribedTopics] = useState<Set<string>>(new Set());
     const clientRef = useRef<MqttClient | null>(null);
-    const callbacksRef = useRef<Map<string, (msg: Message) => void>>(new Map()); // 维护一个函数池，存储不同 topic 对应的回调函数。
+    const callbacksRef = useRef<Map<string, (msg: Message<ICallMessage>) => void>>(new Map()); // 维护一个函数池，存储不同 topic 对应的回调函数。
 
 
     useEffect(() => {
@@ -57,7 +64,7 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
         //   console.log('--------------------------');
         //   console.log(`${payload.toString()}    ${new Date()}`);
         //   console.log('--------------------------');
-            const message: Message = {
+            const message: Message<ICallMessage> = {
                 topic,
                 payload: JSON.parse(payload.toString()),
                 cmd: packet.cmd,

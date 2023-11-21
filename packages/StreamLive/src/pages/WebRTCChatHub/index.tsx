@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Modal } from 'antd';
+import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Modal, Tabs } from 'antd';
 import RTCPlayer from './aa';
 import styles from './index.module.less';
 import UseRTCPlayer from './hooks/UseRTCPlayer';
@@ -29,6 +29,8 @@ const WebRTCChatHub = () => {
 
   const [call_open_state, set_call_open_state] = useState(false);
 
+  const [oncall_open_state, set_oncall_open_state] = useState(false);
+
   const callRing = (parm: {
       room_id: string | null; // 房间名称
       initator: string | null; // 发起者device_id
@@ -40,15 +42,23 @@ const WebRTCChatHub = () => {
   };
 
 
+  const Confir_call = () => {
+
+  };
+
+
   const acceptCall = (message: ICallMessage) => {
     let roomId = message.room_id;
     let user_ids = message.user_id;
   };
   useEffect(() => {
       subscribe('v1/callsystem/OnCall/device/', { qos: 2 }, (MSG) => {
-        console.log('------');
-        console.log(`${JSON.stringify(MSG.payload)}--${new Date()}`);
-        console.log('------');
+        let target_ids = MSG.payload.user_id;
+        let taget_room = MSG.payload.room_id;
+
+        if (taget_room === roomId && target_ids?.includes(deviceId!)) {
+          set_oncall_open_state(true);
+        }
       });
   }, []);
     return (
@@ -109,6 +119,25 @@ const WebRTCChatHub = () => {
             </Form.Item>
           </Form>
         </Modal>
+
+        <Modal
+          title="CONFIRN ONCALL"
+          open={oncall_open_state}
+          footer={false}
+          onOk={() => {
+          set_oncall_open_state(false);
+        }}
+          onCancel={() => {
+          set_oncall_open_state(false);
+        }}
+        >
+          <div className={styles['confirm_call']}>
+            <Button size="large" onClick={() => { set_oncall_open_state(false); }}>REJECT</Button>
+            <Button size="large" onClick={() => { set_oncall_open_state(false); }}>ACCEPT</Button>
+          </div>
+        </Modal>
+
+
         <div
           className={styles['phone']}
           onClick={() => {
@@ -191,16 +220,33 @@ const WebRTCChatHub = () => {
           {/* 最右边列 */}
           {showGridRight ? (
             <div className={styles['gird-right']}>
-              <div>message history</div>
-              <div style={{ width: '100px' }}>
-                {
+              <Tabs
+                defaultActiveKey="1"
+                items={[
+                    {
+                      label: 'message history',
+                      key: '1',
+                      children: (<div>
+                        {
                   messageHistory.map((v) => {
-                    return (<div>  {JSON.stringify(v)}</div>);
+                    return (<div className={styles['line1']}>  {JSON.stringify(v)}</div>);
                   })
                 }
+                      </div>),
+                    },
+                    {
+                      label: 'filiter msg',
+                      key: '2',
+                      children: 'Tab 2',
 
-
-              </div>
+                    },
+                    {
+                      label: 'connect store',
+                      key: '3',
+                      children: 'Tab 3',
+                    },
+                  ]}
+              />
 
             </div>
           ) : null}
