@@ -68,6 +68,7 @@ export class WHIPClient {
 			headers,
 		});
 
+		debugger
 		if (!fetched.ok) throw new Error(`Request rejected with status ${fetched.status}`);
 		// if (!fetched.headers.get('location')) throw new Error('Response missing location header');
 
@@ -192,6 +193,7 @@ params = {};
 	}
 
 	async trickle() {
+		return false
 		// Clear timeout
 		this.iceTrickeTimeout = null;
 
@@ -289,10 +291,13 @@ params = {};
 			body: fragment,
 			headers,
 		});
+
+		alert(JSON.stringify(fetched))
+		debugger
 		if (!fetched.ok) throw new Error(`Request rejected with status ${fetched.status}`);
 
 		// If we have got an answer
-		if (fetched.status == 200) {
+		if (fetched.status == 200||fetched.status===201) {
 			// Get the SDP answer
 			const answer = await fetched.text();
 			// Get remote icename and password

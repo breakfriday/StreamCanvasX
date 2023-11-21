@@ -1,15 +1,15 @@
 import createOriginServiceInstance from './createOriginServiceInstance';
 import { createAudioProcessingServiceInstance } from './createAudioProcessInstance';
-import { createMainPlayerInstance } from './createMainPlayerInstance';
+// import { createMainPlayerInstance } from './createMainPlayerInstance';
 import { createPlayerServiceInstance } from './createPlayerInstance';
-import { createRTCPlayerServiceInstance,RTCPlayerService } from './createWebRtcInstance';
+import { createRTCPlayerServiceInstance } from './createWebRtcInstance';
 import { createWaveAudioServiceInstance } from './createWaveAudio';
 import { createWavePlayerServiceInstance } from './createWavePlayerInstance';
 import { createWaveVisualizationInstance } from './createWaveVisualizationInstance';
 export {
         createOriginServiceInstance,
         createAudioProcessingServiceInstance,
-        createMainPlayerInstance,
+        // createMainPlayerInstance,
         createPlayerServiceInstance,
         createRTCPlayerServiceInstance,
         createWavePlayerServiceInstance,

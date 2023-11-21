@@ -15,7 +15,7 @@ class VideoService {
     init(playerService: RTCPlayerService) {
        this.playerService = playerService;
        let { config } = this.playerService;
-       debugger;
+    //    debugger;
        this.start();
 
 
@@ -59,12 +59,16 @@ class VideoService {
         }
 
           this.meidiaEl.width = width;
-         // this.meidiaEl.height = height;
+
+         this.meidiaEl.height = height;
     }
 
     render() {
         let { contentEl } = this.playerService.config;
         this.meidiaEl = document.createElement('video');
+        this.meidiaEl.style.position = 'absolute';
+        this.meidiaEl.style.top = '0px';
+        this.meidiaEl.style.left = '0px';
         this.meidiaEl.autoplay = true;
         contentEl.append(this.meidiaEl);
     }

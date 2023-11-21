@@ -46,19 +46,55 @@ const WebRTCChatHub = () => {
 
   };
 
+  const fetch_remote_media = (url) => {
+    createPlayer(containerRef);
+
+    return false;
+
+    playerRef.current?.runwhep({ url: url });
+  };
+
 
   const acceptCall = (message: ICallMessage) => {
     let roomId = message.room_id;
     let user_ids = message.user_id;
   };
+
+  const push_media = () => {
+    createPlayer(containerRef);
+    playerRef.current?.getMedia();
+
+
+    setTimeout(() => {
+      let url = `http://192.168.3.15/index/api/whip?app=${roomId}&stream=${deviceId}`;
+      playerRef.current?.runwhip({ url: url, token: 'ss' });
+    }, 600);
+  };
   useEffect(() => {
+      // 監聽 被 invite 消息
       subscribe('v1/callsystem/OnCall/device/', { qos: 2 }, (MSG) => {
         let target_ids = MSG.payload.user_id;
         let taget_room = MSG.payload.room_id;
 
+
         if (taget_room === roomId && target_ids?.includes(deviceId!)) {
           set_oncall_open_state(true);
         }
+      });
+
+      subscribe('v1/callsystem/OnPlay/device/', { qos: 2 }, (MSG) => {
+        let whepUrl = MSG.payload.whep?.filter((v) => {
+          if (v.user != deviceId) {
+            return v.url;
+          }
+        });
+
+
+        if (whepUrl && whepUrl?.length > 0) {
+          fetch_remote_media(whepUrl);
+        }
+
+        // console.log('-----------');
       });
   }, []);
     return (
@@ -133,12 +169,12 @@ const WebRTCChatHub = () => {
         >
           <div className={styles['confirm_call']}>
             <Button size="large" onClick={() => { set_oncall_open_state(false); }}>REJECT</Button>
-            <Button size="large" onClick={() => { set_oncall_open_state(false); }}>ACCEPT</Button>
+            <Button size="large" onClick={() => { set_oncall_open_state(false); push_media(); }}>ACCEPT</Button>
           </div>
         </Modal>
 
 
-        <div
+        {/* <div
           className={styles['phone']}
           onClick={() => {
             alert(22);
@@ -146,7 +182,7 @@ const WebRTCChatHub = () => {
         }}
         >
           📞
-        </div>
+        </div> */}
 
         <div className={showGridRight ? styles['grid-container-has-right'] : styles['grid-container']}>
 
@@ -165,7 +201,7 @@ const WebRTCChatHub = () => {
           </div>
 
           {/* 第二行 */}
-          <div className={showGridRight ? styles['grid-large-has-right'] : styles['grid-large']} ref={containerRef}>large_caputre</div>
+          <div className={showGridRight ? styles['grid-large-has-right'] : styles['grid-large']} ref={containerRef} />
 
           {/* 第三行 */}
           <div className={styles['grid-bottom']}>

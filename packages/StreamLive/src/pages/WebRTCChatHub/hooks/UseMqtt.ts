@@ -9,6 +9,7 @@ interface ICallMessage {
     initator: string | null; // 发起者device_id
     user_id: Array<string | number> | null; // 被邀请者device_id
     cmd?: string;
+    whep?: Array<{url: string; user: string}>;
   }
 
 interface Message<T> {

@@ -153,8 +153,24 @@ class RTCPlayer {
         // Start publishing
         whip.publish(pc, url, token);
     }
-    runwhep() {
+    runwhep(value: {url?: string; token?: string }) {
+      let { url = '', token = '' } = value;
+      let video = this.meidiaEl;
+      const pc = new RTCPeerConnection();
 
+      // Add recv only transceivers
+      pc.addTransceiver('audio');
+      pc.addTransceiver('video');
+
+
+      pc.ontrack = (event) => {
+          if (event.track.kind == 'video') {
+              video.srcObject = event.streams[0];
+          }
+      };
+
+      const whep = new WHEPClient();
+      whep.view(pc, url, token);
     }
 
     stopStream() {
