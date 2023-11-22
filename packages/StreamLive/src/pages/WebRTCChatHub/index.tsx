@@ -1,12 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Modal, Tabs } from 'antd';
-import RTCPlayer from './aa';
+// import RTCPlayer from './aa';
 import styles from './index.module.less';
 import UseRTCPlayer from './hooks/UseRTCPlayer';
  import useMqtt from './hooks/UseMqtt';
 import { useSearchParams, useParams } from 'ice';
 import { tr } from 'date-fns/locale';
-import R from 'ramda';
+import RtcPlayer from './RtcPlayer';
+const R = require('ramda');
 let classNames = require('classnames');
 
 interface ICallMessage {
@@ -30,6 +31,8 @@ const WebRTCChatHub = () => {
   const [call_open_state, set_call_open_state] = useState(false);
 
   const [oncall_open_state, set_oncall_open_state] = useState(false);
+
+  const [whepUrlStore, setWhepUrlSotre] = useState<Array<{url?: string}>>([]);
 
   const callRing = (parm: {
       room_id: string | null; // 房间名称
@@ -63,15 +66,15 @@ const WebRTCChatHub = () => {
     let user_ids = message.user_id;
   };
 
-  const push_media = () => {
+  const push_media = async () => {
     createPlayer(containerRef);
-    playerRef.current?.getMedia();
+    await playerRef.current?.getMedia();
+    let url = `http://192.168.3.15/index/api/whip?app=${roomId}&stream=${deviceId}`;
+    playerRef.current?.runwhip({ url: url, token: 'ss' });
 
+    // setTimeout(() => {
 
-    setTimeout(() => {
-      let url = `http://192.168.3.15/index/api/whip?app=${roomId}&stream=${deviceId}`;
-      playerRef.current?.runwhip({ url: url, token: 'ss' });
-    }, 600);
+    // }, 900);
   };
   useEffect(() => {
       // 監聽 被 invite 消息
@@ -94,6 +97,9 @@ const WebRTCChatHub = () => {
 
 
         if (whepUrl && whepUrl?.length > 0) {
+          let diffValues = R.difference(whepUrl, whepUrlStore);
+          let newwhepUrlStore = [...whepUrlStore, ...diffValues];
+          setWhepUrlSotre(newwhepUrlStore);
           fetch_remote_media(whepUrl);
         }
 
@@ -190,7 +196,7 @@ const WebRTCChatHub = () => {
         <div className={showGridRight ? styles['grid-container-has-right'] : styles['grid-container']}>
 
           {/* 第一行 */}
-          <div className={styles['grid-item']}>
+          {/* <div className={styles['grid-item']}>
             <div className={styles['grid-item-box']} >1</div>
           </div>
           <div className={styles['grid-item']}>
@@ -201,6 +207,26 @@ const WebRTCChatHub = () => {
           </div>
           <div className={styles['grid-item']}>
             <div className={styles['grid-item-box']} >1</div>
+          </div> */}
+
+          <div className={styles['gird-first-row']}>
+
+            <div className={styles['first-flex-row']}>
+              {
+                (() => {
+                  return R.map((v) => {
+                    return (<div className={styles['row_item']} >
+                      <RtcPlayer whepUrl={v.url} />
+                    </div>);
+                  }, whepUrlStore);
+                })()
+              }
+
+              <div className={styles['row_item']} >m_1</div>
+
+
+            </div>
+
           </div>
 
           {/* 第二行 */}
@@ -273,16 +299,17 @@ const WebRTCChatHub = () => {
                 }
                       </div>),
                     },
-                    {
-                      label: 'filiter msg',
-                      key: '2',
-                      children: 'Tab 2',
 
-                    },
                     {
                       label: 'connect store',
-                      key: '3',
-                      children: 'Tab 3',
+                      key: '2',
+                      children: (<div>
+                        {
+                          whepUrlStore.map((v) => {
+                            return (<div className={styles['line1']}>  {JSON.stringify(v)}</div>);
+                          })
+                        }
+                      </div>),
                     },
                   ]}
               />

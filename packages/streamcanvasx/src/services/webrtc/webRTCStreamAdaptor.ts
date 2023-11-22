@@ -32,6 +32,49 @@ class RTCStreamAdaptor {
     connectPeer() {
 
     }
+
+    async publish(url: string) {
+        let pc = this.peer;
+
+		const offer = await pc.createOffer();
+        const headers = {
+			'Content-Type': 'application/sdp',
+		};
+
+        const fetched = await fetch(url, {
+			method: 'POST',
+			body: offer.sdp,
+			headers,
+		});
+
+
+        pc.onconnectionstatechange = (event) => {
+			switch (pc.connectionState) {
+				case 'connected':
+					// The connection has become fully connected
+					break;
+				case 'disconnected':
+				case 'failed':
+					// One or more transports has terminated unexpectedly or in an error
+					break;
+				case 'closed':
+					// The connection has been closed
+					break;
+			}
+		};
+
+        /// / Get the SDP answer
+        const answer = await fetched.text();
+
+        await pc.setLocalDescription(offer);
+
+        await pc.setRemoteDescription({ type: 'answer', sdp: answer });
+    }
+
+    close() {
+        this.peer.close();
+        this.peer = null;
+    }
 }
 
 export default RTCStreamAdaptor;

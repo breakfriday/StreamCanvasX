@@ -83,13 +83,41 @@
   
     text-align: center;
     padding: 10px;
+    grid-row: 1;  /* 第一行 */
 }
 
 .grid-item-box{
     border: 1px solid red;
     height: 200px;
+    width:  200px;
+    margin-right: 10px;
 
 }
+
+.gird-first-row{
+    grid-column: 1 / -2;  /* 跨越从第一列到最后一列 */
+    grid-row: 1;  /* 第一行 */
+    box-sizing: border-box;
+
+}
+
+.first-flex-row{
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    padding: 20px 0px;
+    overflow-y: auto;
+}
+.row_item{
+    border: 1px solid red;
+    height: 200px;
+    width:  200px;
+    margin-right: 10px;
+    display: flex;
+
+}
+
+
 
 .grid-large {
     grid-column: 1 / -1;  /* 跨越从第一列到最后一列 */
@@ -103,7 +131,7 @@
 }
 
 .grid-large-has-right {
-    grid-column: 1 / 6;  /* 跨越从第一列到最后一列 */
+    grid-column: 1 / -2;  /* 跨越从第一列到最后一列 */
     grid-row: 2;  /* 第二行 */
     text-align: center;
     // padding-bottom: 20px;
@@ -122,7 +150,7 @@
 }
 .gird-right{
 
-    grid-column: 6;  /* 位置在第11列 */
+    grid-column: -2;  /* 位置在第11列 */
     grid-row: 1 / -1;  /* 从第一行跨越到最后一行 */
     background-color: lightgoldenrodyellow;
     text-align: center;

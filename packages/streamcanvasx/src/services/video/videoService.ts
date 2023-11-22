@@ -58,17 +58,19 @@ class VideoService {
           width = contentEl.clientWidth;
         }
 
-          this.meidiaEl.width = width;
+        //   this.meidiaEl.width = width;
 
-         this.meidiaEl.height = height;
+        //  this.meidiaEl.height = height;
+        this.meidiaEl.style.width = '100%';
+        this.meidiaEl.style.height = '100%';
     }
 
     render() {
         let { contentEl } = this.playerService.config;
         this.meidiaEl = document.createElement('video');
-        this.meidiaEl.style.position = 'absolute';
-        this.meidiaEl.style.top = '0px';
-        this.meidiaEl.style.left = '0px';
+        // this.meidiaEl.style.position = 'absolute';
+        // this.meidiaEl.style.top = '0px';
+        // this.meidiaEl.style.left = '0px';
         this.meidiaEl.autoplay = true;
         contentEl.append(this.meidiaEl);
     }
