@@ -76,6 +76,14 @@ const WebRTCChatHub = () => {
 
     // }, 900);
   };
+
+  const pushScreenMedia = async () => {
+    createPlayer(containerRef);
+    await playerRef.current?.getdisplaymedia();
+    let url = `http://192.168.3.15/index/api/whip?app=${roomId}&stream=${deviceId}`;
+    playerRef.current?.runwhip({ url: url, token: 'ss' });
+  };
+
   useEffect(() => {
       // 監聽 被 invite 消息
       subscribe('v1/callsystem/OnCall/device/', { qos: 2 }, (MSG) => {
@@ -100,7 +108,6 @@ const WebRTCChatHub = () => {
           let diffValues = R.difference(whepUrl, whepUrlStore);
           let newwhepUrlStore = [...whepUrlStore, ...diffValues];
           setWhepUrlSotre(newwhepUrlStore);
-          fetch_remote_media(whepUrl);
         }
 
         // console.log('-----------');
@@ -248,8 +255,9 @@ const WebRTCChatHub = () => {
             <button
               className={styles['icon-button']}
               onClick={() => {
-                createPlayer(containerRef);
-                playerRef.current?.getdisplaymedia();
+                // createPlayer(containerRef);
+                // playerRef.current?.getdisplaymedia();
+                pushScreenMedia();
             }}
             >
               <i className="icon-camera">共享-屏幕</i>
