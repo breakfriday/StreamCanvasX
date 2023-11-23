@@ -130,11 +130,26 @@ const WebRTCChatHub = () => {
     setSearchParams(data);
   };
 
+  const getSearchParms = () => {
+     const urlString = location.href;
+
+      const url = new URL(urlString);
+
+      const roomId = url.searchParams.get('roomId');
+      const deviceId = url.searchParams.get('deviceId');
+    return {
+      roomId,
+      deviceId,
+    };
+  };
+
   useEffect(() => {
       // 監聽 被 invite 消息
       subscribe('v1/callsystem/OnCall/device/', { qos: 2 }, (MSG) => {
         let target_ids = MSG.payload.user_id;
         let taget_room = MSG.payload.room_id;
+
+        let { roomId, deviceId } = getSearchParms();
 
         if (roomId === null && target_ids?.includes(deviceId!)) {
           set_oncall_open_state({ open: true, roomId: taget_room! });
