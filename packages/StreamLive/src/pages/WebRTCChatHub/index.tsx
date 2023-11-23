@@ -32,7 +32,7 @@ const WebRTCChatHub = () => {
 
   const [call_open_state, set_call_open_state] = useState(false);
 
-  const [oncall_open_state, set_oncall_open_state] = useState(false);
+  const [oncall_open_state, set_oncall_open_state] = useState<{open: boolean; roomId?: string}>({ open: false });
 
   const [whepUrlStore, setWhepUrlSotre] = useState<Array<{url?: string}>>([]);
 
@@ -43,17 +43,16 @@ const WebRTCChatHub = () => {
   }) => {
     let message = parm;
     let messageString = JSON.stringify(message);
+    let targetRoomId = roomId;
 
     if (roomId === null) {
-      let roomId = await createRoomId();
-      updateUrlHistory({ roomId });
-      message = Object.assign({}, message, { roomId });
-      messageString = JSON.stringify(message);
-      sendMessage('v1/callsystem/OnCall/device/', messageString, { qos: 2 });
-    } else {
-      sendMessage('v1/callsystem/OnCall/device/', messageString, { qos: 2 });
-    }
+      targetRoomId = await createRoomId();
 
+      updateUrlHistory({ roomId: targetRoomId });
+      message = Object.assign({}, message, { room_id: targetRoomId });
+    }
+    messageString = JSON.stringify(message);
+    sendMessage('v1/callsystem/OnCall/device/', messageString, { qos: 2 });
 
     // setTimeout(() => {
     //   const urlString = location.href;
@@ -101,7 +100,14 @@ const WebRTCChatHub = () => {
   const push_media = async () => {
     createPlayer(containerRef);
     await playerRef.current?.getMedia();
-    let url = `http://192.168.3.15/index/api/whip?app=${roomId}&stream=${deviceId}`;
+    let targetRoomId = roomId;
+    if (roomId === null) {
+     let { roomId } = oncall_open_state;
+     updateUrlHistory({ roomId });
+     targetRoomId = roomId!;
+    }
+
+    let url = `http://192.168.3.15/index/api/whip?app=${targetRoomId}&stream=${deviceId}`;
     playerRef.current?.runwhip({ url: url, token: 'ss' });
 
     // setTimeout(() => {
@@ -130,9 +136,12 @@ const WebRTCChatHub = () => {
         let target_ids = MSG.payload.user_id;
         let taget_room = MSG.payload.room_id;
 
+        if (roomId === null && target_ids?.includes(deviceId!)) {
+          set_oncall_open_state({ open: true, roomId: taget_room! });
+        }
 
         if (taget_room === roomId && target_ids?.includes(deviceId!)) {
-          set_oncall_open_state(true);
+          set_oncall_open_state({ open: true });
         }
       });
 
@@ -218,18 +227,18 @@ const WebRTCChatHub = () => {
 
           <Modal
             title="CONFIRN ONCALL"
-            open={oncall_open_state}
+            open={oncall_open_state.open}
             footer={false}
             onOk={() => {
-          set_oncall_open_state(false);
+          set_oncall_open_state({ open: false, roomId: '' });
         }}
             onCancel={() => {
-          set_oncall_open_state(false);
+          set_oncall_open_state({ open: false, roomId: '' });
         }}
           >
             <div className={styles['confirm_call']}>
-              <Button size="large" onClick={() => { set_oncall_open_state(false); }}>REJECT</Button>
-              <Button size="large" onClick={() => { set_oncall_open_state(false); push_media(); }}>ACCEPT</Button>
+              <Button size="large" onClick={() => { set_oncall_open_state({ open: false, roomId: '' }); }}>REJECT</Button>
+              <Button size="large" onClick={() => { set_oncall_open_state({ open: false, roomId: '' }); push_media(); }}>ACCEPT</Button>
             </div>
           </Modal>
 
