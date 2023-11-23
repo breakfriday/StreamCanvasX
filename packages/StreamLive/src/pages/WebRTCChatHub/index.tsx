@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Modal, Tabs } from 'antd';
+import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Modal, Tabs, Flex } from 'antd';
 // import RTCPlayer from './aa';
 import styles from './index.module.css';
 import UseRTCPlayer from './hooks/UseRTCPlayer';
@@ -244,55 +244,62 @@ const WebRTCChatHub = () => {
           <div className={showGridRight ? styles['grid-large-has-right'] : styles['grid-large']} ref={containerRef} />
 
           {/* 第三行 */}
-          <div className={styles['grid-bottom']}>
-            <button
-              className={styles['icon-button']}
-              onClick={() => {
+          <div className={styles['grid_third_row']}>
+
+            <div className={styles['third-flex-row']}>
+              <div className={styles['grid-bottom']}>
+                <Button
+                  type="primary"
+                  className={styles['icon-button']}
+                  onClick={() => {
                 createPlayer(containerRef);
                 playerRef.current?.getMedia();
-            }}
-            >
-              <i className="icon-camera">打开摄像头</i>
-            </button>
-          </div>
-          <div className={styles['grid-bottom']}>
-            <button
-              className={styles['icon-button']}
-              onClick={() => {
+                }}
+                >
+                  <i className="icon-camera">打开摄像头</i>
+                </Button>
+              </div>
+              <div className={styles['grid-bottom']}>
+                <Button
+                  className={styles['icon-button']}
+                  onClick={() => {
                 // createPlayer(containerRef);
                 // playerRef.current?.getdisplaymedia();
                 pushScreenMedia();
             }}
-            >
-              <i className="icon-camera">共享-屏幕</i>
-            </button>
-          </div>
-          <div className={styles['grid-bottom']}>
-            <button
-              className={styles['icon-button']}
-              onClick={() => {
+                >
+                  <i className="icon-camera">共享-屏幕</i>
+                </Button>
+              </div>
+              <div className={styles['grid-bottom']}>
+                <Button
+                  className={styles['icon-button']}
+                  onClick={() => {
                 set_call_open_state(true);
                // callRing({ room_id: roomId, initator: deviceId, user_id: ['16'] });
             }}
-            >
-              <i className="icon-camera">邀请</i>
-            </button>
-          </div>
-          <div className={styles['grid-bottom']}>
-            <button className={styles['icon-button']}>
-              <i className="icon-members">成员</i>
-            </button>
-          </div>
-          <div className={styles['grid-bottom']}>
-            <button
-              className={styles['icon-button']}
-              onClick={() => {
+                >
+                  <i className="icon-camera">邀请</i>
+                </Button>
+              </div>
+              <div className={styles['grid-bottom']}>
+                <Button className={styles['icon-button']}>
+                  <i className="icon-members">成员</i>
+                </Button>
+              </div>
+              <div className={styles['grid-bottom']}>
+                <Button
+                  className={styles['icon-button']}
+                  onClick={() => {
               setShowGridRight(false);
             }}
-            >
-              <i className="icon-members">聊天</i>
-            </button>
+                >
+                  <i className="icon-members">聊天</i>
+                </Button>
+              </div>
+            </div>
           </div>
+
 
           {/* 最右边列 */}
           {showGridRight ? (
