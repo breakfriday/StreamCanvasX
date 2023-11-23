@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Modal, Tabs } from 'antd';
 // import RTCPlayer from './aa';
-import styles from './index.module.less';
+import styles from './index.module.css';
 import UseRTCPlayer from './hooks/UseRTCPlayer';
  import useMqtt from './hooks/UseMqtt';
 import { useSearchParams, useParams } from 'ice';
@@ -27,6 +27,7 @@ const WebRTCChatHub = () => {
   // alert(JSON.stringify(searchParams))
   const roomId = searchParams.get('roomId');
   const deviceId = searchParams.get('deviceId');
+
 
   const [call_open_state, set_call_open_state] = useState(false);
 
@@ -57,7 +58,7 @@ const WebRTCChatHub = () => {
 
     setTimeout(() => {
     playerRef.current?.runwhep({ url: whepUrl.url });
-    }, 100);
+    }, 200);
   };
 
 
@@ -108,10 +109,13 @@ const WebRTCChatHub = () => {
           let diffValues = R.difference(whepUrl, whepUrlStore);
           let newwhepUrlStore = [...whepUrlStore, ...diffValues];
           setWhepUrlSotre(newwhepUrlStore);
+         // fetch_remote_media(newwhepUrlStore);
         }
 
         // console.log('-----------');
       });
+      // let newparms = Object.assign(searchParams, { name: 22 });
+      debugger;
   }, []);
     return (
       <div>
@@ -309,7 +313,7 @@ const WebRTCChatHub = () => {
                     },
 
                     {
-                      label: 'connect store',
+                      label: 'pull stream store',
                       key: '2',
                       children: (<div>
                         {

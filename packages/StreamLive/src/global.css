@@ -16,3 +16,10 @@
 .ant-pro-page-container-children-content {
   padding-block: 24px;
 }
+
+
+
+:root {
+  --unit: px; /* default unit */
+}
+

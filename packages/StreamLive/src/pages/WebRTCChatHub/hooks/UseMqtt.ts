@@ -52,12 +52,10 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
 
 
         mqttClient.on('connect', () => {
-            debugger;
             setIsConnected(true);
         });
 
         mqttClient.on('error', (err) => {
-            debugger;
             setError(err);
         });
 
@@ -76,7 +74,6 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
                 callback(message);
             }
 
-            debugger;
 
             setMessageHistory((prev) => [...prev, message]);
         });
@@ -86,7 +83,6 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
         // setClient(mqttClient);
 
         return () => {
-            debugger;
             mqttClient.end();
         };
     }, [brokerUrl]);
@@ -100,10 +96,8 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
 
 
         if (client) {
-            debugger;
             client.subscribe(topic, options, (err) => {
                 if (err) {
-                    debugger;
                     alert('error');
                 }
                 if (callback) {

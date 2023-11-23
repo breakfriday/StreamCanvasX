@@ -1,0 +1,197 @@
+
+:root {
+    --unit: 1px; /* Default unit */
+}
+
+.flex_box{
+
+    display: flex;
+    flex-direction: row;
+    border: 1px  solid red;
+
+}
+
+
+
+.icon-button {
+    background-color: #555;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+  }
+  
+  .icon-button:hover {
+    background-color: #777;
+  }
+  
+  .icon-button i {
+    font-size: 16px;
+    margin-right: 5px;
+  }
+
+  
+
+/* //   .main_top{
+//     display: flex;
+//     flex: 1;
+//     flex-direction: row;
+//     width: 100%;
+//     border: 1px  solid red;
+//   } */
+
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);  /* 定义5个列 */
+    grid-template-rows: auto 1fr auto;  /* 三行，第二行占据剩余空间 */
+    gap: 10px;
+    width: 100%;  /* 宽度撑满父容器 */
+    height: 100vh;  /* 举例：可以根据实际需要调整 */
+    border: 1px solid black;  /* 可视化，可移除 */
+}
+
+.grid-container-has-right {
+    grid-template-columns: repeat(5, 1fr) minmax(100px, 1fr) ;  /* 当有.grid-right时，调整为11个列 */
+    display: grid;
+    grid-template-rows: auto 1fr auto;  /* 三行，第二行占据剩余空间 */
+    gap: 0px;
+    width: 100%;  /* 宽度撑满父容器 */
+    height: 100vh;  /* 举例：可以根据实际需要调整 */
+    border: 1px solid black;  /* 可视化，可移除 */
+}
+
+
+.grid-item {
+  
+    text-align: center;
+    padding: 10px;
+    grid-row: 1;  /* 第一行 */
+}
+
+.grid-item-box{
+    border: 1px solid red;
+    height: 200px;
+    width:  200px;
+    margin-right: 10px;
+
+}
+
+.gird-first-row{
+    grid-column: 1 / -2;  /* 跨越从第一列到最后一列 */
+    grid-row: 1;  /* 第一行 */
+    box-sizing: border-box;
+
+}
+
+.first-flex-row{
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    padding: 20px 0px;
+    overflow-y: auto;
+}
+.row_item{
+    border: 1px solid red;
+    /* height: 200px; */
+   /* height: 200px;
+    width:  200px; */
+    height: calc(200 * var(--unit));
+    width: calc(200 * var(--unit));
+    margin-right: 10px;
+    display: flex;
+
+}
+
+.gird-third-row{
+    grid-column: 1 / -2;  /* 跨越从第一列到最后一列 */
+    grid-row: 3;  /* 第一行 */
+    box-sizing: border-box;
+
+}
+
+
+.grid-large {
+    grid-column: 1 / -1;  /* 跨越从第一列到最后一列 */
+    grid-row: 2;  /* 第二行 */
+
+    text-align: center;
+    padding: 0px;
+    box-sizing: border-box;
+    border: 1px solid black;
+
+}
+
+.grid-large-has-right {
+    grid-column: 1 / -2;  /* 跨越从第一列到最后一列 */
+    grid-row: 2;  /* 第二行 */
+    text-align: center;
+    /* // padding-bottom: 20px;
+    // padding-top: 20px; */
+    box-sizing: border-box;
+    padding: 0px;
+    border: 1px solid black;
+    position: relative;
+}
+
+.grid-bottom {
+    grid-row: 3;  /* 第三行 */
+   
+    text-align: center;
+    padding: 10px;
+}
+.gird-right{
+
+    grid-column: -2;  /* 位置在第11列 */
+    grid-row: 1 / -1;  /* 从第一行跨越到最后一行 */
+    background-color: lightgoldenrodyellow;
+    text-align: center;
+   
+
+}
+
+
+/* phone style */
+.phone {
+    display: inline-block;
+    transform-origin: bottom center;
+    animation: ringing 1s infinite alternate;
+}
+
+@keyframes ringing {
+    0% {
+        transform: rotate(0deg);
+    }
+    20% {
+        transform: rotate(10deg);
+    }
+    40% {
+        transform: rotate(-10deg);
+    }
+    60% {
+        transform: rotate(10deg);
+    }
+    80% {
+        transform: rotate(-10deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+
+.line1{
+    margin-bottom:  5px;
+    padding-bottom: 5px;
+    border-bottom:  1px solid gray;
+}
+
+.confirm_call{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 300px;
+    align-items: center;
+}
