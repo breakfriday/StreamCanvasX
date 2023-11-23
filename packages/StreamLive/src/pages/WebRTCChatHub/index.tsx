@@ -222,25 +222,30 @@ const WebRTCChatHub = () => {
             <div className={styles['grid-item-box']} >1</div>
           </div> */}
 
-            <div className={styles['gird-first-row']}>
+            {
+            whepUrlStore && whepUrlStore.length > 0 ? (
+              <div className={styles['gird-first-row']}>
 
-              <div className={styles['first-flex-row']}>
-                {
-                (() => {
-                  return R.map((v) => {
-                    return (<div className={styles['row_item']} >
-                      <RtcPlayer whepUrl={v.url} />
-                    </div>);
-                  }, whepUrlStore);
-                })()
-              }
+                <div className={styles['first-flex-row']}>
+                  {
+                          (() => {
+                            return R.map((v) => {
+                              return (<div className={styles['row_item']} >
+                                <RtcPlayer whepUrl={v.url} />
+                              </div>);
+                            }, whepUrlStore);
+                          })()
+                        }
 
-                <Card className={styles['row_item']} >m1</Card>
+                  <Card className={styles['row_item']} >m1</Card>
 
+
+                </div>
 
               </div>
+            ) : ''
+          }
 
-            </div>
 
             {/* 第二行 */}
             <div className={showGridRight ? styles['grid-large-has-right'] : styles['grid-large']} ><Card ref={containerRef} style={{ height: '100%' }} /></div>
