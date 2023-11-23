@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Modal, Tabs, Flex, ConfigProvider, theme, Card } from 'antd';
+import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Modal, Tabs, Flex, ConfigProvider, theme, Card, List } from 'antd';
 // import RTCPlayer from './aa';
 import styles from './index.module.css';
 import UseRTCPlayer from './hooks/UseRTCPlayer';
@@ -322,13 +322,20 @@ const WebRTCChatHub = () => {
                     {
                       label: 'message history',
                       key: '1',
-                      children: (<div>
-                        {
-                  messageHistory.map((v) => {
-                    return (<div className={styles['line1']}>  {JSON.stringify(v)}</div>);
-                  })
-                }
-                      </div>),
+                      children: (
+                        <List
+                          header={<div>message history</div>}
+                          bordered
+
+                        >
+                          {
+                               messageHistory.map((v) => {
+                                return (<List.Item>  {JSON.stringify(v)}</List.Item>);
+                              })
+                          }
+
+                        </List>
+                        ),
                     },
 
                     {
@@ -342,6 +349,8 @@ const WebRTCChatHub = () => {
                         }
                       </div>),
                     },
+
+
                   ]}
                 />
 
