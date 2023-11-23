@@ -35,7 +35,7 @@ const RtcPlayer: React.FC<Iprops> = (props) => {
 
 
     return (
-      <div ref={containerRef} />
+      <div ref={containerRef} style={{ height: '100%', width: '100%' }} />
       );
 };
 

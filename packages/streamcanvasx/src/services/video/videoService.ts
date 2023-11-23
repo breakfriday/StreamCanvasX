@@ -36,7 +36,7 @@ class VideoService {
         this.resizeObserver = new ResizeObserver(() => {
             setTimeout(() => {
                this.setVideoSize();
-            }, 20);
+            }, 200);
           });
 
           this.resizeObserver.observe(contentEl);
@@ -61,8 +61,13 @@ class VideoService {
         //   this.meidiaEl.width = width;
 
         //  this.meidiaEl.height = height;
-        this.meidiaEl.style.width = '100%';
-        this.meidiaEl.style.height = '100%';
+
+        this.meidiaEl.style.width = `${width}px`;
+
+         this.meidiaEl.style.height = `${height}px`;
+
+        // this.meidiaEl.style.width = '100%';
+        // this.meidiaEl.style.height = '100%';
     }
 
     render() {

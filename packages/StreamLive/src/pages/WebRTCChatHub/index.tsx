@@ -235,7 +235,7 @@ const WebRTCChatHub = () => {
                 })()
               }
 
-                <div className={styles['row_item']} >m_1</div>
+                <Card className={styles['row_item']} >m1</Card>
 
 
               </div>

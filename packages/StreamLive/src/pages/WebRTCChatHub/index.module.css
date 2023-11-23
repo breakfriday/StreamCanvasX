@@ -160,6 +160,7 @@
 
     
     position: relative;
+    overflow: hidden;
 }
 
 .grid-bottom {
