@@ -71,7 +71,7 @@
     gap: 0px;
     width: 100%;  /* 宽度撑满父容器 */
     height: 100vh;  /* 举例：可以根据实际需要调整 */
-    border: 1px solid black;  /* 可视化，可移除 */
+  
 }
 
 
@@ -157,7 +157,7 @@
     // padding-top: 20px; */
     box-sizing: border-box;
     padding: 0px;
-    border: 1px solid #f0f0f0;
+
     
     position: relative;
 }

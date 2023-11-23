@@ -10,7 +10,7 @@
     "@ice/runtime": "^1.0.0",
     "@tensorflow-models/coco-ssd": "^2.2.2",
     "@tensorflow/tfjs": "^4.2.0",
-    "antd": "^4.24.0",
+    "antd": "5.11.3",
     "classnames": "^2.3.2",
     "date-fns": "^2.30.0",
     "flv.js": "^1.6.2",

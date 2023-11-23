@@ -1,4 +1,4 @@
-@import 'antd/dist/antd.css';
+/* @import 'antd/dist/antd.css'; */
 
 .ant-pro-page-container .ant-page-header {
   background: white;
@@ -23,3 +23,7 @@
   --unit: px; /* default unit */
 }
 
+
+body{
+  margin:  0px;
+}

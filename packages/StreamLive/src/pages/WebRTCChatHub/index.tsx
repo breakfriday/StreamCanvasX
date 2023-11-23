@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Modal, Tabs, Flex } from 'antd';
+import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Modal, Tabs, Flex, ConfigProvider, theme, Card } from 'antd';
 // import RTCPlayer from './aa';
 import styles from './index.module.css';
 import UseRTCPlayer from './hooks/UseRTCPlayer';
@@ -7,6 +7,7 @@ import UseRTCPlayer from './hooks/UseRTCPlayer';
 import { useSearchParams, useParams } from 'ice';
 import { tr } from 'date-fns/locale';
 import RtcPlayer from './RtcPlayer';
+
 const R = require('ramda');
 let classNames = require('classnames');
 
@@ -118,14 +119,15 @@ const WebRTCChatHub = () => {
       debugger;
   }, []);
     return (
-      <div>
-        {/* <div >
+      <ConfigProvider theme={{ algorithm: [theme.defaultAlgorithm, theme.compactAlgorithm] }}>
+        <div>
+          {/* <div >
 
           <RTCPlayer />
 
 
         </div> */}
-        {/*
+          {/*
         <div style={{ height: '100px' }} />
 
         <div className={styles['main_top']}>
@@ -150,10 +152,10 @@ const WebRTCChatHub = () => {
           </button>
 
         </div> */}
-        <Modal
-          title="call_ring"
-          open={call_open_state}
-          onOk={() => {
+          <Modal
+            title="call_ring"
+            open={call_open_state}
+            onOk={() => {
             let values = call_form_ref.getFieldsValue();
             let { ids } = values;
 
@@ -162,39 +164,39 @@ const WebRTCChatHub = () => {
             });
             set_call_open_state(false);
           }}
-          onCancel={() => {
+            onCancel={() => {
             set_call_open_state(false);
           }}
-        >
-          <Form form={call_form_ref}>
-            <Form.Item
-              label="target_Ids"
-              name="ids"
-            >
-              <Input />
-            </Form.Item>
-          </Form>
-        </Modal>
+          >
+            <Form form={call_form_ref}>
+              <Form.Item
+                label="target_Ids"
+                name="ids"
+              >
+                <Input />
+              </Form.Item>
+            </Form>
+          </Modal>
 
-        <Modal
-          title="CONFIRN ONCALL"
-          open={oncall_open_state}
-          footer={false}
-          onOk={() => {
+          <Modal
+            title="CONFIRN ONCALL"
+            open={oncall_open_state}
+            footer={false}
+            onOk={() => {
           set_oncall_open_state(false);
         }}
-          onCancel={() => {
+            onCancel={() => {
           set_oncall_open_state(false);
         }}
-        >
-          <div className={styles['confirm_call']}>
-            <Button size="large" onClick={() => { set_oncall_open_state(false); }}>REJECT</Button>
-            <Button size="large" onClick={() => { set_oncall_open_state(false); push_media(); }}>ACCEPT</Button>
-          </div>
-        </Modal>
+          >
+            <div className={styles['confirm_call']}>
+              <Button size="large" onClick={() => { set_oncall_open_state(false); }}>REJECT</Button>
+              <Button size="large" onClick={() => { set_oncall_open_state(false); push_media(); }}>ACCEPT</Button>
+            </div>
+          </Modal>
 
 
-        {/* <div
+          {/* <div
           className={styles['phone']}
           onClick={() => {
             alert(22);
@@ -204,10 +206,10 @@ const WebRTCChatHub = () => {
           📞
         </div> */}
 
-        <div className={showGridRight ? styles['grid-container-has-right'] : styles['grid-container']}>
+          <div className={showGridRight ? styles['grid-container-has-right'] : styles['grid-container']}>
 
-          {/* 第一行 */}
-          {/* <div className={styles['grid-item']}>
+            {/* 第一行 */}
+            {/* <div className={styles['grid-item']}>
             <div className={styles['grid-item-box']} >1</div>
           </div>
           <div className={styles['grid-item']}>
@@ -220,10 +222,10 @@ const WebRTCChatHub = () => {
             <div className={styles['grid-item-box']} >1</div>
           </div> */}
 
-          <div className={styles['gird-first-row']}>
+            <div className={styles['gird-first-row']}>
 
-            <div className={styles['first-flex-row']}>
-              {
+              <div className={styles['first-flex-row']}>
+                {
                 (() => {
                   return R.map((v) => {
                     return (<div className={styles['row_item']} >
@@ -233,80 +235,80 @@ const WebRTCChatHub = () => {
                 })()
               }
 
-              <div className={styles['row_item']} >m_1</div>
+                <div className={styles['row_item']} >m_1</div>
 
+
+              </div>
 
             </div>
 
-          </div>
+            {/* 第二行 */}
+            <div className={showGridRight ? styles['grid-large-has-right'] : styles['grid-large']} ><Card ref={containerRef} style={{ height: '100%' }} /></div>
 
-          {/* 第二行 */}
-          <div className={showGridRight ? styles['grid-large-has-right'] : styles['grid-large']} ref={containerRef} />
+            {/* 第三行 */}
+            <div className={styles['grid_third_row']}>
 
-          {/* 第三行 */}
-          <div className={styles['grid_third_row']}>
-
-            <div className={styles['third-flex-row']}>
-              <div className={styles['grid-bottom']}>
-                <Button
-                  type="primary"
-                  className={styles['icon-button']}
-                  onClick={() => {
+              <div className={styles['third-flex-row']}>
+                <div className={styles['grid-bottom']}>
+                  <Button
+                    type="primary"
+                    className={styles['icon-button']}
+                    onClick={() => {
                 createPlayer(containerRef);
                 playerRef.current?.getMedia();
                 }}
-                >
-                  <i className="icon-camera">打开摄像头</i>
-                </Button>
-              </div>
-              <div className={styles['grid-bottom']}>
-                <Button
-                  className={styles['icon-button']}
-                  onClick={() => {
+                  >
+                    <i className="icon-camera">打开摄像头</i>
+                  </Button>
+                </div>
+                <div className={styles['grid-bottom']}>
+                  <Button
+                    className={styles['icon-button']}
+                    onClick={() => {
                 // createPlayer(containerRef);
                 // playerRef.current?.getdisplaymedia();
                 pushScreenMedia();
             }}
-                >
-                  <i className="icon-camera">共享-屏幕</i>
-                </Button>
-              </div>
-              <div className={styles['grid-bottom']}>
-                <Button
-                  className={styles['icon-button']}
-                  onClick={() => {
+                  >
+                    <i className="icon-camera">共享-屏幕</i>
+                  </Button>
+                </div>
+                <div className={styles['grid-bottom']}>
+                  <Button
+                    className={styles['icon-button']}
+                    onClick={() => {
                 set_call_open_state(true);
                // callRing({ room_id: roomId, initator: deviceId, user_id: ['16'] });
             }}
-                >
-                  <i className="icon-camera">邀请</i>
-                </Button>
-              </div>
-              <div className={styles['grid-bottom']}>
-                <Button className={styles['icon-button']}>
-                  <i className="icon-members">成员</i>
-                </Button>
-              </div>
-              <div className={styles['grid-bottom']}>
-                <Button
-                  className={styles['icon-button']}
-                  onClick={() => {
+                  >
+                    <i className="icon-camera">邀请</i>
+                  </Button>
+                </div>
+                <div className={styles['grid-bottom']}>
+                  <Button className={styles['icon-button']}>
+                    <i className="icon-members">成员</i>
+                  </Button>
+                </div>
+                <div className={styles['grid-bottom']}>
+                  <Button
+                    className={styles['icon-button']}
+                    onClick={() => {
               setShowGridRight(false);
             }}
-                >
-                  <i className="icon-members">聊天</i>
-                </Button>
+                  >
+                    <i className="icon-members">聊天</i>
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
 
 
-          {/* 最右边列 */}
-          {showGridRight ? (
-            <div className={styles['gird-right']}>
-              <Tabs
-                defaultActiveKey="1"
-                items={[
+            {/* 最右边列 */}
+            {showGridRight ? (
+              <div className={styles['gird-right']}>
+                <Tabs
+                  defaultActiveKey="1"
+                  items={[
                     {
                       label: 'message history',
                       key: '1',
@@ -331,14 +333,15 @@ const WebRTCChatHub = () => {
                       </div>),
                     },
                   ]}
-              />
+                />
 
-            </div>
+              </div>
           ) : null}
 
 
+          </div>
         </div>
-      </div>
+      </ConfigProvider>
       );
 };
 
