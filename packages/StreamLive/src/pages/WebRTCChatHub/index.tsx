@@ -36,16 +36,46 @@ const WebRTCChatHub = () => {
 
   const [whepUrlStore, setWhepUrlSotre] = useState<Array<{url?: string}>>([]);
 
-  const callRing = (parm: {
+  const callRing = async (parm: {
       room_id: string | null; // 房间名称
       initator: string | null; // 发起者device_id
       user_id: Array<string | number> | null; // 被邀请者device_id
   }) => {
-    let message = JSON.stringify(parm);
+    let message = parm;
+    let messageString = JSON.stringify(message);
 
-    sendMessage('v1/callsystem/OnCall/device/', message, { qos: 2 });
+    if (roomId === null) {
+      let roomId = await createRoomId();
+      updateUrlHistory({ roomId });
+      message = Object.assign({}, message, { roomId });
+      messageString = JSON.stringify(message);
+      sendMessage('v1/callsystem/OnCall/device/', messageString, { qos: 2 });
+    } else {
+      sendMessage('v1/callsystem/OnCall/device/', messageString, { qos: 2 });
+    }
+
+
+    // setTimeout(() => {
+    //   const urlString = location.href;
+
+    //   // 创建一个URL对象
+    //   const url = new URL(urlString);
+
+    //   // 获取"name"参数的值
+    //   const nameValue = url.searchParams.get('name');
+    // }, 12);
   };
 
+
+  const createRoomId = (): Promise< string> => {
+    return new Promise((resolve, reject) => {
+      // 使用 setTimeout 模拟异步操作，这里设置为0毫秒，表示立即解决
+      setTimeout(() => {
+        const roomId = Math.floor(Math.random() * 900) + 100;
+        resolve(String(roomId));
+      }, 10);
+    });
+  };
 
   const Confir_call = () => {
 
@@ -84,6 +114,14 @@ const WebRTCChatHub = () => {
     await playerRef.current?.getdisplaymedia();
     let url = `http://192.168.3.15/index/api/whip?app=${roomId}&stream=${deviceId}`;
     playerRef.current?.runwhip({ url: url, token: 'ss' });
+  };
+
+
+  const updateUrlHistory = (newParm: { roomId?: string; deviceId?: string}) => {
+    let oldData = { roomId, deviceId };
+    let data = Object.assign({}, oldData, newParm);
+
+    setSearchParams(data);
   };
 
   useEffect(() => {
