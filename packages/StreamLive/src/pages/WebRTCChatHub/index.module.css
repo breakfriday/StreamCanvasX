@@ -1,6 +1,8 @@
 
 :root {
     --unit: 1px; /* Default unit */
+    --border-default: 1px solid #f0f0f0;
+    --border-default-radius: 8px;
 }
 
 .flex_box{
@@ -109,6 +111,7 @@
     flex-direction: row;
     padding: 20px 0px;
     overflow-y: auto;
+    gap: 5px;
 }
 
 .third-flex-row{
@@ -119,14 +122,14 @@
     flex-wrap: wrap;
 }
 .row_item{
-    border: 1px solid #f0f0f0;
+    border: var(--border-default);
     /* height: 200px; */
    /* height: 200px;
     width:  200px; */
     height: calc(200 * var(--unit));
     width: calc(200 * var(--unit));
-    margin-right: 10px;
     display: flex;
+    border-radius: var(--border-default-radius);
 
 }
 
@@ -174,8 +177,10 @@
 
     grid-column: -2;  /* 位置在第11列 */
     grid-row: 1 / -1;  /* 从第一行跨越到最后一行 */
-    background-color: lightgoldenrodyellow;
+    /* background-color: lightgoldenrodyellow; */
     text-align: center;
+    overflow: hidden;
+    border-left: var(--border-default);
    
 
 }
@@ -213,7 +218,7 @@
 .line1{
     margin-bottom:  5px;
     padding-bottom: 5px;
-    border-bottom:  1px solid gray;
+    border-bottom:  var(--border-default);
 }
 
 .confirm_call{

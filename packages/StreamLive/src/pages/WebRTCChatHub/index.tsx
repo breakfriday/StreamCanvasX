@@ -299,6 +299,16 @@ const WebRTCChatHub = () => {
                     <i className="icon-members">聊天</i>
                   </Button>
                 </div>
+                <div className={styles['grid-bottom']}>
+                  <Button
+                    className={styles['icon-button']}
+                    onClick={() => {
+              setShowGridRight(false);
+            }}
+                  >
+                    <i className="icon-members">挂断</i>
+                  </Button>
+                </div>
               </div>
             </div>
 
