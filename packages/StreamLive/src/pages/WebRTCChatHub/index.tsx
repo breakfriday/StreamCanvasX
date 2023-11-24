@@ -108,7 +108,9 @@ const WebRTCChatHub = () => {
     }
 
     let url = `http://192.168.3.15/index/api/whip?app=${targetRoomId}&stream=${deviceId}`;
-    playerRef.current?.runwhip({ url: url, token: 'ss' });
+   // playerRef.current?.runwhip({ url: url, token: 'ss' });
+
+    playerRef.current?.pushWhip({ url: url });
 
     // setTimeout(() => {
 
@@ -370,7 +372,7 @@ const WebRTCChatHub = () => {
                   <Button
                     className={styles['icon-button']}
                     onClick={() => {
-              setShowGridRight(false);
+                     playerRef.current?.stop();
             }}
                   >
                     <i className="icon-members">挂断</i>

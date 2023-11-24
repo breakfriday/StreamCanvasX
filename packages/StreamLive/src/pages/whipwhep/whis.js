@@ -342,7 +342,7 @@ params = {};
 		}
 
 		// Cancel any pending timeout
-		this.iceTrickeTimeout = clearTimeout(this.iceTrickeTimeout);
+		// this.iceTrickeTimeout = clearTimeout(this.iceTrickeTimeout);
 
 		// Close peerconnection
 		this.pc.close();

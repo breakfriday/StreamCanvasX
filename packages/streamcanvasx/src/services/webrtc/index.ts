@@ -3,12 +3,13 @@ import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 
 import { TYPES } from '../../serviceFactories/symbol';
 
-import { WHIPClient } from './whip.js';
+
 import { WHEPClient } from './whep.js';
 
 import { IRTCPlayerConfig } from '../../types/services';
 import VideoService from '../video/videoService';
-import { debug } from 'console';
+import WebRTCStreamAdaptor from './webRTCStreamAdaptor';
+
 
 @injectable()
 class RTCPlayer {
@@ -18,6 +19,7 @@ class RTCPlayer {
         audioInputs: MediaDeviceInfo[];
         audioOutputs?: MediaDeviceInfo[];
     };
+
     audioSource?: string;
     videoSource?: string;
 
@@ -25,10 +27,12 @@ class RTCPlayer {
     config?: IRTCPlayerConfig;
     contentEl?: HTMLDivElement;
     videoService?: VideoService;
+    webRTCStreamAdaptor: WebRTCStreamAdaptor;
     constructor(
       @inject(TYPES.IVideoService) videoService: VideoService,
     ) {
       this.videoService = videoService;
+      this.webRTCStreamAdaptor = null;
     }
     createVideo() {
       this.meidiaEl = document.createElement('video');
@@ -131,28 +135,35 @@ class RTCPlayer {
           });
     }
 
-    runwhip(value: {url?: string; token?: string}) {
-        let { url = '', token = '' } = value;
-        let stream = this.mediaStream;
-
-        // Create peerconnection
-        const pc = new RTCPeerConnection();
-
-        // Send all tracks
-        for (const track of stream.getTracks()) {
-            // You could add simulcast too here
-            pc.addTrack(track);
-        }
-
-        // Create whip client
-        const whip = new WHIPClient();
-
-        // const url = 'https://whip.test/whip/endpoint';
-        // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IndoaXAgdGVzdCIsImlhdCI6MTUxNjIzOTAyMn0.jpM01xu_vnSXioxQ3I7Z45bRh5eWRBEY2WJPZ6FerR8';
-
-        // Start publishing
-        whip.publish(pc, url, token);
+    pushWhip(value: {url?: string; token?: string}) {
+      let { url = '' } = value;
+      let stream = this.mediaStream;
+      if (this.webRTCStreamAdaptor === null) {
+        this.webRTCStreamAdaptor = new WebRTCStreamAdaptor({ role: 'sender' });
+      }
+      this.webRTCStreamAdaptor.addTrack(stream);
+      this.webRTCStreamAdaptor.publish({ url });
     }
+
+    runWhep2(value: {url?: string; token?: string}) {
+      let { url = '' } = value;
+      let video: HTMLVideoElement = this.videoService.meidiaEl;
+
+      if (this.webRTCStreamAdaptor === null) {
+        this.webRTCStreamAdaptor = new WebRTCStreamAdaptor({ role: 'sender' });
+      }
+      this.webRTCStreamAdaptor.runWhep({ url });
+
+      this.webRTCStreamAdaptor.peer.ontrack = (event) => {
+        if (event.track.kind == 'video') {
+           video.srcObject = event.streams[0];
+         }
+      };
+
+
+      // this.webRTCStreamAdaptor.pee
+    }
+
     runwhep(value: {url?: string; token?: string }) {
       let { url = '', token = '' } = value;
       // let video = this.meidiaEl;
@@ -174,6 +185,10 @@ class RTCPlayer {
       whep.view(pc, url, token);
     }
 
+    stop() {
+       this.stopStream();
+       this.webRTCStreamAdaptor.close();
+    }
     stopStream() {
       if (this.mediaStream) {
         this.mediaStream.getTracks().forEach(track => {

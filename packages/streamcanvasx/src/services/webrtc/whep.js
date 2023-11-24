@@ -22,13 +22,18 @@ export class WHEPClient extends EventTarget {
 		pc.onconnectionstatechange = (event) => {
 			switch (pc.connectionState) {
 				case 'connected':
+					// alert(1);
 					// The connection has become fully connected
 					break;
 				case 'disconnected':
+					// alert(2);
 				case 'failed':
+					this.pc.close();
+					// alert(3);
 					// One or more transports has terminated unexpectedly or in an error
 					break;
 				case 'closed':
+					// alert(4);
 					// The connection has been closed
 					break;
 			}
@@ -410,6 +415,7 @@ params = {};
 
 		// Cancel any pending timeout
 		this.iceTrickeTimeout = clearTimeout(this.iceTrickeTimeout);
+
 
 		// Close peerconnection
 		this.pc.close();
