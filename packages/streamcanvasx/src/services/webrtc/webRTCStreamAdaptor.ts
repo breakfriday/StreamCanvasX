@@ -53,7 +53,7 @@ class RTCStreamAdaptor {
 		};
     }
 
-    addTrack(stream: MediaStream) {
+    addTrack(stream:TCPeerConnectionream) {
         for (const track of stream.getTracks()) {
             // You could add simulcast too here
             this.peer.addTrack(track);

@@ -372,7 +372,7 @@ const WebRTCChatHub = () => {
                   <Button
                     className={styles['icon-button']}
                     onClick={() => {
-                     playerRef.current?.stop();
+                     playerRef.current?.close();
             }}
                   >
                     <i className="icon-members">挂断</i>

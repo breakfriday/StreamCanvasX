@@ -186,6 +186,7 @@ class RTCPlayer {
       // getSenders方法返回一个RTCRtpSender[]，其中包含了RTCPeerConnection目前正在发送的所有轨道的发送器对象。
       const senders = this.webRTCStreamAdaptor.peer.getSenders();
 
+
       senders.forEach((sender) => {
         this.webRTCStreamAdaptor.peer.removeTrack(sender);
 
@@ -201,7 +202,7 @@ class RTCPlayer {
       }
     }
 
-    stop() {
+    close() {
       this.stopStream();
       this.removeAllTracks();
       this.webRTCStreamAdaptor.close();
