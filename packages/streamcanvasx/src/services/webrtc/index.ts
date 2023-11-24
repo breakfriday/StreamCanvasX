@@ -182,9 +182,29 @@ class RTCPlayer {
     //   whep.view(pc, url, token);
     // }
 
+    removeAllTracks(): void {
+      // getSenders方法返回一个RTCRtpSender[]，其中包含了RTCPeerConnection目前正在发送的所有轨道的发送器对象。
+      const senders = this.webRTCStreamAdaptor.peer.getSenders();
+
+      senders.forEach((sender) => {
+        this.webRTCStreamAdaptor.peer.removeTrack(sender);
+
+        sender.track?.stop();
+      });
+    }
+
+    closeMediaStream() {
+      if (this.mediaStream) {
+        this.mediaStream.getTracks().forEach(track => {
+          track.stop();
+        });
+      }
+    }
+
     stop() {
-       this.stopStream();
-       this.webRTCStreamAdaptor.close();
+      this.stopStream();
+      this.removeAllTracks();
+      this.webRTCStreamAdaptor.close();
     }
     stopStream() {
       if (this.mediaStream) {
@@ -193,6 +213,7 @@ class RTCPlayer {
         });
       }
     }
+
 
     destroy() {
 
