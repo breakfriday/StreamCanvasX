@@ -110,6 +110,7 @@ const WebRTCChatHub = () => {
     let url = `http://192.168.3.15/index/api/whip?app=${targetRoomId}&stream=${deviceId}`;
    // playerRef.current?.runwhip({ url: url, token: 'ss' });
 
+  // url = 'http://localhost:1985/rtc/v1/whip/?app=live&stream=livestream ';
     playerRef.current?.pushWhip({ url: url });
 
     // setTimeout(() => {
@@ -121,7 +122,8 @@ const WebRTCChatHub = () => {
     createPlayer(containerRef);
     await playerRef.current?.getdisplaymedia();
     let url = `http://192.168.3.15/index/api/whip?app=${roomId}&stream=${deviceId}`;
-    playerRef.current?.runwhip({ url: url, token: 'ss' });
+    // url = 'http://localhost:1985/rtc/v1/whip/?app=live&stream=livestream ';
+    playerRef.current?.pushWhip({ url: url });
   };
 
 
