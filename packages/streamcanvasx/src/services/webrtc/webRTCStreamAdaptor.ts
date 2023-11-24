@@ -40,10 +40,13 @@ class RTCStreamAdaptor {
 					// The connection has become fully connected
 					break;
 				case 'disconnected':
+                    this.peer.close();
 				case 'failed':
+                     this.peer.close();
 					// One or more transports has terminated unexpectedly or in an error
 					break;
 				case 'closed':
+                    this.peer.close();
 					// The connection has been closed
 					break;
 			}

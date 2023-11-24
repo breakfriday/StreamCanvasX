@@ -145,12 +145,12 @@ class RTCPlayer {
       this.webRTCStreamAdaptor.publish({ url });
     }
 
-    runWhep2(value: {url?: string; token?: string}) {
+    runWhep(value: {url?: string; token?: string}) {
       let { url = '' } = value;
       let video: HTMLVideoElement = this.videoService.meidiaEl;
 
       if (this.webRTCStreamAdaptor === null) {
-        this.webRTCStreamAdaptor = new WebRTCStreamAdaptor({ role: 'sender' });
+        this.webRTCStreamAdaptor = new WebRTCStreamAdaptor({ role: 'receiver' });
       }
       this.webRTCStreamAdaptor.runWhep({ url });
 
@@ -159,31 +159,28 @@ class RTCPlayer {
            video.srcObject = event.streams[0];
          }
       };
-
-
-      // this.webRTCStreamAdaptor.pee
     }
 
-    runwhep(value: {url?: string; token?: string }) {
-      let { url = '', token = '' } = value;
-      // let video = this.meidiaEl;
-      let video: HTMLVideoElement = this.videoService.meidiaEl;
-      const pc = new RTCPeerConnection();
+    // runwhep(value: {url?: string; token?: string }) {
+    //   let { url = '', token = '' } = value;
+    //   // let video = this.meidiaEl;
+    //   let video: HTMLVideoElement = this.videoService.meidiaEl;
+    //   const pc = new RTCPeerConnection();
 
-      // Add recv only transceivers
-      pc.addTransceiver('audio');
-      pc.addTransceiver('video');
+    //   // Add recv only transceivers
+    //   pc.addTransceiver('audio');
+    //   pc.addTransceiver('video');
 
 
-      pc.ontrack = (event) => {
-          if (event.track.kind == 'video') {
-              video.srcObject = event.streams[0];
-          }
-      };
+    //   pc.ontrack = (event) => {
+    //       if (event.track.kind == 'video') {
+    //           video.srcObject = event.streams[0];
+    //       }
+    //   };
 
-      const whep = new WHEPClient();
-      whep.view(pc, url, token);
-    }
+    //   const whep = new WHEPClient();
+    //   whep.view(pc, url, token);
+    // }
 
     stop() {
        this.stopStream();

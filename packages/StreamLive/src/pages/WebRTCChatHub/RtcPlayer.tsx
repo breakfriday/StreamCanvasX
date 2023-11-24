@@ -19,7 +19,7 @@ const RtcPlayer: React.FC<Iprops> = (props) => {
 
     useEffect(() => {
       if (whepUrl) {
-        playerRef.current?.runwhep({ url: whepUrl });
+        playerRef.current?.runWhep({ url: whepUrl });
       } else {
         playerRef.current?.destroy();
       }
@@ -27,7 +27,7 @@ const RtcPlayer: React.FC<Iprops> = (props) => {
 
     useEffect(() => {
       if (whipUrl) {
-        playerRef.current?.runwhip({ url: whipUrl });
+        playerRef.current?.pushWhip({ url: whipUrl });
       } else {
         playerRef.current?.destroy();
       }

@@ -66,12 +66,16 @@ export class WHEPClient extends EventTarget {
 		// If token is set
 		if (token) headers['Authorization'] = `Bearer ${token}`;
 
+		debugger;
+
 		// Do the post request to the WHEP endpoint with the SDP offer
 		const fetched = await fetch(url, {
 			method: 'POST',
 			body: offer.sdp,
 			headers,
 		});
+
+		debugger;
 
 		if (!fetched.ok) throw new Error(`Request rejected with status ${fetched.status}`);
 		// if (!fetched.headers.get('location')) throw new Error('Response missing location header');
