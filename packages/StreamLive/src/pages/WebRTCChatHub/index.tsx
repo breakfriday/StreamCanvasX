@@ -17,11 +17,20 @@ interface ICallMessage {
   user_id: Array<string | number> | null; // 被邀请者device_id
 }
 
+let wsProtocol = 'ws';
+
+// 判断当前页面是否使用 HTTPS
+if (window.location.protocol === 'https:') {
+    wsProtocol = 'wss';
+}
+
 
 const WebRTCChatHub = () => {
   const [playerRef, createPlayer] = UseRTCPlayer();
   const [showGridRight, setShowGridRight] = useState(true);
-  const { sendMessage, subscribe, isConnected, messageHistory } = useMqtt('mqtt://192.168.3.34:8883');
+  const { sendMessage, subscribe, isConnected, messageHistory } = useMqtt(`${wsProtocol}://192.168.3.34:8883`);
+
+
   let containerRef = useRef(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [call_form_ref] = Form.useForm();
