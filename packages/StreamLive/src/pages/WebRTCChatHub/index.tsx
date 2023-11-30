@@ -7,6 +7,7 @@ import UseRTCPlayer from './hooks/UseRTCPlayer';
 import { useSearchParams, useParams } from 'ice';
 import { tr } from 'date-fns/locale';
 import RtcPlayer from './RtcPlayer';
+import useDrag from './hooks/useDrag';
 
 const R = require('ramda');
 let classNames = require('classnames');
@@ -19,6 +20,10 @@ interface ICallMessage {
 
 
 const WebRTCChatHub = () => {
+  let containerRef2 = useRef<HTMLDivElement | null>(null);
+  // debugger;
+  const { style, initDrag } = useDrag();
+  // const aaa = useDrag({ changeWidth: true, changeHeight: false });
   const [playerRef, createPlayer] = UseRTCPlayer();
   const [showGridRight, setShowGridRight] = useState(true);
   const { sendMessage, subscribe, isConnected, messageHistory } = useMqtt('mqtt://192.168.3.34:8883');
@@ -290,8 +295,15 @@ const WebRTCChatHub = () => {
 
             {
             whepUrlStore && whepUrlStore.length > 0 ? (
-              <div className={styles['gird-first-row']}>
-
+              // <div className={styles['gird-first-row']}>
+              <div
+                className={styles['gird-first-row']}
+                ref={containerRef2}
+                onClick={() => {
+                    initDrag(containerRef2);
+                }}
+                style={{ height: style.height }}
+              >
                 <div className={styles['first-flex-row']}>
                   {
                           (() => {
