@@ -2,29 +2,26 @@ import { useEffect, useRef, useState } from 'react';
 
 interface UseDragReturnType{
   style: number;
-  initDrag: (containerRef: HTMLElement)=>(void);
+  onMouseDown: (event: any)=>(void);
   count: number;
 }
 
-function useDrag(): UseDragReturnType {
-  // function init() {
-  //   console.log('init state');
-  //   return 800;
-  // }
+function useDrag(containerRef): UseDragReturnType {
   const [style, setStyle] = useState(800);
   const [count, setCount] = useState(10);
 
   const elementRef = useRef<HTMLElement>();
   const positon = useRef({ x: 0, y: 0 });
 
-  const initDrag = (containerRef) => {
+  useEffect(() => {
     if (containerRef.current && !elementRef.current) {
       // alert(1233333);
       console.log(containerRef.current);
       elementRef.current = containerRef.current;
-      elementRef.current!.onmousedown = onMouseDown;
+      console.log(elementRef.current?.clientWidth);
+      setStyle(elementRef.current?.clientWidth);
     }
-  };
+  }, [containerRef]);
 
   const onMouseDown = event => {
     // event.stopPropagation();
@@ -93,6 +90,6 @@ function useDrag(): UseDragReturnType {
   };
 
 
-  return { style, initDrag, count };
+  return { style, onMouseDown, count };
 }
 export default useDrag;

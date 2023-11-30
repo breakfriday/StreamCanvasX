@@ -108,8 +108,9 @@ import useCount from './useCount';
 
 const SimpleDemo = () => {
   // const { count, click, click2 } = useCount();
-  const { style, initDrag, count } = useDrag();
   const divElementRef = useRef(null);
+  const { style, onMouseDown, count } = useDrag(divElementRef);
+
   return (
     <>
       <div className="box123" style={{ border: '1px solid green' }}>
@@ -117,11 +118,11 @@ const SimpleDemo = () => {
         <div
           ref={divElementRef}
           className="box111"
-          onClick={() => {
-            initDrag(divElementRef);
-          }}
-          // onMouseDown={onMouseDown}
-          style={{ border: '1px solid red', width: style }}
+          // onClick={() => {
+          //   initDrag(divElementRef);
+          // }}
+          onMouseDown={onMouseDown}
+          style={{ border: '1px solid red', width: (style === 800) ? 'atuo' : style }}
         >
           <h3>我是红色的盒子，点我拖动改变大小</h3>
 
