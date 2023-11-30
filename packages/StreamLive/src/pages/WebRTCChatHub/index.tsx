@@ -18,17 +18,20 @@ interface ICallMessage {
 }
 
 let wsProtocol = 'ws';
+let wsPort = 8883;
+
 
 // 判断当前页面是否使用 HTTPS
 if (window.location.protocol === 'https:') {
     wsProtocol = 'wss';
+    wsPort = 8884;
 }
 
 
 const WebRTCChatHub = () => {
   const [playerRef, createPlayer] = UseRTCPlayer();
   const [showGridRight, setShowGridRight] = useState(true);
-  const { sendMessage, subscribe, isConnected, messageHistory } = useMqtt(`${wsProtocol}://192.168.3.34:8883`);
+  const { sendMessage, subscribe, isConnected, messageHistory } = useMqtt(`${wsProtocol}://192.168.3.34:${wsPort}`);
 
 
   let containerRef = useRef(null);
@@ -116,7 +119,8 @@ const WebRTCChatHub = () => {
      targetRoomId = roomId!;
     }
 
-    let url = `http://192.168.3.15/index/api/whip?app=${targetRoomId}&stream=${deviceId}`;
+
+    let url = `//192.168.3.15/index/api/whip?app=${targetRoomId}&stream=${deviceId}`;
    // playerRef.current?.runwhip({ url: url, token: 'ss' });
 
   // url = 'http://localhost:1985/rtc/v1/whip/?app=live&stream=livestream ';
@@ -130,7 +134,7 @@ const WebRTCChatHub = () => {
   const pushScreenMedia = async () => {
     createPlayer(containerRef);
     await playerRef.current?.getdisplaymedia();
-    let url = `http://192.168.3.15/index/api/whip?app=${roomId}&stream=${deviceId}`;
+    let url = `//192.168.3.15/index/api/whip?app=${roomId}&stream=${deviceId}`;
     // url = 'http://localhost:1985/rtc/v1/whip/?app=live&stream=livestream ';
     playerRef.current?.pushWhip({ url: url });
   };
