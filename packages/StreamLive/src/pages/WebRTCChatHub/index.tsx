@@ -206,8 +206,11 @@ const WebRTCChatHub = () => {
       });
 
       subscribe('v1/callsystem/OnPlay/device/', { qos: 2 }, (MSG) => {
+        let payload_room_id = MSG.payload.room_id;
+
+        let { roomId, deviceId } = getSearchParms();
         let whepUrl = MSG.payload.whep?.filter((v) => {
-          if (v.user != deviceId) {
+          if (v.user != deviceId && payload_room_id == roomId) {
             return v.url;
           }
         });
