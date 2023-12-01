@@ -65,7 +65,7 @@
 }
 
 .grid-container-has-right {
-    grid-template-columns: repeat(5, 1fr) minmax(100px, 1fr) ;  /* 当有.grid-right时，调整为11个列 */
+    grid-template-columns: repeat(5, 1fr) minmax(100px, auto) ;  /* 当有.grid-right时，调整为11个列 */
     display: grid;
     grid-template-rows: auto 1fr auto;  /* 三行，第二行占据剩余空间 */
     gap: 0px;

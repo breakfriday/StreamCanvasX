@@ -30,14 +30,12 @@ if (window.location.protocol === 'https:') {
 
 
 const WebRTCChatHub = () => {
-  let containerRef2 = useRef<HTMLDivElement | null>(null);
-  // debugger;
-  const { style, onMouseDown } = useDrag(containerRef2);
-  // const aaa = useDrag({ changeWidth: true, changeHeight: false });
   const [playerRef, createPlayer] = UseRTCPlayer();
   const [showGridRight, setShowGridRight] = useState(true);
   const { sendMessage, subscribe, isConnected, messageHistory } = useMqtt(`${wsProtocol}://192.168.3.34:${wsPort}`);
 
+  const dragWidth = useDrag();
+  const dragHeight = useDrag();
 
   let containerRef = useRef(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -311,6 +309,8 @@ const WebRTCChatHub = () => {
               // <div className={styles['gird-first-row']}>
               <div
                 className={styles['gird-first-row']}
+                onMouseDown={dragHeight.onMouseDown}
+                style={{ height: dragHeight.style.height }}
               >
                 <div className={styles['first-flex-row']}>
                   {
@@ -334,18 +334,10 @@ const WebRTCChatHub = () => {
 
 
             {/* 第二行 */}
-            <div
-              className={showGridRight ? styles['grid-large-has-right'] : styles['grid-large']}
-              ref={containerRef2}
-              onMouseDown={onMouseDown}
-              style={{ width: style.width }}
-            ><Card ref={containerRef} style={{ height: '100%' }} /></div>
+            <div className={showGridRight ? styles['grid-large-has-right'] : styles['grid-large']}><Card ref={containerRef} style={{ height: '100%' }} /></div>
 
             {/* 第三行 */}
-            <div
-              className={styles['grid_third_row']}
-              style={{ width: style.width }}
-            >
+            <div className={styles['grid_third_row']}>
 
               <div className={styles['third-flex-row']}>
                 <div className={styles['grid-bottom']}>
@@ -414,7 +406,11 @@ const WebRTCChatHub = () => {
 
             {/* 最右边列 */}
             {showGridRight ? (
-              <div className={styles['gird-right']}>
+              <div
+                className={styles['gird-right']}
+                onMouseDown={dragWidth.onMouseDown}
+                style={{ width: dragWidth.style.width }}
+              >
                 <Tabs
                   defaultActiveKey="1"
                   items={[
