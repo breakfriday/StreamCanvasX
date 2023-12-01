@@ -4,7 +4,7 @@ import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, C
 import styles from './index.module.css';
 import UseRTCPlayer from './hooks/UseRTCPlayer';
  import useMqtt from './hooks/UseMqtt';
-import { useSearchParams, useParams } from 'ice';
+import { useSearchParams, useParams, history } from 'ice';
 import { tr } from 'date-fns/locale';
 import RtcPlayer from './RtcPlayer';
 import useDrag from './hooks/useDrag';
@@ -189,7 +189,10 @@ const WebRTCChatHub = () => {
   };
 
   useEffect(() => {
-      // 監聽 被 invite 消息
+       if (deviceId === null) {
+        history?.push('/login');
+       } else {
+          // 監聽 被 invite 消息
       subscribe('v1/callsystem/OnCall/device/', { qos: 2 }, (MSG) => {
         let target_ids = MSG.payload.user_id;
         let taget_room = MSG.payload.room_id;
@@ -225,6 +228,9 @@ const WebRTCChatHub = () => {
 
         // console.log('-----------');
       });
+       }
+
+
       // let newparms = Object.assign(searchParams, { name: 22 });
       debugger;
   }, []);
