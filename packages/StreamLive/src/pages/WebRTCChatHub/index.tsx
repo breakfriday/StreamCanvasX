@@ -7,6 +7,7 @@ import UseRTCPlayer from './hooks/UseRTCPlayer';
 import { useSearchParams, useParams } from 'ice';
 import { tr } from 'date-fns/locale';
 import RtcPlayer from './RtcPlayer';
+import useDrag from './hooks/useDrag';
 
 const R = require('ramda');
 let classNames = require('classnames');
@@ -49,6 +50,8 @@ const WebRTCChatHub = () => {
 
   };
 
+  const dragWidth = useDrag();
+  const dragHeight = useDrag();
 
   let containerRef = useRef(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -331,8 +334,12 @@ const WebRTCChatHub = () => {
 
             {
             whepUrlStore && whepUrlStore.length > 0 ? (
-              <div className={styles['gird-first-row']}>
-
+              // <div className={styles['gird-first-row']}>
+              <div
+                className={styles['gird-first-row']}
+                onMouseDown={dragHeight.onMouseDown}
+                style={{ height: dragHeight.style.height }}
+              >
                 <div className={styles['first-flex-row']}>
                   {
                           (() => {
@@ -355,7 +362,7 @@ const WebRTCChatHub = () => {
 
 
             {/* 第二行 */}
-            <div className={showGridRight ? styles['grid-large-has-right'] : styles['grid-large']} ><Card ref={containerRef} style={{ height: '100%' }} /></div>
+            <div className={showGridRight ? styles['grid-large-has-right'] : styles['grid-large']}><Card ref={containerRef} style={{ height: '100%' }} /></div>
 
             {/* 第三行 */}
             <div className={styles['grid_third_row']}>
@@ -442,7 +449,11 @@ const WebRTCChatHub = () => {
 
             {/* 最右边列 */}
             {showGridRight ? (
-              <div className={styles['gird-right']}>
+              <div
+                className={styles['gird-right']}
+                onMouseDown={dragWidth.onMouseDown}
+                style={{ width: dragWidth.style.width }}
+              >
                 <Tabs
                   defaultActiveKey="1"
                   items={[
