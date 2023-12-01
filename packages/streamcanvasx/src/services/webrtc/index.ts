@@ -140,9 +140,13 @@ class RTCPlayer {
       let stream = this.mediaStream;
       if (this.webRTCStreamAdaptor === null) {
         this.webRTCStreamAdaptor = new WebRTCStreamAdaptor({ role: 'sender' });
+        this.webRTCStreamAdaptor.addTrack(stream);
+        this.webRTCStreamAdaptor.publish({ url });
+      } else {
+        //  在不需要重新协商的情况下更换轨道
+        this.webRTCStreamAdaptor.replaceTrack(stream);
+        // this.webRTCStreamAdaptor.publish({ url });
       }
-      this.webRTCStreamAdaptor.addTrack(stream);
-      this.webRTCStreamAdaptor.publish({ url });
     }
 
     runWhep(value: {url?: string; token?: string}) {

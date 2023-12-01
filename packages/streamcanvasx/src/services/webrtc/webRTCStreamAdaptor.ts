@@ -60,6 +60,23 @@ class RTCStreamAdaptor {
         }
     }
 
+    replaceTrack(stream: MediaStream) {
+         // getSenders方法返回一个RTCRtpSender[]，其中包含了RTCPeerConnection目前正在发送的所有轨道的发送器对象
+        const senders = this.peer.getSenders();
+
+
+        stream.getTracks().forEach(track => {
+          const sender = senders.find(s => s.track?.kind === track.kind);
+          if (sender) {
+            // 重新设置轨道
+            sender.replaceTrack(track);
+          } else {
+            // 如果找不到对应的sender，可能是新的轨道类型，需要添加
+            this.peer.addTrack(track, stream);
+          }
+        });
+    }
+
     async connect(parm: {url: string}) {
         let pc = this.peer;
 
