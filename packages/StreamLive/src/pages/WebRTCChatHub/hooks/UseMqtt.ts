@@ -41,7 +41,7 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
             clientId: `mqttjs_${Math.random().toString(16).substr(2, 8)}`,
             username: 'root',
             password: 'root',
-            port: 8083,
+            // port: 8083,
 
           };
 

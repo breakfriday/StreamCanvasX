@@ -57,7 +57,7 @@ class AudioProcessingService {
 
          this.render();
 
-         this.canvasWorker = new Worker(new URL('./worker.js', import.meta.url));
+        //  this.canvasWorker = new Worker(new URL('./worker.js', import.meta.url));
     }
 
     clearCanvas() {
