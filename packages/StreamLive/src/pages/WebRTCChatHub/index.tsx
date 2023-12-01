@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Modal, Tabs, Flex, ConfigProvider, theme, Card, List } from 'antd';
+import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Modal, Tabs, Flex, ConfigProvider, theme, Card, List, Dropdown } from 'antd';
 // import RTCPlayer from './aa';
 import styles from './index.module.css';
 import UseRTCPlayer from './hooks/UseRTCPlayer';
@@ -32,6 +32,22 @@ const WebRTCChatHub = () => {
   const [playerRef, createPlayer] = UseRTCPlayer();
   const [showGridRight, setShowGridRight] = useState(true);
   const { sendMessage, subscribe, isConnected, messageHistory } = useMqtt(`${wsProtocol}://192.168.3.34:${wsPort}`);
+
+  const [buttonList, setButtonList] = useState([{
+    label: '1st menu item',
+    key: '1',
+
+  },
+  {
+    label: '2nd menu item',
+    key: '2',
+
+  }]);
+
+
+  const buttonHandle = () => {
+
+  };
 
 
   let containerRef = useRef(null);
@@ -134,6 +150,15 @@ const WebRTCChatHub = () => {
   const pushScreenMedia = async () => {
     createPlayer(containerRef);
     await playerRef.current?.getdisplaymedia();
+    let url = `//192.168.3.15/index/api/whip?app=${roomId}&stream=${deviceId}`;
+    // url = 'http://localhost:1985/rtc/v1/whip/?app=live&stream=livestream ';
+    playerRef.current?.pushWhip({ url: url });
+  };
+
+  const pushCameraMedia = async () => {
+    createPlayer(containerRef);
+
+    await playerRef.current?.getMedia();
     let url = `//192.168.3.15/index/api/whip?app=${roomId}&stream=${deviceId}`;
     // url = 'http://localhost:1985/rtc/v1/whip/?app=live&stream=livestream ';
     playerRef.current?.pushWhip({ url: url });
@@ -338,8 +363,9 @@ const WebRTCChatHub = () => {
                     type="primary"
                     className={styles['icon-button']}
                     onClick={() => {
-                createPlayer(containerRef);
-                playerRef.current?.getMedia();
+                      // createPlayer(containerRef);
+                      // playerRef.current?.getMedia();
+                      pushCameraMedia();
                 }}
                   >
                     <i className="icon-camera">打开摄像头</i>
