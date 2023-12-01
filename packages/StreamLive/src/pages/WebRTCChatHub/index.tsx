@@ -325,13 +325,13 @@ const WebRTCChatHub = () => {
               className={showGridRight ? styles['grid-large-has-right'] : styles['grid-large']}
               ref={containerRef2}
               onMouseDown={onMouseDown}
-              style={{ width: (style.width === 0) ? 'auto' : style.width }}
+              style={{ width: style.width }}
             ><Card ref={containerRef} style={{ height: '100%' }} /></div>
 
             {/* 第三行 */}
             <div
               className={styles['grid_third_row']}
-              style={{ width: (style.width === 0) ? 'auto' : style.width }}
+              style={{ width: style.width }}
             >
 
               <div className={styles['third-flex-row']}>
