@@ -6,7 +6,7 @@ interface UseDragReturnType{
 }
 
 function useDrag(): UseDragReturnType {
-  const [style, setStyle] = useState<{width: string | number; height: string | number} >({ width: '', height: '' });
+  const [style, setStyle] = useState<{width: string | number; height: string | number} >({ width: 180, height: '' });
 
   const clientSize = useRef({ clientWidth: 0, clientHeight: 0 });
   const positon = useRef({ x: 0, y: 0 }); // 指针在containerRef中的位置
