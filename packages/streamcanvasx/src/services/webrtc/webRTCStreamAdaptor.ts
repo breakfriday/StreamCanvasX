@@ -76,6 +76,13 @@ class RTCStreamAdaptor {
           }
         });
     }
+    pauseAllTracks(): void {
+        const senders = this.peer.getSenders();
+        senders.forEach(sender => {
+          // 将当前轨道替换为null，暂时停止发送
+          sender.replaceTrack(null);
+        });
+      }
 
     async connect(parm: {url: string}) {
         let pc = this.peer;

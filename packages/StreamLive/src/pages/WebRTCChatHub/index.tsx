@@ -373,6 +373,20 @@ const WebRTCChatHub = () => {
                 </div>
                 <div className={styles['grid-bottom']}>
                   <Button
+                    type="primary"
+                    className={styles['icon-button']}
+                    onClick={() => {
+                      // createPlayer(containerRef);
+                      // playerRef.current?.getMedia();
+
+                      playerRef.current?.pauseBlackStream();
+                }}
+                  >
+                    <i className="icon-camera">關閉摄像头</i>
+                  </Button>
+                </div>
+                <div className={styles['grid-bottom']}>
+                  <Button
                     className={styles['icon-button']}
                     onClick={() => {
                 // createPlayer(containerRef);
