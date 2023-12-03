@@ -7,7 +7,11 @@ import UseRTCPlayer from './hooks/UseRTCPlayer';
 import { useSearchParams, useParams, history } from 'ice';
 import { tr } from 'date-fns/locale';
 import RtcPlayer from './RtcPlayer';
-import useDrag from './hooks/useDrag';
+import useDrag from './hooks/UseDragNew';
+
+
+import userList from './userconfig';
+
 
 const R = require('ramda');
 let classNames = require('classnames');
@@ -34,6 +38,9 @@ const WebRTCChatHub = () => {
   const [showGridRight, setShowGridRight] = useState(true);
   const { sendMessage, subscribe, isConnected, messageHistory } = useMqtt(`${wsProtocol}://192.168.3.34:${wsPort}`);
 
+  const dragRef1 = useRef<HTMLDivElement>(null);
+  const handleRef = useRef<HTMLDivElement>(null);
+
   const [buttonList, setButtonList] = useState([{
     label: '1st menu item',
     key: '1',
@@ -50,12 +57,13 @@ const WebRTCChatHub = () => {
 
   };
 
-  const dragWidth = useDrag();
-  const dragHeight = useDrag();
+  useDrag(dragRef1, handleRef, { resize: 'width' }); // 支持调整宽
 
   let containerRef = useRef(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [call_form_ref] = Form.useForm();
+
+  const [member_form_ref] = Form.useForm();
   // alert(JSON.stringify(searchParams))
   const roomId = searchParams.get('roomId');
   const deviceId = searchParams.get('deviceId');
@@ -111,16 +119,16 @@ const WebRTCChatHub = () => {
 
   };
 
-  const fetch_remote_media = (urls) => {
-    createPlayer(containerRef);
+  // const fetch_remote_media = (urls) => {
+  //   createPlayer(containerRef);
 
-    let whepUrl = urls[0];
+  //   let whepUrl = urls[0];
 
 
-    setTimeout(() => {
-    playerRef.current?.runwhep({ url: whepUrl.url });
-    }, 200);
-  };
+  //   setTimeout(() => {
+  //   playerRef.current?.runwhep({ url: whepUrl.url });
+  //   }, 200);
+  // };
 
 
   const acceptCall = (message: ICallMessage) => {
@@ -343,8 +351,7 @@ const WebRTCChatHub = () => {
               // <div className={styles['gird-first-row']}>
               <div
                 className={styles['gird-first-row']}
-                onMouseDown={dragHeight.onMouseDown}
-                style={{ height: dragHeight.style.height }}
+
               >
                 <div className={styles['first-flex-row']}>
                   {
@@ -426,14 +433,14 @@ const WebRTCChatHub = () => {
                 </div>
                 <div className={styles['grid-bottom']}>
                   <Button className={styles['icon-button']}>
-                    <i className="icon-members">成员</i>
+                    <i className="icon-members">通讯录</i>
                   </Button>
                 </div>
                 <div className={styles['grid-bottom']}>
                   <Button
                     className={styles['icon-button']}
                     onClick={() => {
-              setShowGridRight(false);
+
             }}
                   >
                     <i className="icon-members">聊天</i>
@@ -456,10 +463,12 @@ const WebRTCChatHub = () => {
             {/* 最右边列 */}
             {showGridRight ? (
               <div
+                style={{ position: 'relative' }}
                 className={styles['gird-right']}
-                onMouseDown={dragWidth.onMouseDown}
-                style={{ width: dragWidth.style.width }}
+                ref={dragRef1}
+
               >
+                <div ref={handleRef} style={{ zIndex: '99', width: '10px', height: '100%', position: 'absolute', left: 0, top: 0, cursor: 'ew-resize' }} />
                 <Tabs
                   defaultActiveKey="1"
                   items={[
@@ -481,10 +490,28 @@ const WebRTCChatHub = () => {
                         </List>
                         ),
                     },
+                    {
+                      label: '通訊錄',
+                      key: '2',
+                      children: (
+                        <List
+                          header={<div>message history</div>}
+                          bordered
+
+                        >
+                          {
+                               userList.map((v) => {
+                                return (<List.Item>  <Checkbox /> {v.name}</List.Item>);
+                              })
+                          }
+
+                        </List>
+                        ),
+                    },
 
                     {
                       label: 'pull stream store',
-                      key: '2',
+                      key: '3',
                       children: (<div>
                         {
                           whepUrlStore.map((v) => {

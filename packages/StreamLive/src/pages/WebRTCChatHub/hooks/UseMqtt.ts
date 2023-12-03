@@ -45,7 +45,7 @@ function useMqtt(brokerUrl: string): MqttHookResponse {
 
           };
 
-          alert(JSON.stringify(options));
+        //   alert(JSON.stringify(options));
 
 
         const mqttClient = mqtt.connect(brokerUrl, options);

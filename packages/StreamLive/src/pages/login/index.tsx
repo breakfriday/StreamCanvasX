@@ -31,7 +31,8 @@ const Login: React.FC = () => {
 
 
   async function handleSubmit(values: LoginParams) {
-    const { username, password } = values;
+    let { username, password } = values;
+     history?.push(`/WebRTCChatHub?deviceId=${username}`);
   }
   return (
     <div className={styles.container}>
