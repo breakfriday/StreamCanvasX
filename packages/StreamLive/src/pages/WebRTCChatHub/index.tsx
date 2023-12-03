@@ -424,9 +424,11 @@ const WebRTCChatHub = () => {
                   <Button
                     className={styles['icon-button']}
                     onClick={() => {
-                      let stats = member_form_ref.getFieldsValue();
-                      debugger;
-                set_call_open_state(true);
+                      let values = member_form_ref.getFieldsValue();
+                      let ids = values.Id.join();
+                      set_call_open_state(true);
+
+                call_form_ref.setFieldsValue({ ids: ids });
                // callRing({ room_id: roomId, initator: deviceId, user_id: ['16'] });
             }}
                   >
@@ -470,7 +472,7 @@ const WebRTCChatHub = () => {
                 ref={dragRef1}
 
               >
-                <div ref={handleRef} style={{ zIndex: '99', width: '10px', height: '100%', position: 'absolute', left: 0, top: 0, cursor: 'ew-resize' }} />
+                <div ref={handleRef} style={{ zIndex: '999', width: '10px', height: '100%', position: 'absolute', left: 0, top: 0, cursor: 'ew-resize' }} />
                 <Tabs
                   defaultActiveKey="1"
                   items={[
