@@ -424,6 +424,8 @@ const WebRTCChatHub = () => {
                   <Button
                     className={styles['icon-button']}
                     onClick={() => {
+                      let stats = member_form_ref.getFieldsValue();
+                      debugger;
                 set_call_open_state(true);
                // callRing({ room_id: roomId, initator: deviceId, user_id: ['16'] });
             }}
@@ -494,18 +496,28 @@ const WebRTCChatHub = () => {
                       label: '通訊錄',
                       key: '2',
                       children: (
-                        <List
-                          header={<div>message history</div>}
-                          bordered
+                        <Form form={member_form_ref}>
+                          <Form.Item name="Id">
+                            <Checkbox.Group style={{ width: '100%' }}>
 
-                        >
-                          {
+                              <List
+                                style={{ width: '100%' }}
+                                header={<div>通讯录</div>}
+                                bordered
+                              >
+                                {
                                userList.map((v) => {
-                                return (<List.Item>  <Checkbox /> {v.name}</List.Item>);
+                                return (
+
+                                  <List.Item > <Checkbox value={v.deviceId} /> {v.name}</List.Item>);
                               })
                           }
 
-                        </List>
+
+                              </List>
+                            </Checkbox.Group>
+                          </Form.Item>
+                        </Form>
                         ),
                     },
 
