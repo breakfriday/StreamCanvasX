@@ -284,7 +284,7 @@ const WebRTCChatHub = () => {
             let { ids } = values;
 
             callRing({
-              room_id: roomId, initator: deviceId, user_id: [ids],
+              room_id: roomId, initator: deviceId, user_id: ids.split(','),
             });
             set_call_open_state(false);
           }}
