@@ -394,7 +394,7 @@ const WebRTCChatHub = () => {
                     <i className="icon-camera">打开摄像头</i>
                   </Button>
                 </div>
-                <div className={styles['grid-bottom']}>
+                {/* <div className={styles['grid-bottom']}>
                   <Button
                     type="primary"
                     className={styles['icon-button']}
@@ -407,7 +407,7 @@ const WebRTCChatHub = () => {
                   >
                     <i className="icon-camera">關閉摄像头</i>
                   </Button>
-                </div>
+                </div> */}
                 <div className={styles['grid-bottom']}>
                   <Button
                     className={styles['icon-button']}
@@ -424,8 +424,10 @@ const WebRTCChatHub = () => {
                   <Button
                     className={styles['icon-button']}
                     onClick={() => {
-                      let values = member_form_ref.getFieldsValue();
-                      let ids = values.Id.join();
+                      let { Id = '' } = member_form_ref.getFieldsValue() || '';
+
+
+                      let ids = Id ? Id.join() : [];
                       set_call_open_state(true);
 
                 call_form_ref.setFieldsValue({ ids: ids });
