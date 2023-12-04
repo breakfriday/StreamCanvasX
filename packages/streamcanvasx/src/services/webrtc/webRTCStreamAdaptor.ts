@@ -104,7 +104,7 @@ class RTCStreamAdaptor {
         const answer = await fetched.text();
 
         await pc.setLocalDescription(offer);
-        debugger;
+
 
         await pc.setRemoteDescription({ type: 'answer', sdp: answer });
     }
