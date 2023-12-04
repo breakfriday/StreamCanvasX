@@ -242,6 +242,13 @@ const WebRTCChatHub = () => {
       // let newparms = Object.assign(searchParams, { name: 22 });
       debugger;
   }, []);
+
+  useEffect(() => {
+    if (roomId) {
+      alert(2);
+      push_media();
+    }
+  }, [roomId]);
     return (
       <ConfigProvider theme={{ algorithm: [theme.defaultAlgorithm, theme.compactAlgorithm] }}>
         <div>
