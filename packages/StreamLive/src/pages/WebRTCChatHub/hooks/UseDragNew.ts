@@ -30,6 +30,7 @@ const useDrag = (ref: React.RefObject<HTMLElement>, handleRef: React.RefObject<H
     const handleMouseMove = useCallback((event: MouseEvent) => {
         if (ref.current) {
             const dx = event.clientX - startPos.current.x;
+            const dy = event.clientY - startPos.current.y;
 
             if (options.resize === 'width' || options.resize === 'both') {
                 const newWidth = startSize.current.width - dx;
@@ -40,7 +41,11 @@ const useDrag = (ref: React.RefObject<HTMLElement>, handleRef: React.RefObject<H
             }
 
             // Handle height resizing
-            // ...
+            if (options.resize === 'height' || options.resize === 'both') {
+                const newHeight = startSize.current.height + dy;
+
+                ref.current.style.height = `${Math.max(0, newHeight)}px`;
+            }
         }
     }, [ref, options.resize]);
 

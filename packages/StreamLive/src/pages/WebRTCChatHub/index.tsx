@@ -39,7 +39,9 @@ const WebRTCChatHub = () => {
   const { sendMessage, subscribe, isConnected, messageHistory } = useMqtt(`${wsProtocol}://192.168.3.34:${wsPort}`);
 
   const dragRef1 = useRef<HTMLDivElement>(null);
-  const handleRef = useRef<HTMLDivElement>(null);
+  const handleRef1 = useRef<HTMLDivElement>(null);
+  const dragRef2 = useRef<HTMLDivElement>(null);
+  const handleRef2 = useRef<HTMLDivElement>(null);
 
   const [buttonList, setButtonList] = useState([{
     label: '1st menu item',
@@ -57,7 +59,8 @@ const WebRTCChatHub = () => {
 
   };
 
-  useDrag(dragRef1, handleRef, { resize: 'width' }); // 支持调整宽
+  useDrag(dragRef1, handleRef1, { resize: 'width' }); // 支持调整宽
+  useDrag(dragRef2, handleRef2, { resize: 'height' }); // 支持调整高
 
   let containerRef = useRef(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -351,7 +354,8 @@ const WebRTCChatHub = () => {
               // <div className={styles['gird-first-row']}>
               <div
                 className={styles['gird-first-row']}
-
+                ref={dragRef2}
+                style={{ position: 'relative' }}
               >
                 <div className={styles['first-flex-row']}>
                   {
@@ -368,7 +372,7 @@ const WebRTCChatHub = () => {
 
 
                 </div>
-
+                <div ref={handleRef2} style={{ zIndex: '999', width: '100%', height: '10px', position: 'absolute', left: 0, bottom: 0, cursor: 'ns-resize' }} />
               </div>
             ) : ''
           }
@@ -474,7 +478,7 @@ const WebRTCChatHub = () => {
                 ref={dragRef1}
 
               >
-                <div ref={handleRef} style={{ zIndex: '999', width: '10px', height: '100%', position: 'absolute', left: 0, top: 0, cursor: 'ew-resize' }} />
+                <div ref={handleRef1} style={{ zIndex: '999', width: '10px', height: '100%', position: 'absolute', left: 0, top: 0, cursor: 'ew-resize' }} />
                 <Tabs
                   defaultActiveKey="1"
                   items={[
