@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Modal, Tabs, Flex, ConfigProvider, theme, Card, List, Select } from 'antd';
+import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Modal, Tabs, Flex, ConfigProvider, theme, Card, List, Select, Tag } from 'antd';
 // import RTCPlayer from './aa';
 import styles from './index.module.css';
 import UseRTCPlayer from './hooks/UseRTCPlayer';
@@ -73,7 +73,7 @@ const WebRTCChatHub = () => {
 
   const [oncall_open_state, set_oncall_open_state] = useState<{open: boolean; roomId?: string}>({ open: false });
 
-  const [whepUrlStore, setWhepUrlSotre] = useState<Array<{url?: string}>>([]);
+  const [whepUrlStore, setWhepUrlSotre] = useState<Array<{url?: string; user?: string}>>([]);
 
   const callRing = async (parm: {
       room_id: string | null; // 房间名称
@@ -245,7 +245,7 @@ const WebRTCChatHub = () => {
 
   useEffect(() => {
     if (roomId) {
-      alert(2);
+      // alert(2);
       push_media();
     }
   }, [roomId]);
@@ -365,7 +365,7 @@ const WebRTCChatHub = () => {
                           (() => {
                             return R.map((v) => {
                               return (<div className={styles['row_item']} >
-                                <RtcPlayer whepUrl={v.url} />
+                                <RtcPlayer whepUrl={v.url} userId={v.user} />
                               </div>);
                             }, whepUrlStore);
                           })()
@@ -382,7 +382,10 @@ const WebRTCChatHub = () => {
 
 
             {/* 第二行 */}
-            <div className={showGridRight ? styles['grid-large-has-right'] : styles['grid-large']}><Card ref={containerRef} style={{ height: '100%' }} /></div>
+            <div className={showGridRight ? styles['grid-large-has-right'] : styles['grid-large']}>
+              <Card ref={containerRef} style={{ height: '100%' }} />
+              <Tag color="#2db7f5" style={{ position: 'absolute', left: '0px', top: '0px' }}>设备id：{deviceId}</Tag>
+            </div>
 
             {/* 第三行 */}
             <div className={styles['grid_third_row']}>
