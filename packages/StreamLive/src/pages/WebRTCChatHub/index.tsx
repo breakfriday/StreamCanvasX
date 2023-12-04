@@ -43,6 +43,7 @@ const WebRTCChatHub = () => {
   const dragRef2 = useRef<HTMLDivElement>(null);
   const handleRef2 = useRef<HTMLDivElement>(null);
 
+
   const [buttonList, setButtonList] = useState([{
     label: '1st menu item',
     key: '1',
@@ -59,8 +60,8 @@ const WebRTCChatHub = () => {
 
   };
 
-  useDrag(dragRef1, handleRef1, { resize: 'width' }); // 支持调整宽
-  useDrag(dragRef2, handleRef2, { resize: 'height' }); // 支持调整高
+  useDrag(dragRef1, handleRef1, { resize: 'width' }, true); // 支持调整宽
+
 
   let containerRef = useRef(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -77,6 +78,8 @@ const WebRTCChatHub = () => {
   const [oncall_open_state, set_oncall_open_state] = useState<{open: boolean; roomId?: string}>({ open: false });
 
   const [whepUrlStore, setWhepUrlSotre] = useState<Array<{url?: string}>>([]);
+
+  useDrag(dragRef2, handleRef2, { resize: 'height' }, whepUrlStore.length > 0); // 支持调整高
 
   const callRing = async (parm: {
       room_id: string | null; // 房间名称

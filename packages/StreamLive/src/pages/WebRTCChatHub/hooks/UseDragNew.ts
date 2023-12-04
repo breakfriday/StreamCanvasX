@@ -7,7 +7,7 @@ interface UseDragOptions {
 }
 
 // useDrag Hook
-const useDrag = (ref: React.RefObject<HTMLElement>, handleRef: React.RefObject<HTMLElement>, options: UseDragOptions) => {
+const useDrag = (ref: React.RefObject<HTMLElement>, handleRef: React.RefObject<HTMLElement>, options: UseDragOptions, shoudHandle: boolean) => {
     const startPos = useRef({ x: 0, y: 0 });
     const startSize = useRef({ width: 0, height: 0 });
     const startLeft = useRef(0);
@@ -55,7 +55,7 @@ const useDrag = (ref: React.RefObject<HTMLElement>, handleRef: React.RefObject<H
     }, []);
 
     useEffect(() => {
-        if (handleRef.current) {
+        if (handleRef.current && shoudHandle === true) {
             handleRef.current.addEventListener('mousedown', handleMouseDown);
         }
 
@@ -64,7 +64,7 @@ const useDrag = (ref: React.RefObject<HTMLElement>, handleRef: React.RefObject<H
                 handleRef.current.removeEventListener('mousedown', handleMouseDown);
             }
         };
-    }, [handleRef, handleMouseDown]);
+    }, [handleRef, handleMouseDown, shoudHandle]);
 
     return {};
 };
