@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Modal, Tabs, Flex, ConfigProvider, theme, Card, List, Dropdown } from 'antd';
+import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row, Modal, Tabs, Flex, ConfigProvider, theme, Card, List, Select, Tag } from 'antd';
 // import RTCPlayer from './aa';
 import styles from './index.module.css';
 import UseRTCPlayer from './hooks/UseRTCPlayer';
@@ -34,7 +34,7 @@ if (window.location.protocol === 'https:') {
 
 
 const WebRTCChatHub = () => {
-  const [playerRef, createPlayer] = UseRTCPlayer();
+  const [playerRef, createPlayer, devices] = UseRTCPlayer();
   const [showGridRight, setShowGridRight] = useState(true);
   const { sendMessage, subscribe, isConnected, messageHistory } = useMqtt(`${wsProtocol}://192.168.3.34:${wsPort}`);
 
@@ -77,7 +77,7 @@ const WebRTCChatHub = () => {
 
   const [oncall_open_state, set_oncall_open_state] = useState<{open: boolean; roomId?: string}>({ open: false });
 
-  const [whepUrlStore, setWhepUrlSotre] = useState<Array<{url?: string}>>([]);
+  const [whepUrlStore, setWhepUrlSotre] = useState<Array<{url?: string; user?: string}>>([]);
 
   useDrag(dragRef2, handleRef2, { resize: 'height' }, whepUrlStore.length > 0); // 支持调整高
 
@@ -248,6 +248,13 @@ const WebRTCChatHub = () => {
       // let newparms = Object.assign(searchParams, { name: 22 });
       debugger;
   }, []);
+
+  useEffect(() => {
+    if (roomId) {
+      // alert(2);
+      push_media();
+    }
+  }, [roomId]);
     return (
       <ConfigProvider theme={{ algorithm: [theme.defaultAlgorithm, theme.compactAlgorithm] }}>
         <div>
@@ -365,7 +372,7 @@ const WebRTCChatHub = () => {
                           (() => {
                             return R.map((v) => {
                               return (<div className={styles['row_item']} >
-                                <RtcPlayer whepUrl={v.url} />
+                                <RtcPlayer whepUrl={v.url} userId={v.user} />
                               </div>);
                             }, whepUrlStore);
                           })()
@@ -382,7 +389,10 @@ const WebRTCChatHub = () => {
 
 
             {/* 第二行 */}
-            <div className={showGridRight ? styles['grid-large-has-right'] : styles['grid-large']}><Card ref={containerRef} style={{ height: '100%' }} /></div>
+            <div className={showGridRight ? styles['grid-large-has-right'] : styles['grid-large']}>
+              <Card ref={containerRef} style={{ height: '100%' }} />
+              <Tag color="#2db7f5" style={{ position: 'absolute', left: '0px', top: '0px' }}>设备id：{deviceId}</Tag>
+            </div>
 
             {/* 第三行 */}
             <div className={styles['grid_third_row']}>
@@ -400,6 +410,55 @@ const WebRTCChatHub = () => {
                   >
                     <i className="icon-camera">打开摄像头</i>
                   </Button>
+                </div>
+
+                <div className={styles['grid-bottom']}>
+                  <Form >
+                    <Form.Item
+                      label="攝像頭"
+                      name="selector"
+                    >
+                      {
+                        (() => {
+                          if (devices && devices?.videoInputs.length > 0) {
+                            return (
+                              <Select
+                                placeholder="inputVideoDevices"
+                                defaultValue={devices.videoInputs[0].deviceId}
+                                onChange={(it) => {
+                                  let intput_video_deviceId = it;
+                                  playerRef.current?.getMedia({ videoSource: intput_video_deviceId }).then(() => {
+                                    let url = `//192.168.3.15/index/api/whip?app=${roomId}&stream=${deviceId}`;
+
+                                    playerRef.current?.pushWhip({ url: url });
+                                  });
+                                  // let url = `//192.168.3.15/index/api/whip?app=${roomId}&stream=${deviceId}`;
+
+                                  // // url = 'http://localhost:1985/rtc/v1/whip/?app=live&stream=livestream ';
+
+                                  // setTimeout(() => {
+                                  // playerRef.current?.pushWhip({ url: url });
+                                  // }, 400);
+                              }}
+                              >
+                                {devices.videoInputs.map((v) => {
+                                  return <Select.Option value={v.deviceId}>{v.label}</Select.Option>;
+                                })}
+
+                                {/* <Select.Option value="option1">de</Select.Option>
+                                <Select.Option value="option2">选项 2</Select.Option> */}
+                                {/* 更多选项 */}
+                              </Select>
+                            );
+                          } else {
+                            return null;
+                          }
+                        })()
+                      }
+
+                    </Form.Item>
+
+                  </Form>
                 </div>
                 {/* <div className={styles['grid-bottom']}>
                   <Button
@@ -476,7 +535,7 @@ const WebRTCChatHub = () => {
             {/* 最右边列 */}
             {showGridRight ? (
               <div
-                style={{ position: 'relative' }}
+                style={{ position: 'relative', width: '200px', overflow: 'auto' }}
                 className={styles['gird-right']}
                 ref={dragRef1}
 

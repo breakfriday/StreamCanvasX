@@ -6,11 +6,14 @@ type IRTCPlayerService = ReturnType<typeof createRTCPlayerServiceInstance>;
 type UseRTCPlayerReturnType = [
     React.MutableRefObject<IRTCPlayerService | null>,
     (containerRef: React.RefObject<HTMLElement>) => void,
+    devices:{ videoInputs: MediaDeviceInfo[]; audioInputs: MediaDeviceInfo[]} | undefined,
 ];
 
 
 function UseRTCPlayer(): UseRTCPlayerReturnType {
    const playerRef = useRef<IRTCPlayerService | null>(null);
+
+   const [devices, setDevices] = useState<{ videoInputs: MediaDeviceInfo[]; audioInputs: MediaDeviceInfo[]} | undefined>(null);
 
 
     const createPlayer = (containerRef: React.RefObject<HTMLElement>) => {
@@ -19,7 +22,17 @@ function UseRTCPlayer(): UseRTCPlayerReturnType {
                 contentEl: containerRef.current!,
               });
             playerRef.current = player;
-            }
+
+            getDevices();
+        }
+    };
+
+
+    const getDevices = async () => {
+        let devices = await playerRef.current?.getDeviceLIst();
+
+
+        setDevices(devices);
     };
 
     useEffect(() => {
@@ -30,7 +43,7 @@ function UseRTCPlayer(): UseRTCPlayerReturnType {
         };
     }, []);
 
-    return [playerRef, createPlayer];
+    return [playerRef, createPlayer, devices];
 }
 
 

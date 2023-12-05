@@ -55,7 +55,10 @@ class RTCPlayer {
   };
 
 
-        this.mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+          try {
+            this.mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+          } catch (e) {
+          }
 
 
         this.localPlay();
