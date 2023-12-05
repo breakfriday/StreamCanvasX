@@ -7,7 +7,7 @@ interface UseDragOptions {
 }
 
 // useDrag Hook
-const useDrag = (ref: React.RefObject<HTMLElement>, handleRef: React.RefObject<HTMLElement>, options: UseDragOptions) => {
+const useDrag = (ref: React.RefObject<HTMLElement>, handleRef: React.RefObject<HTMLElement>, options: UseDragOptions, shoudHandle: boolean) => {
     const startPos = useRef({ x: 0, y: 0 });
     const startSize = useRef({ width: 0, height: 0 });
     const startLeft = useRef(0);
@@ -30,6 +30,7 @@ const useDrag = (ref: React.RefObject<HTMLElement>, handleRef: React.RefObject<H
     const handleMouseMove = useCallback((event: MouseEvent) => {
         if (ref.current) {
             const dx = event.clientX - startPos.current.x;
+            const dy = event.clientY - startPos.current.y;
 
             if (options.resize === 'width' || options.resize === 'both') {
                 const newWidth = startSize.current.width - dx;
@@ -40,7 +41,11 @@ const useDrag = (ref: React.RefObject<HTMLElement>, handleRef: React.RefObject<H
             }
 
             // Handle height resizing
-            // ...
+            if (options.resize === 'height' || options.resize === 'both') {
+                const newHeight = startSize.current.height + dy;
+
+                ref.current.style.height = `${Math.max(0, newHeight)}px`;
+            }
         }
     }, [ref, options.resize]);
 
@@ -50,7 +55,7 @@ const useDrag = (ref: React.RefObject<HTMLElement>, handleRef: React.RefObject<H
     }, []);
 
     useEffect(() => {
-        if (handleRef.current) {
+        if (handleRef.current && shoudHandle === true) {
             handleRef.current.addEventListener('mousedown', handleMouseDown);
         }
 
@@ -59,7 +64,7 @@ const useDrag = (ref: React.RefObject<HTMLElement>, handleRef: React.RefObject<H
                 handleRef.current.removeEventListener('mousedown', handleMouseDown);
             }
         };
-    }, [handleRef, handleMouseDown]);
+    }, [handleRef, handleMouseDown, shoudHandle]);
 
     return {};
 };
