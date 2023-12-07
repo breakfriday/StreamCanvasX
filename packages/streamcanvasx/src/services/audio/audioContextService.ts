@@ -457,7 +457,7 @@ class AudioProcessingService {
        this.getAuDioInfo();
       }
 
-      setGain(v: number) {
+      setGain(v: number = 1) {
         try {
         this.context.gainNode.gain.value = v;
         } catch (e) {
