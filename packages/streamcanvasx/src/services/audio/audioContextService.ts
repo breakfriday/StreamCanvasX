@@ -1,6 +1,6 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../player';
-import { debug } from 'console';
+//import { debug } from 'console';
 
 
 const render_times = 1000 / 15;
@@ -422,7 +422,7 @@ class AudioProcessingService {
 
         this.context.audioSourceNode.connect(this.context.gainNode);
         this.context.gainNode.connect(this.context.analyserNode);
-        this.context.gainNode.gain.value = 3;
+        this.context.gainNode.gain.value = 1;
         this.context.analyserNode.connect(this.context.audioContext.destination);
       }
 
