@@ -1,6 +1,6 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../player';
-//import { debug } from 'console';
+// import { debug } from 'console';
 
 
 const render_times = 1000 / 15;
@@ -455,6 +455,14 @@ class AudioProcessingService {
        this.bufferData = new Float32Array(this.bufferDataLength);
 
        this.getAuDioInfo();
+      }
+
+      setGain(v: number) {
+        try {
+        this.context.gainNode.gain.value = v;
+        } catch (e) {
+          console.error('调整音频增益失败');
+        }
       }
 
       getAuDioInfo() {
