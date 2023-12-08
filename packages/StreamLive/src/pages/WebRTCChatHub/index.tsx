@@ -8,6 +8,7 @@ import { useSearchParams, useParams, history } from 'ice';
 import { tr } from 'date-fns/locale';
 import RtcPlayer from './RtcPlayer';
 import useDrag from './hooks/UseDragNew';
+import useDragDrop from './hooks/UseDragDrop';
 
 
 import userList from './userconfig';
@@ -42,6 +43,7 @@ const WebRTCChatHub = () => {
   const handleRef1 = useRef<HTMLDivElement>(null);
   const dragRef2 = useRef<HTMLDivElement>(null);
   const handleRef2 = useRef<HTMLDivElement>(null);
+  const dropAreaRef = useRef<HTMLDivElement>(null);
 
 
   const [buttonList, setButtonList] = useState([{
@@ -79,6 +81,7 @@ const WebRTCChatHub = () => {
 
   const [whepUrlStore, setWhepUrlSotre] = useState<Array<{url?: string; user?: string}>>([]);
 
+  const { handleDragStart, handleDrop } = useDragDrop(dropAreaRef, whepUrlStore, setWhepUrlSotre);
   useDrag(dragRef2, handleRef2, { resize: 'height' }, whepUrlStore.length > 0); // 支持调整高
 
   const callRing = async (parm: {
@@ -367,11 +370,11 @@ const WebRTCChatHub = () => {
                 ref={dragRef2}
                 style={{ position: 'relative' }}
               >
-                <div className={styles['first-flex-row']}>
+                <div className={styles['first-flex-row']} ref={dropAreaRef}>
                   {
                           (() => {
                             return R.map((v) => {
-                              return (<div className={styles['row_item']} >
+                              return (<div className={styles['row_item']} draggable onDragStart={handleDragStart} onDrop={handleDrop}>
                                 <RtcPlayer whepUrl={v.url} userId={v.user} />
                               </div>);
                             }, whepUrlStore);
