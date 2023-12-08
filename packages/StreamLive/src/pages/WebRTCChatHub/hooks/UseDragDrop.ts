@@ -40,7 +40,7 @@ const useDragDrop = <T>(ref: React.RefObject<HTMLElement>, itemList: Array<T>, s
     }
     const dropItem = event.currentTarget;
     // console.log('handleDrop  event.currentTarget', event.currentTarget);
-    const list = Array.from(ref.current.childNodes);
+    const list = Array.from(ref.current.children);
     const dropIndex = list.indexOf(dropItem);
     if (!dragItemRef.current) {
       return;
