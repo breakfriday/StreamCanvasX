@@ -34,7 +34,7 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.71';
+window.streamCanvasX = '0.1.73';
 
 function now() {
     return new Date().getTime();
@@ -294,8 +294,6 @@ class PlayerService extends Emitter {
                      liveBufferLatencyMaxLatency: 1,
                      fixAudioTimestampGap: false,
                      autoCleanupSourceBuffer: true,
-
-
                     // // autoCleanupMaxBackwardDuration: 5, // seconds.
                     // autoCleanupMinBackwardDuration: 5,
                     // lazyLoad: false,
