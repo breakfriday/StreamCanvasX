@@ -81,7 +81,7 @@ const WebRTCChatHub = () => {
 
   const [whepUrlStore, setWhepUrlSotre] = useState<Array<{url?: string; user?: string}>>([]);
 
-  const { handleDragStart, handleDrop } = useDragDrop(dropAreaRef, whepUrlStore, setWhepUrlSotre);
+  const { handleDragStart, handleDrop } = useDragDrop(dropAreaRef, whepUrlStore.length > 0);
   useDrag(dragRef2, handleRef2, { resize: 'height' }, whepUrlStore.length > 0); // 支持调整高
 
   const callRing = async (parm: {
