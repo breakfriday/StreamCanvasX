@@ -34,7 +34,7 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.57';
+window.streamCanvasX = '0.1.73';
 
 function now() {
     return new Date().getTime();
@@ -218,7 +218,7 @@ class PlayerService extends Emitter {
         let { type = 'flv' } = parms;
 
         let { isLive, url, fileData, streamType } = this.config;
-        if (streamType === 'AAC' || streamType === 'MP4' || streamType === 'MPEG-TS') {
+        if (streamType === 'AAC' || streamType === 'MP4') {
             this.createBetaPlayer();
             return false;
         }
@@ -226,6 +226,12 @@ class PlayerService extends Emitter {
         if (fileData) {
             let blobUrl = URL.createObjectURL(fileData);
             url = blobUrl;
+        }
+
+
+        if (streamType == 'MpegTs' || streamType === 'MPEG-TS') {
+            type = 'mpegts';
+            isLive = false;
         }
 
 
@@ -313,6 +319,8 @@ class PlayerService extends Emitter {
                  this.mpegtsPlayer.attachMediaElement(videoEl, audioEl);
             }
 
+            this.mpegtsPlayer.defatulEvent();
+
 
         //   this.getVideoSize();
           this.mpegtsPlayer.load();
@@ -321,10 +329,25 @@ class PlayerService extends Emitter {
 
         //   window.pp = this.mpegtsPlayer;
 
-          this.mpegtsPlayer.on('audio_segment', (data) => {
-            // let h = data;
-            // debugger;
-          });
+        //   this.mpegtsPlayer.on('audio_segment', (data) => {
+        //     // let h = data;
+        //     // debugger;
+        //   });
+
+
+          if (isLive === false) {
+            this.canvasVideoService.loading = false;
+            setTimeout(() => {
+                // this.mpegtsPlayer.load();
+
+                this.mpegtsPlayer.play();
+                this.canvasVideoService.createVideoFramCallBack(videoEl);
+            }, 1000);
+
+
+            return false;
+          }
+
 
           this.mpegtsPlayer.on(mpegts.Events.MEDIA_INFO, (parm) => {
             let video_width = parm.metadata.width;
@@ -345,18 +368,16 @@ class PlayerService extends Emitter {
             console.log('---------');
             console.info(error);
             console.log('---------');
-            if (error === mpegts.ErrorTypes.NETWORK_ERROR || error === mpegts.ErrorTypes.MEDIA_ERROR) {
-                setTimeout(() => {
-                    this.reload2();
-                }, 8 * 1000);
+            if (error === mpegts.ErrorTypes.NETWORK_ERROR) {
+               this.reload2();
             }
           });
 
-          this.mpegtsPlayer.on(mpegts.Events.LOADING_COMPLETE, () => {
-            setTimeout(() => {
-                this.reload2();
-            }, 8 * 1000);
-          });
+        //   this.mpegtsPlayer.on(mpegts.Events.LOADING_COMPLETE, () => {
+        //     setTimeout(() => {
+        //         this.reload2();
+        //     }, 8 * 1000);
+        //   });
 
         //   const seedFrame = () => {
         //     setTimeout(() => {
@@ -370,7 +391,7 @@ class PlayerService extends Emitter {
         let lowSpeedStartTime: number | null = null;
 
           this.mpegtsPlayer.on(mpegts.Events.STATISTICS_INFO, (data) => {
-            let { speed, decodedFrames } = data;
+             let { speed, decodedFrames } = data;
 
 
             // let end = this.mpegtsPlayer.buffered.end(0);
@@ -382,25 +403,28 @@ class PlayerService extends Emitter {
             // console.info(this.mpegtsPlayer.buffered);
 
 
-            if (speed <= 1) {
-                if (lowSpeedStartTime === null) {
-                    lowSpeedStartTime = Date.now();
-                }
-                if (Date.now() - lowSpeedStartTime >= 8000) {
-                    this.reload2();
-                   lowSpeedStartTime = null; // 重置计时器
-                }
-                // this.reload();
-                // this.reload();
-            } else {
-                lowSpeedStartTime = null;
-                if (decodedFrames > 0 || hasVideo === false) {
-                    this.canvasVideoService.loading = false;
-                    this.httpFlvStreamService.hertTime = 0;
-                    this.error_connect_times = 0;
-                }
-            }
+            // if (speed <= 1) {
+            //     if (lowSpeedStartTime === null) {
+            //         lowSpeedStartTime = Date.now();
+            //     }
+            //     if (Date.now() - lowSpeedStartTime >= 80000) {
+            //         this.reload2();
+            //        lowSpeedStartTime = null; // 重置计时器
+            //     }
+            //     // this.reload();
+            //     // this.reload();
+            // } else {
+            //     lowSpeedStartTime = null;
+            //     if (decodedFrames > 0 || hasVideo === false) {
+            //         this.canvasVideoService.loading = false;
+            //         this.httpFlvStreamService.hertTime = 0;
+            //         this.error_connect_times = 0;
+            //     }
+            // }
 
+            if (speed > 1) {
+                this.error_connect_times = 0;
+            }
 
             this.emit('otherInfo', data);
         });
@@ -507,21 +531,28 @@ class PlayerService extends Emitter {
             this.error_connect_times++;
 
 
+            // if (this.error_connect_times > 3) {
+            //    this.canvasVideoService.loading = false;
+            //    this.setError();
+            //    return false;
+            // }
+            // this.mpegtsPlayer.unload();
+            // this.mpegtsPlayer.load();
+            // this.canvasVideoService.drawLoading();
+            // setTimeout(() => {
+            //     try {
+            //       this.mpegtsPlayer.play();
+            //     } catch (e) {
+
+            //     }
+            // }, 200);
             if (this.error_connect_times > 3) {
-               this.canvasVideoService.loading = false;
+                 this.canvasVideoService.loading = false;
                this.setError();
                return false;
+            } else {
+               this.mpegtsPlayer.reload();
             }
-            this.mpegtsPlayer.unload();
-            this.mpegtsPlayer.load();
-            this.canvasVideoService.drawLoading();
-            setTimeout(() => {
-                try {
-                  this.mpegtsPlayer.play();
-                } catch (e) {
-
-                }
-            }, 200);
         }
 
         setError() {
