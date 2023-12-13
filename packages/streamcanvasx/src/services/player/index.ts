@@ -34,7 +34,7 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.73';
+window.streamCanvasX = '0.1.77';
 
 function now() {
     return new Date().getTime();
@@ -317,6 +317,9 @@ class PlayerService extends Emitter {
                  this.audioProcessingService.mute(true);
 
                  this.mpegtsPlayer.attachMediaElement(videoEl, audioEl);
+
+
+                 this.videoEvent(videoEl);
             }
 
             this.mpegtsPlayer.defatulEvent();
@@ -368,7 +371,8 @@ class PlayerService extends Emitter {
             console.log('---------');
             console.info(error);
             console.log('---------');
-            if (error === mpegts.ErrorTypes.NETWORK_ERROR) {
+            if (error === mpegts.ErrorTypes.NETWORK_ERROR || error === mpegts.ErrorTypes.MEDIA_ERROR) {
+                this.canvasVideoService.drawLoading();
                this.reload2();
             }
           });
@@ -422,6 +426,16 @@ class PlayerService extends Emitter {
             //     }
             // }
 
+            if (speed <= 1) {
+               if (lowSpeedStartTime === null) {
+                    lowSpeedStartTime = Date.now();
+                }
+                if (Date.now() - lowSpeedStartTime >= 20000) {
+                    this.canvasVideoService.drawLoading();
+                    this.reload2();
+                   lowSpeedStartTime = null; // 重置计时器
+                }
+            }
             if (speed > 1) {
                 this.error_connect_times = 0;
             }
@@ -452,6 +466,39 @@ class PlayerService extends Emitter {
         if (showAudio === false) {
             this.canvasVideoService.createVideoFramCallBack(videoEl);
         }
+      }
+
+      videoEvent(videoEl: HTMLVideoElement) {
+        let video = videoEl;
+        let lastTimeReadyStateBelow3: number | null = null; // 最后一次 readyState 小于3的时间
+        const timeoutDuration = 1000; // 检查间隔（毫秒）
+        const threshold = 15000; // 阈值（毫秒）
+        let $this = this;
+
+
+        function checkVideoState() {
+            if (video === null) {
+                return false;
+            }
+            if (video.readyState < 3) {
+                if (lastTimeReadyStateBelow3 === null) {
+                    lastTimeReadyStateBelow3 = Date.now(); // 开始计时
+                }
+
+                const duration: number = Date.now() - lastTimeReadyStateBelow3;
+                if (duration >= threshold) {
+                   $this.canvasVideoService.drawLoading();
+                   $this.reload2(); // 触发回调函数
+                } else {
+                    setTimeout(checkVideoState, timeoutDuration); // 继续检查
+                }
+            } else {
+                lastTimeReadyStateBelow3 = null; // 重置计时
+                setTimeout(checkVideoState, timeoutDuration); // 重新开始计时
+            }
+        }
+
+        setTimeout(checkVideoState, 5000);
       }
 
     createBetaPlayer2() {
@@ -546,7 +593,7 @@ class PlayerService extends Emitter {
 
             //     }
             // }, 200);
-            if (this.error_connect_times > 3) {
+            if (this.error_connect_times > 4) {
                  this.canvasVideoService.loading = false;
                this.setError();
                return false;

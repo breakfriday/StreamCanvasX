@@ -129,7 +129,7 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
 
   return (
     <div >
-      <div style={{ width: '400px', height: '200px', border: '1px' }} ref={containerRef} />
+      <div style={{ width: '800px', height: '500px', border: '1px' }} ref={containerRef} />
       <div>{JSON.stringify(info)} </div>
       <div>{JSON.stringify(info1)}</div>
       <div>{JSON.stringify(audioInfo)}</div>
@@ -137,7 +137,7 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
         let play = streamPlayer.current;
         play.reload2();
       }}
-      >retry</Button>
+      >force reload</Button>
       <Button onClick={() => {
         let play = streamPlayer.current;
         play.destroy();
