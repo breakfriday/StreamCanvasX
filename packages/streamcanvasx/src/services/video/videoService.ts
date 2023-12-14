@@ -8,6 +8,7 @@ class VideoService {
     playerService: RTCPlayerService;
     resizeObserver: ResizeObserver;
     meidiaEl: HTMLVideoElement;
+    timer: ReturnType<typeof setTimeout>;
     constructor() {
 
     }
@@ -34,7 +35,8 @@ class VideoService {
         let { contentEl } = this.playerService.config;
 
         this.resizeObserver = new ResizeObserver(() => {
-            setTimeout(() => {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => {
                this.setVideoSize();
             }, 200);
           });

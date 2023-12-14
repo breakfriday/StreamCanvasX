@@ -94,7 +94,7 @@
     grid-column: 1 / -2;  /* 跨越从第一列到最后一列 */
     grid-row: 1;  /* 第一行 */
     box-sizing: border-box;
-
+    height: 30vh;
 }
 
 .grid_third_row{
@@ -115,6 +115,7 @@
     gap: 5px;
     overflow:auto;
     flex-wrap: wrap;
+    height: 100%;
 }
 
 .third-flex-row{
@@ -130,8 +131,8 @@
    /* height: 200px;
     width:  200px; */
     /* height: calc(200 * var(--unit)); */
-     width: 200rpx;
-    height: 100rpx;
+    width: 200rpx;
+    height: 100%;
     display: flex;
     border-radius: var(--border-default-radius);
     position: relative;
