@@ -7,7 +7,7 @@ const config = {
   title: 'streamcanvasx',
   tagline: 'ICE Component Cool',
   url: 'https://your-docusaurus-test-site.com',
-  baseUrl: 'StreamCanvasX',
+  baseUrl: '/',
   i18n: {
     defaultLocale: 'zh-Hans',
     locales: ['zh-Hans',],
@@ -19,7 +19,7 @@ const config = {
   plugins: [
     require.resolve('@ice/pkg-plugin-docusaurus/plugin.js'),
     [
-      '/home/shiyl/work/streamcanvasx/node_modules/.pnpm/@docusaurus+plugin-content-pages@2.4.1_eslint@8.42.0_react-dom@18.2.0_react@18.2.0/node_modules/@docusaurus/plugin-content-pages/lib/index.js',
+      '/home/break_happy/project/stream_1206/node_modules/.pnpm/@docusaurus+plugin-content-pages@2.4.3_eslint@8.55.0_react-dom@18.2.0_react@18.2.0_typescript@4.9.5/node_modules/@docusaurus/plugin-content-pages/lib/index.js',
       {
         path: 'pages',
         routeBasePath: '/pages',
@@ -30,13 +30,38 @@ const config = {
 
   presets: [
     [
-      '/home/shiyl/work/streamcanvasx/node_modules/.pnpm/@docusaurus+preset-classic@2.4.1_eslint@8.42.0_react-dom@18.2.0_react@18.2.0/node_modules/@docusaurus/preset-classic/lib/index.js',
+      '/home/break_happy/project/stream_1206/node_modules/.pnpm/@docusaurus+preset-classic@2.4.3_@algolia+client-search@4.20.0_eslint@8.55.0_react-dom@18.2.0_je77nyfbqimn5pucm5dgvgyxua/node_modules/@docusaurus/preset-classic/lib/index.js',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
           path: 'docs',
+          sidebarItemsGenerator: async () => {
+          return [
+            { type: "doc", id: "about" },
+            { type: "doc", id: "index" },
+            {
+              type: "category",
+              label: "\u6307\u5357",
+              collapsed: false,
+              items: [
+                { type: "doc", id: "guide/basic/player" },
+                { type: "doc", id: "guide/basic/render" },
+                { type: "doc", id: "guide/basic/interaction" }
+              ]
+            },
+            {
+              type: "category",
+              label: "\u8FDB\u9636",
+              collapsed: true,
+              items: [
+                { type: "doc", id: "guide/advanced/advanced" }
+              ]
+            },
+            { type: "doc", id: "API" }
+          ];
+        },
           remarkPlugins: [
-            [extractCode, { mobilePreview: false, baseUrl: 'StreamCanvasX' }],
+            [extractCode, { mobilePreview: false, baseUrl: '/' }],
           ],
           exclude: [
             '**/_*.{js,jsx,ts,tsx,md,mdx}',
@@ -71,8 +96,8 @@ const config = {
         },
       },
       prism: {
-        theme: require('/home/shiyl/work/streamcanvasx/node_modules/.pnpm/prism-react-renderer@1.3.5_react@18.2.0/node_modules/prism-react-renderer/themes/github'),
-        darkTheme: require('/home/shiyl/work/streamcanvasx/node_modules/.pnpm/prism-react-renderer@1.3.5_react@18.2.0/node_modules/prism-react-renderer/themes/dracula'),
+        theme: require('/home/break_happy/project/stream_1206/node_modules/.pnpm/prism-react-renderer@1.3.5_react@18.2.0/node_modules/prism-react-renderer/themes/github'),
+        darkTheme: require('/home/break_happy/project/stream_1206/node_modules/.pnpm/prism-react-renderer@1.3.5_react@18.2.0/node_modules/prism-react-renderer/themes/dracula'),
       },
       docs: {
         sidebar: {

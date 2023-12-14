@@ -432,7 +432,7 @@ class PlayerService extends Emitter {
                if (lowSpeedStartTime === null) {
                     lowSpeedStartTime = Date.now();
                 }
-                if (Date.now() - lowSpeedStartTime >= 20000) {
+                if (Date.now() - lowSpeedStartTime >= 15000) {
                     // this.canvasVideoService.drawLoading();
 
                     // console.log('---heartcheck 异常 流量0 ----');
@@ -500,7 +500,7 @@ class PlayerService extends Emitter {
                 //    console.log(`reset:${video.readyState}`);
                 //    console.log('----readyState reset-----------');
                 //    $this.reload2(); // 触发回调函数
-                $this.addReloadTask({ arr_msg: ['----reload readyState reset-----------', `reset:${video.readyState}`, '----reload readyState reset-----------'] });
+                $this.addReloadTask({ arr_msg: [`readyState 异常 :${video.readyState}`] });
                     setTimeout(checkVideoState, timeoutDuration); // 继续检查
                 } else {
                     setTimeout(checkVideoState, timeoutDuration); // 继续检查
@@ -625,6 +625,11 @@ class PlayerService extends Emitter {
         }
 
         addReloadTask(parm?: {arr_msg?: Array<string>}) {
+            if (this.error_connect_times > 4) {
+                // console.log('error_connect_times > 4: Scheduler clearQueu ');
+                this.scheduler.clearQueue();
+                return false;
+            }
             this.scheduler.addTask(() => {
                 let { arr_msg = [''] } = parm;
                 this.canvasVideoService.drawLoading();
