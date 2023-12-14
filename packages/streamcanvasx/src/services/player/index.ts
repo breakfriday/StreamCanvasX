@@ -18,7 +18,7 @@ import WasmDecoderService from '../decoder/wasmDecoder';
 import CanvasToVideoSerivce from '../muxer/canvasToVideo';
 import MseDecoderService from '../decoder/mediaSource';
 import PreProcessing from '../preprocessing';
-
+import Scheduler from './util/scheduler';
 import RenderEngine from '../renderingEngines/baseEngine';
 
 
@@ -34,7 +34,7 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.73';
+window.streamCanvasX = '0.1.78';
 
 function now() {
     return new Date().getTime();
@@ -80,6 +80,7 @@ class PlayerService extends Emitter {
 
     };
     meidiaEl: HTMLVideoElement;
+    scheduler: Scheduler;
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -110,7 +111,7 @@ class PlayerService extends Emitter {
         this.mseDecoderService = mseDecoderService;
         this.preProcessing = preProcessing;
         this.renderEngine = renderEngine;
-
+        this.scheduler = new Scheduler(1);
 
         this._times = {
             playInitStart: '', // 1
@@ -317,6 +318,9 @@ class PlayerService extends Emitter {
                  this.audioProcessingService.mute(true);
 
                  this.mpegtsPlayer.attachMediaElement(videoEl, audioEl);
+
+
+                 this.videoEvent(videoEl);
             }
 
             this.mpegtsPlayer.defatulEvent();
@@ -368,8 +372,10 @@ class PlayerService extends Emitter {
             console.log('---------');
             console.info(error);
             console.log('---------');
-            if (error === mpegts.ErrorTypes.NETWORK_ERROR) {
-               this.reload2();
+            if (error === mpegts.ErrorTypes.NETWORK_ERROR || error === mpegts.ErrorTypes.MEDIA_ERROR) {
+            //     this.canvasVideoService.drawLoading();
+            //    this.reload2();
+               this.addReloadTask({ arr_msg: ['-----reload error-------', `reload: ${error}`, '-----reload error-------'] });
             }
           });
 
@@ -422,7 +428,22 @@ class PlayerService extends Emitter {
             //     }
             // }
 
+            if (speed <= 1) {
+               if (lowSpeedStartTime === null) {
+                    lowSpeedStartTime = Date.now();
+                }
+                if (Date.now() - lowSpeedStartTime >= 15000) {
+                    // this.canvasVideoService.drawLoading();
+
+                    // console.log('---heartcheck 异常 流量0 ----');
+                    // this.reload2();
+
+                    this.addReloadTask({ arr_msg: ['---heartcheck 异常 流量0 ----'] });
+                   lowSpeedStartTime = null; // 重置计时器
+                }
+            }
             if (speed > 1) {
+                lowSpeedStartTime = null;
                 this.error_connect_times = 0;
             }
 
@@ -452,6 +473,45 @@ class PlayerService extends Emitter {
         if (showAudio === false) {
             this.canvasVideoService.createVideoFramCallBack(videoEl);
         }
+      }
+
+      videoEvent(videoEl: HTMLVideoElement) {
+        let video = videoEl;
+        let lastTimeReadyStateBelow3: number | null = null; // 最后一次 readyState 小于3的时间
+        const timeoutDuration = 1000; // 检查间隔（毫秒）
+        const threshold = 15000; // 阈值（毫秒）
+        let $this = this;
+
+
+        function checkVideoState() {
+            if (video === null) {
+                return false;
+            }
+            // console.log('readystate', video.readyState);
+            if (video.readyState < 3) {
+                if (lastTimeReadyStateBelow3 === null) {
+                    lastTimeReadyStateBelow3 = Date.now(); // 开始计时
+                }
+
+                const duration: number = Date.now() - lastTimeReadyStateBelow3;
+                if (duration >= threshold) {
+                //    $this.canvasVideoService.drawLoading();
+                //    console.log('----readyState reset-----------');
+                //    console.log(`reset:${video.readyState}`);
+                //    console.log('----readyState reset-----------');
+                //    $this.reload2(); // 触发回调函数
+                $this.addReloadTask({ arr_msg: [`readyState 异常 :${video.readyState}`] });
+                    setTimeout(checkVideoState, timeoutDuration); // 继续检查
+                } else {
+                    setTimeout(checkVideoState, timeoutDuration); // 继续检查
+                }
+            } else {
+                lastTimeReadyStateBelow3 = null; // 重置计时
+                setTimeout(checkVideoState, timeoutDuration); // 重新开始计时
+            }
+        }
+
+        setTimeout(checkVideoState, 5000);
       }
 
     createBetaPlayer2() {
@@ -527,6 +587,15 @@ class PlayerService extends Emitter {
            }
         }
 
+        checkPlaying() {
+            let video = this.meidiaEl;
+            if (video.readyState < 3 || video.paused == true) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
         reload2() {
             this.error_connect_times++;
 
@@ -546,13 +615,36 @@ class PlayerService extends Emitter {
 
             //     }
             // }, 200);
-            if (this.error_connect_times > 3) {
+            if (this.error_connect_times > 4) {
                  this.canvasVideoService.loading = false;
                this.setError();
                return false;
             } else {
                this.mpegtsPlayer.reload();
             }
+        }
+
+        addReloadTask(parm?: {arr_msg?: Array<string>}) {
+            if (this.error_connect_times > 4) {
+                // console.log('error_connect_times > 4: Scheduler clearQueu ');
+                this.scheduler.clearQueue();
+                return false;
+            }
+            this.scheduler.addTask(() => {
+                let { arr_msg = [''] } = parm;
+                this.canvasVideoService.drawLoading();
+                arr_msg.map((msg) => {
+                    console.log(msg);
+                });
+                this.reload2();
+                return new Promise(resolve => setTimeout(() => {
+                    if (this.checkPlaying()) {
+                        resolve('clean');
+                    } else {
+                        resolve('');
+                    }
+                    }, 10000)); // 已10s 的速度均衡执行reload 任务
+                 });
         }
 
         setError() {
