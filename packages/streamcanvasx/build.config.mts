@@ -43,8 +43,11 @@ export default defineConfig({
       },
     ],
   ],
-
   transform: {
     formats: ['es2017', 'esm'],
+  },
+  bundle: {
+    formats: ['esm', 'umd'],
+    polyfill: false,
   },
 });
