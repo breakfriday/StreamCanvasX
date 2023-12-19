@@ -70,7 +70,7 @@ class CanvasWaveService {
             position: regl.prop('buffer'),
           },
 
-          count: this.regGl.prop('count'),
+          count: this.bufferLength * 2,
           depth: { enable: true },
           primitive: 'line strip',
 
@@ -212,7 +212,7 @@ class CanvasWaveService {
           for (let i = 0; i < numSamples; i++) {
               // Math.random()  between -1 and 1
               let value = Math.random() * 2 - 1;
-              buffer[i] = value;
+              buffer[i] = Math.sign(value) * Math.pow(Math.abs(value), 8);
               // buffer[i] = Math.sign(value) * Math.pow(Math.abs(value), 8);
           }
 
