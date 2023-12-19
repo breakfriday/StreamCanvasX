@@ -41,10 +41,16 @@ class WaveVisualization {
       arrayLength: 8000 * 4,
     };
     const defaultextend = {
-      hasShowid: false,
+      showid: true,
       showAllid: false,
       terminalid: new Array(defaultConfig.routes),
       id: new Array(defaultConfig.routes),
+      style: {
+        position: 'absolute',
+        color: 'rgb(255, 255, 255)',
+        width: '100%',
+        borderBlockStart: '1px solid #31352E',
+      },
     };
     // let { routes, contentEl, isMocking = false, renderType = 1, duration = 4, updateArrayLength = 160, width = 3000 * 1, height = 50 * 32, updateArrayTimes = 20, renderTimes = 20, arrayLength = duration * 1000 / updateArrayTimes } = defaultConfig;
     this.config = Object.assign(defaultConfig, config);
