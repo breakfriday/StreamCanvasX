@@ -1,8 +1,10 @@
 
 import { createPlayerServiceInstance } from './serviceFactories/createPlayerInstance';
+import { IplayerConfig } from './types/services';
 
 
 type ICreatePlayerServiceInstance = ReturnType<typeof createPlayerServiceInstance>;
+
 
 let loadMicroModule = async function (vendorUrl: string, indexUrl: string): Promise<any> {
     try {
@@ -19,7 +21,7 @@ let loadMicroModule = async function (vendorUrl: string, indexUrl: string): Prom
 };
 
 
-const createPlayerServicePromise = async function (parm): Promise<ICreatePlayerServiceInstance> {
+const createPlayerServicePromise = async function (parm: IplayerConfig): Promise<ICreatePlayerServiceInstance> {
     let module = await loadMicroModule(
         'https://breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.78/index.esm.es5.production.js',
         'https://breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.78/index.esm.es5.production.js');

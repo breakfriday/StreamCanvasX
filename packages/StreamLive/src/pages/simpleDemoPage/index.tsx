@@ -18,7 +18,7 @@ const SimplePage = () => {
 
 
   const createPlayer = async () => {
-    let player = await createPlayerServicePromise({ url, contentEl: containerRef.current! });
+    let player = await createPlayerServicePromise({ url, contentEl: containerRef.current!, streamType: 'flv' });
 
 
     player.createFlvPlayer({});

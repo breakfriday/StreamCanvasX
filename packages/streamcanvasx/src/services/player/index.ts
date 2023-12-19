@@ -34,7 +34,7 @@ mpegts.LoggingControl.applyConfig({
 
  });
 
-window.streamCanvasX = '0.1.78';
+
 
 function now() {
     return new Date().getTime();
@@ -137,6 +137,7 @@ class PlayerService extends Emitter {
             vbps: 0, // 当前视频码率，单位bit
             ts: 0, // 当前视频帧pts，单位毫秒
         };
+        window.streamCanvasX = '0.1.78';
     }
 
     init(config?: IplayerConfig) {
