@@ -16,14 +16,15 @@ class CanvasWaveService {
     glContext: WebGLRenderingContext;
     wavePlayerService: WavePlayerService;
     drawCommand: createREGL.DrawCommand;
-    vertBuffer: Array<Float32Array>;
-    xglBuffer: createREGL.Buffer;
+    // vertBuffer: Array<Float32Array>;
+    vertBuffer: number[][];
+    // xglBuffer: createREGL.Buffer;
     glBuffer: Array<createREGL.Buffer>;
     totalWaveforms: number;
     bufferLength: number; // 每一路音频数据的长度
     bufferData: Array<Float32Array>;// 32 路音频数据的data
-    updateLength: number; // 每次更新音频数据的长度
-    verticalOffsetArray: number[]; // 垂直偏移量
+    // updateLength: number; // 每次更新音频数据的长度
+    // verticalOffsetArray: number[]; // 垂直偏移量
     constructor() {
 
 
@@ -35,8 +36,7 @@ class CanvasWaveService {
        this.glContext = this.wavePlayerService.gl_context;
        this.totalWaveforms = this.wavePlayerService.config.routes;
        this.bufferLength = this.wavePlayerService.config.arrayLength;
-       this.updateLength = this.wavePlayerService.config.updateArrayLength;
-       this.vertBuffer = [];
+      //  this.vertBuffer = [];
 
 
         this.initgl();
@@ -50,42 +50,41 @@ class CanvasWaveService {
 
          this.drawCommand = this.regGl({
           frag: `
-          precision mediump float;
+          precision highp float;
           uniform vec4 color;
           void main() {
             gl_FragColor = vec4(0.47, 1.0, 0.0, 1.0);
           }`,
 
           vert: `
-          precision mediump float;
-          attribute float xposition;
-          attribute float yposition;
-          attribute float yOffset; // 波形的垂直偏移
+          precision highp float;
+          attribute vec2 position;
+          uniform float yOffset; // 波形的垂直偏移
           uniform float yScale;  // 波形的垂直缩放
           void main() {
-            gl_Position = vec4(xposition, yposition, 0, 1);
+            gl_PointSize = 10.0;
+            gl_Position = vec4(position, 0, 1);
           }`,
           attributes: {
             // position: this.glBuffer,
-            xposition: regl.prop('xbuffer'),
-            yposition: regl.prop('ybuffer'),
+            position: regl.prop('buffer'),
           },
 
           count: this.regGl.prop('count'),
-          depth: { enable: false },
-          primitive: 'lines',
+          depth: { enable: true },
+          primitive: 'line strip',
 
          });
 
          if (!this.glBuffer) {
           this.glBuffer = [];
           for (let i = 0; i < this.totalWaveforms; i++) {
-            this.glBuffer[i] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: this.bufferLength * 2 });
+            this.glBuffer[i] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: this.bufferLength * 4 });
           }
         }
-        if (!this.xglBuffer) {
-          this.xglBuffer = this.regGl.buffer({ type: 'float', usage: 'static', length: this.bufferLength * 2 });
-        }
+        // if (!this.xglBuffer) {
+        //   this.xglBuffer = this.regGl.buffer({ type: 'float', usage: 'static', length: this.bufferLength * 2 });
+        // }
     }
 
 
@@ -93,45 +92,47 @@ class CanvasWaveService {
         const { totalWaveforms } = this;
         const heightPerWaveform = 2 / (totalWaveforms); // 分配给每一路的高度空间
         const heightScale = heightPerWaveform * 0.3; // 实际波形的高度缩放，留出空间以避免相互重叠,最大不能超过0.5，否则放大会导致波形重叠
-        // const verticalOffsetIncrement = heightPerWaveform;
-        // let verticalOffset = 1 - verticalOffsetIncrement / 2; // 从最顶部的波形开始计算垂直偏移
-
-        for (let i = 0; i < this.totalWaveforms; i++) {
-          let pcmData = this.bufferData[i].subarray(this.bufferData[i].length - this.updateLength);
-         // let data = this.translatePointe(pcmData, heightScale, verticalOffset);
-          let data = this.convertPCMToVertices(pcmData, heightScale, this.verticalOffsetArray[i]);
-          this.vertBuffer[i].copyWithin(0, 2 * this.updateLength);
-          this.vertBuffer[i].set(data, 2 * (this.bufferData[i].length - this.updateLength));
-          this.glBuffer[i](this.vertBuffer[i]);
-          // verticalOffset -= verticalOffsetIncrement; // 更新偏移量，为下一路波形准备
-        }
-      }
-      initVertBuffer() {
-        const { totalWaveforms } = this;
-        const heightPerWaveform = 2 / (totalWaveforms); // 分配给每一路的高度空间
-        const heightScale = heightPerWaveform * 0.3; // 实际波形的高度缩放，留出空间以避免相互重叠,最大不能超过0.5，否则放大会导致波形重叠
         const verticalOffsetIncrement = heightPerWaveform;
         let verticalOffset = 1 - verticalOffsetIncrement / 2; // 从最顶部的波形开始计算垂直偏移
-        this.verticalOffsetArray = [];
+
         for (let i = 0; i < this.totalWaveforms; i++) {
+          // let pcmData = this.bufferData[i].subarray(this.bufferData[i].length - this.updateLength);
           let pcmData = this.bufferData[i];
-          this.verticalOffsetArray.push(verticalOffset);
-         // let data = this.translatePointe(pcmData, heightScale, verticalOffset);
+
           let data = this.convertPCMToVertices(pcmData, heightScale, verticalOffset);
-          this.vertBuffer[i] = data;
-          this.glBuffer[i](this.vertBuffer[i]);
+          // this.vertBuffer[i].copyWithin(0, 2 * this.updateLength);
+          // this.vertBuffer[i].set(data, 2 * (this.bufferData[i].length - this.updateLength));
+          // this.glBuffer[i](this.vertBuffer[i]);
+          this.glBuffer[i](data);
           verticalOffset -= verticalOffsetIncrement; // 更新偏移量，为下一路波形准备
         }
       }
-      initXVertBuffer() {
-        const array = new Float32Array(this.bufferLength * 2);
-        for (let index = 0; index < this.bufferLength; index++) {
-          const x = (index / (this.bufferLength - 1)) * 2 - 1;
-          array[2 * index] = x;
-          array[2 * index + 1] = x;
-        }
-        this.xglBuffer(array);
-      }
+      // initVertBuffer() {
+      //   const { totalWaveforms } = this;
+      //   const heightPerWaveform = 2 / (totalWaveforms); // 分配给每一路的高度空间
+      //   const heightScale = heightPerWaveform * 0.3; // 实际波形的高度缩放，留出空间以避免相互重叠,最大不能超过0.5，否则放大会导致波形重叠
+      //   const verticalOffsetIncrement = heightPerWaveform;
+      //   let verticalOffset = 1 - verticalOffsetIncrement / 2; // 从最顶部的波形开始计算垂直偏移
+      //   this.verticalOffsetArray = [];
+      //   for (let i = 0; i < this.totalWaveforms; i++) {
+      //     let pcmData = this.bufferData[i];
+      //     this.verticalOffsetArray.push(verticalOffset);
+      //    // let data = this.translatePointe(pcmData, heightScale, verticalOffset);
+      //     let data = this.convertPCMToVertices(pcmData, heightScale, verticalOffset);
+      //     this.vertBuffer[i] = data;
+      //     this.glBuffer[i](this.vertBuffer[i]);
+      //     verticalOffset -= verticalOffsetIncrement; // 更新偏移量，为下一路波形准备
+      //   }
+      // }
+      // initXVertBuffer() {
+      //   const array = new Float32Array(this.bufferLength * 2);
+      //   for (let index = 0; index < this.bufferLength; index++) {
+      //     const x = (index / (this.bufferLength - 1)) * 2 - 1;
+      //     array[2 * index] = x;
+      //     array[2 * index + 1] = x;
+      //   }
+      //   this.xglBuffer(array);
+      // }
 
       // 将数据点转换为顶点数据
       translatePointe(data: Float32Array, heightScale: number, verticalOffset: number) {
@@ -157,16 +158,19 @@ class CanvasWaveService {
       // PCM数据点转换为对称于X轴的两组顶点数据
       convertPCMToVertices(pcmData: Float32Array, heightScale: number, verticalOffset: number) {
         const sampleCount = pcmData.length;
-        const vertices = new Float32Array(sampleCount * 2);
+        // const vertices = new Float32Array(sampleCount * 2);
+        const vertices = [];
 
         for (let index = 0; index < sampleCount; index++) {
-          // const x = (index / (sampleCount - 1)) * 2 - 1; // 将索引规范化到[-1, 1]
+          const x = (index / (sampleCount - 1)) * 2 - 1; // 将索引规范化到[-1, 1]
           const y = (pcmData[index] * heightScale) + verticalOffset;
 
           // 添加原始点
-          vertices[2 * index] = (y);
+          vertices.push(x, y);
+          // vertices[2 * index] = (y);
           // 添加沿x轴对称的点
-          vertices[2 * index + 1] = (-y + 2 * verticalOffset);
+          vertices.push(x, -y + 2 * verticalOffset);
+          // vertices[2 * index + 1] = (-y + 2 * verticalOffset);
         }
 
         return vertices;
@@ -208,7 +212,8 @@ class CanvasWaveService {
           for (let i = 0; i < numSamples; i++) {
               // Math.random()  between -1 and 1
               let value = Math.random() * 2 - 1;
-              buffer[i] = Math.sign(value) * Math.pow(Math.abs(value), 8);
+              buffer[i] = value;
+              // buffer[i] = Math.sign(value) * Math.pow(Math.abs(value), 8);
           }
 
           return buffer;
@@ -234,10 +239,11 @@ class CanvasWaveService {
 
 
           for (let i = 0; i < this.totalWaveforms; i++) {
-            // let glbuffer = this.glBuffer[i].length;
+            let glbuffer = this.glBuffer[i].length;
 
-            let count = this.bufferData[i].length;
-            this.drawCommand({ count: count * 2, xbuffer: this.xglBuffer, ybuffer: this.glBuffer[i] });
+            let count = this.bufferData[i].length * 2;
+
+            this.drawCommand({ count: count, buffer: this.glBuffer[i] });
           }
         });
       }
@@ -250,13 +256,13 @@ class CanvasWaveService {
         for (let i = 0; i < routes; i++) {
           this.bufferData[i] = new Float32Array(length);
         }
-        this.initVertBuffer();
-        this.initXVertBuffer();
+        // this.initVertBuffer();
+        // this.initXVertBuffer();
       }
 
 
       destroy() {
-        this.xglBuffer.destroy();
+        // this.xglBuffer.destroy();
         for (let i = 0; i < this.totalWaveforms; i++) {
           this.glBuffer[i].destroy();
         }
