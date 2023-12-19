@@ -205,8 +205,8 @@ importers:
         specifier: ^0.0.6
         version: 0.0.6
       streamcanvasx-core:
-        specifier: 0.0.21
-        version: 0.0.21
+        specifier: 0.0.22
+        version: 0.0.22
       webm-muxer:
         specifier: ^3.1.1
         version: 3.1.3
@@ -16745,8 +16745,8 @@ packages:
   /std-env@3.6.0:
     resolution: {integrity: sha512-aFZ19IgVmhdB2uX599ve2kE6BIE3YMnQ6Gp6BURhW/oIzpXGKr878TQfAQZn1+i0Flcc/UKUy1gOlcfaUBCryg==}
 
-  /streamcanvasx-core@0.0.21:
-    resolution: {integrity: sha512-XTqcj82iXr7YStfW505c0sEDq/BTxkcvTUEqcO5Qp9138ihyQWb5HvCDLarwkMuDCexhZXAAbyspj6ABS88VRg==}
+  /streamcanvasx-core@0.0.22:
+    resolution: {integrity: sha512-ZnXeks+vvJ8CX4bIPQRjd27bXEGtBezwvdSGfGADaTZzRbNmOITEUm+H+NRkSb0heSzenPMs6PUrPbEyZkbTKw==}
     dependencies:
       codec-parser: 2.4.3
       es6-promise: 4.2.8
