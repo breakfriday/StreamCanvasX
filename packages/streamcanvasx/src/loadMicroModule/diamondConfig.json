@@ -29,23 +29,23 @@
             "rulesId":1 , "dataId":1,"desc":"pcweb 开发环境","conditions": [{
                 "type": "and", 
                 "condition": {
-                    "name":"domain","options": ["pcweb","http://localhost:3000/*","http://localhost:3003/*"]
+                    "name":"domain","options": ["http://192.168.100.26:8011","http://192.168.100.26:8011/*"]
                 }}] 
         },
         {
             "rulesId":2 , "dataId":2,"desc":"pcweb  测试环境","conditions":[{
                 "type": "and",
-                 "condition": {"name":"domain","options": ["pre-pcweb"]}}] 
+                 "condition": {"name":"domain","options": ["http://192.168.100.66:42091","http://192.168.100.66:42091/*"]}}] 
         },
         {
             "rulesId":3 , "dataId":3,"desc":"pcweb  演示环境","conditions":[{
                 "type": "and",
-                 "condition": {"name":"domain","options": ["pre-pcweb"]}}] 
+                 "condition": {"name":"domain","options": ["http://120.26.38.129:42091/*","http://47.98.145.160:42091/*"]}}] 
         },
         {
             "rulesId":4 ,"dataId":4,"desc":"IOT 测试环境","conditions":[{
                 "type": "and", 
-                "condition": {"name":"domain","options": ["http://192.168.100.120:8080/*"]}}] 
+                "condition": {"name":"domain","options": ["http://192.168.100.120:8080/*","http://192.168.100.120:8080","https://192.168.100.120:8080/*"]}}] 
         },
         {
             "rulesId":5 ,"dataId":5,"desc":"IOT 演示环境","conditions":[{
