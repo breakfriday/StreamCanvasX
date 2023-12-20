@@ -22,7 +22,7 @@ const getConfig = async () => {
    let verison = selectData.version;
 
    let resouce = config.resources.find((v) => {
-    return v.version = verison;
+    return v.version === verison;
    });
    return resouce.data;
 };

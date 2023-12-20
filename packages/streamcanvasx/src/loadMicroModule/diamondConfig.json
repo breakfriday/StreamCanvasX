@@ -2,7 +2,7 @@
 
    
     "data":[
-        {"id":1,"version":"0.1.78"}, {"id":2,"version":"0.1.78"}, {"id":3,"version":"0.1.78"}
+        {"id":1,"version":"0.1.79"}, {"id":2,"version":"0.1.78"}, {"id":3,"version":"0.1.78"}
     ],
     "resources": [
         {
@@ -14,8 +14,8 @@
             {
                 "version":"0.1.79",
                  "data":[
-                    "https://breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.78/index.esm.es5.production.js",
-                    "https://breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.78/index.esm.es5.production.js"
+                    "https://breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.79/vendor.esm.es5.production.js",
+                    "https://breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.79/index.esm.es5.production.js"
                 ]}
     ],
 
