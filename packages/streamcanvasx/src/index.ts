@@ -7,9 +7,14 @@ type ICreatePlayerServiceInstance = ReturnType<typeof createPlayerServiceInstanc
 
 
 const createPlayerServicePromise = async function (parm: IplayerConfig): Promise<ICreatePlayerServiceInstance> {
-    let module = await loadMicroModule();
+    try {
+        let module = await loadMicroModule();
 
-    return module.createPlayerServiceInstance(parm);
+        return module.createPlayerServiceInstance(parm);
+    } catch (e) {
+        console.log(' 播放器 远程微模块加载失败');
+        return createPlayerServiceInstance(parm);
+    }
 };
 
 export {
