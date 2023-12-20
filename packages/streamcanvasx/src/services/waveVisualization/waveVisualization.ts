@@ -61,7 +61,11 @@ class WaveVisualization {
     // this.extend = extend;
     this.canvas_el = document.createElement('canvas');
     this.contentEl = this.config.contentEl;
-    this.contentEl?.append(this.canvas_el);
+    const height = this.contentEl.clientHeight;
+    const width = this.contentEl.clientWidth;
+    this.canvas_el.height = height;
+    this.canvas_el.width = width;
+    this.contentEl.append(this.canvas_el);
     // this.WavePlayerService.init(Object.assign(config, { canvas_el: this.canvas_el }));
     this.WavePlayerService.init(this);
   }
