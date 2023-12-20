@@ -7,7 +7,6 @@ function domain(currentDomain: string, options: string[]): boolean {
         const pattern = escapedOption.replace(/\*/g, '.*');
         const regex = new RegExp(`^${pattern}$`);
 
-        debugger
         // 测试当前域名是否匹配该模式
         return regex.test(currentDomain);
     });

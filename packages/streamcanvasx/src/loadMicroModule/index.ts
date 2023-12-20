@@ -1,7 +1,7 @@
 
 import RuleEngine from './ruleEngine';
 let fetchConfig = async function () {
-    const response = await fetch('https://breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/config/diamondConfig.json');
+    const response = await fetch('//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/config/diamondConfig.json');
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -14,12 +14,14 @@ const getConfig = async () => {
 
 
     const engine = new RuleEngine(config);
-    const dataId = engine.evaluate({ currentDomain: location.href });
+    const dataId = engine.evaluate({ currentDomain: location.href }) || 0;
     const selectData = data.find((it) => {
         return it.id === dataId;
     });
 
+
    let verison = selectData.version;
+   console.info('version data', selectData);
 
    let resouce = config.resources.find((v) => {
     return v.version === verison;

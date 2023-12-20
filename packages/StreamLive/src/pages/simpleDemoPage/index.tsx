@@ -2,9 +2,7 @@ import React, { useRef, useEffect } from 'react';
 // import player from 'streamcanvasx/player';
 // import CanvasPlayer from 'streamcanvasx/canvasPlayer';
 
- import { createOriginServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
 
- import createRegl from 'regl';
  import { createPlayerServicePromise } from 'streamcanvasx/src/index';
  import styles from './index.module.css';
 

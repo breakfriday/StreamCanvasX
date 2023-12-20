@@ -2,20 +2,25 @@
 
    
     "data":[
-        {"id":1,"version":"0.1.79"}, {"id":2,"version":"0.1.78"}, {"id":3,"version":"0.1.78"}
+        {"id":0,"version":"0.1.79","desc":"default 環境 ，沒有規則命中"},
+        {"id":1,"version":"0.1.79","desc":"pcweb 开发环境"},
+        {"id":2,"version":"0.1.78","desc":"pcweb  测试环境"},
+        {"id":3,"version":"0.1.78","desc":"pcweb  演示环境"},
+        {"id":4,"version":"0.1.79","desc":"IOT 测试环境"},
+        {"id":5,"version":"0.1.78","desc":"IOT 演示环境"}
     ],
     "resources": [
         {
             "version":"0.1.78",
              "data":[
-                "https://breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.78/index.esm.es5.production.js",
-                "https://breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.78/index.esm.es5.production.js"
+                "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.78/index.esm.es5.production.js",
+                "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.78/index.esm.es5.production.js"
             ]},
             {
                 "version":"0.1.79",
                  "data":[
-                    "https://breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.79/vendor.esm.es5.production.js",
-                    "https://breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.79/index.esm.es5.production.js"
+                    "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.79/vendor.esm.es5.production.js",
+                    "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.79/index.esm.es5.production.js"
                 ]}
     ],
 
@@ -33,14 +38,19 @@
                  "condition": {"name":"domain","options": ["pre-pcweb"]}}] 
         },
         {
-            "rulesId":2 , "dataId":2,"desc":"pcweb  演示环境","conditions":[{
+            "rulesId":3 , "dataId":3,"desc":"pcweb  演示环境","conditions":[{
                 "type": "and",
                  "condition": {"name":"domain","options": ["pre-pcweb"]}}] 
         },
         {
-            "rulesId":3 ,"dataId":3,"desc":"IOT 测试环境","conditions":[{
+            "rulesId":4 ,"dataId":4,"desc":"IOT 测试环境","conditions":[{
                 "type": "and", 
-                "condition": {"name":"domain","options": ["IOT"]}}] 
+                "condition": {"name":"domain","options": ["http://192.168.100.120:8080/*"]}}] 
+        },
+        {
+            "rulesId":5 ,"dataId":5,"desc":"IOT 演示环境","conditions":[{
+                "type": "and", 
+                "condition": {"name":"domain","options": ["http://36.7.159.51:28082/*"]}}] 
         }
     ]
 
