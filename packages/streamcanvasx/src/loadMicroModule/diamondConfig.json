@@ -1,0 +1,48 @@
+{
+
+   
+    "data":[
+        {"id":1,"version":"0.1.78"}, {"id":2,"version":"0.1.78"}, {"id":3,"version":"0.1.78"}
+    ],
+    "resources": [
+        {
+            "version":"0.1.78",
+             "data":[
+                "https://breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.78/index.esm.es5.production.js",
+                "https://breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.78/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.79",
+                 "data":[
+                    "https://breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.78/index.esm.es5.production.js",
+                    "https://breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.78/index.esm.es5.production.js"
+                ]}
+    ],
+
+    "rules":[
+        {
+            "rulesId":1 , "dataId":1,"desc":"pcweb 开发环境","conditions": [{
+                "type": "and", 
+                "condition": {
+                    "name":"domain","options": ["pcweb","http://localhost:3000/*","http://localhost:3003/*"]
+                }}] 
+        },
+        {
+            "rulesId":2 , "dataId":2,"desc":"pcweb  测试环境","conditions":[{
+                "type": "and",
+                 "condition": {"name":"domain","options": ["pre-pcweb"]}}] 
+        },
+        {
+            "rulesId":2 , "dataId":2,"desc":"pcweb  演示环境","conditions":[{
+                "type": "and",
+                 "condition": {"name":"domain","options": ["pre-pcweb"]}}] 
+        },
+        {
+            "rulesId":3 ,"dataId":3,"desc":"IOT 测试环境","conditions":[{
+                "type": "and", 
+                "condition": {"name":"domain","options": ["IOT"]}}] 
+        }
+    ]
+
+
+}
