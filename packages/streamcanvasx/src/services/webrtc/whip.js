@@ -17,6 +17,7 @@ export class WHIPClient {
 		// Store pc object and token
 		this.token = token;
 		this.pc = pc;
+		this.url = url;
 
 		// Listen for state change events
 		pc.onconnectionstatechange = (event) => {
@@ -192,6 +193,7 @@ params = {};
 	}
 
 	async trickle() {
+		return false;
 		// Clear timeout
 		this.iceTrickeTimeout = null;
 
@@ -336,29 +338,10 @@ params = {};
 			return;
 		}
 
-		// Cancel any pending timeout
-		this.iceTrickeTimeout = clearTimeout(this.iceTrickeTimeout);
 
-		// Close peerconnection
 		this.pc.close();
 
 		// Null
 		this.pc = null;
-
-		// If we don't have the resource url
-		if (!this.resourceURL) throw new Error('WHIP resource url not available yet');
-
-		// Request headers
-		const headers = {
-		};
-
-		// If token is set
-		if (this.token) headers['Authorization'] = `Bearer ${this.token}`;
-
-		// Send a delete
-		await fetch(this.resourceURL, {
-			method: 'DELETE',
-			headers,
-		});
 	}
 }

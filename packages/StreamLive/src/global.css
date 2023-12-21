@@ -1,4 +1,4 @@
-@import 'antd/dist/antd.css';
+/* @import 'antd/dist/antd.css'; */
 
 .ant-pro-page-container .ant-page-header {
   background: white;
@@ -15,4 +15,15 @@
 .ant-pro-page-container 
 .ant-pro-page-container-children-content {
   padding-block: 24px;
+}
+
+
+
+:root {
+  --unit: px; /* default unit */
+}
+
+
+body{
+  margin:  0px;
 }

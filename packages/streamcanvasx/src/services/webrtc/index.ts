@@ -3,12 +3,13 @@ import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 
 import { TYPES } from '../../serviceFactories/symbol';
 
-import { WHIPClient } from './whip.js';
+
 import { WHEPClient } from './whep.js';
 
 import { IRTCPlayerConfig } from '../../types/services';
 import VideoService from '../video/videoService';
-import { debug } from 'console';
+import WebRTCStreamAdaptor from './webRTCStreamAdaptor';
+
 
 @injectable()
 class RTCPlayer {
@@ -18,6 +19,7 @@ class RTCPlayer {
         audioInputs: MediaDeviceInfo[];
         audioOutputs?: MediaDeviceInfo[];
     };
+
     audioSource?: string;
     videoSource?: string;
 
@@ -25,10 +27,12 @@ class RTCPlayer {
     config?: IRTCPlayerConfig;
     contentEl?: HTMLDivElement;
     videoService?: VideoService;
+    webRTCStreamAdaptor: WebRTCStreamAdaptor;
     constructor(
       @inject(TYPES.IVideoService) videoService: VideoService,
     ) {
       this.videoService = videoService;
+      this.webRTCStreamAdaptor = null;
     }
     createVideo() {
       this.meidiaEl = document.createElement('video');
@@ -51,7 +55,10 @@ class RTCPlayer {
   };
 
 
-        this.mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+          try {
+            this.mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+          } catch (e) {
+          }
 
 
         this.localPlay();
@@ -131,38 +138,110 @@ class RTCPlayer {
           });
     }
 
-    runwhip(value: {url?: string; token?: string}) {
-        let { url = '', token = '' } = value;
-        let stream = this.mediaStream;
-
-        // Create peerconnection
-        const pc = new RTCPeerConnection();
-
-        // Send all tracks
-        for (const track of stream.getTracks()) {
-            // You could add simulcast too here
-            pc.addTrack(track);
-        }
-
-        // Create whip client
-        const whip = new WHIPClient();
-
-        // const url = 'https://whip.test/whip/endpoint';
-        // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IndoaXAgdGVzdCIsImlhdCI6MTUxNjIzOTAyMn0.jpM01xu_vnSXioxQ3I7Z45bRh5eWRBEY2WJPZ6FerR8';
-
-        // Start publishing
-        whip.publish(pc, url, token);
-    }
-    runwhep() {
-
+    pushWhip(value: {url?: string; token?: string}) {
+      let { url = '' } = value;
+      let stream = this.mediaStream;
+      if (this.webRTCStreamAdaptor === null) {
+        this.webRTCStreamAdaptor = new WebRTCStreamAdaptor({ role: 'sender' });
+        this.webRTCStreamAdaptor.addTrack(stream);
+        this.webRTCStreamAdaptor.publish({ url });
+      } else {
+        //  在不需要重新协商的情况下更换轨道
+        this.webRTCStreamAdaptor.replaceTrack(stream);
+        // this.webRTCStreamAdaptor.publish({ url });
+      }
     }
 
+    runWhep(value: {url?: string; token?: string}) {
+      let { url = '' } = value;
+      let video: HTMLVideoElement = this.videoService.meidiaEl;
+
+      if (this.webRTCStreamAdaptor === null) {
+        this.webRTCStreamAdaptor = new WebRTCStreamAdaptor({ role: 'receiver' });
+      }
+      this.webRTCStreamAdaptor.runWhep({ url });
+
+      this.webRTCStreamAdaptor.peer.ontrack = (event) => {
+        if (event.track.kind == 'video') {
+           video.srcObject = event.streams[0];
+         }
+      };
+    }
+
+    // runwhep(value: {url?: string; token?: string }) {
+    //   let { url = '', token = '' } = value;
+    //   // let video = this.meidiaEl;
+    //   let video: HTMLVideoElement = this.videoService.meidiaEl;
+    //   const pc = new RTCPeerConnection();
+
+    //   // Add recv only transceivers
+    //   pc.addTransceiver('audio');
+    //   pc.addTransceiver('video');
+
+
+    //   pc.ontrack = (event) => {
+    //       if (event.track.kind == 'video') {
+    //           video.srcObject = event.streams[0];
+    //       }
+    //   };
+
+    //   const whep = new WHEPClient();
+    //   whep.view(pc, url, token);
+    // }
+
+    removeAllTracks(): void {
+      // getSenders方法返回一个RTCRtpSender[]，其中包含了RTCPeerConnection目前正在发送的所有轨道的发送器对象。
+      const senders = this.webRTCStreamAdaptor.peer.getSenders();
+
+
+      senders.forEach((sender) => {
+        this.webRTCStreamAdaptor.peer.removeTrack(sender);
+
+        sender.track?.stop();
+      });
+    }
+
+    closeMediaStream() {
+      if (this.mediaStream) {
+        this.mediaStream.getTracks().forEach(track => {
+          track.stop();
+        });
+      }
+    }
+
+    close() {
+      this.stopStream();
+      this.removeAllTracks();
+      this.webRTCStreamAdaptor.close();
+    }
+
+   createBlackVideoStream() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 640;
+      canvas.height = 480;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      return canvas.captureStream();
+    }
+    pauseBlackStream() {
+      this.stopStream();
+      const blackStream = this.createBlackVideoStream();
+
+      this.webRTCStreamAdaptor.replaceTrack(blackStream);
+    }
     stopStream() {
       if (this.mediaStream) {
         this.mediaStream.getTracks().forEach(track => {
           track.stop();
         });
       }
+    }
+
+
+    destroy() {
+
     }
 }
 

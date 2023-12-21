@@ -5,7 +5,11 @@ import { defineStoreConfig } from '@ice/plugin-store/types';
 import { defineRequestConfig } from '@ice/plugin-request/types';
 
 // App config, see https://v3.ice.work/docs/guide/basic/app
-export default defineAppConfig(() => ({}));
+export default defineAppConfig(() => ({
+  router: {
+    basename: '/StreamCanvasX',
+  },
+}));
 
 export const authConfig = defineAuthConfig(async (appData) => {
   const { userInfo = {} } = appData;

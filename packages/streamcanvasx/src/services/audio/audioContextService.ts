@@ -1,6 +1,6 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../player';
-import { debug } from 'console';
+// import { debug } from 'console';
 
 
 const render_times = 1000 / 15;
@@ -57,7 +57,7 @@ class AudioProcessingService {
 
          this.render();
 
-         this.canvasWorker = new Worker(new URL('./worker.js', import.meta.url));
+        //  this.canvasWorker = new Worker(new URL('./worker.js', import.meta.url));
     }
 
     clearCanvas() {
@@ -422,7 +422,7 @@ class AudioProcessingService {
 
         this.context.audioSourceNode.connect(this.context.gainNode);
         this.context.gainNode.connect(this.context.analyserNode);
-        this.context.gainNode.gain.value = 3;
+        this.context.gainNode.gain.value = 1;
         this.context.analyserNode.connect(this.context.audioContext.destination);
       }
 
@@ -435,7 +435,11 @@ class AudioProcessingService {
           }
         } else {
           if (parm === true) {
+            try {
             this.context.analyserNode!.disconnect(this.context.audioContext!.destination);
+            } catch (e) {
+
+            }
           } else {
             this.context.analyserNode!.connect(this.context.audioContext!.destination);
           }
@@ -451,6 +455,14 @@ class AudioProcessingService {
        this.bufferData = new Float32Array(this.bufferDataLength);
 
        this.getAuDioInfo();
+      }
+
+      setGain(v: number = 1) {
+        try {
+        this.context.gainNode.gain.value = v;
+        } catch (e) {
+          console.error('调整音频增益失败');
+        }
       }
 
       getAuDioInfo() {

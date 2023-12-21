@@ -15,6 +15,10 @@ export default function Layout() {
     return <Outlet />;
   }
 
+  if (['/WebRTCChatHub'].includes(location.pathname)) {
+    return <Outlet />;
+  }
+
   return (
     <ProLayout
       menu={{ defaultOpenAll: true }}

@@ -11,10 +11,9 @@ const LiveVideo = (props) => {
     const playerRef = useRef();
 
     const runplayer = () => {
-      let { url, key_v = '', enable_crypto = false, fileData, showAudio = false } = props;
+      let { url, key_v = '', enable_crypto = false, playMethod, fileData, showAudio = false } = props;
       // fetchflv.fetchStream(url);
-
-     let hasVideo = false,
+      let hasVideo = false,
       hasAudio = true;
 
 
@@ -25,6 +24,9 @@ const LiveVideo = (props) => {
         hasAudio,
         contentEl: containerRef.current!,
         streamType: 'AAC',
+        audioPlayback: {
+          method: playMethod, // 'MSE' 或 'AudioContext'
+        },
         fileData,
         crypto: enable_crypto === '1' ? {
           key: key_v,
@@ -32,7 +34,7 @@ const LiveVideo = (props) => {
           wasmModulePath: '',
           useWasm: true,
         } : null,
-       };
+      };
 
        config = Object.assign(config, auduo1);
 
@@ -40,7 +42,6 @@ const LiveVideo = (props) => {
 
 
       const player = createPlayerServiceInstance(config);
-
 
       player.createBetaPlayer();
     };

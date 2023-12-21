@@ -10,4 +10,6 @@ export default defineConfig(() => ({
   minify,
   plugins: [request(), store(), auth()],
   compileDependencies: false,
+  publicPath: 'https://breakhappy.oss-cn-beijing.aliyuncs.com/streamLive/build/',
+
 }));

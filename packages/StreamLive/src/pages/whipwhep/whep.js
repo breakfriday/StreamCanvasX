@@ -234,6 +234,7 @@ params = {};
 	}
 
 	async trickle() {
+		return false;
 		// Clear timeout
 		this.iceTrickeTimeout = null;
 
