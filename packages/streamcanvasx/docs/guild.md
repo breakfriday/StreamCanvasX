@@ -1,7 +1,7 @@
 ---
-title: 播放
-sidebar_label: 播放
-sidebar_position: 0
+title: 新手指南
+sidebar_label: Guild
+sidebar_position: 2
 ---
 
 
@@ -9,4 +9,3 @@ sidebar_position: 0
 ##  WebCodecs 解码播放
 ### 本地文件 webCodecs 解码播放
 ### flv流 解码播放
-

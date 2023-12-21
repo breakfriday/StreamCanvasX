@@ -101,9 +101,9 @@ class WavePlayer {
 
       this.canvas_el.width = width;
       this.canvas_el.height = height;
-    if (!this.extend.hasShowId) {
+    if (this.extend.showid) {
       this.showid();
-      this.extend.hasShowId = true;
+      this.extend.showid = false;
     }
       this.setidSize();
   }
@@ -114,14 +114,17 @@ class WavePlayer {
   showid() {
     const { height } = this.canvas_el;
     if (this.contentEl.hasChildNodes() && this.contentEl.firstChild.nodeName === 'CANVAS' && !this.contentEl.firstChild.nextSibling) {
+      const { style } = this.extend;
       if (this.extend.showAllid) {
         for (let i = 0; i < this.config.routes; i++) {
           let div = document.createElement('div');
           let ids = document.createTextNode(`设备-${this.extend.terminalid[i]}通道-${this.extend.id[i]}`);
           div.appendChild(ids);
-          div.style.position = 'absolute';
+          // div.style = style;
+          for (const prop in style) {
+            div.style[prop] = style[prop];
+          }
           div.style.top = `${i / this.config.routes * height + this.contentEl.offsetTop}px`;
-          div.style.color = '#ffffff';
           this.contentEl.appendChild(div);
         }
       } else {
@@ -129,9 +132,10 @@ class WavePlayer {
           let div = document.createElement('div');
           let ids = document.createTextNode(`通道-${this.extend.id[i]}`);
           div.appendChild(ids);
-          div.style.position = 'absolute';
+          for (const prop in style) {
+            div.style[prop] = style[prop];
+          }
           div.style.top = `${i / this.config.routes * height + this.contentEl.offsetTop}px`;
-          div.style.color = '#ffffff';
           this.contentEl.appendChild(div);
         }
       }
@@ -142,13 +146,13 @@ class WavePlayer {
   setidSize() {
     let count = 0;
     const { height } = this.canvas_el;
-    let node = this.contentEl.firstChild;
+    let node = this.contentEl.firstElementChild as HTMLElement;
     while (node && node.nodeName !== 'DIV') {
-      node = node.nextSibling;
+      node = node.nextElementSibling as HTMLElement;
     }
     while (node?.nodeName === 'DIV') {
-      node.setAttribute('style', `position: absolute; color: rgb(255, 255, 255);top:${count / this.config.routes * height}px;`);
-      node = node.nextSibling;
+      node.style.top = `${count / this.config.routes * height}px`;
+      node = node.nextElementSibling as HTMLElement;
       count++;
     }
   }

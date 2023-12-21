@@ -1,7 +1,12 @@
+import pkg from './package.json' assert { type: 'json' };
+
 import { defineConfig } from '@ice/pkg';
 
 // https://pkg.ice.work/reference/config/
 export default defineConfig({
+  define: {
+    __VERSION__: pkg.version,
+  },
   plugins: [
     [
       '@ice/pkg-plugin-docusaurus', {
@@ -43,7 +48,11 @@ export default defineConfig({
       },
     ],
   ],
+  transform: {
+    formats: ['es2017', 'esm'],
+  },
   bundle: {
-    formats: ['esm', 'es2017'],
+    formats: ['esm', 'umd'],
+    polyfill: false,
   },
 });

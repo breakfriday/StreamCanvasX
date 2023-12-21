@@ -93,6 +93,7 @@ class AudioWave {
     let scriptNode = audioContext.createScriptProcessor(1024, 0, 1);
     scriptNode.onaudioprocess = (audioProcessingEvent) => {
       const { outputBuffer } = audioProcessingEvent;
+      let p=outputBufferp
       const bufferItem = bufferList[0];
       bufferList.shift();
 

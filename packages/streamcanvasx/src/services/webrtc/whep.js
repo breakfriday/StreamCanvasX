@@ -22,13 +22,18 @@ export class WHEPClient extends EventTarget {
 		pc.onconnectionstatechange = (event) => {
 			switch (pc.connectionState) {
 				case 'connected':
+					// alert(1);
 					// The connection has become fully connected
 					break;
 				case 'disconnected':
+					// alert(2);
 				case 'failed':
+					this.pc.close();
+					// alert(3);
 					// One or more transports has terminated unexpectedly or in an error
 					break;
 				case 'closed':
+					// alert(4);
 					// The connection has been closed
 					break;
 			}
@@ -61,12 +66,16 @@ export class WHEPClient extends EventTarget {
 		// If token is set
 		if (token) headers['Authorization'] = `Bearer ${token}`;
 
+		debugger;
+
 		// Do the post request to the WHEP endpoint with the SDP offer
 		const fetched = await fetch(url, {
 			method: 'POST',
 			body: offer.sdp,
 			headers,
 		});
+
+		debugger;
 
 		if (!fetched.ok) throw new Error(`Request rejected with status ${fetched.status}`);
 		// if (!fetched.headers.get('location')) throw new Error('Response missing location header');
@@ -234,6 +243,7 @@ params = {};
 	}
 
 	async trickle() {
+		return false;
 		// Clear timeout
 		this.iceTrickeTimeout = null;
 
@@ -409,6 +419,7 @@ params = {};
 
 		// Cancel any pending timeout
 		this.iceTrickeTimeout = clearTimeout(this.iceTrickeTimeout);
+
 
 		// Close peerconnection
 		this.pc.close();

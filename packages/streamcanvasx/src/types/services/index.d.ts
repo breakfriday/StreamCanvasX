@@ -165,6 +165,7 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   };
   fileData?: File;
   isLive?: boolean;
+  splitAVBuffers?: boolean;
 
 }
 
@@ -193,10 +194,11 @@ interface IWavePlayerConfig{
 }
 
 interface IWavePlayerExtend{
-  hasShowId?: boolean;
+  showid?: boolean;
   showAllid?: boolean;
   terminalid?: Array<string | number>;
   id?: Array<number>;
+  style?: CSSStyleDeclaration;
 }
 
 export type IplayerConfig = Partial<IplayerConfig>;

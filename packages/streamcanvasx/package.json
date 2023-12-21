@@ -1,6 +1,6 @@
 {
   "name": "streamcanvasx",
-  "version": "0.0.10-beta",
+  "version": "0.1.79",
   "description": "组件功能描述",
   "files": [
     "esm",
@@ -64,7 +64,7 @@
     "reflect-metadata": "^0.1.13",
     "regl": "^2.1.0",
     "sm4js": "^0.0.6",
-    "streamcanvasx-core": "0.0.8",
+    "streamcanvasx-core": "0.0.22",
     "webm-muxer": "^3.1.1",
     "webm-writer": "^1.0.0",
     "worker-loader": "^3.0.8"
