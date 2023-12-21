@@ -376,6 +376,7 @@ class PlayerService extends Emitter {
 
             if (hasVideo === false && this.config.showAudio != true) {
                 this.config.showAudio = true;
+                this.meidiaEl = null;
                 this.audioProcessingService.updateBufferData();
                 this.audioProcessingService.render();
             }
