@@ -194,10 +194,11 @@ interface IWavePlayerConfig{
 }
 
 interface IWavePlayerExtend{
-  hasShowId?: boolean;
+  showid?: boolean;
   showAllid?: boolean;
   terminalid?: Array<string | number>;
   id?: Array<number>;
+  style?: CSSStyleDeclaration;
 }
 
 export type IplayerConfig = Partial<IplayerConfig>;

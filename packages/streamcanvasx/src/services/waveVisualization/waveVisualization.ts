@@ -41,10 +41,16 @@ class WaveVisualization {
       arrayLength: 8000 * 4,
     };
     const defaultextend = {
-      hasShowid: false,
+      showid: true,
       showAllid: false,
       terminalid: new Array(defaultConfig.routes),
       id: new Array(defaultConfig.routes),
+      style: {
+        position: 'absolute',
+        color: 'rgb(255, 255, 255)',
+        width: '100%',
+        borderBlockStart: '1px solid #31352E',
+      },
     };
     // let { routes, contentEl, isMocking = false, renderType = 1, duration = 4, updateArrayLength = 160, width = 3000 * 1, height = 50 * 32, updateArrayTimes = 20, renderTimes = 20, arrayLength = duration * 1000 / updateArrayTimes } = defaultConfig;
     this.config = Object.assign(defaultConfig, config);
@@ -55,7 +61,11 @@ class WaveVisualization {
     // this.extend = extend;
     this.canvas_el = document.createElement('canvas');
     this.contentEl = this.config.contentEl;
-    this.contentEl?.append(this.canvas_el);
+    const height = this.contentEl.clientHeight;
+    const width = this.contentEl.clientWidth;
+    this.canvas_el.height = height;
+    this.canvas_el.width = width;
+    this.contentEl.append(this.canvas_el);
     // this.WavePlayerService.init(Object.assign(config, { canvas_el: this.canvas_el }));
     this.WavePlayerService.init(this);
   }
