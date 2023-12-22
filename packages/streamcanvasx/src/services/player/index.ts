@@ -160,6 +160,17 @@ class PlayerService extends Emitter {
             splitAVBuffers: true,
         };
 
+        function removeNullAndUndefined(obj: any): any {
+            let newObj = { ...obj }; // Shallow copy of the object to avoid modifying the original
+            Object.keys(newObj).forEach(key => {
+                if (newObj[key] === null || newObj[key] === undefined) {
+                    delete newObj[key];
+                }
+            });
+            return newObj;
+        }
+        config = removeNullAndUndefined(config);
+
         this.config = Object.assign(default_config, config);
         let { model, url, contentEl, useOffScreen, fileData } = this.config;
 
@@ -359,7 +370,16 @@ class PlayerService extends Emitter {
 
             this.mediaInfo = parm;
 
-            // debugger
+
+            let { hasVideo } = parm;
+            let { hasAudio } = parm;
+
+            if (hasVideo === false && this.config.showAudio != true) {
+                this.config.showAudio = true;
+                this.meidiaEl = null;
+                this.audioProcessingService.updateBufferData();
+                this.audioProcessingService.render();
+            }
 
 
             // this.metadata = {
