@@ -30,6 +30,9 @@ class Scheduler {
             }
         }
     }
+    getQueue() {
+        return this.taskQueue;
+    }
 
     clearQueue() {
         this.taskQueue = []; // 清空队列

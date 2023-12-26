@@ -618,6 +618,7 @@ class PlayerService extends Emitter {
             paused: video.paused,
             error_connect_times: this.error_connect_times,
             url: this.config.url,
+            taskQueue: this.scheduler.getQueue(),
         };
 
         console.info('getStatus', data);
