@@ -501,7 +501,7 @@ class PlayerService extends Emitter {
         const timeoutDuration = 1000; // 检查间隔（毫秒）
         const threshold = 15000; // 阈值（毫秒）
         let $this = this;
-
+        let { url='' } = this.config;
 
         function checkVideoState() {
             if (video === null) {
@@ -520,7 +520,7 @@ class PlayerService extends Emitter {
                 //    console.log(`reset:${video.readyState}`);
                 //    console.log('----readyState reset-----------');
                 //    $this.reload2(); // 触发回调函数
-                $this.addReloadTask({ arr_msg: [`readyState 异常 :${video.readyState}`] });
+                $this.addReloadTask({ arr_msg: [`readyState 异常 :${video.readyState} ${url}`] });
                     setTimeout(checkVideoState, timeoutDuration); // 继续检查
                 } else {
                     setTimeout(checkVideoState, timeoutDuration); // 继续检查
@@ -532,6 +532,31 @@ class PlayerService extends Emitter {
         }
 
         setTimeout(checkVideoState, 5000);
+
+
+        
+        if (this.meidiaEl) {
+           this.meidiaEl.addEventListener('error', (e) => {
+                const { error } = (e.target as HTMLVideoElement);
+                switch (error.code) {
+                  case 1:
+                    this.addReloadTask({ arr_msg: [`中断下载 ${url}`] });
+                    break;
+                  case 2:
+                    this.addReloadTask({ arr_msg: [`网络异常中断 ${url}`] });
+                    break;
+                  case 3:
+                    this.addReloadTask({ arr_msg: [`解码失败 ${url}`] });
+                    break;
+                  case 4:
+                  //  console.log('视频格式不支持。');
+                    break;
+                  default:
+                    this.addReloadTask({ arr_msg: [`发生了其他错误 ${url}`] });
+                    break;
+                }
+              });
+        }
       }
 
     createBetaPlayer2() {
