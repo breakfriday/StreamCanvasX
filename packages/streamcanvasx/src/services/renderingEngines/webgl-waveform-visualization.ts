@@ -224,15 +224,38 @@ class CanvasWaveService {
         return randomPCMData;
       }
 
+      render2() {
+        let renderPerSecond = 30;
+        let regl = this.regGl;
+        let timeId: any = '';
+        this.canvas_el.style.backgroundColor = 'black';
+        const AnimationFrame = () => {
+          for (let i = 0; i < this.totalWaveforms; i++) {
+            let glbuffer = this.glBuffer[i].length;
+
+            let count = this.bufferData[i].length * 2;
+
+            this.drawCommand({ count: count, buffer: this.glBuffer[i] });
+          }
+          timeId = setTimeout(AnimationFrame.bind(this), renderPerSecond);
+        };
+
+        AnimationFrame();
+      }
 
       render() {
+             // regl.clear({
+          //   color: [0, 0, 0, 1],
+          //   depth: 1,
+          // });
         // this.dataArray = this.generateSineWave();
+        this.canvas_el.style.backgroundColor = 'black';
         let regl = this.regGl;
         regl.frame(() => {
-          regl.clear({
-            color: [0, 0, 0, 1],
-            depth: 1,
-          });
+          // regl.clear({
+          //   color: [0, 0, 0, 1],
+          //   depth: 1,
+          // });
 
 
           // console.log('------');
@@ -277,7 +300,8 @@ class CanvasWaveService {
           return { data: bufferData, lenght: dataArray.length };
         };
 
-        for (let i = 0; i < data.length; i++) {
+        let count = this.bufferData.length;
+        for (let i = 0; i < count; i++) {
           shiftAppendTypedArray(this.bufferData[i], data[i]);
         }
 
