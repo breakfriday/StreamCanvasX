@@ -92,6 +92,10 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
       setInfo({ speed });
     });
 
+    player.on('mediaInfo', (data) => {
+      debugger;
+    });
+
     player.on('errorInfo', (data) => {
       console.log('--------------------');
       console.info(data);
