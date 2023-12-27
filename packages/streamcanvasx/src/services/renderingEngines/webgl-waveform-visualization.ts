@@ -4,6 +4,7 @@ import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import createREGL from 'regl';
 // import BaseRenderEnging from './baseEngine';
 import WavePlayerService from '../audio/wavePlayer';
+import { includes } from 'lodash';
 
 
 @injectable()
@@ -43,115 +44,116 @@ class CanvasWaveService {
         this.initData();
     }
 
+    // initgl() {
+    //      this.regGl = createREGL({ canvas: this.canvas_el });
+    //      let regl = this.regGl;
+
+
+    //      this.drawCommand = this.regGl({
+    //       frag: `
+    //       precision highp float;
+    //       uniform vec4 color;
+    //       void main() {
+    //         gl_FragColor = vec4(0.47, 1.0, 0.0, 1.0);
+    //       }`,
+
+    //       vert: `
+    //       precision highp float;
+    //       attribute vec2 position;
+    //       uniform float yOffset; // 波形的垂直偏移
+    //       uniform float yScale;  // 波形的垂直缩放
+    //       void main() {
+    //         gl_PointSize = 10.0;
+    //         gl_Position = vec4(position, 0, 1);
+    //       }`,
+    //       attributes: {
+    //         // position: this.glBuffer,
+    //         position: regl.prop('buffer'),
+    //       },
+
+    //       count: this.bufferLength * 2,
+    //       depth: { enable: true },
+    //       primitive: 'line strip',
+
+    //      });
+
+    //      if (!this.glBuffer) {
+    //       this.glBuffer = [];
+    //       for (let i = 0; i < this.totalWaveforms; i++) {
+    //         this.glBuffer[i] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: this.bufferLength * 4 });
+    //       }
+    //     }
+    //     // if (!this.xglBuffer) {
+    //     //   this.xglBuffer = this.regGl.buffer({ type: 'float', usage: 'static', length: this.bufferLength * 2 });
+    //     // }
+    // }
+
     initgl() {
-         this.regGl = createREGL({ canvas: this.canvas_el });
-         let regl = this.regGl;
+      this.regGl = createREGL({ canvas: this.canvas_el });
+      let regl = this.regGl;
+      let indices = Array.from({ length: this.bufferLength }, (_, k) => k); // 创建索引数组
+      let vertexIndexBuffer = regl.buffer(indices);
 
+      // 着色器程序
+      this.drawCommand = regl({
+        frag: `
+        precision highp float;
+        void main() {
+          gl_FragColor = vec4(0.47, 1.0, 0.0, 1.0);
+        }`,
 
-         this.drawCommand = this.regGl({
-          frag: `
-          precision highp float;
-          uniform vec4 color;
-          void main() {
-            gl_FragColor = vec4(0.47, 1.0, 0.0, 1.0);
-          }`,
+        vert: `
+        precision highp float;
+        attribute float pcmData; // 音频数据作为属性
+        attribute float vertexIndex; // 顶点索引
+        uniform float heightScale;  // 波形的垂直缩放
+        uniform float verticalOffset; // 波形的垂直偏移
+        uniform float count; // 传入顶点总数
+               
+        void main() {
+      
+          float scaleX = 2.0 / (count - 1.0);
+          float x = vertexIndex * scaleX - 1.0; // 计算 x 坐标
+          float y = pcmData * heightScale + verticalOffset; // 计算Y坐标
 
-          vert: `
-          precision highp float;
-          attribute vec2 position;
-          uniform float yOffset; // 波形的垂直偏移
-          uniform float yScale;  // 波形的垂直缩放
-          void main() {
-            gl_PointSize = 10.0;
-            gl_Position = vec4(position, 0, 1);
-          }`,
-          attributes: {
-            // position: this.glBuffer,
-            position: regl.prop('buffer'),
-          },
+          gl_Position = vec4(x, y, 0.0, 1.0);
+        }`,
 
-          count: this.bufferLength * 2,
-          depth: { enable: true },
-          primitive: 'line strip',
+        uniforms: {
+          heightScale: regl.prop('heightScale'),
+          verticalOffset: regl.prop('verticalOffset'),
+          count: regl.prop('count'),
+      },
+        attributes: {
+          pcmData: regl.prop('buffer'),
+          vertexIndex: vertexIndexBuffer, // 顶点索引
+        },
 
-         });
+        count: regl.prop('count'),
+        depth: { enable: true },
+        primitive: 'line strip',
+      });
 
-         if (!this.glBuffer) {
-          this.glBuffer = [];
-          for (let i = 0; i < this.totalWaveforms; i++) {
-            this.glBuffer[i] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: this.bufferLength * 4 });
-          }
+      // 创建存储音频数据的 GLBuffer
+      if (!this.glBuffer) {
+        this.glBuffer = [];
+        for (let i = 0; i < this.totalWaveforms; i++) {
+          this.glBuffer[i] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: this.bufferLength });
         }
-        // if (!this.xglBuffer) {
-        //   this.xglBuffer = this.regGl.buffer({ type: 'float', usage: 'static', length: this.bufferLength * 2 });
-        // }
+      }
     }
 
 
       updateVertBuffer() {
-        const { totalWaveforms } = this;
-        const heightPerWaveform = 2 / (totalWaveforms); // 分配给每一路的高度空间
-        const heightScale = heightPerWaveform * 0.3; // 实际波形的高度缩放，留出空间以避免相互重叠,最大不能超过0.5，否则放大会导致波形重叠
-        const verticalOffsetIncrement = heightPerWaveform;
-        let verticalOffset = 1 - verticalOffsetIncrement / 2; // 从最顶部的波形开始计算垂直偏移
+        const heightPerWaveform = 2 / this.totalWaveforms; // 分配给每一路的高度空间
+        const heightScale = heightPerWaveform * 0.3; // 实际波形的高度缩放
+        let verticalOffset = 1 - heightPerWaveform / 2; // 从最顶部的波形开始计算垂直偏移
 
         for (let i = 0; i < this.totalWaveforms; i++) {
-          // let pcmData = this.bufferData[i].subarray(this.bufferData[i].length - this.updateLength);
           let pcmData = this.bufferData[i];
-
-          let data = this.convertPCMToVertices(pcmData, heightScale, verticalOffset);
-          // this.vertBuffer[i].copyWithin(0, 2 * this.updateLength);
-          // this.vertBuffer[i].set(data, 2 * (this.bufferData[i].length - this.updateLength));
-          // this.glBuffer[i](this.vertBuffer[i]);
-          this.glBuffer[i](data);
-          verticalOffset -= verticalOffsetIncrement; // 更新偏移量，为下一路波形准备
+          this.glBuffer[i](pcmData); // 直接将音频数据存储到 GLBuffer
+          verticalOffset -= heightPerWaveform; // 更新偏移量
         }
-      }
-      // initVertBuffer() {
-      //   const { totalWaveforms } = this;
-      //   const heightPerWaveform = 2 / (totalWaveforms); // 分配给每一路的高度空间
-      //   const heightScale = heightPerWaveform * 0.3; // 实际波形的高度缩放，留出空间以避免相互重叠,最大不能超过0.5，否则放大会导致波形重叠
-      //   const verticalOffsetIncrement = heightPerWaveform;
-      //   let verticalOffset = 1 - verticalOffsetIncrement / 2; // 从最顶部的波形开始计算垂直偏移
-      //   this.verticalOffsetArray = [];
-      //   for (let i = 0; i < this.totalWaveforms; i++) {
-      //     let pcmData = this.bufferData[i];
-      //     this.verticalOffsetArray.push(verticalOffset);
-      //    // let data = this.translatePointe(pcmData, heightScale, verticalOffset);
-      //     let data = this.convertPCMToVertices(pcmData, heightScale, verticalOffset);
-      //     this.vertBuffer[i] = data;
-      //     this.glBuffer[i](this.vertBuffer[i]);
-      //     verticalOffset -= verticalOffsetIncrement; // 更新偏移量，为下一路波形准备
-      //   }
-      // }
-      // initXVertBuffer() {
-      //   const array = new Float32Array(this.bufferLength * 2);
-      //   for (let index = 0; index < this.bufferLength; index++) {
-      //     const x = (index / (this.bufferLength - 1)) * 2 - 1;
-      //     array[2 * index] = x;
-      //     array[2 * index + 1] = x;
-      //   }
-      //   this.xglBuffer(array);
-      // }
-
-      // 将数据点转换为顶点数据
-      translatePointe(data: Float32Array, heightScale: number, verticalOffset: number) {
-        const translatedPoints = new Float32Array(data.length * 2); // 创建一个新的Float32Array，长度是原数组的两倍，因为每个点需要两个坐标值
-
-        // debugger;
-
-        for (let index = 0; index < data.length; index++) {
-          // 归一化X坐标到[-1, 1]
-          const x = (index / (data.length - 1)) * 2 - 1;
-          // 应用高度缩放和垂直偏移
-          const y = (data[index] * heightScale) + verticalOffset;
-
-          translatedPoints[index * 2] = x; // 储存x坐标
-          translatedPoints[index * 2 + 1] = y; // 储存y坐标
-        }
-
-
-        return translatedPoints;
       }
 
 
@@ -177,56 +179,7 @@ class CanvasWaveService {
       }
 
 
-    hexArrayToFloat32Array(hexArray: Int16Array) {
-     // 创建一个足够大的buffer来存放16位的PCM数据
-     const buffer = new ArrayBuffer(hexArray.length * 2);
-      // 使用一个DataView来操作ArrayBuffer
-      const view = new DataView(buffer);
-
-      // 16进制 转16位10进制整数
-      hexArray.forEach((hex, i) => {
-        const intValue = parseInt(hex, 16);
-        // 将16位整数（假定为有符号）写入DataView
-        view.setInt16(i * 2, intValue, true);
-      });
-
-      // 现在我们有了一个包含16位PCM数据的ArrayBuffer，创建一个16位整数数组来读取它
-      const int16Array = new Int16Array(buffer);
-
-      // 创建一个Float32Array来存放-1到1之间的浮点数
-      const float32Array = new Float32Array(int16Array.length);
-
-      // 归1化，转换16位整数范围到-1到1的浮点数
-      for (let i = 0; i < int16Array.length; i++) {
-        float32Array[i] = int16Array[i] / 32768;
-      }
-
-      return float32Array;
-      }
-      // 生成pcm mock 数据
-      generateSineWave(sampleRate = 4000, duration = 1) {
-        function generateRandomPCMData(duration: number, sampleRate: number) {
-          const numSamples = sampleRate * duration;
-          const buffer = new Float32Array(numSamples);
-
-          for (let i = 0; i < numSamples; i++) {
-              // Math.random()  between -1 and 1
-              let value = Math.random() * 2 - 1;
-              buffer[i] = Math.sign(value) * Math.pow(Math.abs(value), 8);
-              // buffer[i] = Math.sign(value) * Math.pow(Math.abs(value), 8);
-          }
-
-          return buffer;
-      }
-        // 生成440Hz音频的PCM数据，持续1秒，样本率为44100Hz
-        const randomPCMData = generateRandomPCMData(duration, sampleRate);
-
-        return randomPCMData;
-      }
-
-
       render() {
-        // this.dataArray = this.generateSineWave();
         let regl = this.regGl;
         regl.frame(() => {
           regl.clear({
@@ -234,16 +187,18 @@ class CanvasWaveService {
             depth: 1,
           });
 
-
-          // console.log('------');
-
+          const heightPerWaveform = 2 / this.totalWaveforms;
+          let verticalOffset = 1 - heightPerWaveform / 2;
 
           for (let i = 0; i < this.totalWaveforms; i++) {
-            let glbuffer = this.glBuffer[i].length;
+            this.drawCommand({
+              buffer: this.glBuffer[i],
+              count: this.bufferData[i].length,
+              heightScale: heightPerWaveform * 0.3,
+              verticalOffset: verticalOffset,
+            });
 
-            let count = this.bufferData[i].length * 2;
-
-            this.drawCommand({ count: count, buffer: this.glBuffer[i] });
+            verticalOffset -= heightPerWaveform;
           }
         });
       }
