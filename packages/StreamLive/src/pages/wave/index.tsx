@@ -43,8 +43,8 @@ const Wave = () => {
 
        let data32 = createMockData32();
 
-      //  waveVisualization?.WavePlayerService.update(data32);
-      waveVisualization?.WavePlayerService.triggerUpdate(data32);
+        waveVisualization?.WavePlayerService.update(data32);
+      // waveVisualization?.WavePlayerService.triggerUpdate(data32);
       // console.info(data32);
     };
 
@@ -65,7 +65,8 @@ const Wave = () => {
 };
   useEffect(() => {
     const routes = 32;
-    let waveVisualization = createWaveVisualizationInstance({ routes: routes, contentEl: containerRef.current, renderType: 3, isMocking: false, duration: 22, arrayLength: 8000 * 3 }, {});
+    let length = Math.pow(2, 16);
+    let waveVisualization = createWaveVisualizationInstance({ routes: routes, contentEl: containerRef.current, renderType: 3, isMocking: false, arrayLength: length }, {});
     waveVisualizationRef.current = waveVisualization;
   }, []);
 
@@ -181,29 +182,7 @@ const Wave = () => {
       }}
       >update by WebSocket</Button>
 
-      <Button onClick={() => {
-        let waveVisualization = waveVisualizationRef.current;
-        let { routes } = waveVisualization.config;
 
-        setInterval(() => {
-          let createMockData32 = () => {
-            let mockdata_item = waveVisualization?.WavePlayerService.waveGl.generateSineWave(160, 1);
-            let mockdata = [];
-            for (let i = 0; i < routes; i++) {
-              mockdata[i] = mockdata_item;
-            }
-            return mockdata;
-          };
-
-          let mockdata = createMockData32();
-          waveVisualization?.WavePlayerService.update(mockdata);
-        }, 40);
-        if (waveVisualization?.renderType === 3) {
-          waveVisualization?.WavePlayerService.waveGl.render();
-        }
-      }}
-
-      > updata by Mock</Button>
       <Button onClick={() => {
         let waveVisualization = waveVisualizationRef.current;
         waveVisualization?.destroy();

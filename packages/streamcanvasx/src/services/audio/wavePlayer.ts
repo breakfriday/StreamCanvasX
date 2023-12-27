@@ -44,7 +44,7 @@ class WavePlayer {
     this.event();
     this.scheduler = new Scheduler(1);
 
-    this.throttledUpdate = _.throttle(this.update.bind(this), 50);
+    this.throttledUpdate = _.throttle(this.update.bind(this), 1);
 
 
     switch (renderType) {
