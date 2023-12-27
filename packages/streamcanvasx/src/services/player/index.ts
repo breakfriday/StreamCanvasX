@@ -374,6 +374,8 @@ class PlayerService extends Emitter {
             let { hasVideo } = parm;
             let { hasAudio } = parm;
 
+            this.emit('mediaInfo', { hasVideo, hasAudio });
+
             if (hasVideo === false && this.config.showAudio != true) {
                 this.config.showAudio = true;
                 this.meidiaEl = null;
