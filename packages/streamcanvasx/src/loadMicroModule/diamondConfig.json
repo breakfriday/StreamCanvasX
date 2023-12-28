@@ -3,7 +3,7 @@
    
     "data":[
         {"id":0,"version":"0.1.79","desc":"default 環境 ，沒有規則命中"},
-        {"id":1,"version":"0.1.82","desc":"pcweb 开发环境"},
+        {"id":1,"version":"0.1.83","desc":"pcweb 开发环境"},
         {"id":2,"version":"0.1.82","desc":"pcweb  测试环境"},
         {"id":3,"version":"0.1.79","desc":"pcweb  演示环境"},
         {"id":4,"version":"0.1.79","desc":"IOT 测试环境"},
@@ -39,6 +39,12 @@
                 "data":[
                         "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.82/vendor.esm.es5.production.js",
                         "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.82/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.83",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.83/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.83/index.esm.es5.production.js"
             ]}
     ],
 

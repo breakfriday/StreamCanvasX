@@ -136,7 +136,7 @@ class PlayerService extends Emitter {
             vbps: 0, // 当前视频码率，单位bit
             ts: 0, // 当前视频帧pts，单位毫秒
         };
-        window.streamCanvasX = window.__VERSION__ || 'DEV_0.1.82';
+        window.streamCanvasX = window.__VERSION__ || 'DEV_0.1.83';
     }
 
     init(config?: IplayerConfig) {
@@ -503,7 +503,7 @@ class PlayerService extends Emitter {
         const timeoutDuration = 1000; // 检查间隔（毫秒）
         const threshold = 15000; // 阈值（毫秒）
         let $this = this;
-        let { url = '' } = this.config;
+        let { url='' } = this.config;
 
         function checkVideoState() {
             if (video === null) {
@@ -536,6 +536,7 @@ class PlayerService extends Emitter {
         setTimeout(checkVideoState, 5000);
 
 
+        
         if (this.meidiaEl) {
            this.meidiaEl.addEventListener('error', (e) => {
                 const { error } = (e.target as HTMLVideoElement);
@@ -612,20 +613,6 @@ class PlayerService extends Emitter {
         this.httpFlvStreamService.fetchStream(url);
     }
 
-    getStatus() {
-        let video = this.meidiaEl;
-        let data = {
-            el: video,
-            readay: video.readyState,
-            paused: video.paused,
-            error_connect_times: this.error_connect_times,
-            url: this.config.url,
-            taskQueue: this.scheduler.getQueue(),
-        };
-
-        console.info('getStatus', data);
-        return data;
-    }
 
     throttle(fn: Function, delay: number) {
         let _start = Date.now();
