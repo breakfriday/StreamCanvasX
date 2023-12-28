@@ -6,20 +6,77 @@ import styles from './index.module.css';
 
 type ICreateWaveVisualizationInstance = ReturnType<typeof createWaveVisualizationInstance>;
 
+
 const Wave = () => {
   // debugger;
   const containerRef = useRef();
   const waveVisualizationRef = useRef<ICreateWaveVisualizationInstance | null>(null);
   const [kbps, setKbps] = useState<string>();
 
+  const audioProcess1 = (stream: MediaStream) => {
+    let audioContext = new AudioContext();
+    let source = audioContext.createMediaStreamSource(stream);
+
+    // 创建 ScriptProcessorNode
+    let processor = audioContext.createScriptProcessor(512, 1, 1);
+
+    let waveVisualization = waveVisualizationRef.current;
+    waveVisualization?.WavePlayerService.waveGl.render();
+    // 处理音频事件
+    processor.onaudioprocess = function (e) {
+        // 获取输入缓冲区的浮点数组
+        let { inputBuffer } = e;
+        let inputData = inputBuffer.getChannelData(0);
+
+        let createMockData32 = () => {
+          let mockdata_item = inputData;
+          let mockdata = [];
+          for (let i = 0; i < 32; i++) {
+            mockdata[i] = mockdata_item;
+          }
+          return mockdata;
+        };
+
+        // inputData 是 Float32Array，包含音频样本数据
+        // 在这里可以对 inputData 进行处理
+       // console.log(inputData);
+
+       let data32 = createMockData32();
+
+        waveVisualization?.WavePlayerService.update(data32);
+      // waveVisualization?.WavePlayerService.triggerUpdate(data32);
+      // console.info(data32);
+    };
+
+    // 连接节点
+    source.connect(processor);
+    processor.connect(audioContext.destination);
+  };
+
+ let getAudioPlay = async (parm?: {audioSource?: string; videoSource?: string}) => {
+    let { audioSource = '', videoSource = '' } = parm || {};
+   let mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+   let audio: HTMLAudioElement = document.getElementById('audioElement');
+   audio.srcObject = mediaStream;
+
+   audioProcess1(mediaStream);
+   return mediaStream;
+};
   useEffect(() => {
     const routes = 32;
-    let waveVisualization = createWaveVisualizationInstance({ routes: routes, contentEl: containerRef.current, renderType: 3, isMocking: false, duration: 22, arrayLength: 8000 * 3 }, {});
+    let length = Math.pow(2, 16);
+    let waveVisualization = createWaveVisualizationInstance({ routes: routes, contentEl: containerRef.current, renderType: 3, isMocking: false, arrayLength: length }, {});
     waveVisualizationRef.current = waveVisualization;
   }, []);
 
   return (
     <>
+      <audio id="audioElement" autoPlay controls />
+      <Button onClick={() => {
+      getAudioPlay();
+      }}
+      >audio Play</Button>
       <Button onClick={() => {
         let waveVisualization = waveVisualizationRef.current;
         let ws: WebSocket;
@@ -125,29 +182,7 @@ const Wave = () => {
       }}
       >update by WebSocket</Button>
 
-      <Button onClick={() => {
-        let waveVisualization = waveVisualizationRef.current;
-        let { routes } = waveVisualization.config;
 
-        setInterval(() => {
-          let createMockData32 = () => {
-            let mockdata_item = waveVisualization?.WavePlayerService.waveGl.generateSineWave(160, 1);
-            let mockdata = [];
-            for (let i = 0; i < routes; i++) {
-              mockdata[i] = mockdata_item;
-            }
-            return mockdata;
-          };
-
-          let mockdata = createMockData32();
-          waveVisualization?.WavePlayerService.update(mockdata);
-        }, 40);
-        if (waveVisualization?.renderType === 3) {
-          waveVisualization?.WavePlayerService.waveGl.render();
-        }
-      }}
-
-      > updata by Mock</Button>
       <Button onClick={() => {
         let waveVisualization = waveVisualizationRef.current;
         waveVisualization?.destroy();

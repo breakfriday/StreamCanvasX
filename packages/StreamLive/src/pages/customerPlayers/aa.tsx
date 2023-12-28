@@ -92,6 +92,10 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
       setInfo({ speed });
     });
 
+    player.on('mediaInfo', (data) => {
+      debugger;
+    });
+
     player.on('errorInfo', (data) => {
       console.log('--------------------');
       console.info(data);
@@ -140,6 +144,12 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
       <div>{JSON.stringify(info)} </div>
       <div>{JSON.stringify(info1)}</div>
       <div>{JSON.stringify(audioInfo)}</div>
+      <Button onClick={() => {
+        let play = streamPlayer.current;
+        let data = play.getStatus();
+        debugger;
+      }}
+      >getstatus</Button>
       <Button onClick={() => {
         let play = streamPlayer.current;
         play.reload2();
