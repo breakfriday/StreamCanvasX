@@ -92,9 +92,9 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
       setInfo({ speed });
     });
 
-    player.on('mediaInfo', (data) => {
-      debugger;
-    });
+    // player.on('mediaInfo', (data) => {
+    //   debugger;
+    // });
 
     player.on('errorInfo', (data) => {
       console.log('--------------------');
@@ -106,11 +106,11 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
       setInfo1(data);
     });
 
-    player.on('mediaInfo', (data) => {
-       let data1 = data;
-       alert(JSON.stringify(data1));
-       debugger;
-    });
+    // player.on('mediaInfo', (data) => {
+    //    let data1 = data;
+    //    alert(JSON.stringify(data1));
+    //    debugger;
+    // });
 
 
     player.on('audioInfo', (data) => {
