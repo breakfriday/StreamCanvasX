@@ -384,6 +384,7 @@ class PlayerService extends Emitter {
                 this.meidiaEl = null;
                 this.audioProcessingService.updateBufferData();
                 this.audioProcessingService.render();
+                this.audioEvent();
             }
 
 
@@ -566,6 +567,70 @@ class PlayerService extends Emitter {
         }
       }
 
+      audioEvent(videoEl?: HTMLVideoElement) {
+        let video = this.audioEl;
+        let lastTimeReadyStateBelow3: number | null = null; // 最后一次 readyState 小于3的时间
+        const timeoutDuration = 1000; // 检查间隔（毫秒）
+        const threshold = 15000; // 阈值（毫秒）
+        let $this = this;
+        let { url = '' } = this.config;
+
+        function checkVideoState() {
+            if ($this.audioEl === null) {
+                return false;
+            }
+            // console.log('readystate', video.readyState);
+            if (video.readyState < 3) {
+                if (lastTimeReadyStateBelow3 === null) {
+                    lastTimeReadyStateBelow3 = Date.now(); // 开始计时
+                }
+
+                const duration: number = Date.now() - lastTimeReadyStateBelow3;
+                if (duration >= threshold) {
+                //    $this.canvasVideoService.drawLoading();
+                //    console.log('----readyState reset-----------');
+                //    console.log(`reset:${video.readyState}`);
+                //    console.log('----readyState reset-----------');
+                //    $this.reload2(); // 触发回调函数
+                $this.addReloadTask({ arr_msg: [`readyState 异常 :${video.readyState} ${url}`] });
+                    setTimeout(checkVideoState, timeoutDuration); // 继续检查
+                } else {
+                    setTimeout(checkVideoState, timeoutDuration); // 继续检查
+                }
+            } else {
+                lastTimeReadyStateBelow3 = null; // 重置计时
+                setTimeout(checkVideoState, timeoutDuration); // 重新开始计时
+            }
+        }
+
+        setTimeout(checkVideoState, 5000);
+
+
+        if (this.audioEl) {
+           this.audioEl.addEventListener('error', (e) => {
+                const { error } = (e.target as HTMLVideoElement);
+                switch (error.code) {
+                  case 1:
+                    this.addReloadTask({ arr_msg: [`中断下载 ${url}`] });
+                    break;
+                  case 2:
+                    this.addReloadTask({ arr_msg: [`网络异常中断 ${url}`] });
+                    break;
+                  case 3:
+                    this.addReloadTask({ arr_msg: [`解码失败 ${url}`] });
+                    break;
+                  case 4:
+                  //  console.log('视频格式不支持。');
+                    break;
+                  default:
+                    this.addReloadTask({ arr_msg: [`发生了其他错误 ${url}`] });
+                    break;
+                }
+              });
+        }
+      }
+
+
     createBetaPlayer2() {
         let { url } = this.httpFlvStreamService;
         let container = this.config.contentEl;
@@ -655,6 +720,11 @@ class PlayerService extends Emitter {
 
         checkPlaying() {
             let video = this.meidiaEl;
+            if (this.config.showAudio === true) {
+                video = this.audioEl;
+            } else {
+                video = this.meidiaEl;
+            }
             if (video.readyState < 3 || video.paused == true) {
                 return false;
             } else {

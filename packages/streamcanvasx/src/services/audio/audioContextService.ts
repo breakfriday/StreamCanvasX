@@ -339,7 +339,6 @@ class AudioProcessingService {
       let { bufferDataLength } = this;
 
       let { updataBufferPerSecond } = this.playerService.config;
-      debugger
 
       if (this.clear === true) {
         // this.destory()
