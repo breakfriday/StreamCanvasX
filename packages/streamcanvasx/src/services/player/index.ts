@@ -484,8 +484,11 @@ class PlayerService extends Emitter {
             if (parm.videocodecid == 12 && mseH265Playback === false) {
                 this.destroy();
 
+                console.log('使用jessibuca 軟解码中');
+
                 this.createBetaPlayer2();
             } else {
+                console.log('使用 硬解');
                 this.mpegtsPlayer.play();
             }
           });
