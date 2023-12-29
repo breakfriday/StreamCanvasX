@@ -79,6 +79,7 @@ class PlayerService extends Emitter {
 
     };
     meidiaEl: HTMLVideoElement;
+    audioEl: HTMLVideoElement;
     scheduler: Scheduler;
     constructor(
 
@@ -322,6 +323,8 @@ class PlayerService extends Emitter {
                  });
                  let audioEl = document.createElement('video');
 
+                 this.audioEl = audioEl;
+
 
                  this.audioProcessingService.init(this, { media_el: audioEl });
 
@@ -509,7 +512,7 @@ class PlayerService extends Emitter {
         let { url = '' } = this.config;
 
         function checkVideoState() {
-            if (video === null) {
+            if ($this.meidiaEl === null) {
                 return false;
             }
             // console.log('readystate', video.readyState);
