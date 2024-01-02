@@ -44,8 +44,8 @@ class WavePlayer {
     this.event();
     this.scheduler = new Scheduler(1);
 
-    this.throttledUpdate = _.throttle(this.update.bind(this), 1);
-
+   // this.throttledUpdate = _.throttle(this.update.bind(this), 1);
+   this.throttledUpdate = _.throttle(this.updateInput.bind(this), 10);
 
     switch (renderType) {
       case 1: // canvas2d
@@ -163,7 +163,7 @@ class WavePlayer {
       count++;
     }
   }
-  update(data: Array<Float32Array>) {
+  updateInput(data: Array<Float32Array>) {
     // debugger;
     switch (this.renderType) {
       case 1: // canvas2d
@@ -179,6 +179,10 @@ class WavePlayer {
       default:
           break;
     }
+  }
+
+  update(data: Float32Array[]) {
+     this.throttledUpdate(data);
   }
 
   triggerUpdate(data: Float32Array[]) {
