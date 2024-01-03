@@ -45,8 +45,8 @@ class LiveAudio {
         this.audioContext = new AudioContext();
         this.scriptProcessor = this.audioContext.createScriptProcessor(bufferSize, channels, channels);
         this.channels = channels;
-        // this.audioQueue = [];
-        this.audioQueue = Array(channels).fill(null).map(() => []); //
+         this.audioQueue = [];
+       // this.audioQueue = Array(channels).fill(null).map(() => []); //
         this.handleFn = handleFn;
         const gainNode = this.audioContext.createGain();
         gainNode.gain.value = 0;
@@ -61,7 +61,6 @@ class LiveAudio {
             }
 
 
-
             if (this.audioQueue.length > 0) {
                 // If there is data in the queue, use it
                 const inputData = this.audioQueue.shift();
@@ -73,6 +72,8 @@ class LiveAudio {
                 outputBuffers.forEach(buffer => buffer.fill(0));
             }
 
+
+            // debugger
             // Handle the multi-channel data
             this.handleFn(outputBuffers);
         };
