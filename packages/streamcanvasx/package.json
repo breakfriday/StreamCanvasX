@@ -1,7 +1,7 @@
 {
   "name": "streamcanvasx",
-  "version": "0.1.84",
-  "description": "组件功能描述",
+  "version": "0.1.84-beta",
+  "description": " 32路波形 update",
   "files": [
     "esm",
     "es2017",
