@@ -45,15 +45,22 @@ class LiveAudio {
         this.audioContext = new AudioContext();
         this.scriptProcessor = this.audioContext.createScriptProcessor(bufferSize, channels, channels);
         this.channels = channels;
-        this.audioQueue = [];
+        // this.audioQueue = [];
+        this.audioQueue = Array(channels).fill(null).map(() => []); //
         this.handleFn = handleFn;
+        const gainNode = this.audioContext.createGain();
+        gainNode.gain.value = 0;
+
 
         this.scriptProcessor.onaudioprocess = (event: AudioProcessingEvent) => {
             const outputBuffers: Array<Float32Array> = [];
+
+
             for (let channel = 0; channel < this.channels; channel++) {
                 outputBuffers.push(event.outputBuffer.getChannelData(channel));
             }
-            debugger;
+
+
 
             if (this.audioQueue.length > 0) {
                 // If there is data in the queue, use it
@@ -69,6 +76,11 @@ class LiveAudio {
             // Handle the multi-channel data
             this.handleFn(outputBuffers);
         };
+        // this.scriptProcessor.connect(this.audioContext.destination);
+        this.scriptProcessor.connect(gainNode);
+        gainNode.connect(this.audioContext.destination);
+        // this.audioContext.resume();
+        // this.scriptProcessor.disconnect(this.audioContext.destination)
     }
 
     // Receive and store PCM data for all channels
