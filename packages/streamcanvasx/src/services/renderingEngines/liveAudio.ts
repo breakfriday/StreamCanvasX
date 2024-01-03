@@ -4,7 +4,7 @@
 //     private audioQueue: Float32Array[];
 //     private handleFn: (data: Float32Array) => void; // 处理函数
 
-//     constructor(bufferSize: number = 4096, handleFn: (data: Float32Array) => void) {
+//     constructor(bufferSize: number = 1024, handleFn: (data: Float32Array) => void) {
 //         this.audioContext = new AudioContext();
 //         this.scriptProcessor = this.audioContext.createScriptProcessor(bufferSize, 1, 1);
 //         this.audioQueue = [];
@@ -25,8 +25,6 @@
 //             // 使用传入的处理函数
 //             this.handleFn(outputData);
 //         };
-
-//         this.scriptProcessor.connect(this.audioContext.destination);
 //     }
 
 //     // 从外部源接收并存储PCM数据
@@ -35,66 +33,52 @@
 //     }
 // }
 
-// export default LiveAudio;
 
-
-class LiveAudioProcessor {
+class LiveAudio {
     private audioContext: AudioContext;
     private scriptProcessor: ScriptProcessorNode;
-    private audioQueue: Float32Array[][];
-    private numChannels: number;
+    private audioQueue: Array<Float32Array>[];
+    private channels: number;
+    private handleFn: (data: Array<Float32Array>) => void;
 
-    constructor(bufferSize: number = 4096, numChannels: number = 32, handleFn: (data: Float32Array[]) => void) {
+    constructor(channels: number = 32, bufferSize: number = 1024, handleFn: (data: Array<Float32Array>) => void) {
         this.audioContext = new AudioContext();
-        this.scriptProcessor = this.audioContext.createScriptProcessor(bufferSize, numChannels, numChannels);
+        this.scriptProcessor = this.audioContext.createScriptProcessor(bufferSize, channels, channels);
+        this.channels = channels;
         this.audioQueue = [];
-        this.numChannels = numChannels;
+        this.handleFn = handleFn;
 
         this.scriptProcessor.onaudioprocess = (event: AudioProcessingEvent) => {
-            let inputData: Float32Array[];
+            const outputBuffers: Array<Float32Array> = [];
+            for (let channel = 0; channel < this.channels; channel++) {
+                outputBuffers.push(event.outputBuffer.getChannelData(channel));
+            }
+            debugger;
+
             if (this.audioQueue.length > 0) {
-                inputData = this.audioQueue.shift();
+                // If there is data in the queue, use it
+                const inputData = this.audioQueue.shift();
+                inputData.forEach((channelData, index) => {
+                    outputBuffers[index].set(channelData);
+                });
             } else {
-                inputData = Array.from({ length: this.numChannels }, () => new Float32Array(bufferSize).fill(0));
+                // If no data, fill each channel with zeros
+                outputBuffers.forEach(buffer => buffer.fill(0));
             }
 
-            for (let channel = 0; channel < this.numChannels; channel++) {
-                const outputData = event.outputBuffer.getChannelData(channel);
-                outputData.set(inputData[channel]);
-            }
-
-            handleFn(inputData);
+            // Handle the multi-channel data
+            this.handleFn(outputBuffers);
         };
-
-        this.scriptProcessor.connect(this.audioContext.destination);
     }
 
-    // 从外部源接收并存储PCM数据
-    receiveData(pcmData: Float32Array[]) {
-        if (pcmData.length !== this.numChannels) {
-            throw new Error('Received data does not match the number of channels');
+    // Receive and store PCM data for all channels
+    receiveData(pcmDataArray: Array<Float32Array>) {
+        if (pcmDataArray.length !== this.channels) {
+            throw new Error('Incorrect number of channels in input data');
         }
-        this.audioQueue.push(pcmData);
-    }
-
-    destroy() {
-        // 断开 scriptProcessor 与其连接的任何节点
-        if (this.scriptProcessor) {
-            this.scriptProcessor.disconnect();
-            // 对于某些浏览器，还需要断开 onaudioprocess 事件以确保垃圾回收
-            this.scriptProcessor.onaudioprocess = null;
-        }
-
-        // 关闭 AudioContext，如果它还在运行的话
-        if (this.audioContext && this.audioContext.state !== 'closed') {
-            this.audioContext.close();
-        }
-
-        // 清空音频队列
-        this.audioQueue = [];
-
-        // 如果有其他需要清理的资源，也在这里处理
+        this.audioQueue.push(pcmDataArray);
     }
 }
 
-export default LiveAudioProcessor;
+
+export default LiveAudio;
