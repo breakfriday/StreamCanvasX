@@ -45,7 +45,9 @@ class WavePlayer {
     this.scheduler = new Scheduler(1);
 
    // this.throttledUpdate = _.throttle(this.update.bind(this), 1);
-   this.throttledUpdate = _.throttle(this.updateInput.bind(this), 10);
+
+   let { updateArrayTimes } = this.config;
+   this.throttledUpdate = _.throttle(this.updateInput.bind(this), updateArrayTimes);
 
     switch (renderType) {
       case 1: // canvas2d

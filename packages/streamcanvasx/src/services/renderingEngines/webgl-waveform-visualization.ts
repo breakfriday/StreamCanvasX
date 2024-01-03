@@ -21,6 +21,7 @@ class CanvasWaveService {
     vertBuffer: number[][];
     // xglBuffer: createREGL.Buffer;
     glBuffer: Array<createREGL.Buffer>;
+    waveformTextures: Array<createREGL.Texture2D>;
     totalWaveforms: number;
     bufferLength: number; // 每一路音频数据的长度
     bufferData: Array<Float32Array>;// 32 路音频数据的data
@@ -89,7 +90,7 @@ class CanvasWaveService {
     // }
 
     initgl() {
-      this.regGl = createREGL({ canvas: this.canvas_el });
+      this.regGl = createREGL({ canvas: this.canvas_el, extensions: ['OES_texture_float'] });
       let regl = this.regGl;
       let indices = Array.from({ length: this.bufferLength }, (_, k) => k); // 创建索引数组
       let vertexIndexBuffer = regl.buffer(indices);
@@ -106,6 +107,7 @@ class CanvasWaveService {
         precision highp float;
         attribute float pcmData; // 音频数据作为属性
         attribute float vertexIndex; // 顶点索引
+        uniform sampler2D waveformTexture; // 波形纹理 其中存储音频数据
         uniform float heightScale;  // 波形的垂直缩放
         uniform float verticalOffset; // 波形的垂直偏移
         uniform float count; // 传入顶点总数
@@ -113,6 +115,7 @@ class CanvasWaveService {
         void main() {
       
           float scaleX = 2.0 / (count - 1.0);
+          int pcmIndex = int(vertexIndex) / 2; // 计算 pcmData 的索引
           float x = vertexIndex * scaleX - 1.0; // 计算 x 坐标
           float y = pcmData * heightScale + verticalOffset; // 计算Y坐标
 
