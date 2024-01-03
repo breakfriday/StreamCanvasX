@@ -4,7 +4,7 @@ import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import createREGL from 'regl';
 // import BaseRenderEnging from './baseEngine';
 import WavePlayerService from '../audio/wavePlayer';
-import { includes } from 'lodash';
+import LiveAudio from './liveAudio';
 
 
 @injectable()
@@ -25,6 +25,7 @@ class CanvasWaveService {
     totalWaveforms: number;
     bufferLength: number; // 每一路音频数据的长度
     bufferData: Array<Float32Array>;// 32 路音频数据的data
+    liveAudio: LiveAudio;
     // updateLength: number; // 每次更新音频数据的长度
     // verticalOffsetArray: number[]; // 垂直偏移量
     constructor() {
@@ -39,10 +40,17 @@ class CanvasWaveService {
        this.totalWaveforms = this.wavePlayerService.config.routes;
        this.bufferLength = this.wavePlayerService.config.arrayLength;
       //  this.vertBuffer = [];
+      let { converLiveData, routes } = this.wavePlayerService.config;
 
 
         this.initgl();
         this.initData();
+        if (converLiveData === true) {
+          this.liveAudio = new LiveAudio(routes, 512, (data) => {
+            let newData = data;
+            debugger;
+          });
+        }
     }
 
     // initgl() {

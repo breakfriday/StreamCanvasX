@@ -191,6 +191,7 @@ interface IWavePlayerConfig{
   renderTimes?: number;
   duration?: number;
   canvas_el?: HTMLCanvasElement;
+  converLiveData?: boolean;
 }
 
 interface IWavePlayerExtend{

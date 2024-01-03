@@ -66,7 +66,7 @@ const Wave = () => {
   useEffect(() => {
     const routes = 32;
     let length = 90000;
-    let waveVisualization = createWaveVisualizationInstance({ routes: routes, contentEl: containerRef.current, renderType: 3, isMocking: false, arrayLength: length, updateArrayTimes: 10 }, {});
+    let waveVisualization = createWaveVisualizationInstance({ routes: routes, contentEl: containerRef.current, renderType: 3, isMocking: false, arrayLength: length, updateArrayTimes: 10, converLiveData: false }, {});
     waveVisualizationRef.current = waveVisualization;
   }, []);
 

@@ -39,6 +39,7 @@ class WaveVisualization {
       updateArrayTimes: 20,
       renderTimes: 20,
       arrayLength: 8000 * 4,
+      converLiveData: false,
     };
     const defaultextend = {
       showid: true,
