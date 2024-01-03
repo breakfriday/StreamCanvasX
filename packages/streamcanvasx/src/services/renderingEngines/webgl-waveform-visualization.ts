@@ -26,6 +26,7 @@ class CanvasWaveService {
     bufferLength: number; // 每一路音频数据的长度
     bufferData: Array<Float32Array>;// 32 路音频数据的data
     liveAudio: LiveAudio;
+    converLiveData: boolean;
     // updateLength: number; // 每次更新音频数据的长度
     // verticalOffsetArray: number[]; // 垂直偏移量
     constructor() {
@@ -42,13 +43,14 @@ class CanvasWaveService {
       //  this.vertBuffer = [];
       let { converLiveData, routes } = this.wavePlayerService.config;
 
+      this.converLiveData = converLiveData;
 
         this.initgl();
         this.initData();
         if (converLiveData === true) {
-          this.liveAudio = new LiveAudio(routes, 512, (data) => {
+          this.liveAudio = new LiveAudio(routes, 1024, (data) => {
             let newData = data;
-            debugger;
+            this.updataData(newData);
           });
         }
     }
@@ -236,6 +238,24 @@ class CanvasWaveService {
       }
 
       inputData(data: Array<Float32Array>) {
+        if (this.converLiveData === true) {
+          this.liveAudio.receiveData(data);
+          return false;
+        }
+        let shiftAppendTypedArray = (bufferData: Float32Array, dataArray: Float32Array) => {
+          bufferData.copyWithin(0, dataArray.length);
+          bufferData.set(dataArray, bufferData.length - dataArray.length);
+
+          return { data: bufferData, lenght: dataArray.length };
+        };
+
+        for (let i = 0; i < data.length; i++) {
+          shiftAppendTypedArray(this.bufferData[i], data[i]);
+        }
+
+        this.updateVertBuffer();
+      }
+      updataData(data: Array<Float32Array>) {
         let shiftAppendTypedArray = (bufferData: Float32Array, dataArray: Float32Array) => {
           bufferData.copyWithin(0, dataArray.length);
           bufferData.set(dataArray, bufferData.length - dataArray.length);
