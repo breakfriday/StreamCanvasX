@@ -41,14 +41,14 @@ class CanvasWaveService {
        this.totalWaveforms = this.wavePlayerService.config.routes;
        this.bufferLength = this.wavePlayerService.config.arrayLength;
       //  this.vertBuffer = [];
-      let { converLiveData, routes } = this.wavePlayerService.config;
+      let { converLiveData, routes, fftSize } = this.wavePlayerService.config;
 
       this.converLiveData = converLiveData;
 
         this.initgl();
         this.initData();
         if (converLiveData === true) {
-          this.liveAudio = new LiveAudio(routes, 1024, (data) => {
+          this.liveAudio = new LiveAudio(routes, fftSize, (data) => {
             let newData = data;
             this.updataData(newData);
           });

@@ -192,6 +192,7 @@ interface IWavePlayerConfig{
   duration?: number;
   canvas_el?: HTMLCanvasElement;
   converLiveData?: boolean;
+  fftSize?: number;
 }
 
 interface IWavePlayerExtend{

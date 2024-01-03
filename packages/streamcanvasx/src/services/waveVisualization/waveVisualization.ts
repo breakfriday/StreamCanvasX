@@ -40,6 +40,7 @@ class WaveVisualization {
       renderTimes: 20,
       arrayLength: 8000 * 4,
       converLiveData: false,
+      fftsize: 512,
     };
     const defaultextend = {
       showid: true,
