@@ -7,6 +7,30 @@ import WavePlayerService from '../audio/wavePlayer';
 import LiveAudio from './liveAudio';
 
 
+// function expandArrayEfficient(inputArray: Float32Array): Float32Array {
+//   // 创建一个新的ArrayBuffer，长度是原数组的两倍
+//   const buffer = new ArrayBuffer(inputArray.length * 2 * Float32Array.BYTES_PER_ELEMENT);
+//   const expandedArray = new Float32Array(buffer);
+
+//   // 使用单个循环进行填充
+//   for (let i = 0, j = 0; i < inputArray.length; i++) {
+//       expandedArray[j++] = inputArray[i];
+//       expandedArray[j++] = inputArray[i];
+//   }
+
+//   return expandedArray;
+// }
+
+
+// 減少循環次數 充分利用了现代 JavaScript 引擎对于内置方法的优化。但是將數普通数组和回到 Float32Array 的过程中可能会有一些性能开销
+function expandArrayEfficient(arr: Float32Array): Float32Array {
+  // 将 Float32Array 转换为普通数组并应用 map
+  const doubledArray = Array.from(arr).flatMap(n => [n, n]);
+
+  // 使用 Float32Array.from() 从结果数组创建新的 Float32Array
+  return Float32Array.from(doubledArray);
+}
+
 @injectable()
 class CanvasWaveService {
     canvas_el: HTMLCanvasElement;
@@ -27,6 +51,7 @@ class CanvasWaveService {
     bufferData: Array<Float32Array>;// 32 路音频数据的data
     liveAudio: LiveAudio;
     converLiveData: boolean;
+    mirrorMode: boolean;
     // updateLength: number; // 每次更新音频数据的长度
     // verticalOffsetArray: number[]; // 垂直偏移量
     constructor() {
@@ -40,6 +65,7 @@ class CanvasWaveService {
        this.glContext = this.wavePlayerService.gl_context;
        this.totalWaveforms = this.wavePlayerService.config.routes;
        this.bufferLength = this.wavePlayerService.config.arrayLength;
+       this.mirrorMode = false;
       //  this.vertBuffer = [];
       let { converLiveData, routes, fftSize } = this.wavePlayerService.config;
 
@@ -102,7 +128,13 @@ class CanvasWaveService {
     initgl() {
       this.regGl = createREGL({ canvas: this.canvas_el, extensions: ['OES_texture_float'] });
       let regl = this.regGl;
-      let indices = Array.from({ length: this.bufferLength }, (_, k) => k); // 创建索引数组
+      // let indices = Array.from({ length: this.bufferLength }, (_, k) => k); // 创建索引数组
+      let indices: Array<number>;
+      if (this.mirrorMode === true) {
+        indices = Array.from({ length: this.bufferLength * 2 }, (_, k) => k); // 创建索引数组 擴展2倍
+      } else {
+        indices = Array.from({ length: this.bufferLength }, (_, k) => k); // 创建索引数组 擴展2倍
+      }
       let vertexIndexBuffer = regl.buffer(indices);
 
       // 着色器程序
@@ -120,12 +152,12 @@ class CanvasWaveService {
         uniform sampler2D waveformTexture; // 波形纹理 其中存储音频数据
         uniform float heightScale;  // 波形的垂直缩放
         uniform float verticalOffset; // 波形的垂直偏移
-        uniform float count; // 传入顶点总数
+        uniform float count; // 音頻點总数
                
         void main() {
       
           float scaleX = 2.0 / (count - 1.0);
-          int pcmIndex = int(vertexIndex) / 2; // 计算 pcmData 的索引
+          //int pcmIndex = int(vertexIndex) / 2; // 计算 pcmData 的索引
           float x = vertexIndex * scaleX - 1.0; // 计算 x 坐标
           float y = pcmData * heightScale + verticalOffset; // 计算Y坐标
 
@@ -135,14 +167,14 @@ class CanvasWaveService {
         uniforms: {
           heightScale: regl.prop('heightScale'),
           verticalOffset: regl.prop('verticalOffset'),
-          count: regl.prop('count'),
+          count: regl.prop('count'), // 音频点数
       },
         attributes: {
           pcmData: regl.prop('buffer'),
           vertexIndex: vertexIndexBuffer, // 顶点索引
         },
 
-        count: regl.prop('count'),
+        count: regl.prop('pointCounts'), // 實際定點數
         depth: { enable: true },
         primitive: 'line strip',
       });
@@ -164,6 +196,12 @@ class CanvasWaveService {
 
         for (let i = 0; i < this.totalWaveforms; i++) {
           let pcmData = this.bufferData[i];
+
+          // 扩展两倍 方便對稱渲染，
+          if (this.mirrorMode === true) {
+           pcmData = expandArrayEfficient(pcmData);
+          }
+
           this.glBuffer[i](pcmData); // 直接将音频数据存储到 GLBuffer
           verticalOffset -= heightPerWaveform; // 更新偏移量
         }
@@ -171,28 +209,29 @@ class CanvasWaveService {
 
 
       // PCM数据点转换为对称于X轴的两组顶点数据
-      convertPCMToVertices(pcmData: Float32Array, heightScale: number, verticalOffset: number) {
-        const sampleCount = pcmData.length;
-        // const vertices = new Float32Array(sampleCount * 2);
-        const vertices = [];
+      // convertPCMToVertices(pcmData: Float32Array, heightScale: number, verticalOffset: number) {
+      //   const sampleCount = pcmData.length;
+      //   // const vertices = new Float32Array(sampleCount * 2);
+      //   const vertices = [];
 
-        for (let index = 0; index < sampleCount; index++) {
-          const x = (index / (sampleCount - 1)) * 2 - 1; // 将索引规范化到[-1, 1]
-          const y = (pcmData[index] * heightScale) + verticalOffset;
+      //   for (let index = 0; index < sampleCount; index++) {
+      //     const x = (index / (sampleCount - 1)) * 2 - 1; // 将索引规范化到[-1, 1]
+      //     const y = (pcmData[index] * heightScale) + verticalOffset;
 
-          // 添加原始点
-          vertices.push(x, y);
-          // vertices[2 * index] = (y);
-          // 添加沿x轴对称的点
-          vertices.push(x, -y + 2 * verticalOffset);
-          // vertices[2 * index + 1] = (-y + 2 * verticalOffset);
-        }
+      //     // 添加原始点
+      //     vertices.push(x, y);
+      //     // vertices[2 * index] = (y);
+      //     // 添加沿x轴对称的点
+      //     vertices.push(x, -y + 2 * verticalOffset);
+      //     // vertices[2 * index + 1] = (-y + 2 * verticalOffset);
+      //   }
 
-        return vertices;
-      }
+      //   return vertices;
+      // }
 
 
       render() {
+        let { mirrorMode } = this;
         let regl = this.regGl;
         regl.frame(() => {
           regl.clear({
@@ -206,9 +245,10 @@ class CanvasWaveService {
           for (let i = 0; i < this.totalWaveforms; i++) {
             this.drawCommand({
               buffer: this.glBuffer[i],
-              count: this.bufferData[i].length,
+              count: this.bufferData[i].length, // 实际音频点数
               heightScale: heightPerWaveform * 0.3,
               verticalOffset: verticalOffset,
+              pointCounts: mirrorMode === true ? this.bufferData[i].length * 2 : this.bufferData[i].length, // 顶点数
             });
 
             verticalOffset -= heightPerWaveform;
