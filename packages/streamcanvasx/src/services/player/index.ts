@@ -304,7 +304,7 @@ class PlayerService extends Emitter {
                      enableStashBuffer: false,
                      enableWorker: true,
                      liveBufferLatencyChasing: true,
-                     liveBufferLatencyMaxLatency: 1,
+                     liveBufferLatencyMaxLatency: 1.5,
                      fixAudioTimestampGap: false,
                      autoCleanupSourceBuffer: true,
                     // // autoCleanupMaxBackwardDuration: 5, // seconds.
