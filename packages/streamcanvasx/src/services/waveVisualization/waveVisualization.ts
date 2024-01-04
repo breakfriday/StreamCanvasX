@@ -41,6 +41,7 @@ class WaveVisualization {
       arrayLength: 8000 * 4,
       converLiveData: false,
       fftsize: 512,
+      mirrorMode: false,
     };
     const defaultextend = {
       showid: true,

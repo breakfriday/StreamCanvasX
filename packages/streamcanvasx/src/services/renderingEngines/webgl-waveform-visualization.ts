@@ -7,29 +7,29 @@ import WavePlayerService from '../audio/wavePlayer';
 import LiveAudio from './liveAudio';
 
 
-// function expandArrayEfficient(inputArray: Float32Array): Float32Array {
-//   // 创建一个新的ArrayBuffer，长度是原数组的两倍
-//   const buffer = new ArrayBuffer(inputArray.length * 2 * Float32Array.BYTES_PER_ELEMENT);
-//   const expandedArray = new Float32Array(buffer);
+function expandArrayEfficient(inputArray: Float32Array): Float32Array {
+  // 创建一个新的ArrayBuffer，长度是原数组的两倍
+  const buffer = new ArrayBuffer(inputArray.length * 2 * Float32Array.BYTES_PER_ELEMENT);
+  const expandedArray = new Float32Array(buffer);
 
-//   // 使用单个循环进行填充
-//   for (let i = 0, j = 0; i < inputArray.length; i++) {
-//       expandedArray[j++] = inputArray[i];
-//       expandedArray[j++] = inputArray[i];
-//   }
+  // 使用单个循环进行填充
+  for (let i = 0, j = 0; i < inputArray.length; i++) {
+      expandedArray[j++] = inputArray[i];
+      expandedArray[j++] = inputArray[i];
+  }
 
-//   return expandedArray;
-// }
+  return expandedArray;
+}
 
 
 // 減少循環次數 充分利用了现代 JavaScript 引擎对于内置方法的优化。但是將數普通数组和回到 Float32Array 的过程中可能会有一些性能开销
-function expandArrayEfficient(arr: Float32Array): Float32Array {
-  // 将 Float32Array 转换为普通数组并应用 map
-  const doubledArray = Array.from(arr).flatMap(n => [n, n]);
+// function expandArrayEfficient(arr: Float32Array): Float32Array {
+//   // 将 Float32Array 转换为普通数组并应用 map
+//   const doubledArray = Array.from(arr).flatMap(n => [n, n]);
 
-  // 使用 Float32Array.from() 从结果数组创建新的 Float32Array
-  return Float32Array.from(doubledArray);
-}
+//   // 使用 Float32Array.from() 从结果数组创建新的 Float32Array
+//   return Float32Array.from(doubledArray);
+// }
 
 @injectable()
 class CanvasWaveService {
@@ -65,11 +65,12 @@ class CanvasWaveService {
        this.glContext = this.wavePlayerService.gl_context;
        this.totalWaveforms = this.wavePlayerService.config.routes;
        this.bufferLength = this.wavePlayerService.config.arrayLength;
-       this.mirrorMode = false;
+
       //  this.vertBuffer = [];
-      let { converLiveData, routes, fftSize } = this.wavePlayerService.config;
+      let { converLiveData, routes, fftSize, mirrorMode } = this.wavePlayerService.config;
 
       this.converLiveData = converLiveData;
+      this.mirrorMode = mirrorMode;
 
         this.initgl();
         this.initData();
@@ -131,6 +132,7 @@ class CanvasWaveService {
       // let indices = Array.from({ length: this.bufferLength }, (_, k) => k); // 创建索引数组
       let indices: Array<number>;
       if (this.mirrorMode === true) {
+        console.log('开启对称渲染 注意性能问题');
         indices = Array.from({ length: this.bufferLength * 2 }, (_, k) => k); // 创建索引数组 擴展2倍
       } else {
         indices = Array.from({ length: this.bufferLength }, (_, k) => k); // 创建索引数组 擴展2倍
@@ -159,8 +161,18 @@ class CanvasWaveService {
           float scaleX = 2.0 / (count - 1.0);
           //int pcmIndex = int(vertexIndex) / 2; // 计算 pcmData 的索引
           float x = vertexIndex * scaleX - 1.0; // 计算 x 坐标
-          float y = pcmData * heightScale + verticalOffset; // 计算Y坐标
+          bool isOriginalPoint = mod(vertexIndex, 2.0) < 1.0; // 判断原点是原始点还是对称点,奇数原始点偶数对称点
 
+          float yOriginal = pcmData * heightScale + verticalOffset; // 原始点的 y 坐标
+          
+          float y = yOriginal;
+
+          if (!isOriginalPoint) {
+            y = -yOriginal + 2.0 * verticalOffset;
+          }
+       
+    
+        
           gl_Position = vec4(x, y, 0.0, 1.0);
         }`,
 
@@ -183,7 +195,11 @@ class CanvasWaveService {
       if (!this.glBuffer) {
         this.glBuffer = [];
         for (let i = 0; i < this.totalWaveforms; i++) {
-          this.glBuffer[i] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: this.bufferLength });
+          if (this.mirrorMode === true) {
+            this.glBuffer[i] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: this.bufferLength * 2 });
+          } else {
+            this.glBuffer[i] = this.regGl.buffer({ type: 'float', usage: 'dynamic', length: this.bufferLength });
+          }
         }
       }
     }
@@ -201,6 +217,7 @@ class CanvasWaveService {
           if (this.mirrorMode === true) {
            pcmData = expandArrayEfficient(pcmData);
           }
+
 
           this.glBuffer[i](pcmData); // 直接将音频数据存储到 GLBuffer
           verticalOffset -= heightPerWaveform; // 更新偏移量
