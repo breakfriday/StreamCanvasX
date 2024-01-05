@@ -199,7 +199,7 @@ class PlayerService extends Emitter {
 
         // const decode_worker = new Worker(new URL('../decoder/decode_worker.js', import.meta.url));
 
-        this.debounceReload();
+        // this.debounceReload();
     }
 
     createBetaPlayer() {
@@ -401,7 +401,7 @@ class PlayerService extends Emitter {
             if (error === mpegts.ErrorTypes.NETWORK_ERROR || error === mpegts.ErrorTypes.MEDIA_ERROR) {
             //     this.canvasVideoService.drawLoading();
             //    this.reload2();
-               this.addReloadTask({ arr_msg: ['-----reload error-------', `reload: ${error}`, '-----reload error-------'] });
+               this.addReloadTask({ arr_msg: [ `reload: ${error}`] });
             }
           });
 
@@ -508,7 +508,7 @@ class PlayerService extends Emitter {
         let video = videoEl;
         let lastTimeReadyStateBelow3: number | null = null; // 最后一次 readyState 小于3的时间
         const timeoutDuration = 1000; // 检查间隔（毫秒）
-        const threshold = 15000; // 阈值（毫秒）
+        const threshold = 2000; // 阈值（毫秒）
         let $this = this;
         let { url = '' } = this.config;
 
@@ -692,6 +692,8 @@ class PlayerService extends Emitter {
             error_connect_times: this.error_connect_times,
             url: this.config.url,
             taskQueue: this.scheduler.getQueue(),
+            ended: video.ended,
+           
         };
 
         console.info('getStatus', data);
@@ -725,7 +727,7 @@ class PlayerService extends Emitter {
             } else {
                 video = this.meidiaEl;
             }
-            if (video.readyState < 3 || video.paused == true) {
+            if (video.readyState < 3 || video.paused == true||video.ended==true) {
                 return false;
             } else {
                 return true;
@@ -761,20 +763,29 @@ class PlayerService extends Emitter {
         }
 
         addReloadTask(parm?: {arr_msg?: Array<string>}) {
-            if (this.error_connect_times > 4) {
-                // console.log('error_connect_times > 4: Scheduler clearQueu ');
+            if (this.error_connect_times > 5) {
+              //  console.log("error_connect_times > 4: Scheduler clearQueu  "+this.config.url)
                 this.scheduler.clearQueue();
                 return false;
+            }
+
+            let queue=this.scheduler.getQueue()
+            if(queue.length>10){
+               // console.log("task > 10 addTask false "+this.config.url)
+                return false
             }
             this.scheduler.addTask(() => {
                 let { arr_msg = [''] } = parm;
                 this.canvasVideoService.drawLoading();
+                console.log("=======tasking=======")
                 arr_msg.map((msg) => {
                     console.log(msg);
                 });
+                console.log("=======tasking=======")
                 this.reload2();
                 return new Promise(resolve => setTimeout(() => {
                     if (this.checkPlaying()) {
+                        this.error_connect_times=0
                         resolve('clean');
                     } else {
                         resolve('');
@@ -798,27 +809,27 @@ class PlayerService extends Emitter {
             this.emit('otherInfo', { speed: 0 });
         }
 
-        debounceReload() {
-            let $this = this;
+        // debounceReload() {
+        //     let $this = this;
 
-           this.reload = this.throttle(() => {
-            //    this.canvasVideoService.drawLoading();
-                this.httpFlvStreamService.hertTime++;
+        //    this.reload = this.throttle(() => {
+        //     //    this.canvasVideoService.drawLoading();
+        //         this.httpFlvStreamService.hertTime++;
 
-                debugger;
-                if (this.httpFlvStreamService.hertTime > this.httpFlvStreamService.maxHeartTimes) {
-                    console.log('超过最大重连次数');
-                    this.setError();
-                    return false;
-                }
-                $this.mpegtsPlayer.unload();
-                $this.mpegtsPlayer.load();
-                setTimeout(() => {
-                   // $this.mpegtsPlayer.play();
-                }, 200);
-                // $this.mpegtsPlayer.play();
-            }, 15 * 1000);
-        }
+        //         debugger;
+        //         if (this.httpFlvStreamService.hertTime > this.httpFlvStreamService.maxHeartTimes) {
+        //             console.log('超过最大重连次数');
+        //             this.setError();
+        //             return false;
+        //         }
+        //         $this.mpegtsPlayer.unload();
+        //         $this.mpegtsPlayer.load();
+        //         setTimeout(() => {
+        //            // $this.mpegtsPlayer.play();
+        //         }, 200);
+        //         // $this.mpegtsPlayer.play();
+        //     }, 15 * 1000);
+        // }
 }
 
 export default PlayerService;
