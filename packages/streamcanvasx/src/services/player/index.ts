@@ -288,6 +288,7 @@ class PlayerService extends Emitter {
                         enableStashBuffer: false,
                         enableWorker: true,
                         liveBufferLatencyChasing: true,
+                        lazyLoad:false
                  });
                  this.mpegtsPlayer.attachMediaElement(videoEl);
             } else {
@@ -307,6 +308,7 @@ class PlayerService extends Emitter {
                      liveBufferLatencyMaxLatency: 1.5,
                      fixAudioTimestampGap: false,
                      autoCleanupSourceBuffer: true,
+                     lazyLoad:false
                     // // autoCleanupMaxBackwardDuration: 5, // seconds.
                     // autoCleanupMinBackwardDuration: 5,
                     // lazyLoad: false,
