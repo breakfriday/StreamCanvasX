@@ -65,7 +65,7 @@ const Wave = () => {
 };
   useEffect(() => {
     const routes = 32;
-    let length = 32000;
+    let length = 10 * 10000;
     let waveVisualization = createWaveVisualizationInstance({
       routes: routes,
       contentEl: containerRef.current,
@@ -75,7 +75,9 @@ const Wave = () => {
       updateArrayTimes: 10,
       converLiveData: false,
       fftSize: 1024,
-      mirrorMode: false }, {});
+      mirrorMode: true,
+      expandGlBuffer: 3,
+    }, {});
     waveVisualizationRef.current = waveVisualization;
   }, []);
 

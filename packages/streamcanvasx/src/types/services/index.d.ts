@@ -194,6 +194,7 @@ interface IWavePlayerConfig{
   converLiveData?: boolean;
   fftSize?: number;
   mirrorMode?: boolean;
+  expandGlBuffer?: number;
 }
 
 interface IWavePlayerExtend{
