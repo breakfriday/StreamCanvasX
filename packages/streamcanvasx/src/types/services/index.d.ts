@@ -191,6 +191,10 @@ interface IWavePlayerConfig{
   renderTimes?: number;
   duration?: number;
   canvas_el?: HTMLCanvasElement;
+  converLiveData?: boolean;
+  fftSize?: number;
+  mirrorMode?: boolean;
+  expandGlBuffer?: number;
 }
 
 interface IWavePlayerExtend{
