@@ -1,7 +1,7 @@
 {
   "name": "streamcanvasx",
-  "version": "0.1.84-beta",
-  "description": " 32路波形 update",
+  "version": "0.1.85",
+  "description": "组件功能描述",
   "files": [
     "esm",
     "es2017",
@@ -64,7 +64,7 @@
     "reflect-metadata": "^0.1.13",
     "regl": "^2.1.0",
     "sm4js": "^0.0.6",
-    "streamcanvasx-core": "0.0.25",
+    "streamcanvasx-core": "0.0.26",
     "webm-muxer": "^3.1.1",
     "webm-writer": "^1.0.0",
     "worker-loader": "^3.0.8"
