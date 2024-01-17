@@ -832,6 +832,12 @@ class PlayerService extends Emitter {
         //         // $this.mpegtsPlayer.play();
         //     }, 15 * 1000);
         // }
+
+        forceReload(){
+            this.error_connect_times=0
+            this.addReloadTask({ arr_msg: ['---设备上线 强制重连 ----'] });
+
+        }
 }
 
 export default PlayerService;
