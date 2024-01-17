@@ -835,6 +835,7 @@ class PlayerService extends Emitter {
 
         forceReload(){
             this.error_connect_times=0
+            this.canvasVideoService.clear=false
             this.addReloadTask({ arr_msg: ['---设备上线 强制重连 ----'] });
 
         }
