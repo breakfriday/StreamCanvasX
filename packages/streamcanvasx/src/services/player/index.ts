@@ -288,7 +288,7 @@ class PlayerService extends Emitter {
                         enableStashBuffer: false,
                         enableWorker: true,
                         liveBufferLatencyChasing: true,
-                        lazyLoad:false
+                        lazyLoad: false,
                  });
                  this.mpegtsPlayer.attachMediaElement(videoEl);
             } else {
@@ -308,7 +308,7 @@ class PlayerService extends Emitter {
                      liveBufferLatencyMaxLatency: 1.5,
                      fixAudioTimestampGap: false,
                      autoCleanupSourceBuffer: true,
-                     lazyLoad:false
+                     lazyLoad: false,
                     // // autoCleanupMaxBackwardDuration: 5, // seconds.
                     // autoCleanupMinBackwardDuration: 5,
                     // lazyLoad: false,
@@ -403,7 +403,7 @@ class PlayerService extends Emitter {
             if (error === mpegts.ErrorTypes.NETWORK_ERROR || error === mpegts.ErrorTypes.MEDIA_ERROR) {
             //     this.canvasVideoService.drawLoading();
             //    this.reload2();
-               this.addReloadTask({ arr_msg: [ `reload: ${error}`] });
+               this.addReloadTask({ arr_msg: [`reload: ${error}`] });
             }
           });
 
@@ -695,7 +695,7 @@ class PlayerService extends Emitter {
             url: this.config.url,
             taskQueue: this.scheduler.getQueue(),
             ended: video.ended,
-           
+
         };
 
         console.info('getStatus', data);
@@ -729,7 +729,7 @@ class PlayerService extends Emitter {
             } else {
                 video = this.meidiaEl;
             }
-            if (video.readyState < 3 || video.paused == true||video.ended==true) {
+            if (video.readyState < 3 || video.paused == true || video.ended == true) {
                 return false;
             } else {
                 return true;
@@ -771,23 +771,23 @@ class PlayerService extends Emitter {
                 return false;
             }
 
-            let queue=this.scheduler.getQueue()
-            if(queue.length>10){
+            let queue = this.scheduler.getQueue();
+            if (queue.length > 10) {
                // console.log("task > 10 addTask false "+this.config.url)
-                return false
+                return false;
             }
             this.scheduler.addTask(() => {
                 let { arr_msg = [''] } = parm;
                 this.canvasVideoService.drawLoading();
-                console.log("=======tasking=======")
+                console.log('=======tasking=======');
                 arr_msg.map((msg) => {
                     console.log(msg);
                 });
-                console.log("=======tasking=======")
+                console.log('=======tasking=======');
                 this.reload2();
                 return new Promise(resolve => setTimeout(() => {
                     if (this.checkPlaying()) {
-                        this.error_connect_times=0
+                        this.error_connect_times = 0;
                         resolve('clean');
                     } else {
                         resolve('');
@@ -833,11 +833,10 @@ class PlayerService extends Emitter {
         //     }, 15 * 1000);
         // }
 
-        forceReload(){
-            this.error_connect_times=0
-            this.canvasVideoService.clear=false
+        forceReload() {
+            this.error_connect_times = 0;
+            this.canvasVideoService.clear = false;
             this.addReloadTask({ arr_msg: ['---设备上线 强制重连 ----'] });
-
         }
 }
 
