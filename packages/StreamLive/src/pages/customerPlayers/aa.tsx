@@ -152,7 +152,7 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
       >getstatus</Button>
       <Button onClick={() => {
         let play = streamPlayer.current;
-        play.reload2();
+        play.forceReload()
       }}
       >force reload</Button>
       <Button onClick={() => {
