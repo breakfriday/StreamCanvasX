@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Divider, Space, Button, Form, Input, Radio } from 'antd';
-import { createWaveVisualizationInstance } from 'streamcanvasx/src/serviceFactories/index';
+import { createWaveVisualizationInstance, createWaveVisualizationPromise } from 'streamcanvasx/src/index';
 
 import styles from './index.module.css';
 
@@ -63,22 +63,23 @@ const Wave = () => {
    audioProcess1(mediaStream);
    return mediaStream;
 };
+const createWaveVisualization = async () => {
+  let waveVisualization = await createWaveVisualizationPromise({
+    routes: 32,
+    contentEl: containerRef.current,
+    renderType: 3,
+    isMocking: false,
+    arrayLength: 10 * 10000,
+    updateArrayTimes: 10,
+    converLiveData: false,
+    fftSize: 1024,
+    mirrorMode: true,
+    expandGlBuffer: 3,
+  }, {});
+  waveVisualizationRef.current = waveVisualization;
+};
   useEffect(() => {
-    const routes = 32;
-    let length = 10 * 10000;
-    let waveVisualization = createWaveVisualizationInstance({
-      routes: routes,
-      contentEl: containerRef.current,
-      renderType: 3,
-      isMocking: false,
-      arrayLength: length,
-      updateArrayTimes: 10,
-      converLiveData: false,
-      fftSize: 1024,
-      mirrorMode: true,
-      expandGlBuffer: 3,
-    }, {});
-    waveVisualizationRef.current = waveVisualization;
+    createWaveVisualization();
   }, []);
 
   return (
