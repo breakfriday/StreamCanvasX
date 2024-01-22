@@ -22,6 +22,11 @@ import Scheduler from './util/scheduler';
 import RenderEngine from '../renderingEngines/baseEngine';
 
 
+// 接入rtc player service
+import RTCPlayerService from '../webrtc';
+import { none } from '../decoder/CodecParser/constants';
+
+
 mpegts.LoggingControl.applyConfig({
     forceGlobalTag: true,
     globalTag: 'streanCanvasX',
@@ -81,6 +86,7 @@ class PlayerService extends Emitter {
     meidiaEl: HTMLVideoElement;
     audioEl: HTMLVideoElement;
     scheduler: Scheduler;
+    rtcPlayerService: RTCPlayerService;
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -95,6 +101,7 @@ class PlayerService extends Emitter {
         @inject(TYPES.IMseDecoderService) mseDecoderService: MseDecoderService,
         @inject(TYPES.IPreProcessing) preProcessing: PreProcessing,
         @inject(TYPES.IRenderEngine) renderEngine: RenderEngine,
+        @inject(TYPES.IRTCPlayerService) rtcPlayerService: RTCPlayerService,
         ) {
         super();
         this.httpFlvStreamService = httpFlvStreamService;
@@ -112,6 +119,7 @@ class PlayerService extends Emitter {
         this.preProcessing = preProcessing;
         this.renderEngine = renderEngine;
         this.scheduler = new Scheduler(1);
+        this.rtcPlayerService = rtcPlayerService;
 
         this._times = {
             playInitStart: '', // 1
@@ -222,6 +230,33 @@ class PlayerService extends Emitter {
 
             // 此處默認靜音
             // this.audioProcessingService.mute(false);
+    }
+    createWebRtcPlayer() {
+        let { url, contentEl } = this.config;
+        this.rtcPlayerService.init({ url, contentEl });
+        this.rtcPlayerService.runWhep({ url });
+
+        let video = this.rtcPlayerService.videoService.meidiaEl;
+        this.meidiaEl = video;
+        this.meidiaEl.style.display = none;
+
+
+            this.canvasVideoService.loading = false;
+            setTimeout(() => {
+                // this.mpegtsPlayer.load();
+                this.canvasVideoService.createVideoFramCallBack(this.meidiaEl);
+            }, 1000);
+
+
+            return false;
+    }
+    createPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
+        let { streamType } = this.config;
+        if (streamType === 'WEBRtC') {
+            this.createWebRtcPlayer();
+        } else {
+            this.createFlvPlayer(parms);
+        }
     }
     createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
         if (window.wasmDebug) {

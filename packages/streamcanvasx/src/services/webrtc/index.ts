@@ -28,6 +28,7 @@ class RTCPlayer {
     contentEl?: HTMLDivElement;
     videoService?: VideoService;
     webRTCStreamAdaptor: WebRTCStreamAdaptor;
+    audioEl?: HTMLAudioElement;
     constructor(
       @inject(TYPES.IVideoService) videoService: VideoService,
     ) {
@@ -36,6 +37,7 @@ class RTCPlayer {
     }
     createVideo() {
       this.meidiaEl = document.createElement('video');
+      this.audioEl = document.createElement('audio');
     }
     async init(config: IRTCPlayerConfig) {
       this.config = config;
@@ -160,11 +162,22 @@ class RTCPlayer {
         this.webRTCStreamAdaptor = new WebRTCStreamAdaptor({ role: 'receiver' });
       }
       this.webRTCStreamAdaptor.runWhep({ url });
+      const receivers = this.webRTCStreamAdaptor.peer.getReceivers();
+      const hasVideoTrack = receivers.some(receiver => receiver.track.kind === 'video');
+      const hasAudioTrack = receivers.some(receiver => receiver.track.kind === 'audio');
 
       this.webRTCStreamAdaptor.peer.ontrack = (event) => {
         if (event.track.kind == 'video') {
            video.srcObject = event.streams[0];
          }
+         if (event.track.kind == 'audio') {
+         /*  debugger
+          this.audioEl.srcObject = event.streams[0]; */
+         }
+      };
+
+      return {
+        hasAudioTrack, hasVideoTrack,
       };
     }
 

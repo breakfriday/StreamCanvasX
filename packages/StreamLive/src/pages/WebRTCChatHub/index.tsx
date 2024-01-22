@@ -79,7 +79,7 @@ const WebRTCChatHub = () => {
 
   const [oncall_open_state, set_oncall_open_state] = useState<{open: boolean; roomId?: string}>({ open: false });
 
-  const [whepUrlStore, setWhepUrlSotre] = useState<Array<{url?: string; user?: string}>>([]);
+  const [whepUrlStore, setWhepUrlSotre] = useState<Array<{url?: string; user?: string}>>([{ url: 'http://192.168.3.15/index/api/whep?app=null&stream=rr' }]);
 
   const { handleDragStart, handleDrop } = useDragDrop(dropAreaRef, whepUrlStore.length > 0);
   useDrag(dragRef2, handleRef2, { resize: 'height' }, whepUrlStore.length > 0); // 支持调整高
