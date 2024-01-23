@@ -88,25 +88,37 @@ class RTCStreamAdaptor {
         let pc = this.peer;
 
         let { url = '' } = parm;
-		const offer = await pc.createOffer();
-        const headers = {
+
+        const offerOptions = {
+          offerToReceiveAudio: true,
+          offerToReceiveVideo: true,
+        };
+
+		const offer = await pc.createOffer(offerOptions);
+
+
+    const headers = {
 			'Content-Type': 'application/sdp',
 		};
 
         const fetched = await fetch(url, {
-			method: 'POST',
-			body: offer.sdp,
-			headers,
-		});
+          method: 'POST',
+          body: offer.sdp,
+          headers,
+		  });
 
 
         /// / Get the SDP answer
-        const answer = await fetched.text();
+         const answer = await fetched.text();
+
+        //  let answer = await fetched.json();
+        //  answer = answer.sdp;
 
         await pc.setLocalDescription(offer);
 
 
         await pc.setRemoteDescription({ type: 'answer', sdp: answer });
+        // debugger
     }
 
     async publish(parm: {url: string}) {
