@@ -262,7 +262,7 @@ class PlayerService extends Emitter {
     }
     createPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
         let { streamType } = this.config;
-        if (streamType === 'WEBRtC') {
+        if (streamType === 'WEBRTC') {
             this.createWebRtcPlayer();
         } else {
             this.createFlvPlayer(parms);
@@ -714,6 +714,11 @@ class PlayerService extends Emitter {
         if (this.canvasVideoService) {
             this.canvasVideoService.destroy();
             this.canvasVideoService = null;
+            debugger
+        }
+        if (this.config.streamType === 'WEBRTC') {
+            this.rtcPlayerService.destroy();
+            debugger;
         }
 
         if (this.mpegtsPlayer) {

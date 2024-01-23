@@ -267,7 +267,7 @@ class RTCPlayer {
 
 
     destroy() {
-
+      this.webRTCStreamAdaptor.close();
     }
 }
 
