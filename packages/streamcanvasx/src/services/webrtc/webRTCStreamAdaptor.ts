@@ -107,9 +107,18 @@ class RTCStreamAdaptor {
           headers,
 		  });
 
+      const contentType = fetched.headers.get('Content-Type');
+      let answer = '';
+      if (contentType.includes('application/json')) {
+          answer = await fetched.json();
+          answer = answer.sdp;
+      } else {
+        answer = await fetched.text();
+      }
+
 
         /// / Get the SDP answer
-         const answer = await fetched.text();
+        //  const answer = await fetched.text();
 
         //  let answer = await fetched.json();
         //  answer = answer.sdp;
