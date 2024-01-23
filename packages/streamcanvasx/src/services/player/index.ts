@@ -238,17 +238,27 @@ class PlayerService extends Emitter {
 
         let video = this.rtcPlayerService.videoService.meidiaEl;
         this.meidiaEl = video;
-        this.meidiaEl.style.display = none;
+       // this.meidiaEl.style.display = none;
+        this.config.showAudio = true;
 
 
-            this.canvasVideoService.loading = false;
-            setTimeout(() => {
-                // this.mpegtsPlayer.load();
-                this.canvasVideoService.createVideoFramCallBack(this.meidiaEl);
-            }, 1000);
+        setTimeout(() => {
+            this.audioProcessingService.init(this, { media_el: video });
+            this.config.showAudio = true;
+
+            this.audioProcessingService.updateBufferData();
+            this.audioProcessingService.render();
+        }, 1000);
 
 
-            return false;
+            // this.canvasVideoService.loading = false;
+            // setTimeout(() => {
+            //     // this.mpegtsPlayer.load();
+            //     this.canvasVideoService.createVideoFramCallBack(this.meidiaEl);
+            // }, 1000);
+
+
+            // return false;
     }
     createPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
         let { streamType } = this.config;

@@ -85,7 +85,9 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
 
     streamPlayer.current = player;
 
-    player.createFlvPlayer({});
+    // player.createFlvPlayer({});
+
+    player.createPlayer({});
 
     player.on('otherInfo', (data) => {
       let { speed } = data;
