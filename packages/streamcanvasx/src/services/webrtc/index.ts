@@ -170,12 +170,10 @@ class RTCPlayer {
 
       if (hasVideoTrack === true) {
         this.webRTCStreamAdaptor.peer.ontrack = (event) => {
-          if (event.track.kind == 'video') {
-            const remoteStream = event.streams[0];
-            const audioTracks = remoteStream.getAudioTracks();
-             video.srcObject = event.streams[0];
-             video.volume = 1.0;
-           }
+          const remoteStream = event.streams[0];
+          const audioTracks = remoteStream.getAudioTracks();
+           video.srcObject = event.streams[0];
+           video.volume = 1.0;
         };
       } else {
         this.webRTCStreamAdaptor.peer.ontrack = (event) => {

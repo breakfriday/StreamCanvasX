@@ -91,7 +91,7 @@ class RTCStreamAdaptor {
 
         const offerOptions = {
           offerToReceiveAudio: true,
-          offerToReceiveVideo: true,
+          offerToReceiveVideo: false,
         };
 
 		const offer = await pc.createOffer(offerOptions);
