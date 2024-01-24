@@ -145,7 +145,7 @@ class PlayerService extends Emitter {
             vbps: 0, // 当前视频码率，单位bit
             ts: 0, // 当前视频帧pts，单位毫秒
         };
-        window.streamCanvasX = window.__VERSION__ || 'DEV_0.1.86';
+        window.streamCanvasX = window.__VERSION__ || 'DEV_0.1.87';
     }
 
     init(config?: IplayerConfig) {
