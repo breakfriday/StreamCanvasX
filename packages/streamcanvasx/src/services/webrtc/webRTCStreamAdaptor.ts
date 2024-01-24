@@ -34,7 +34,11 @@ class RTCStreamAdaptor {
 
     event() {
         let pc = this.peer;
+        pc.onicecandidate = (event) => {
+          console.log(`ICE candidate:\n${event.candidate ? event.candidate.candidate : '(null)'}`);
+        };
         pc.onconnectionstatechange = (event) => {
+        console.log('pc.connectionState', pc.connectionState);
 			switch (pc.connectionState) {
 				case 'connected':
 					// The connection has become fully connected
