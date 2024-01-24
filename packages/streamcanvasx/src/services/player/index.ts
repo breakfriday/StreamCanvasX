@@ -245,10 +245,11 @@ class PlayerService extends Emitter {
         setTimeout(() => {
             this.audioProcessingService.init(this, { media_el: video });
             this.config.showAudio = true;
+            this.audioProcessingService.mute(true);
 
             this.audioProcessingService.updateBufferData();
             this.audioProcessingService.render();
-        }, 1000);
+        }, 200);
 
 
             // this.canvasVideoService.loading = false;

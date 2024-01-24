@@ -97,10 +97,14 @@ class RTCStreamAdaptor {
 		const offer = await pc.createOffer(offerOptions);
 
 
-    const headers = {
-			'Content-Type': 'application/sdp',
-		};
+    // const headers = {
+		// 	'Content-Type': 'application/sdp',
+		// };
 
+    // const headers = {
+		// 	'Content-Type': 'application/json',
+		// };
+    let headers = new Headers();
         const fetched = await fetch(url, {
           method: 'POST',
           body: offer.sdp,
