@@ -438,7 +438,11 @@ class AudioProcessingService {
       mute(parm?: boolean) {
         if (this.playerService.config.streamType === 'WEBRTC') {
           // webrtc 的特殊播放， 需要先將播放器禁音樂， audiocontext  的斷開輸出節點才能生效， 打開輸出不需要重置mute屬性
-          this.playerService.rtcPlayerService.videoService.meidiaEl.muted = true;
+          if (parm === true) {
+            this.playerService.rtcPlayerService.videoService.meidiaEl.muted = true;
+          } else {
+            this.playerService.rtcPlayerService.videoService.meidiaEl.muted = false;
+          }
         }
         if (this.playerService.mpegtsPlayer?.audioPlayer) {
           if (parm === true) {

@@ -148,6 +148,14 @@ class PlayerService extends Emitter {
         window.streamCanvasX = window.__VERSION__ || 'DEV_0.1.89';
     }
 
+    emitOtherInfo(data: {speed: string | number}) {
+        let { speed } = data;
+        this.emit('otherInfo', { speed });
+
+        console.log(`当前音頻流量：${speed} kBps`);
+    }
+
+
     init(config?: IplayerConfig) {
         // let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false, hasAudio = true, hasVideo = true, errorUrl = '', useOffScreen = false, audioDraw = 1 } = config;
 
@@ -233,7 +241,7 @@ class PlayerService extends Emitter {
     }
     createWebRtcPlayer() {
         let { url, contentEl } = this.config;
-        this.rtcPlayerService.init({ url, contentEl });
+        this.rtcPlayerService.init({ url, contentEl }, this);
         this.rtcPlayerService.runWhep({ url });
 
         let video = this.rtcPlayerService.videoService.meidiaEl;
@@ -249,7 +257,7 @@ class PlayerService extends Emitter {
 
             this.audioProcessingService.updateBufferData();
             this.audioProcessingService.render();
-        }, 200);
+        }, 1500);
 
 
             // this.canvasVideoService.loading = false;
@@ -265,6 +273,9 @@ class PlayerService extends Emitter {
         let { streamType } = this.config;
         if (streamType === 'WEBRTC') {
             this.createWebRtcPlayer();
+
+            // 暂时只有音频 ，写死
+            this.emit('mediaInfo', { hasVideo: false, hasAudio: true });
         } else {
             this.createFlvPlayer(parms);
         }
@@ -715,7 +726,7 @@ class PlayerService extends Emitter {
         if (this.canvasVideoService) {
             this.canvasVideoService.destroy();
             this.canvasVideoService = null;
-            debugger
+            debugger;
         }
         if (this.config.streamType === 'WEBRTC') {
             this.rtcPlayerService.destroy();

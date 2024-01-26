@@ -9,6 +9,7 @@ import { WHEPClient } from './whep.js';
 import { IRTCPlayerConfig } from '../../types/services';
 import VideoService from '../video/videoService';
 import WebRTCStreamAdaptor from './webRTCStreamAdaptor';
+import PlayerService from '../player';
 
 
 @injectable()
@@ -28,6 +29,7 @@ class RTCPlayer {
     contentEl?: HTMLDivElement;
     videoService?: VideoService;
     webRTCStreamAdaptor: WebRTCStreamAdaptor;
+    playerService: PlayerService;
     audioEl?: HTMLAudioElement;
     constructor(
       @inject(TYPES.IVideoService) videoService: VideoService,
@@ -39,11 +41,14 @@ class RTCPlayer {
       this.meidiaEl = document.createElement('video');
       this.audioEl = document.createElement('audio');
     }
-    async init(config: IRTCPlayerConfig) {
+    async init(config: IRTCPlayerConfig, player?: PlayerService) {
       this.config = config;
       let { contentEl } = this.config;
 
       this.videoService.init(this);
+      if (player) {
+        this.playerService = player;
+      }
     }
 
     async getMedia(parm?: {audioSource?: string; videoSource?: string}) {
@@ -161,7 +166,7 @@ class RTCPlayer {
 
 
       if (this.webRTCStreamAdaptor === null) {
-        this.webRTCStreamAdaptor = new WebRTCStreamAdaptor({ role: 'receiver' });
+        this.webRTCStreamAdaptor = new WebRTCStreamAdaptor({ role: 'receiver' }, this.playerService);
       }
       this.webRTCStreamAdaptor.runWhep({ url });
       const receivers = this.webRTCStreamAdaptor.peer.getReceivers();
