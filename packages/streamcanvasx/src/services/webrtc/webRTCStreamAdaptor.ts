@@ -1,4 +1,4 @@
-
+import PlayerService from '../player';
 class RTCStreamAdaptor {
   public peer: RTCPeerConnection;
   private resource: string;
@@ -11,9 +11,14 @@ class RTCStreamAdaptor {
   private iceGatheringTimeout: any;
   private waitingForCandidates: boolean = false;
   private role?: string;
-    constructor(parm: { role: string }) {
+  private timeId: NodeJS.Timeout;
+  playerService: PlayerService;
+    constructor(parm: { role: string }, player?: PlayerService) {
         let { role } = parm;
         this.role = role;
+        if (player) {
+          this.playerService = player;
+        }
         this.init();
     }
 
@@ -38,23 +43,25 @@ class RTCStreamAdaptor {
           console.log(`ICE candidate:\n${event.candidate ? event.candidate.candidate : '(null)'}`);
         };
         pc.onconnectionstatechange = (event) => {
-        console.log('pc.connectionState', pc.connectionState);
-			switch (pc.connectionState) {
-				case 'connected':
-					// The connection has become fully connected
-					break;
-				case 'disconnected':
-                    this.peer.close();
-				case 'failed':
-                     this.peer.close();
-					// One or more transports has terminated unexpectedly or in an error
-					break;
-				case 'closed':
-                    this.peer.close();
-					// The connection has been closed
-					break;
-			}
-		};
+          console.log('pc.connectionState', pc.connectionState);
+          switch (pc.connectionState) {
+            case 'connected':
+              // The connection has become fully connected
+              break;
+            case 'disconnected':
+                        this.peer.close();
+            case 'failed':
+                        this.peer.close();
+              // One or more transports has terminated unexpectedly or in an error
+              break;
+            case 'closed':
+                        this.peer.close();
+              // The connection has been closed
+              break;
+          }
+        };
+
+       this.getReceiverStatsJSON();
     }
 
     addTrack(stream: MediaStream) {
@@ -63,6 +70,45 @@ class RTCStreamAdaptor {
             this.peer.addTrack(track);
         }
     }
+
+    getReceiverStatsJSON() {
+      let lastTime = 0;
+      let lastBytes = 0;
+      let pc = this.peer;
+      let $this = this;
+
+
+      function calculateAudioBitrate() {
+          pc.getStats(null).then(stats => {
+              stats.forEach(report => {
+                  if (report.type === 'inbound-rtp' && !report.isRemote && report.mediaType === 'video') {
+                     console.info(report);
+                      const currentTime = report.timestamp;
+                      const currentBytes = report.bytesReceived;
+
+                      if (lastTime) {
+                          // 计算时间差，单位转换为秒
+                          const timeDiff = (currentTime - lastTime) / 1000; // 毫秒转换为秒
+                          if (timeDiff > 0) {
+                              const bytesDiff = currentBytes - lastBytes;
+                              const bytesPerSecond = bytesDiff / timeDiff;
+                              const kbps = (bytesPerSecond * 8) / 1000; // 字节转换为比特，再转换为千比特
+
+                              const kBps = (bytesPerSecond) / 1024; // 1kB=1024 bytes
+
+                              console.log(`当前网速：${kBps} kBps`);
+                             $this.playerService.emitOtherInfo({ speed: kBps });
+                          }
+                      }
+
+                      lastTime = currentTime;
+                      lastBytes = currentBytes;
+                  }
+              });
+          });
+      }
+              this.timeId = setInterval(calculateAudioBitrate, 1000);
+          }
 
     replaceTrack(stream: MediaStream) {
          // getSenders方法返回一个RTCRtpSender[]，其中包含了RTCPeerConnection目前正在发送的所有轨道的发送器对象
@@ -149,6 +195,7 @@ class RTCStreamAdaptor {
     close() {
         this.peer.close();
         this.peer = null;
+       clearTimeout(this.timeId);
     }
 }
 
