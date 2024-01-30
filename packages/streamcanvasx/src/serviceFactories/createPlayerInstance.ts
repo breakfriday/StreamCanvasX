@@ -18,7 +18,7 @@ import FLVDemuxStream from '../services/demux/flvDemuxStream';
 
 import AudioProcessingService from '../services/audio/audioContextService';
 
-import { IplayerConfig } from '../types/services';
+import { IplayerConfig, IRTCPlayerConfig } from '../types/services';
 
 import WasmDecoderService from '../services/decoder/wasmDecoder';
 
@@ -30,6 +30,8 @@ import PreProcessing from '../services/preprocessing';
 import RenderEngine from '../services/renderingEngines/baseEngine';
 import WaveGl from '../services/renderingEngines/webgl-waveform-visualization';
 
+import RTCPlayerService from '../services/webrtc';
+import VideoService from '../services/video/videoService';
 
 // const worker = new Worker(new URL('work.js', import.meta.url));
 
@@ -58,6 +60,8 @@ containerPlayer.bind<PreProcessing>(TYPES.IPreProcessing).to(PreProcessing);
 containerPlayer.bind<RenderEngine>(TYPES.IRenderEngine).to(RenderEngine);
 containerPlayer.bind<WaveGl>(TYPES.IWaveGl).to(WaveGl);
 
+containerPlayer.bind<RTCPlayerService>(TYPES.IRTCPlayerService).to(RTCPlayerService);
+containerPlayer.bind<VideoService>(TYPES.IVideoService).to(VideoService);
 
  function createPlayerServiceInstance(config: IplayerConfig): PlayerService {
   let playerInstance = containerPlayer.get<PlayerService>(TYPES.IPlayerService);

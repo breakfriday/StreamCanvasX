@@ -22,6 +22,11 @@ import Scheduler from './util/scheduler';
 import RenderEngine from '../renderingEngines/baseEngine';
 
 
+// 接入rtc player service
+import RTCPlayerService from '../webrtc';
+import { none } from '../decoder/CodecParser/constants';
+
+
 mpegts.LoggingControl.applyConfig({
     forceGlobalTag: true,
     globalTag: 'streanCanvasX',
@@ -81,6 +86,7 @@ class PlayerService extends Emitter {
     meidiaEl: HTMLVideoElement;
     audioEl: HTMLVideoElement;
     scheduler: Scheduler;
+    rtcPlayerService: RTCPlayerService;
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -95,6 +101,7 @@ class PlayerService extends Emitter {
         @inject(TYPES.IMseDecoderService) mseDecoderService: MseDecoderService,
         @inject(TYPES.IPreProcessing) preProcessing: PreProcessing,
         @inject(TYPES.IRenderEngine) renderEngine: RenderEngine,
+        @inject(TYPES.IRTCPlayerService) rtcPlayerService: RTCPlayerService,
         ) {
         super();
         this.httpFlvStreamService = httpFlvStreamService;
@@ -112,6 +119,7 @@ class PlayerService extends Emitter {
         this.preProcessing = preProcessing;
         this.renderEngine = renderEngine;
         this.scheduler = new Scheduler(1);
+        this.rtcPlayerService = rtcPlayerService;
 
         this._times = {
             playInitStart: '', // 1
@@ -137,8 +145,16 @@ class PlayerService extends Emitter {
             vbps: 0, // 当前视频码率，单位bit
             ts: 0, // 当前视频帧pts，单位毫秒
         };
-        window.streamCanvasX = window.__VERSION__ || 'DEV_0.1.85.2';
+        window.streamCanvasX = window.__VERSION__ || 'DEV_0.1.90';
     }
+
+    emitOtherInfo(data: {speed: string | number}) {
+        let { speed } = data;
+        this.emit('otherInfo', { speed });
+
+        console.log(`当前音頻流量：${speed} kBps`);
+    }
+
 
     init(config?: IplayerConfig) {
         // let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false, hasAudio = true, hasVideo = true, errorUrl = '', useOffScreen = false, audioDraw = 1 } = config;
@@ -222,6 +238,47 @@ class PlayerService extends Emitter {
 
             // 此處默認靜音
             // this.audioProcessingService.mute(false);
+    }
+    createWebRtcPlayer() {
+        let { url, contentEl } = this.config;
+        this.rtcPlayerService.init({ url, contentEl }, this);
+        this.rtcPlayerService.runWhep({ url });
+
+        let video = this.rtcPlayerService.videoService.meidiaEl;
+        this.meidiaEl = video;
+       // this.meidiaEl.style.display = none;
+        this.config.showAudio = true;
+
+
+        setTimeout(() => {
+            this.audioProcessingService.init(this, { media_el: video });
+            this.config.showAudio = true;
+            this.audioProcessingService.mute(true);
+
+            this.audioProcessingService.updateBufferData();
+            this.audioProcessingService.render();
+        }, 1500);
+
+
+            // this.canvasVideoService.loading = false;
+            // setTimeout(() => {
+            //     // this.mpegtsPlayer.load();
+            //     this.canvasVideoService.createVideoFramCallBack(this.meidiaEl);
+            // }, 1000);
+
+
+            // return false;
+    }
+    createPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
+        let { streamType } = this.config;
+        if (streamType === 'WEBRTC') {
+            this.createWebRtcPlayer();
+
+            // 暂时只有音频 ，写死
+            this.emit('mediaInfo', { hasVideo: false, hasAudio: true });
+        } else {
+            this.createFlvPlayer(parms);
+        }
     }
     createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
         if (window.wasmDebug) {
@@ -669,6 +726,11 @@ class PlayerService extends Emitter {
         if (this.canvasVideoService) {
             this.canvasVideoService.destroy();
             this.canvasVideoService = null;
+            debugger;
+        }
+        if (this.config.streamType === 'WEBRTC') {
+            this.rtcPlayerService.destroy();
+            debugger;
         }
 
         if (this.mpegtsPlayer) {

@@ -12,7 +12,7 @@ class AudioProcessingService {
         audioContext?: AudioContext;
         analyserNode?: AnalyserNode;
         gainNode?: GainNode;
-        audioSourceNode?: MediaElementAudioSourceNode;
+        audioSourceNode?: MediaElementAudioSourceNode | MediaStreamAudioSourceNode;
         mediaSource_el?: HTMLAudioElement | HTMLVideoElement;
     };
     bufferLength: number;
@@ -395,7 +395,16 @@ class AudioProcessingService {
 
   setMediaSource_el(el: HTMLVideoElement) {
     this.context.mediaSource_el = el;
-    this.context.audioSourceNode = this.context.audioContext!.createMediaElementSource(el);
+    if (el.srcObject) {
+      let stream = el.srcObject;
+      // webrtc 场景下 通过.srcObject 写入媒体流， 这种情况下
+      this.context.audioSourceNode = this.context.audioContext!.createMediaStreamSource(stream);
+    } else {
+      this.context.audioSourceNode = this.context.audioContext!.createMediaElementSource(el);
+    }
+  }
+  setMediaSource(stream: MediaStream) {
+
   }
 
     createAudioContext() {
@@ -427,6 +436,14 @@ class AudioProcessingService {
       }
 
       mute(parm?: boolean) {
+        if (this.playerService.config.streamType === 'WEBRTC') {
+          // webrtc 的特殊播放， 需要先將播放器禁音樂， audiocontext  的斷開輸出節點才能生效， 打開輸出不需要重置mute屬性
+          if (parm === true) {
+            this.playerService.rtcPlayerService.videoService.meidiaEl.muted = true;
+          } else {
+            this.playerService.rtcPlayerService.videoService.meidiaEl.muted = false;
+          }
+        }
         if (this.playerService.mpegtsPlayer?.audioPlayer) {
           if (parm === true) {
             this.playerService.mpegtsPlayer?.audioPlayer?.mute(true);
