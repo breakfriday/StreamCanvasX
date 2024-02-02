@@ -47,7 +47,9 @@
     "@webpack-cli/serve": "2.0.5",
     "ws": "^8.16.0",
     "xmlhttprequest-ssl": "^2.1.1",
-    "events":"3.3.0"
+    "events":"3.3.0",
+    "worker-loader":"3.0.8",
+    "workerize-loader":"2.0.2"
   },
   "license": "MIT"
 }

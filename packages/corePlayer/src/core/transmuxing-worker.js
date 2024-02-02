@@ -268,4 +268,7 @@ let TransmuxingWorker = function (self) {
 
 };
 
+
+TransmuxingWorker(self)
+
 export default TransmuxingWorker;

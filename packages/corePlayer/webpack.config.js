@@ -54,7 +54,27 @@ module.exports = {
                 enforce: 'pre',
                 test: /\.js$/,
                 use: 'source-map-loader'
+            },
+            {
+                // test: /\.worker\.js$/, 
+                test: /-worker\.js$/,
+                use: { 
+                    loader: 'worker-loader',
+                    options: { inline: 'no-fallback' } // 这会生成一个Blob URL来加载Worker，而不是一个单独的文件 ,使用 options 内联你的worker
+                 },
+             
+               
             }
+            // {
+            //     // test: /\.worker\.js$/, 
+            //     test: /-worker\.js$/,
+            //     use: { 
+            //         loader: 'workerize-loader',
+            //         options: { inline: true } // 这会生成一个Blob URL来加载Worker，而不是一个单独的文件 ,使用 options 内联你的worker
+            //      },
+             
+               
+            // }
         ]
     },
 
