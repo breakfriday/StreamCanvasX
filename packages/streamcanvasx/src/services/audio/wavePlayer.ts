@@ -4,6 +4,8 @@ import AudioWaveService from './audioWaveService';
 import WaveGl from '../renderingEngines/webgl-waveform-visualization';
 import WaveVisualization from '../waveVisualization/waveVisualization';
 import { IWavePlayerConfig, IWavePlayerExtend } from '../../types/services';
+import Scheduler from './scheduler';
+import _ from 'lodash';
 
 
 @injectable()
@@ -20,6 +22,8 @@ class WavePlayer {
   updateBuffer: Float32Array;
   audioWaveService: AudioWaveService;
   renderType: number;
+  scheduler: Scheduler;
+  private throttledUpdate: (data: Float32Array[]) => void;
 
   constructor(
     @inject(TYPES.IAudioWaveService) audioWaveService: AudioWaveService,
@@ -38,7 +42,12 @@ class WavePlayer {
     this.canvas_el = waveVisualization.canvas_el;
     this.contentEl = waveVisualization.contentEl;
     this.event();
+    this.scheduler = new Scheduler(1);
 
+   // this.throttledUpdate = _.throttle(this.update.bind(this), 1);
+
+   let { updateArrayTimes } = this.config;
+   this.throttledUpdate = _.throttle(this.updateInput.bind(this), updateArrayTimes);
 
     switch (renderType) {
       case 1: // canvas2d
@@ -156,7 +165,7 @@ class WavePlayer {
       count++;
     }
   }
-  update(data: Array<Float32Array>) {
+  updateInput(data: Array<Float32Array>) {
     // debugger;
     switch (this.renderType) {
       case 1: // canvas2d
@@ -172,6 +181,14 @@ class WavePlayer {
       default:
           break;
     }
+  }
+
+  update(data: Float32Array[]) {
+     this.throttledUpdate(data);
+  }
+
+  triggerUpdate(data: Float32Array[]) {
+    this.throttledUpdate(data);
   }
 
   hexArrayToFloat32Array(hexArray: Int16Array) {

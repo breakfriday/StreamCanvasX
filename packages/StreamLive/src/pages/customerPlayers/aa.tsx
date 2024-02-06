@@ -85,12 +85,18 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
 
     streamPlayer.current = player;
 
-    player.createFlvPlayer({});
+    // player.createFlvPlayer({});
+
+    player.createPlayer({});
 
     player.on('otherInfo', (data) => {
       let { speed } = data;
       setInfo({ speed });
     });
+
+    // player.on('mediaInfo', (data) => {
+    //   debugger;
+    // });
 
     player.on('errorInfo', (data) => {
       console.log('--------------------');
@@ -101,6 +107,13 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
     player.on('performaceInfo', (data) => {
       setInfo1(data);
     });
+
+    // player.on('mediaInfo', (data) => {
+    //    let data1 = data;
+    //    alert(JSON.stringify(data1));
+    //    debugger;
+    // });
+
 
     player.on('audioInfo', (data) => {
       setAudioInfo(data);
@@ -135,7 +148,13 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
       <div>{JSON.stringify(audioInfo)}</div>
       <Button onClick={() => {
         let play = streamPlayer.current;
-        play.reload2();
+        let data = play.getStatus();
+        debugger;
+      }}
+      >getstatus</Button>
+      <Button onClick={() => {
+        let play = streamPlayer.current;
+        play.forceReload();
       }}
       >force reload</Button>
       <Button onClick={() => {

@@ -9,6 +9,7 @@ import { WHEPClient } from './whep.js';
 import { IRTCPlayerConfig } from '../../types/services';
 import VideoService from '../video/videoService';
 import WebRTCStreamAdaptor from './webRTCStreamAdaptor';
+import PlayerService from '../player';
 
 
 @injectable()
@@ -28,6 +29,8 @@ class RTCPlayer {
     contentEl?: HTMLDivElement;
     videoService?: VideoService;
     webRTCStreamAdaptor: WebRTCStreamAdaptor;
+    playerService: PlayerService;
+    audioEl?: HTMLAudioElement;
     constructor(
       @inject(TYPES.IVideoService) videoService: VideoService,
     ) {
@@ -36,12 +39,16 @@ class RTCPlayer {
     }
     createVideo() {
       this.meidiaEl = document.createElement('video');
+      this.audioEl = document.createElement('audio');
     }
-    async init(config: IRTCPlayerConfig) {
+    async init(config: IRTCPlayerConfig, player?: PlayerService) {
       this.config = config;
       let { contentEl } = this.config;
 
       this.videoService.init(this);
+      if (player) {
+        this.playerService = player;
+      }
     }
 
     async getMedia(parm?: {audioSource?: string; videoSource?: string}) {
@@ -124,6 +131,7 @@ class RTCPlayer {
         let video: HTMLVideoElement = this.videoService.meidiaEl;
         video.autoplay = true;
         video.srcObject = this.mediaStream;
+        video.muted = true;
     }
 
     check_permission() {
@@ -156,15 +164,36 @@ class RTCPlayer {
       let { url = '' } = value;
       let video: HTMLVideoElement = this.videoService.meidiaEl;
 
+
       if (this.webRTCStreamAdaptor === null) {
-        this.webRTCStreamAdaptor = new WebRTCStreamAdaptor({ role: 'receiver' });
+        this.webRTCStreamAdaptor = new WebRTCStreamAdaptor({ role: 'receiver' }, this.playerService);
       }
       this.webRTCStreamAdaptor.runWhep({ url });
+      const receivers = this.webRTCStreamAdaptor.peer.getReceivers();
+      const hasVideoTrack = receivers.some(receiver => receiver.track.kind === 'video');
+      const hasAudioTrack = receivers.some(receiver => receiver.track.kind === 'audio');
 
-      this.webRTCStreamAdaptor.peer.ontrack = (event) => {
-        if (event.track.kind == 'video') {
+      if (hasVideoTrack === true) {
+        this.webRTCStreamAdaptor.peer.ontrack = (event) => {
+          const remoteStream = event.streams[0];
+          const audioTracks = remoteStream.getAudioTracks();
            video.srcObject = event.streams[0];
-         }
+           video.volume = 1.0;
+        };
+      } else {
+        this.webRTCStreamAdaptor.peer.ontrack = (event) => {
+          if (event.track.kind == 'audio') {
+            const remoteStream = event.streams[0];
+            const audioTracks = remoteStream.getAudioTracks();
+             video.srcObject = event.streams[0];
+             video.volume = 1.0;
+           }
+        };
+      }
+
+
+      return {
+        hasAudioTrack, hasVideoTrack,
       };
     }
 
@@ -241,7 +270,7 @@ class RTCPlayer {
 
 
     destroy() {
-
+      this.webRTCStreamAdaptor.close();
     }
 }
 

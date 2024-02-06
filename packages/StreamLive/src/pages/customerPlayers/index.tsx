@@ -137,6 +137,7 @@ const HlsDemo = () => {
             <Radio value="FLV"> FLV</Radio>
             <Radio value="MPEG-TS"> MPEG-TS</Radio>
             <Radio value="MP4"> MP4</Radio>
+            <Radio value="WEBRTC"> WEBRtC</Radio>
           </Radio.Group>
         </Form.Item>
 

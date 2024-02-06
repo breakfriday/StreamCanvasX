@@ -4,9 +4,9 @@ import { defineConfig } from '@ice/pkg';
 
 // https://pkg.ice.work/reference/config/
 export default defineConfig({
-  define: {
-    __VERSION__: pkg.version,
-  },
+  // define: {
+  //   __VERSION__: pkg.version,
+  // },
   plugins: [
     [
       '@ice/pkg-plugin-docusaurus', {

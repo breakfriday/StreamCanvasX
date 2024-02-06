@@ -79,7 +79,9 @@ class VideoService {
         // this.meidiaEl.style.top = '0px';
         // this.meidiaEl.style.left = '0px';
         this.meidiaEl.autoplay = true;
-        contentEl.append(this.meidiaEl);
+        this.meidiaEl.controls = true;
+
+        // contentEl.append(this.meidiaEl);
     }
 
     play() {

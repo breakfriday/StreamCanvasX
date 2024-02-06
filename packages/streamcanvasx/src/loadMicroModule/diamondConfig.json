@@ -3,11 +3,12 @@
    
     "data":[
         {"id":0,"version":"0.1.79","desc":"default 環境 ，沒有規則命中"},
-        {"id":1,"version":"0.1.79","desc":"pcweb 开发环境"},
-        {"id":2,"version":"0.1.78","desc":"pcweb  测试环境"},
-        {"id":3,"version":"0.1.78","desc":"pcweb  演示环境"},
+        {"id":1,"version":"0.1.90","desc":"pcweb 开发环境"},
+        {"id":2,"version":"0.1.90","desc":"pcweb  测试环境"},
+        {"id":3,"version":"0.1.85","desc":"pcweb  演示环境"},
         {"id":4,"version":"0.1.79","desc":"IOT 测试环境"},
-        {"id":5,"version":"0.1.78","desc":"IOT 演示环境"}
+        {"id":5,"version":"0.1.78","desc":"IOT 演示环境"},
+        {"id":6,"version":"0.1.85-beta","desc":"806 波形"}
     ],
     "resources": [
         {
@@ -21,7 +22,79 @@
                  "data":[
                     "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.79/vendor.esm.es5.production.js",
                     "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.79/index.esm.es5.production.js"
-                ]}
+            ]},
+            {
+                "version":"0.1.80",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.80/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.80/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.81",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.81/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.81/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.82",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.82/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.82/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.83",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.83/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.83/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.83.2",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.83.2/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.83.2/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.85",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.85/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.85/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.85.1",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.85.1/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.85.1/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.85.2",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.85.2/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.85.2/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.85-beta",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.85-beta/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.85-beta/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.86",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.86/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.86/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.89",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.89/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.89/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.90",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.90/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.90/index.esm.es5.production.js"
+            ]}
     ],
 
     "rules":[
@@ -29,18 +102,18 @@
             "rulesId":1 , "dataId":1,"desc":"pcweb 开发环境","conditions": [{
                 "type": "and", 
                 "condition": {
-                    "name":"domain","options": ["http://192.168.100.26:8011","http://192.168.100.26:8011/*"]
+                    "name":"domain","options": ["http://192.168.100.26:8011","http://192.168.100.26:8011/*","http://localhost:9000/*"]
                 }}] 
         },
         {
             "rulesId":2 , "dataId":2,"desc":"pcweb  测试环境","conditions":[{
                 "type": "and",
-                 "condition": {"name":"domain","options": ["http://192.168.100.66:42091","http://192.168.100.66:42091/*"]}}] 
+                 "condition": {"name":"domain","options": ["http://192.168.100.66:9080/pcweb/*"]}}] 
         },
         {
             "rulesId":3 , "dataId":3,"desc":"pcweb  演示环境","conditions":[{
                 "type": "and",
-                 "condition": {"name":"domain","options": ["http://120.26.38.129:42091/*","http://47.98.145.160:42091/*"]}}] 
+                 "condition": {"name":"domain","options": ["http://120.26.38.129:42091/*","http://47.98.145.160:42091/*","http://120.26.38.129:42072/*"]}}] 
         },
         {
             "rulesId":4 ,"dataId":4,"desc":"IOT 测试环境","conditions":[{
@@ -51,6 +124,11 @@
             "rulesId":5 ,"dataId":5,"desc":"IOT 演示环境","conditions":[{
                 "type": "and", 
                 "condition": {"name":"domain","options": ["http://36.7.159.51:28082/*"]}}] 
+        },
+        {
+            "rulesId":6 ,"dataId":6,"desc":"806 波形环境","conditions":[{
+                "type": "and", 
+                "condition": {"name":"domain","options": ["http://localhost:3003/StreamCanvasX/wave/*","http://localhost:3003/StreamCanvasX/wave"]}}] 
         }
     ]
 
