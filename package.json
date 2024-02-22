@@ -14,7 +14,9 @@
     "docs": "pnpm -r --filter=./packages/streamcanvasx run start",
     "buildDocs:streamcanvasx": "pnpm -r --filter=./packages/streamcanvasx run build",
     "publish:streamcanvasx": "pnpm -r publish --filter=./packages/streamcanvasx --no-git-checks",
-    "startCore": "pnpm -r --filter=./packages/corePlayer run serve"
+    "startCore": "pnpm -r --filter=./packages/streamcanvasx-core run serve",
+    "buildCore": "pnpm -r --filter=./packages/streamcanvasx-core run build",
+    "watchCore": "pnpm -r --filter=./packages/streamcanvasx-core run watch"
   },
   "repository": "git@github.com:breakfriday/canvasTable.git",
   "author": "breakhappy <break_happy@163.com>",
