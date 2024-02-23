@@ -576,7 +576,7 @@ class PlayerService extends Emitter {
                 return false;
             }
             // console.log('readystate', video.readyState);
-            if (video.readyState < 3) {
+            if (video.readyState < 3||video.paused===true) {
                 if (lastTimeReadyStateBelow3 === null) {
                     lastTimeReadyStateBelow3 = Date.now(); // 开始计时
                 }
