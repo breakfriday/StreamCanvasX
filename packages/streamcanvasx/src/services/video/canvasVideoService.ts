@@ -10,6 +10,7 @@ import { GPUDevice, GPUSampler, GPURenderPipeline, GPUCanvasContext } from '../.
 import { UseMode } from '../../constant';
 import { loadWASM } from '../../utils';
 
+import ControlPanel from "../canvasUI/components/controlPanel";
 function createContextGL($canvas: HTMLCanvasElement): WebGLRenderingContext | null {
     let gl: WebGLRenderingContext | null = null;
 
@@ -67,9 +68,10 @@ class CanvasVideoService {
     WatermarkModule;
     isDrawingWatermark: boolean;
     isGettingWatermark: boolean;
+    control_pannel_el: HTMLCanvasElement|null
     constructor() {
         this.canvas_el = document.createElement('canvas');
-
+        this.control_pannel_el=null;
         // canvas_el2 用于录制原始高清视频
         this.canvas_el2 = document.createElement('canvas');
 
@@ -85,6 +87,7 @@ class CanvasVideoService {
       this.resizeObserver = new ResizeObserver(() => {
         setTimeout(() => {
            this.setCanvasSize();
+           this.resizeControlPannel();
         }, 20);
       });
 
@@ -576,6 +579,30 @@ class CanvasVideoService {
     getCanvas2dEl() {
         return this.canvas_el;
     }
+
+    initControlPannel() {
+      this.control_pannel_el= this.control_pannel_el=document.createElement('canvas');
+      this.control_pannel_el.width=200;
+      this.control_pannel_el.height=10;
+      this.control_pannel_el.style.position="absolute";
+      this.control_pannel_el.style.zIndex="99";
+      this.control_pannel_el.style.bottom="0px";
+      this.control_pannel_el.style.left="0px";
+      this.contentEl.append(this.control_pannel_el);
+      this.contentEl.style.position="relative";
+      this.control_pannel_el.style.border='none';
+      this.resizeControlPannel();
+    }
+    resizeControlPannel() {
+      if(this.control_pannel_el) {
+        let width = 400;
+        if (this.contentEl) {
+          width = this.contentEl.clientWidth;
+        }
+        this.control_pannel_el.width=width;
+      }
+    }
+
     createVideoFramCallBack(video: HTMLVideoElement) {
       let $this = this;
 
@@ -628,6 +655,13 @@ class CanvasVideoService {
         });
       };
       cb();
+
+      if(this.playerService.config.hasControl=true) {
+        if(this.control_pannel_el===null) {
+           this.initControlPannel();
+          let contrl=new ControlPanel(video,this.control_pannel_el);
+        }
+      }
     }
 
     clearCanvas() {

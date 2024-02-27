@@ -302,6 +302,7 @@ class PlayerService extends Emitter {
         if (streamType == 'MpegTs' || streamType === 'MPEG-TS') {
             type = 'mpegts';
             isLive = false;
+            this.config.isLive=false;
         }
 
 
@@ -570,6 +571,10 @@ class PlayerService extends Emitter {
         const threshold = 2000; // 阈值（毫秒）
         let $this = this;
         let { url = '' } = this.config;
+
+        if(this.config.isLive!=true) {
+            return false;
+        }
 
         function checkVideoState() {
             if ($this.meidiaEl === null) {
