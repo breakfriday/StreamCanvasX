@@ -583,7 +583,7 @@ class CanvasVideoService {
     initControlPannel() {
       this.control_pannel_el= this.control_pannel_el=document.createElement('canvas');
       this.control_pannel_el.width=200;
-      this.control_pannel_el.height=10;
+      this.control_pannel_el.height=30;
       this.control_pannel_el.style.position="absolute";
       this.control_pannel_el.style.zIndex="99";
       this.control_pannel_el.style.bottom="0px";
@@ -591,6 +591,8 @@ class CanvasVideoService {
       this.contentEl.append(this.control_pannel_el);
       this.contentEl.style.position="relative";
       this.control_pannel_el.style.border='none';
+      this.control_pannel_el.style.backgroundColor= 'rgba(0, 0, 0, 0.7)';
+
       this.resizeControlPannel();
     }
     resizeControlPannel() {
@@ -656,7 +658,7 @@ class CanvasVideoService {
       };
       cb();
 
-      if(this.playerService.config.hasControl===true) {
+      if(this.playerService.config.hasControl=true) {
         if(this.control_pannel_el===null) {
            this.initControlPannel();
           let contrl=new ControlPanel(video,this.control_pannel_el);
