@@ -413,6 +413,10 @@ class PlayerService extends Emitter {
         //   });
 
 
+        this.mpegtsPlayer.on(mpegts.Events.LOADING_COMPLETE, (parm) => {
+            this.emit("loadingComplete",{});
+        });
+
           if (isLive === false) {
             this.canvasVideoService.loading = false;
             setTimeout(() => {
