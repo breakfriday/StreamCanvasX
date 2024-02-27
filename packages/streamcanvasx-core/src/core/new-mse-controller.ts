@@ -15,6 +15,7 @@ interface Config {
     autoCleanupSourceBuffer?: boolean;
     autoCleanupMaxBackwardDuration?:number
     autoCleanupMinBackwardDuration?:number
+    url?:string
 }
 
 interface InitSegment {
@@ -528,6 +529,7 @@ class MSEController {
 
     _onSourceOpen() {
         Log.v(this.TAG, 'MediaSource onSourceOpen');
+        console.log(this.TAG, 'MediaSource onSourceOpen_ '+this._config.url)
         this._mediaSource.removeEventListener('sourceopen', this.e.onSourceOpen);
         // deferred sourcebuffer creation / initialization
         if (this._pendingSourceBufferInit.length > 0) {
@@ -547,11 +549,13 @@ class MSEController {
     _onSourceEnded() {
         // fired on endOfStream
         Log.v(this.TAG, 'MediaSource onSourceEnded');
+        console.log(this.TAG, 'MediaSource onSourceEnded')
     }
 
     _onSourceClose() {
         // fired on detaching from media element
         Log.v(this.TAG, 'MediaSource onSourceClose');
+        console.log(this.TAG, 'MediaSource onSourceEnded')
         if (this._mediaSource && this.e != null) {
             this._mediaSource.removeEventListener('sourceopen', this.e.onSourceOpen);
             this._mediaSource.removeEventListener('sourceended', this.e.onSourceEnded);
@@ -585,6 +589,7 @@ class MSEController {
 
     _onSourceBufferError(e) {
         Log.e(this.TAG, `SourceBuffer Error: ${e}`);
+        console.error(this.TAG,`SourceBuffer Error: ${e}`)
         // this error might not always be fatal, just ignore it
     }
 

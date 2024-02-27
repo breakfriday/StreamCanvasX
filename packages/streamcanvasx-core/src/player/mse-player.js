@@ -39,7 +39,8 @@ class MSEPlayer {
         this._emitter = new EventEmitter();
         this.splitAVBuffers= mediaDataSource.splitAVBuffers||false
 
-       
+       config.url=mediaDataSource.url
+      
 
         this._config = createDefaultConfig();
         if (typeof config === 'object') {
