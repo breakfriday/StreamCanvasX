@@ -4,6 +4,9 @@ class VideoController {
     private ctx: CanvasRenderingContext2D;
     private isPlaying: boolean;
     private handleRadius: number = 10; // 句柄的半径
+    private dragging: boolean = false;
+    private handle: { x: number; y: number; radius: number } = { x: 0, y: 0, radius: 10 };
+
     offsetX: number
 
     constructor(videoElement: HTMLVideoElement, canvasElement: HTMLCanvasElement) {
@@ -18,22 +21,31 @@ class VideoController {
     }
 
     initControls() {
+      this.event();
+      this.handle.y = this.canvas.height / 2;
+    }
+
+    event() {
+      this.canvas.addEventListener('click', this.mouseClick.bind(this));
+      // this.canvas.addEventListener('mousemove', this.onMouseMove.bind(this));
+      // this.canvas.addEventListener('mousedown', this.onMouseDown.bind(this));
+    }
+
+    mouseClick(e: MouseEvent) {
       let { offsetX } = this;
-      this.canvas.addEventListener('click', (e) => {
-        const rect = this.canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
+      const rect = this.canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
 
 
-        if (x > 0 && x < offsetX) { //  判断是否点击了播放/暂停按钮
-           return false;
-        } else {
-          // 调整视频进度
-         // const clickedTime = (x / (this.canvas.width- offsetX)) * this.video.duration;
-          const clickedTime = ((x - offsetX) / (this.canvas.width - offsetX)) * this.video.duration;
+      if (x > 0 && x < offsetX) { //  判断是否点击了播放/暂停按钮
+         return false;
+      } else {
+        // 调整视频进度
+       // const clickedTime = (x / (this.canvas.width- offsetX)) * this.video.duration;
+        const clickedTime = ((x - offsetX) / (this.canvas.width - offsetX)) * this.video.duration;
 
-          this.video.currentTime = clickedTime;
-        }
-      });
+        this.video.currentTime = clickedTime;
+      }
     }
 
     togglePlayPause() {
@@ -88,7 +100,31 @@ class VideoController {
       this.ctx.beginPath();
       this.ctx.arc(offsetX+cur_progress_wh, this.canvas.height / 2, this.handleRadius, 0, Math.PI * 2);
       this.ctx.fill();
+    }
+
+
+    onMouseDown(event: MouseEvent) {
+      const x = event.offsetX;
+      const y = event.offsetY;
+
+
+      // 檢查是否點擊在 圓形上
+      const distance = Math.sqrt((x - this.handle.x) ** 2 + (y - this.handle.y) ** 2);
+      if (distance < this.handle.radius) {
+          this.dragging = true;
+      }
   }
+
+  onMouseMove(event: MouseEvent) {
+      if (this.dragging) {
+        let { offsetX } = this;
+          // Calculate the new time based on the mouse position
+          const progress_wh=this.canvas.width-offsetX;
+          const newTime = (event.offsetX / progress_wh) * this.video.duration;
+          this.video.currentTime = Math.min(Math.max(newTime, 0), this.video.duration);
+          this.drawProgress(); // Redraw the progress bar with the new handle position
+      }
+     }
   }
 
 
