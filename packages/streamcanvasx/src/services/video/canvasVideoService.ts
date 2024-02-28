@@ -658,7 +658,7 @@ class CanvasVideoService {
       };
       cb();
 
-      if(this.playerService.config.hasControl=true) {
+      if(this.playerService.config.hasControl===true) {
         if(this.control_pannel_el===null) {
            this.initControlPannel();
           let contrl=new ControlPanel(video,this.control_pannel_el);
