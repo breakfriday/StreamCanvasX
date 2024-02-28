@@ -175,6 +175,9 @@ class PlayerService extends Emitter {
             streamType: 'flv',
             isLive: true,
             splitAVBuffers: true,
+            audioPlayback: {
+                method: 'MSE'
+            }
         };
 
         function removeNullAndUndefined(obj: any): any {
@@ -189,6 +192,7 @@ class PlayerService extends Emitter {
         config = removeNullAndUndefined(config);
 
         this.config = Object.assign(default_config, config);
+
         let { model, url, contentEl, useOffScreen, fileData } = this.config;
 
         if (fileData) {
