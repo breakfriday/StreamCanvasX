@@ -79,6 +79,7 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
         wasmModulePath: '',
         useWasm: true,
       } : null,
+      hasControl: true
     };
 
     let player = createPlayerServiceInstance(config);
