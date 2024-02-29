@@ -3,18 +3,23 @@ class VideoController {
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
     private isPlaying: boolean;
-    private handleRadius: number = 10; // 句柄的半径
     private dragging: boolean = false;
-    private handle: { x: number; y: number; radius: number } = { x: 0, y: 0, radius: 10 };
-
-    offsetX: number
+    private handle: { x: number; y: number; radius: number } = { x: 0, y: 0, radius: 5 };
+    private progressBar: { x: number; y: number; height?: number} = { x: 0, y: 0,height: 4 };
+    private container_bar: {height: number}={ height: 0 }
+    private playPauseButton: {x: number;y: number;height: number;width: number}={
+      x: 20, // 将按钮放在canvas的右侧
+      y: 19,
+      width: 12,
+      height: 12
+    }
 
     constructor(videoElement: HTMLVideoElement, canvasElement: HTMLCanvasElement) {
       this.video = videoElement;
       this.canvas = canvasElement;
       this.ctx = this.canvas.getContext('2d');
       this.isPlaying = false;
-      this.offsetX=0;
+
 
       this.initControls();
       this.update();
@@ -22,7 +27,9 @@ class VideoController {
 
     initControls() {
       this.event();
-      this.handle.y = this.canvas.height / 2;
+      this.container_bar.height=20; // this.canvas.height;
+
+      this.handle.y =this.container_bar.height / 2;
     }
 
     event() {
@@ -32,12 +39,15 @@ class VideoController {
     }
 
     mouseClick(e: MouseEvent) {
-      let { offsetX } = this;
+      let offsetX= this.progressBar.x;
       const rect = this.canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
 
 
-      if (x > 0 && x < offsetX) { //  判断是否点击了播放/暂停按钮
+      if (x >= this.playPauseButton.x && x <= this.playPauseButton.x + this.playPauseButton.width &&
+        y >= this.playPauseButton.y && y <= this.playPauseButton.y + this.playPauseButton.height) { //  判断是否点击了播放/暂停按钮
+          this.togglePlayPause();
          return false;
       } else {
         // 调整视频进度
@@ -75,30 +85,46 @@ class VideoController {
       // this.ctx.fillRect(150, 20, 20, 20); // 假定播放/暂停按钮的简单表示
 
       this.drawProgress();
+      this.drawPlayButton();
     }
 
     private drawProgress() {
-      let { offsetX } = this;
+      let offsetX = this.progressBar.x;
       const progress_wh=this.canvas.width-offsetX;
 
+      let container_height=this.container_bar.height;
+
       const cur_progress_wh = (this.video.currentTime / this.video.duration) * progress_wh;
-      const progressBarHeight = 4; // 进度条的高度
+      const progressBarHeight = this.progressBar.height; // 进度条的高度
+      const progressBarY=this.progressBar.y+ (container_height - progressBarHeight) / 2;
+
+
+      this.handle= Object.assign(this.handle, { x: offsetX+cur_progress_wh, y: container_height / 2 });
 
       // 清除画布
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.clearRect(0, 0, this.canvas.width, container_height);
 
       // 绘制进度条背景
       this.ctx.fillStyle = 'rgba(211, 211, 211, 0.5)';
-      this.ctx.fillRect(offsetX, (this.canvas.height - progressBarHeight) / 2, progress_wh, progressBarHeight);
+      this.ctx.fillRect(offsetX, progressBarY, progress_wh, progressBarHeight);
 
       // 绘制进度
       this.ctx.fillStyle = 'lightblue';
-      this.ctx.fillRect(offsetX, (this.canvas.height - progressBarHeight) / 2, cur_progress_wh, progressBarHeight);
+      this.ctx.fillRect(offsetX, progressBarY, cur_progress_wh, progressBarHeight);
 
       // 绘制圆形句柄
       this.ctx.fillStyle = 'white';
       this.ctx.beginPath();
-      this.ctx.arc(offsetX+cur_progress_wh, this.canvas.height / 2, this.handleRadius, 0, Math.PI * 2);
+      this.ctx.arc(this.handle.x, this.handle.y, this.handle.radius, 0, Math.PI * 2);
+      this.ctx.fill();
+    }
+
+    drawPlayButton() {
+      this.ctx.fillStyle = 'white';
+      this.ctx.beginPath();
+      this.ctx.moveTo(this.playPauseButton.x, this.playPauseButton.y);
+      this.ctx.lineTo(this.playPauseButton.x + this.playPauseButton.width, this.playPauseButton.y + this.playPauseButton.height / 2);
+      this.ctx.lineTo(this.playPauseButton.x, this.playPauseButton.y + this.playPauseButton.height);
       this.ctx.fill();
     }
 
@@ -117,7 +143,7 @@ class VideoController {
 
   onMouseMove(event: MouseEvent) {
       if (this.dragging) {
-        let { offsetX } = this;
+        let offsetX = this.progressBar.x;
           // Calculate the new time based on the mouse position
           const progress_wh=this.canvas.width-offsetX;
           const newTime = (event.offsetX / progress_wh) * this.video.duration;
