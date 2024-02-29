@@ -418,7 +418,17 @@ class PlayerService extends Emitter {
 
 
         this.mpegtsPlayer.on(mpegts.Events.LOADING_COMPLETE, (parm) => {
-            this.emit("loadingComplete",{});
+            let data={};
+
+            if(this.config.streamType === 'MpegTs' || this.config.streamType === 'MPEG-TS') {
+                data={
+                    hasVideo: true,
+                    hasAudio: true
+                };
+            }
+
+
+            this.emit("loadingComplete",data);
         });
 
           if (isLive === false) {
