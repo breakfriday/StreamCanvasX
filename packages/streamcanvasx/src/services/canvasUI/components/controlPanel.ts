@@ -18,7 +18,7 @@ class VideoController {
       this.video = videoElement;
       this.canvas = canvasElement;
       this.ctx = this.canvas.getContext('2d');
-      this.isPlaying = false;
+      this.isPlaying = true;
 
 
       this.initControls();
@@ -102,7 +102,7 @@ class VideoController {
       this.handle= Object.assign(this.handle, { x: offsetX+cur_progress_wh, y: container_height / 2 });
 
       // 清除画布
-      this.ctx.clearRect(0, 0, this.canvas.width, container_height);
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
       // 绘制进度条背景
       this.ctx.fillStyle = 'rgba(211, 211, 211, 0.5)';
@@ -120,12 +120,27 @@ class VideoController {
     }
 
     drawPlayButton() {
-      this.ctx.fillStyle = 'white';
-      this.ctx.beginPath();
-      this.ctx.moveTo(this.playPauseButton.x, this.playPauseButton.y);
-      this.ctx.lineTo(this.playPauseButton.x + this.playPauseButton.width, this.playPauseButton.y + this.playPauseButton.height / 2);
-      this.ctx.lineTo(this.playPauseButton.x, this.playPauseButton.y + this.playPauseButton.height);
-      this.ctx.fill();
+      let draw_play=() => {
+        this.ctx.fillStyle = 'white';
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.playPauseButton.x, this.playPauseButton.y);
+        this.ctx.lineTo(this.playPauseButton.x + this.playPauseButton.width, this.playPauseButton.y + this.playPauseButton.height / 2);
+        this.ctx.lineTo(this.playPauseButton.x, this.playPauseButton.y + this.playPauseButton.height);
+        this.ctx.fill();
+      };
+
+      let draw_pause=() => {
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillRect(this.playPauseButton.x, this.playPauseButton.y, this.playPauseButton.width / 3, this.playPauseButton.height);
+        this.ctx.fillRect(this.playPauseButton.x + this.playPauseButton.width * 2 / 3, this.playPauseButton.y, this.playPauseButton.width / 3, this.playPauseButton.height);
+      };
+
+      if (this.isPlaying) {
+        draw_pause();
+      }else{
+        debugger
+        draw_play();
+      }
     }
 
 
