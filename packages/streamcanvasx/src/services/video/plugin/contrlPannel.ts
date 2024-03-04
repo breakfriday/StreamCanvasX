@@ -12,24 +12,61 @@ class VideoController {
       y: 19,
       width: 12,
       height: 12
-    }
+    };
+    private content_el: HTMLElement
 
-    constructor(videoElement: HTMLVideoElement, canvasElement: HTMLCanvasElement) {
+    constructor(videoElement: HTMLVideoElement, content_el: HTMLElement) {
       this.video = videoElement;
-      this.canvas = canvasElement;
-      this.ctx = this.canvas.getContext('2d');
+      this.content_el=content_el
+
+   
       this.isPlaying = true;
 
 
+ 
+    }
+    load(){
       this.initControls();
       this.update();
+
     }
 
     initControls() {
+      this.create_canvas_el();
       this.event();
       this.container_bar.height=20; // this.canvas.height;
 
       this.handle.y =this.container_bar.height / 2;
+    }
+
+    create_canvas_el() {
+      let control_pannel_el=document.createElement('canvas');
+      let contentEl=this.content_el
+
+
+      control_pannel_el.width=200;
+      control_pannel_el.height=35;
+      control_pannel_el.style.position="absolute";
+      control_pannel_el.style.zIndex="99";
+      control_pannel_el.style.bottom="0px";
+      control_pannel_el.style.left="0px";
+      control_pannel_el.style.border='none';
+      control_pannel_el.style.backgroundColor= 'rgba(0, 0, 0, 0.5)';
+
+      this.canvas=control_pannel_el;
+      this.ctx = this.canvas.getContext('2d');
+
+      this.setSize()
+
+
+      contentEl.append(control_pannel_el);
+      contentEl.style.position="relative";
+    }
+
+    setSize(){
+      let width=this.content_el.clientWidth
+      this.canvas.width=width
+
     }
 
     event() {
@@ -165,6 +202,11 @@ class VideoController {
           this.video.currentTime = Math.min(Math.max(newTime, 0), this.video.duration);
           this.drawProgress(); // Redraw the progress bar with the new handle position
       }
+     }
+
+
+     destroy() {
+
      }
   }
 

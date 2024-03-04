@@ -87,7 +87,7 @@ class CanvasVideoService {
       this.resizeObserver = new ResizeObserver(() => {
         setTimeout(() => {
            this.setCanvasSize();
-           this.resizeControlPannel();
+          //  this.resizeControlPannel();
         }, 20);
       });
 
@@ -128,6 +128,12 @@ class CanvasVideoService {
 
 
         // this.initgl();
+    }
+
+    load(video: HTMLVideoElement){
+
+      this.createVideoFramCallBack(video)
+      this.resignPlugin()
     }
     setUseMode(mode: UseMode): void {
         this.useMode = mode;
@@ -580,30 +586,8 @@ class CanvasVideoService {
         return this.canvas_el;
     }
 
-    initControlPannel() {
-      this.control_pannel_el= this.control_pannel_el=document.createElement('canvas');
-      this.control_pannel_el.width=200;
-      this.control_pannel_el.height=35;
-      this.control_pannel_el.style.position="absolute";
-      this.control_pannel_el.style.zIndex="99";
-      this.control_pannel_el.style.bottom="0px";
-      this.control_pannel_el.style.left="0px";
-      this.contentEl.append(this.control_pannel_el);
-      this.contentEl.style.position="relative";
-      this.control_pannel_el.style.border='none';
-      this.control_pannel_el.style.backgroundColor= 'rgba(0, 0, 0, 0.5)';
 
-      this.resizeControlPannel();
-    }
-    resizeControlPannel() {
-      if(this.control_pannel_el) {
-        let width = 400;
-        if (this.contentEl) {
-          width = this.contentEl.clientWidth;
-        }
-        this.control_pannel_el.width=width;
-      }
-    }
+ 
 
     createVideoFramCallBack(video: HTMLVideoElement) {
       let $this = this;
@@ -658,12 +642,7 @@ class CanvasVideoService {
       };
       cb();
 
-      if(this.playerService.config.hasControl===true) {
-        if(this.control_pannel_el===null) {
-           this.initControlPannel();
-          let contrl=new ControlPanel(video,this.control_pannel_el);
-        }
-      }
+ 
     }
 
     clearCanvas() {
@@ -675,6 +654,21 @@ class CanvasVideoService {
       // 清除画布
       this.canvas_context.clearRect(0, 0, canvasEl.width, canvasEl.height);
     }
+
+    resignPlugin(){
+      let contentEl=this.contentEl
+      let video=this.playerService.meidiaEl
+
+
+      if(this.playerService.config.hasControl===true){
+        let control=new ControlPanel(video,contentEl);
+        control.load()
+      }
+
+      
+
+    }
+
     drawLoading() {
       if (this.playerService.config.useOffScreen === true) {
         return false;
