@@ -10,7 +10,7 @@ import { GPUDevice, GPUSampler, GPURenderPipeline, GPUCanvasContext } from '../.
 import { UseMode } from '../../constant';
 import { loadWASM } from '../../utils';
 
-import ControlPanel from "../canvasUI/components/controlPanel";
+import ControlPanel from "./plugin/contrlPannel";
 function createContextGL($canvas: HTMLCanvasElement): WebGLRenderingContext | null {
     let gl: WebGLRenderingContext | null = null;
 
