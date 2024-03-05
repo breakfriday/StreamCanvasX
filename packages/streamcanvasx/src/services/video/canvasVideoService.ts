@@ -68,10 +68,10 @@ class CanvasVideoService {
     WatermarkModule;
     isDrawingWatermark: boolean;
     isGettingWatermark: boolean;
-    control_pannel_el: HTMLCanvasElement|null
+
     constructor() {
         this.canvas_el = document.createElement('canvas');
-        this.control_pannel_el=null;
+
         // canvas_el2 用于录制原始高清视频
         this.canvas_el2 = document.createElement('canvas');
 
