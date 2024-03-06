@@ -27,5 +27,26 @@ function RotateDecorator(target: any, propertyName: string, descriptor: Property
     return descriptor;
 }
 
+function RotateResetDecrator(target: any, propertyName: string, descriptor: PropertyDescriptor): PropertyDescriptor {
+    const originalMethod = descriptor.value;
 
-export { RotateDecorator };
+    descriptor.value = function(this: MediaView ,...args: any[]) {
+        let ctx = this.canvas_context;
+        let { canvas_el } = this;
+        let canvas = canvas_el;
+        let degree = (360 - this.rotateDegreeSum);
+        degree = this.transformCount == 0 ? degree : -degree;
+        let deg = Math.PI / 180;// 角度转化为弧度
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.translate(centerX, centerY);
+        ctx.transform(Math.cos(deg * degree), Math.sin(deg * degree), -Math.sin(deg * degree), Math.cos(deg * degree), 0, 0);
+        ctx.translate(-centerX, -centerY);
+        this.rotateDegreeSum = 0;
+    };
+    return descriptor;
+}
+
+
+export { RotateDecorator ,RotateResetDecrator };

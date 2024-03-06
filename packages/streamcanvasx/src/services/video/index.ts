@@ -92,6 +92,16 @@ class CanvasVideoService {
     destroy() {
         this.mediaView.destroy();
     }
+    setCover(cover: boolean = false) {
+      this.mediaView.setCover(cover);
+     }
+
+     drawRotate(degree: number) {
+      this.mediaView.drawRotate(degree);
+     }
+     rotateReset() {
+      this.mediaView.rotateReset();
+     }
 }
 
 

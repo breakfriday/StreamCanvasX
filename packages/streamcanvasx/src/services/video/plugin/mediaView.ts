@@ -1,7 +1,7 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../../player';
 import { UseMode } from '../../../constant';
-import { RotateDecorator } from './utilDecorator/RotateDecorator';
+import { RotateDecorator ,RotateResetDecrator } from './utilDecorator/RotateDecorator';
 
 
 class MediaView {
@@ -370,9 +370,10 @@ class MediaView {
        }
 
        @RotateDecorator
-       drawRotate(degree: number) {
+       drawRotate(degree: number) {}
 
-      }
+       @RotateResetDecrator
+       rotateReset() { }
 
 
     setCanvas2Size(parm: {width: number; height: number}) {
