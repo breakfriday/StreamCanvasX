@@ -351,6 +351,8 @@ class MediaView {
             if (this.cover === true && (this.rotateDegreeSum === 90 || this.rotateDegreeSum === 270)) {
                 offsetX=centerX - centerY;
                 offsetY= centerY - centerX;
+                targetVideoWidth=height;
+                targetVideoHeight=width;
             }
         }else{
               let scaleRatio = Math.min(width / video_width, height / video_height);
