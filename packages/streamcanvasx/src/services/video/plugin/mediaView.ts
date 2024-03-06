@@ -1,7 +1,7 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../../player';
 import { UseMode } from '../../../constant';
-import { RotateDecorator } from './utilDecorator/ RotateDecorator';
+import { RotateDecorator } from './utilDecorator/RotateDecorator';
 
 
 class MediaView {
@@ -74,7 +74,6 @@ class MediaView {
     }
 
     load(video: HTMLVideoElement) {
-      debugger
         this.createVideoFramCallBack(video);
       }
     event() {
@@ -366,10 +365,14 @@ class MediaView {
         return { targetVideoWidth,targetVideoHeight,offsetX,offsetY };
       }
 
+      setCover(cover: boolean = false) {
+        this.cover = cover;
+       }
 
-    drawRotate(degree: number) {
+       @RotateDecorator
+       drawRotate(degree: number) {
 
-    }
+      }
 
 
     setCanvas2Size(parm: {width: number; height: number}) {

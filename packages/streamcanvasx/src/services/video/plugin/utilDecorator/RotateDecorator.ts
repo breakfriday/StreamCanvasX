@@ -1,7 +1,8 @@
+import MediaView from "../mediaView";
 function RotateDecorator(target: any, propertyName: string, descriptor: PropertyDescriptor): PropertyDescriptor {
     const originalMethod = descriptor.value;
 
-    descriptor.value = function(degree: number, ...args: any[]) { // 确保degree作为参数
+    descriptor.value = function(this: MediaView ,degree: number, ...args: any[]) { // 确保degree作为参数
         let ctx = this.canvas_context;
         // 你的自定义逻辑
         let canvas = this.canvas_el;
