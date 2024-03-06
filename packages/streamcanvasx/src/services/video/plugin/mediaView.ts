@@ -2,10 +2,10 @@ import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../../player';
 import { UseMode } from '../../../constant';
 
-import ControlPanel from "./contrlPannel";
-class MediaView{
+
+class MediaView {
     canvas_el: HTMLCanvasElement;
-    canvas_el2: HTMLCanvasElement; //canvas2 用来最原始视频录制的画布
+    canvas_el2: HTMLCanvasElement; // canvas2 用来最原始视频录制的画布
     canvas_context: CanvasRenderingContext2D;
     canvas_context2: CanvasRenderingContext2D;
     contentEl: HTMLElement;
@@ -28,15 +28,13 @@ class MediaView{
     WatermarkModule;
     isDrawingWatermark: boolean;
     isGettingWatermark: boolean;
-    constructor(){
-
+    constructor() {
         this.canvas_el = document.createElement('canvas');
 
         // canvas_el2 用于录制原始高清视频
         this.canvas_el2 = document.createElement('canvas');
 
         this.canvas_el.style.position = 'absolute';
-
     }
     init(playerService: PlayerService, data: {model?: UseMode; contentEl?: HTMLElement | null; useOffScreen: boolean}) {
         // this.initGpu();
@@ -73,13 +71,11 @@ class MediaView{
 
         // this.initgl();
     }
-    
-    load(video: HTMLVideoElement){
 
-        this.createVideoFramCallBack(video)
-        this.resignPlugin()
+    load(video: HTMLVideoElement) {
+        this.createVideoFramCallBack(video);
       }
-    event(){
+    event() {
               // 监听 dom size 变化， 调整canvas 大小
       this.resizeObserver = new ResizeObserver(() => {
         setTimeout(() => {
@@ -89,12 +85,11 @@ class MediaView{
       });
 
       this.resizeObserver.observe(this.contentEl);
+    }
+    initgl() {
 
     }
-    initgl(){
-
-    }
-    initGpu(){
+    initGpu() {
 
     }
     _initContext2D() {
@@ -111,47 +106,46 @@ class MediaView{
     setUseMode(mode: UseMode): void {
         this.useMode = mode;
     }
-    setCanvasSize(){
+    setCanvasSize() {
         let height = 200;
         let width = 400;
-  
+
         // if (this.playerService.config.useOffScreen == true) {
         //   return false;
         // }
-  
-  
+
+
         if (this.contentEl) {
           height = this.contentEl.clientHeight;
           width = this.contentEl.clientWidth;
         }
-  
+
           this.canvas_el.width = width;
           this.canvas_el.height = height;
-        
     }
     createVideoFramCallBack(video: HTMLVideoElement) {
         let $this = this;
-  
+
         let fpsCount = 5;
         let frame_count = 0;
         let start_time = 0.0;
         let now_time = 0.0;
         let fps = 0;
-  
+
         function millisecondsToTime(ms: any) {
           // 将时间戳转换为秒并取整
           let seconds = Math.floor(ms / 1000);
-  
+
           // 计算小时数、分钟数和秒数
           let hours = Math.floor(seconds / 3600);
           let minutes = Math.floor((seconds - (hours * 3600)) / 60);
            seconds = seconds - (hours * 3600) - (minutes * 60);
-  
+
           // 如果只有一位数字，前面补0
           if (hours < 10) { hours = `0${hours}`; }
           if (minutes < 10) { minutes = `0${minutes}`; }
           if (seconds < 10) { seconds = `0${seconds}`; }
-  
+
           // 返回格式化的字符串
           return `${hours}:${minutes}:${seconds}`;
         }
@@ -164,38 +158,25 @@ class MediaView{
               }
               now_time = now;
               // let last_time = performance.now();
-  
+
               let elapsed = (now_time - last_time) / 1000.0;
               // 每经过fpsCount帧后，输出一次当前的瞬时帧率
               if (!(frame_count % fpsCount)) {
                 fps = (1 / elapsed).toFixed(3);
               }
               frame_count++;
-  
+
               let performanceInfo = { fps: fps, duringtime: millisecondsToTime(now - start_time) };
               // console.info(performanceInfo);
-  
+
               $this.playerService.emit('performaceInfo', performanceInfo);
               $this.render(video);
             cb();
           });
         };
         cb();
-  
-   
       }
-    resignPlugin(){
-        let contentEl=this.contentEl
-        let video=this.playerService.meidiaEl
-  
-  
-        if(this.playerService.config.hasControl===true){
-          let control=new ControlPanel(video,contentEl);
-          control.load()
-        }
-  
 
-    }
 
     render(videoFrame: VideoFrame | HTMLVideoElement) {
         this.videoFrame = videoFrame as VideoFrame;
@@ -210,13 +191,129 @@ class MediaView{
                 //   this.renderFrameByWebgpu(videoFrame);
               break;
           }
-  
-  
+
+
          // this.renderFrameByWebgpu(videoFrame);
-  
+
       //    this.drawGl(videoFrame);
       }
 
+      drawLoading() {
+        if (this.playerService.config.useOffScreen === true) {
+          return false;
+        }
+        let ctx = this.canvas_context;
+        let { canvas_el } = this;
+        let canvas = canvas_el;
+        let timeId: any = null;
+        if (this.loading === true) {
+          return false;
+        }
+
+        // Define the circle radius and line width
+        const radius = 50;
+        const lineWidth = 10;
+
+        // Initialize the start and end angles of the arc progress bar
+        let startAngle = 0;
+        let endAngle = 0;
+        let $this = this;
+
+        this.loading = true;
+
+        let drawAnimation = () => {
+          // Define the center coordinates of the circle
+          const centerX = canvas.width / 2;
+          const centerY = canvas.height / 2;
+          if (this.loading === false) {
+            clearTimeout(timeId);
+            return false;
+          }
+          if ($this.clear === true) {
+            // this.destory()
+            clearTimeout(timeId);
+            $this.clearCanvas();
+            return false;
+          }
+          // Clear the canvas content to prepare for drawing a new frame
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          // Draw the background circle
+          ctx.beginPath(); // Begin a new path
+          ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI); // Draw a full circle
+          ctx.lineWidth = lineWidth; // Set the line width
+          ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)'; // Set the line color
+          ctx.stroke(); // Stroke the path
+
+          // Draw the loading progress arc
+          ctx.beginPath(); // Begin a new path
+          ctx.arc(centerX, centerY, radius, startAngle * Math.PI, endAngle * Math.PI); // Draw an arc
+          ctx.lineWidth = lineWidth; // Set the line width
+          ctx.strokeStyle = 'rgba(50, 150, 255, 1)'; // Set the line color
+          ctx.stroke(); // Stroke the path
+
+          // Update the start and end angles of the arc progress bar for the next frame
+          startAngle += 0.01;
+          endAngle += 0.02;
+
+          // When the angle reaches 2π, reset it to 0
+          if (startAngle >= 2) {
+            startAngle = 0;
+          }
+
+          if (endAngle >= 2) {
+            endAngle = 0;
+          }
+
+          // Use the setTimeout function to recursively call drawLoading() to achieve animation effect
+          timeId = setTimeout(drawAnimation, 1000 / 30); // Approximate 60 FPS
+        };
+
+        drawAnimation();
+      }
+
+      clearCanvas() {
+        if (this.playerService.config.useOffScreen === true) {
+            return false;
+          }
+          let canvasEl = this.canvas_el;
+          this.clear = true;
+          // 清除画布
+          this.canvas_context.clearRect(0, 0, canvasEl.width, canvasEl.height);
+      }
+      destroy() {
+        if (this.playerService.config.showAudio === true) {
+          this.playerService.audioProcessingService.clearCanvas();
+        }
+        if (this.canvas_el && this.contentEl) {
+          this.canvas_el.remove();
+          this.contentEl = null;
+        }
+      }
+
+      drawError() {
+        // this.playerService.mpegtsPlayer.destroy();
+        // this.playerService.audioProcessingService.clearCanvas();
+        // this.clearCanvas();
+
+        let canvasContext = this.canvas_context;
+        let canvas = this.canvas_el;
+        let { errorUrl = '' } = this.playerService.config;
+
+        let errorImg = new Image();
+        errorImg.src = errorUrl;
+
+        errorImg.onload = function () {
+          let width = canvas.width * 0.5;
+
+            errorImg.width = width;
+
+
+          let startY = (canvas.height - width) / 2;
+          let startX = (canvas.width - width) / 2;
+          canvasContext.drawImage(errorImg, startX, startY, width, width);
+       };
+      }
       renderCanvas2d(videoFrame: VideoFrame | HTMLVideoElement) {
         // let video_width = videoFrame.codedHeight;
         // let video_height = videoFrame.codedHeight;
@@ -243,10 +340,8 @@ class MediaView{
         // let clearSize = Math.max(3 * centerX - centerY, 3 * centerY - centerX);
         // this.canvas_context.clearRect(clearStart, clearStart, clearSize, clearSize); // 无需讨论 width height的大小关系，均有效
 
-        let {offsetX,offsetY,targetVideoHeight,targetVideoWidth}=this.calculateVideoAttributes(video)
+        let { offsetX,offsetY,targetVideoHeight,targetVideoWidth }=this.calculateVideoAttributes(video);
         this.canvas_context.drawImage(videoFrame, offsetX, offsetY, targetVideoWidth, targetVideoHeight);
-      
-      
 
 
         let video_height = video.videoHeight;
@@ -262,7 +357,6 @@ class MediaView{
           // this.drawTrasform(30);
           this.canvas_context2.drawImage(videoFrame, 0, 0, video_width, video_height);
         }
-        
 
 
         // this.drawTrasform(videoFrame, 30, ctx);
@@ -280,12 +374,12 @@ class MediaView{
     }
 
     // 属性x,
-     calculateVideoAttributes(videoFrame: VideoFrame | HTMLVideoElement):{
-         offsetX: number, 
-         offsetY: number, 
-         targetVideoWidth: number,
-         targetVideoHeight: number 
-        }{
+     calculateVideoAttributes(videoFrame: VideoFrame | HTMLVideoElement): {
+         offsetX: number;
+         offsetY: number;
+         targetVideoWidth: number;
+         targetVideoHeight: number;
+        } {
         let video = videoFrame as HTMLVideoElement;
         let video_height = video.videoHeight;
         let video_width = video.videoWidth;
@@ -299,50 +393,36 @@ class MediaView{
         const centerX = width / 2;
         const centerY = height / 2;
 
-        let  offsetX=0
-        let  offsetY=0
-        let targetVideoWidth=width
-        let targetVideoHeight=height
+        let offsetX=0;
+        let offsetY=0;
+        let targetVideoWidth=width;
+        let targetVideoHeight=height;
 
-        if(this.cover===true){
-
+        if(this.cover===true) {
             if (this.cover === true && (this.rotateDegreeSum === 90 || this.rotateDegreeSum === 270)) {
-                offsetX=centerX - centerY
-                offsetY= centerY - centerX
+                offsetX=centerX - centerY;
+                offsetY= centerY - centerX;
             }
-
-     
-
         }else{
-
               let scaleRatio = Math.min(width / video_width, height / video_height);
               // Calculate the target video dimensions after scaling
                targetVideoWidth = video_width * scaleRatio;
                targetVideoHeight = video_height * scaleRatio;
-        
+
               // Calculate the position to center the video frame on the canvas
              offsetX = (width - targetVideoWidth) / 2;
              offsetY = (height - targetVideoHeight) / 2;
-    
-            
         }
-        return {targetVideoWidth,targetVideoHeight,offsetX,offsetY}
-
-
-     
-
-      }
-
-      drawInvisibleWatermark(){
-
-      }
-
-      getInvisibleWatermark(){
-        
+        return { targetVideoWidth,targetVideoHeight,offsetX,offsetY };
       }
 
 
-    // 录制原始高清视频 ,
+      getInvisibleWatermark(isGettingWatermark: boolean) {
+
+      }
+
+
+    // 原始高清视频 ,
     renderOriginCanvas(videoFrame: VideoFrame | HTMLVideoElement) {
         let video = videoFrame as HTMLVideoElement;
         if (this.playerService.canvasToVideoSerivce.recording === true) {
@@ -353,19 +433,17 @@ class MediaView{
             this.setCanvas2Size({ width: video_width, height: video_height });
           }
           this.canvas_context2.clearRect(0, 0, video_width, video_height);
-  
+
           // this.drawTrasform(30);
           this.canvas_context2.drawImage(videoFrame, 0, 0, video_width, video_height);
         }
     }
 
     setCanvas2Size(parm: {width: number; height: number}) {
-        let { width, height } = parm;
+     let { width, height } = parm;
        this.canvas_el2.width = width;
        this.canvas_el2.height = height;
      }
- 
-
 }
 
-export default MediaView
+export default MediaView;
