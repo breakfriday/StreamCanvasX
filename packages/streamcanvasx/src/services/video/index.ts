@@ -47,10 +47,6 @@ class CanvasVideoService {
 
     constructor() {
 
-        // this._initContext2D();
-
-        // this.init();
-        // this.setCanvasSize();
     }
 
     init(playerService: PlayerService,data: {model?: UseMode; contentEl?: HTMLElement | null; useOffScreen: boolean}) {
@@ -58,6 +54,7 @@ class CanvasVideoService {
         this.resignPlugin();
     }
 
+    // 插件注冊
     resignPlugin() {
         let { playerService } = this;
         let { contentEl,model,useOffScreen } = this.playerService.config;
@@ -69,15 +66,20 @@ class CanvasVideoService {
         let video=this.playerService.meidiaEl;
     }
 
+    // 插件啓動
+    pluginBoot(video: HTMLVideoElement) {
+      let { contentEl } = this.playerService.config;
+      this.mediaView.load(video);
+
+      if(this.playerService.config.hasControl===true) {
+        let control=new ControlPanel(video,contentEl);
+         control.load();
+      }
+    }
+
 
     load(video: HTMLVideoElement) {
-      let { contentEl } = this.playerService.config;
-        this.mediaView.load(video);
-
-        if(this.playerService.config.hasControl===true) {
-          let control=new ControlPanel(video,contentEl);
-           control.load();
-        }
+      this.pluginBoot(video);
     }
 
     drawLoading() {

@@ -17,18 +17,14 @@ class VideoController {
 
     constructor(videoElement: HTMLVideoElement, content_el: HTMLElement) {
       this.video = videoElement;
-      this.content_el=content_el
+      this.content_el=content_el;
 
-   
+
       this.isPlaying = true;
-
-
- 
     }
-    load(){
+    load() {
       this.initControls();
       this.update();
-
     }
 
     initControls() {
@@ -41,7 +37,7 @@ class VideoController {
 
     create_canvas_el() {
       let control_pannel_el=document.createElement('canvas');
-      let contentEl=this.content_el
+      let contentEl=this.content_el;
 
 
       control_pannel_el.width=200;
@@ -56,17 +52,16 @@ class VideoController {
       this.canvas=control_pannel_el;
       this.ctx = this.canvas.getContext('2d');
 
-      this.setSize()
+      this.setSize();
 
 
       contentEl.append(control_pannel_el);
       contentEl.style.position="relative";
     }
 
-    setSize(){
-      let width=this.content_el.clientWidth
-      this.canvas.width=width
-
+    setSize() {
+      let width=this.content_el.clientWidth;
+      this.canvas.width=width;
     }
 
     event() {
