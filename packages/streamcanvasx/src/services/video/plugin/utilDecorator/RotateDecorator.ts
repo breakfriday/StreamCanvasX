@@ -49,4 +49,32 @@ function RotateResetDecrator(target: any, propertyName: string, descriptor: Prop
 }
 
 
-export { RotateDecorator ,RotateResetDecrator };
+function TrasformDecractor(target: any, propertyName: string, descriptor: PropertyDescriptor): PropertyDescriptor {
+    descriptor.value=function(this: MediaView ,degree: number, ...args: any[]) {
+        this.transformCount = this.transformCount ? this.transformCount : 0;
+        this.transformCount = (this.transformCount + 1) % 2;
+        // console.log(this.transformCount);
+        this.transformDegreeSum = this.transformDegreeSum ? this.transformDegreeSum : 0;
+        degree = degree ? Number(degree) : 0;
+        this.transformDegreeSum = (this.transformDegreeSum + degree) % 180;
+        // 和初版实现相似   translate()scale()rotate()和transform()应该类似
+        // 那么翻转后再调用旋转操作时旋转方向改变的问题 应无法通过改变翻转方式来解决
+        let ctx = this.canvas_context;
+        // ctx.restore(); // restore(),save()重置画布  添加之后可在render中直接调用drawTrasform()
+        // ctx.save();
+        let { canvas_el } = this;
+        let canvas = canvas_el;
+        let deg = Math.PI / 180; // 角度转化为弧度
+        degree = this.transformCount == 0 ? -2 * degree : 2 * degree;
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.translate(centerX, centerY);
+        ctx.transform(Math.cos(deg * degree), Math.sin(deg * degree), -Math.sin(deg * degree), Math.cos(deg * degree), 0, 0);
+        ctx.translate(-centerX, -centerY);
+        ctx.transform(1, 0, 0, -1, 0, canvas.height);
+    };
+    return descriptor;
+}
+
+export { RotateDecorator ,RotateResetDecrator,TrasformDecractor };

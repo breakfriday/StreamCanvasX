@@ -73,6 +73,9 @@ class CanvasVideoService {
      rotateReset() {
       this.mediaView.rotateReset();
      }
+     drawTrasform(degree: number) {
+      this.mediaView.drawTrasform(degree);
+     }
 }
 
 
