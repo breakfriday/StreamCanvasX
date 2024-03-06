@@ -54,6 +54,7 @@ class CanvasVideoService {
     }
 
     init(playerService: PlayerService,data: {model?: UseMode; contentEl?: HTMLElement | null; useOffScreen: boolean}) {
+      this.playerService=playerService;
         this.resignPlugin();
     }
 
@@ -62,23 +63,26 @@ class CanvasVideoService {
         let { contentEl,model,useOffScreen } = this.playerService.config;
 
         this.mediaView=new MediaView();
+
         this.mediaView.init(playerService,{ contentEl,model,useOffScreen });
 
-
         let video=this.playerService.meidiaEl;
-        if(this.playerService.config.hasControl===true) {
-          let control=new ControlPanel(video,contentEl);
-          control.load();
-        }
     }
 
 
     load(video: HTMLVideoElement) {
+      let { contentEl } = this.playerService.config;
         this.mediaView.load(video);
+
+        if(this.playerService.config.hasControl===true) {
+          let control=new ControlPanel(video,contentEl);
+           control.load();
+        }
     }
 
     drawLoading() {
-        this.mediaView.drawLoading();
+      // debugger;
+      //  this.mediaView.drawLoading();
     }
     drawError() {
         this.mediaView.drawError();

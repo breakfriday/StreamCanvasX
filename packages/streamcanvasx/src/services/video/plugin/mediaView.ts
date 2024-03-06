@@ -1,6 +1,7 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../../player';
 import { UseMode } from '../../../constant';
+import { RotateDecorator } from './utilDecorator/ RotateDecorator';
 
 
 class MediaView {
@@ -25,7 +26,7 @@ class MediaView {
     transformDegreeSum: number;
     rotateDegreeSum: number;
 
-    WatermarkModule;
+
     isDrawingWatermark: boolean;
     isGettingWatermark: boolean;
     constructor() {
@@ -41,7 +42,7 @@ class MediaView {
         //  this.setUseMode(UseMode.UseCanvas);
         //  this.setUseMode(UseMode.UseWebGPU);
         this.playerService = playerService;
-        let { model = UseMode.UseCanvas, contentEl } = data || {};
+        let { model = UseMode.UseCanvas, contentEl } = playerService.config|| {};
 
 
           this.setUseMode(model);
@@ -73,6 +74,7 @@ class MediaView {
     }
 
     load(video: HTMLVideoElement) {
+      debugger
         this.createVideoFramCallBack(video);
       }
     event() {
@@ -94,14 +96,10 @@ class MediaView {
     }
     _initContext2D() {
         if (this.playerService.config.useOffScreen === true) {
-          // let offscreenCanvas = this.canvas_el.transferControlToOffscreen();
-          // this.offscreen_canvas = offscreenCanvas;
-          // 不能在主线程中  获取上下问
-          // this.offscreen_canvas_context = offscreenCanvas.getContext('2d');
+
         } else {
           this.canvas_context = this.canvas_el.getContext('2d');
         }
-         // this.canvas_context = this.canvas_el.getContext('2d');
       }
     setUseMode(mode: UseMode): void {
         this.useMode = mode;
@@ -191,11 +189,6 @@ class MediaView {
                 //   this.renderFrameByWebgpu(videoFrame);
               break;
           }
-
-
-         // this.renderFrameByWebgpu(videoFrame);
-
-      //    this.drawGl(videoFrame);
       }
 
       drawLoading() {
@@ -292,10 +285,6 @@ class MediaView {
       }
 
       drawError() {
-        // this.playerService.mpegtsPlayer.destroy();
-        // this.playerService.audioProcessingService.clearCanvas();
-        // this.clearCanvas();
-
         let canvasContext = this.canvas_context;
         let canvas = this.canvas_el;
         let { errorUrl = '' } = this.playerService.config;
@@ -315,8 +304,6 @@ class MediaView {
        };
       }
       renderCanvas2d(videoFrame: VideoFrame | HTMLVideoElement) {
-        // let video_width = videoFrame.codedHeight;
-        // let video_height = videoFrame.codedHeight;
         let video = videoFrame as HTMLVideoElement;
 
         let width = 400;
@@ -328,52 +315,15 @@ class MediaView {
         }
         const centerX = width / 2;
         const centerY = height / 2;
-        // let ctx = this.canvas_context;
-        // let { canvas_el } = this;
-        // let canvas = canvas_el;
-        // ctx.save();
 
-        // this.canvas_context.clearRect(0, 0, width, height);
-        // 取消cover后使用clearRect(0, 0, width, height)不能完全清除
         this.canvas_context.clearRect(0, centerY - centerX, width, width); // 当 width > height 时，有效
-        // let clearStart = -Math.abs(centerX - centerY);
-        // let clearSize = Math.max(3 * centerX - centerY, 3 * centerY - centerX);
-        // this.canvas_context.clearRect(clearStart, clearStart, clearSize, clearSize); // 无需讨论 width height的大小关系，均有效
+
 
         let { offsetX,offsetY,targetVideoHeight,targetVideoWidth }=this.calculateVideoAttributes(video);
         this.canvas_context.drawImage(videoFrame, offsetX, offsetY, targetVideoWidth, targetVideoHeight);
-
-
-        let video_height = video.videoHeight;
-        let video_width = video.videoWidth;
-
-        if (this.playerService.canvasToVideoSerivce.recording === true) {
-          if (!this.canvas_context2) {
-            this.canvas_context2 = this.canvas_el2.getContext('2d');
-            this.setCanvas2Size({ width: video_width, height: video_height });
-          }
-          this.canvas_context2.clearRect(0, 0, video_width, video_height);
-
-          // this.drawTrasform(30);
-          this.canvas_context2.drawImage(videoFrame, 0, 0, video_width, video_height);
-        }
-
-
-        // this.drawTrasform(videoFrame, 30, ctx);
-        if (this.isDrawingWatermark) {
-          this.drawInvisibleWatermark(this.isDrawingWatermark, {});
-          this.getInvisibleWatermark(this.isGettingWatermark, {});
-        }
-
-        // ctx.restore();
-        // console.log(this.playerService.config.degree);
-        // this.drawTrasform(videoFrame, this.playerService.config.degree);
-
-        // ctx.restore();
-        this.renderOriginCanvas(videoFrame);
     }
 
-    // 属性x,
+
      calculateVideoAttributes(videoFrame: VideoFrame | HTMLVideoElement): {
          offsetX: number;
          offsetY: number;
@@ -417,27 +367,10 @@ class MediaView {
       }
 
 
-      getInvisibleWatermark(isGettingWatermark: boolean) {
+    drawRotate(degree: number) {
 
-      }
-
-
-    // 原始高清视频 ,
-    renderOriginCanvas(videoFrame: VideoFrame | HTMLVideoElement) {
-        let video = videoFrame as HTMLVideoElement;
-        if (this.playerService.canvasToVideoSerivce.recording === true) {
-          let video_height = video.videoHeight;
-          let video_width = video.videoWidth;
-          if (!this.canvas_context2) {
-            this.canvas_context2 = this.canvas_el2.getContext('2d');
-            this.setCanvas2Size({ width: video_width, height: video_height });
-          }
-          this.canvas_context2.clearRect(0, 0, video_width, video_height);
-
-          // this.drawTrasform(30);
-          this.canvas_context2.drawImage(videoFrame, 0, 0, video_width, video_height);
-        }
     }
+
 
     setCanvas2Size(parm: {width: number; height: number}) {
      let { width, height } = parm;
