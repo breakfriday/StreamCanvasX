@@ -1,7 +1,7 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../../player';
 import { UseMode } from '../../../constant';
-import { RotateDecorator ,RotateResetDecrator,TrasformDecractor } from './utilDecorator/RotateDecorator';
+import { RotateDecorator ,RotateResetDecrator,TrasformDecractor } from './utilDecorator/RotateTrasformDecorator';
 
 
 class MediaView {

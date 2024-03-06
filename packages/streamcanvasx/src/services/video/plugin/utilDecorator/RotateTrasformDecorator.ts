@@ -77,4 +77,11 @@ function TrasformDecractor(target: any, propertyName: string, descriptor: Proper
     return descriptor;
 }
 
-export { RotateDecorator ,RotateResetDecrator,TrasformDecractor };
+function TrasforResetmDecractor(target: any, propertyName: string, descriptor: PropertyDescriptor): PropertyDescriptor {
+    descriptor.value=function(this: MediaView , ...args: any[]) {
+
+    };
+    return descriptor;
+}
+
+export { RotateDecorator ,RotateResetDecrator,TrasformDecractor , TrasforResetmDecractor };
