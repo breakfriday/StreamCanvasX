@@ -37,6 +37,8 @@ class LoadingView {
         this.canvas_el.style.zIndex=zIndex;
         this.canvas_el.style.top="0px";
         this.canvas_el.style.left="0px";
+
+        this.canvas_el.style.backgroundColor= 'rgba(0, 0, 0, 0.3)';
     }
     drawLoading() {
           let { isLoading } = this;
