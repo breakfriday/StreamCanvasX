@@ -1,7 +1,7 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../../player';
 import { UseMode } from '../../../constant';
-import { RotateDecorator ,RotateResetDecrator,TrasformDecractor } from './utilDecorator/RotateTrasformDecorator';
+import { RotateDecorator ,RotateResetDecrator,TrasformDecractor ,TrasforResetmDecractor ,VerticalMirrorDecrator,HorizontalMirrorDecrator } from './utilDecorator/RotateTrasformDecorator';
 
 
 class MediaView {
@@ -380,6 +380,17 @@ class MediaView {
        @TrasformDecractor
        drawTrasform(degree: number) {}
 
+       @TrasforResetmDecractor
+       transformReset() {}
+
+       @VerticalMirrorDecrator
+       drawVerticalMirror() {
+        // 垂直镜像变化
+      }
+      @HorizontalMirrorDecrator
+      drawHorizontalMirror() {
+      // 水平镜像变化
+      }
 
     setCanvas2Size(parm: {width: number; height: number}) {
      let { width, height } = parm;

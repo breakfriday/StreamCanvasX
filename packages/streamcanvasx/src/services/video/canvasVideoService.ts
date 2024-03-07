@@ -76,6 +76,15 @@ class CanvasVideoService {
      drawTrasform(degree: number) {
       this.mediaView.drawTrasform(degree);
      }
+     transformReset() {
+      this.mediaView.transformReset();
+     }
+     drawVerticalMirror() {
+      this.mediaView.drawVerticalMirror();
+     }
+     drawHorizontalMirror() {
+      this.mediaView.drawHorizontalMirror();
+     }
 }
 
 

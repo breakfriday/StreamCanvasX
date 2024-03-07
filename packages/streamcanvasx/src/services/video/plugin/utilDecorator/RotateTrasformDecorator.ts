@@ -79,9 +79,44 @@ function TrasformDecractor(target: any, propertyName: string, descriptor: Proper
 
 function TrasforResetmDecractor(target: any, propertyName: string, descriptor: PropertyDescriptor): PropertyDescriptor {
     descriptor.value=function(this: MediaView , ...args: any[]) {
-
+        let ctx = this.canvas_context;
+        let { canvas_el } = this;
+        let canvas = canvas_el;
+        let degree = (180 - this.transformDegreeSum);
+        let deg = Math.PI / 180;
+        if (this.transformCount) {
+          ctx.transform(1, 0, 0, -1, 0, canvas.height);
+        }
+        // degree = this.transformCount == 0 ? 2 * degree : -2 * degree;
+        degree = 2 * degree;
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        this.canvas_context.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.translate(centerX, centerY);
+        ctx.transform(Math.cos(deg * degree), Math.sin(deg * degree), -Math.sin(deg * degree), Math.cos(deg * degree), 0, 0);
+        ctx.translate(-centerX, -centerY);
+        this.transformDegreeSum = 0;
+        this.transformCount = 0;
     };
     return descriptor;
 }
 
-export { RotateDecorator ,RotateResetDecrator,TrasformDecractor , TrasforResetmDecractor };
+function VerticalMirrorDecrator(target: any, propertyName: string, descriptor: PropertyDescriptor): PropertyDescriptor {
+    descriptor.value=function(this: MediaView , ...args: any[]) {
+        let degree = this.rotateDegreeSum ? this.rotateDegreeSum : 0;
+        this.drawTrasform(0 - degree);
+        this.transformDegreeSum = (this.transformDegreeSum + 2 * degree) % 180;
+    };
+    return descriptor;
+}
+
+function HorizontalMirrorDecrator(target: any, propertyName: string, descriptor: PropertyDescriptor): PropertyDescriptor {
+    descriptor.value=function(this: MediaView , ...args: any[]) {
+        let degree = this.rotateDegreeSum ? this.rotateDegreeSum : 0;
+        this.drawTrasform(90 - degree);
+        this.transformDegreeSum = (this.transformDegreeSum + 2 * degree) % 180;
+    };
+    return descriptor;
+}
+
+export { RotateDecorator ,RotateResetDecrator,TrasformDecractor , TrasforResetmDecractor ,VerticalMirrorDecrator ,HorizontalMirrorDecrator };
