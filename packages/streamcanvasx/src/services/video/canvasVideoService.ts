@@ -11,10 +11,14 @@ import ControlPanel from "./plugin/contrlPannel";
 
 import MediaView from './plugin/mediaView';
 
+import LoadingView from './plugin/loadingView';
+import { debug } from 'console';
+
 @injectable()
 class CanvasVideoService {
     mediaView: MediaView
     playerService: PlayerService
+    loadingView: LoadingView
 
     constructor() {
 
@@ -31,8 +35,10 @@ class CanvasVideoService {
         let { contentEl,model,useOffScreen } = this.playerService.config;
 
         this.mediaView=new MediaView();
-
         this.mediaView.init(playerService,{ contentEl,model,useOffScreen });
+
+        this.loadingView=new LoadingView();
+        this.loadingView.init(playerService);
 
         let video=this.playerService.meidiaEl;
     }
@@ -52,10 +58,18 @@ class CanvasVideoService {
     load(video: HTMLVideoElement) {
       this.pluginBoot(video);
     }
+    set loading(value: boolean) {
+       if(value===false) {
+        this.loadingView.unload();
+       }else{
+
+       }
+    }
 
     drawLoading() {
       // debugger;
       //  this.mediaView.drawLoading();
+      this.loadingView.load();
     }
     drawError() {
         this.mediaView.drawError();

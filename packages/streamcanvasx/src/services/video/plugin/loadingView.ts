@@ -12,6 +12,9 @@ class LoadingView {
         this.playerService=playerService;
         this.zIndex='80';
     }
+    set loading(value: any) {
+        this.isLoading= value;
+      }
     load() {
         let { contentEl } = this.playerService.config;
         let canvas_el=document.createElement("canvas");
