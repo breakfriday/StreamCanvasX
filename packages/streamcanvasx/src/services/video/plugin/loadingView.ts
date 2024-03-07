@@ -16,6 +16,7 @@ class LoadingView {
         this.isLoading= value;
       }
     load() {
+        this.isLoading=true;
         let { contentEl } = this.playerService.config;
         let canvas_el=document.createElement("canvas");
         this.canvas_el=canvas_el;

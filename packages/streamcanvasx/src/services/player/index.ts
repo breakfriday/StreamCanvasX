@@ -199,6 +199,9 @@ class PlayerService extends Emitter {
             let blobUrl = URL.createObjectURL(fileData);
             url = blobUrl;
         }
+        if(this.config.isLive===true) {
+            this.config.hasControl=false;
+        }
 
 
         // debugger;
@@ -437,8 +440,8 @@ class PlayerService extends Emitter {
                 // this.mpegtsPlayer.load();
 
                 this.mpegtsPlayer.play();
-                //this.canvasVideoService.createVideoFramCallBack(videoEl);
-                this.canvasVideoService.load(videoEl)
+                // this.canvasVideoService.createVideoFramCallBack(videoEl);
+                this.canvasVideoService.load(videoEl);
             }, 1000);
 
 
@@ -580,7 +583,7 @@ class PlayerService extends Emitter {
 
         if (showAudio === false) {
            // this.canvasVideoService.createVideoFramCallBack(videoEl);
-           this.canvasVideoService.load(videoEl)
+           this.canvasVideoService.load(videoEl);
         }
       }
 

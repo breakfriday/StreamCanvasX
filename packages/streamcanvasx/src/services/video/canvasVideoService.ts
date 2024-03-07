@@ -12,7 +12,7 @@ import ControlPanel from "./plugin/contrlPannel";
 import MediaView from './plugin/mediaView';
 
 import LoadingView from './plugin/loadingView';
-import { debug } from 'console';
+
 
 @injectable()
 class CanvasVideoService {
@@ -26,7 +26,9 @@ class CanvasVideoService {
 
     init(playerService: PlayerService,data: {model?: UseMode; contentEl?: HTMLElement | null; useOffScreen: boolean}) {
       this.playerService=playerService;
-        this.resignPlugin();
+      let { contentEl } = this.playerService.config;
+      contentEl.style.position="relative";
+      this.resignPlugin();
     }
 
     // 插件注冊
@@ -69,6 +71,9 @@ class CanvasVideoService {
     drawLoading() {
       // debugger;
       //  this.mediaView.drawLoading();
+      if(this.loadingView.isLoading===true) {
+        return false;
+      }
       this.loadingView.load();
     }
     drawError() {
