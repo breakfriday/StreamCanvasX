@@ -21,6 +21,8 @@ import PreProcessing from '../preprocessing';
 import Scheduler from './util/scheduler';
 import RenderEngine from '../renderingEngines/baseEngine';
 
+import { CorrectDecorator } from './util/decrator/configDecrator';
+
 
 // 接入rtc player service
 import RTCPlayerService from '../webrtc';
@@ -159,48 +161,14 @@ class PlayerService extends Emitter {
     init(config?: IplayerConfig) {
         // let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false, hasAudio = true, hasVideo = true, errorUrl = '', useOffScreen = false, audioDraw = 1 } = config;
 
-        const default_config: IplayerConfig = {
-            model: UseMode.UseCanvas,
-            url: '',
-            showAudio: false,
-            hasAudio: true,
-            hasVideo: true,
-            errorUrl: '',
-            useOffScreen: false,
-            audioDraw: 1,
-            updataBufferPerSecond: 15,
-            renderPerSecond: 15,
-            fftsize: 128,
-            bufferSize: 0.2,
-            streamType: 'flv',
-            isLive: true,
-            splitAVBuffers: true,
-            audioPlayback: {
-                method: 'MSE'
-            }
-        };
 
-        function removeNullAndUndefined(obj: any): any {
-            let newObj = { ...obj }; // Shallow copy of the object to avoid modifying the original
-            Object.keys(newObj).forEach(key => {
-                if (newObj[key] === null || newObj[key] === undefined) {
-                    delete newObj[key];
-                }
-            });
-            return newObj;
-        }
-        config = removeNullAndUndefined(config);
-
-        this.config = Object.assign(default_config, config);
+         this.config=this.correctConfig(config);
 
         let { model, url, contentEl, useOffScreen, fileData } = this.config;
 
         if (fileData) {
             let blobUrl = URL.createObjectURL(fileData);
             url = blobUrl;
-        }
-        if(this.config.isLive===true) {
-            this.config.hasControl=false;
         }
 
 
@@ -792,6 +760,10 @@ class PlayerService extends Emitter {
         return data;
     }
 
+    @CorrectDecorator
+    correctConfig(config: IplayerConfig): IplayerConfig {
+        return config;
+    }
     throttle(fn: Function, delay: number) {
         let _start = Date.now();
         return (...args: any[]) => {
