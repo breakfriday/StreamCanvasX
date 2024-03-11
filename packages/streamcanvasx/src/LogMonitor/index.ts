@@ -24,7 +24,7 @@ class LogMonitor {
        this._dbCreatedNotify();
     }
 
-    async log(data: {flvUrl: string;status?: string;message?: ""}) {
+    async log(data: {flvUrl: string;status?: string;message?: "";statusDesc?: string}) {
         await this._dbCreated();
         let time=new Date().getTime();
         let page=location.href;
