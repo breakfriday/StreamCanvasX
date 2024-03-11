@@ -253,7 +253,7 @@ class PlayerService extends Emitter {
     createPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
         let { streamType,url } = this.config;
 
-        this.logMonitor.log({ flvUrl: url,time: new Date().getTime() });
+        this.logMonitor.log({ flvUrl: url ,status: "start",statusDesc: "創建实例 手动拉流" });
 
         if (streamType === 'WEBRTC') {
             this.createWebRtcPlayer();
@@ -728,6 +728,8 @@ class PlayerService extends Emitter {
     }
 
     destroy() {
+        let { url } = this.config;
+        this.logMonitor.log({ flvUrl: url ,status: "destroy",statusDesc: "销毁实例 终止拉流" });
         if (this.canvasVideoService) {
             this.canvasVideoService.destroy();
             this.canvasVideoService = null;
@@ -809,6 +811,9 @@ class PlayerService extends Emitter {
 
         reload2() {
             this.error_connect_times++;
+
+            let { url } = this.config;
+            this.logMonitor.log({ flvUrl: url,status: "reloading" });
 
 
             // if (this.error_connect_times > 3) {

@@ -11,10 +11,14 @@ import ControlPanel from "./plugin/contrlPannel";
 
 import MediaView from './plugin/mediaView';
 
+import LoadingView from './plugin/loadingView';
+
+
 @injectable()
 class CanvasVideoService {
     mediaView: MediaView
     playerService: PlayerService
+    loadingView: LoadingView
 
     constructor() {
 
@@ -22,7 +26,9 @@ class CanvasVideoService {
 
     init(playerService: PlayerService,data: {model?: UseMode; contentEl?: HTMLElement | null; useOffScreen: boolean}) {
       this.playerService=playerService;
-        this.resignPlugin();
+      let { contentEl } = this.playerService.config;
+      contentEl.style.position="relative";
+      this.resignPlugin();
     }
 
     // 插件注冊
@@ -31,8 +37,10 @@ class CanvasVideoService {
         let { contentEl,model,useOffScreen } = this.playerService.config;
 
         this.mediaView=new MediaView();
-
         this.mediaView.init(playerService,{ contentEl,model,useOffScreen });
+
+        this.loadingView=new LoadingView();
+        this.loadingView.init(playerService);
 
         let video=this.playerService.meidiaEl;
     }
@@ -52,10 +60,21 @@ class CanvasVideoService {
     load(video: HTMLVideoElement) {
       this.pluginBoot(video);
     }
+    set loading(value: boolean) {
+       if(value===false) {
+        this.loadingView.unload();
+       }else{
+
+       }
+    }
 
     drawLoading() {
       // debugger;
       //  this.mediaView.drawLoading();
+      if(this.loadingView.isLoading===true) {
+        return false;
+      }
+      this.loadingView.load();
     }
     drawError() {
         this.mediaView.drawError();
