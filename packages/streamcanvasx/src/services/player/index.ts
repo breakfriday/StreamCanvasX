@@ -28,6 +28,9 @@ import { CorrectDecorator } from './util/decrator/configDecrator';
 import RTCPlayerService from '../webrtc';
 import { none } from '../decoder/CodecParser/constants';
 
+import LogMonitor from '../../LogMonitor';
+import { url } from 'inspector';
+
 
 mpegts.LoggingControl.applyConfig({
     forceGlobalTag: true,
@@ -89,6 +92,7 @@ class PlayerService extends Emitter {
     audioEl: HTMLVideoElement;
     scheduler: Scheduler;
     rtcPlayerService: RTCPlayerService;
+    logMonitor: LogMonitor
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -160,6 +164,8 @@ class PlayerService extends Emitter {
 
     init(config?: IplayerConfig) {
         // let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false, hasAudio = true, hasVideo = true, errorUrl = '', useOffScreen = false, audioDraw = 1 } = config;
+
+        this.logMonitor=new LogMonitor();
 
 
          this.config=this.correctConfig(config);
@@ -245,7 +251,10 @@ class PlayerService extends Emitter {
             // return false;
     }
     createPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
-        let { streamType } = this.config;
+        let { streamType,url } = this.config;
+
+        this.logMonitor.log({ flvUrl: url,time: new Date().getTime() });
+
         if (streamType === 'WEBRTC') {
             this.createWebRtcPlayer();
 
@@ -899,6 +908,9 @@ class PlayerService extends Emitter {
             this.error_connect_times = 0;
             this.canvasVideoService.clear = false;
             this.addReloadTask({ arr_msg: ['---设备上线 强制重连 ----'] });
+
+            let { url } = this.config;
+            this.logMonitor.log({ flvUrl: url,message: "---设备上线 强制重连 ----'" });
         }
 }
 
