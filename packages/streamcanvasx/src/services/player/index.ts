@@ -10,8 +10,8 @@ import CanvasVideoService from '../video/canvasVideoService';
 import DebugLogService from '../DebugLogService';
 import FLVDemuxStream from '../demux/flvDemuxStream';
 import { UseMode } from '../../constant';
-import mpegts from 'streamcanvasx-core';
-import Mpegts from 'streamcanvasx-core';
+import corePlayer from 'streamcanvasx-core';
+// import Mpegts from 'streamcanvasx-core';
 import { IplayerConfig } from '../../types/services';
 import AudioProcessingService from '../audio/audioContextService';
 import WasmDecoderService from '../decoder/wasmDecoder';
@@ -32,7 +32,7 @@ import LogMonitor from '../../LogMonitor';
 import { url } from 'inspector';
 
 
-mpegts.LoggingControl.applyConfig({
+corePlayer.LoggingControl.applyConfig({
     forceGlobalTag: true,
     globalTag: 'streanCanvasX',
     enableDebug: true,
@@ -65,7 +65,7 @@ class PlayerService extends Emitter {
     canvasVideoService: CanvasVideoService;
     debugLogService: DebugLogService;
     fLVDemuxStream: FLVDemuxStream;
-    mpegtsPlayer: Mpegts.Player;
+    corePlayer: corePlayer.Player;
     audioProcessingService: AudioProcessingService;
     mseDecoderService: MseDecoderService;
     preProcessing: PreProcessing;
@@ -243,7 +243,7 @@ class PlayerService extends Emitter {
 
             // this.canvasVideoService.loading = false;
             // setTimeout(() => {
-            //     // this.mpegtsPlayer.load();
+            //     // this.corePlayer.load();
             //     this.canvasVideoService.createVideoFramCallBack(this.meidiaEl);
             // }, 1000);
 
@@ -320,7 +320,7 @@ class PlayerService extends Emitter {
 
                 // 此處默認靜音
                 this.audioProcessingService.mute(true);
-                this.mpegtsPlayer = mpegts.createPlayer({
+                this.corePlayer = corePlayer.createPlayer({
                     type: type!, // could also be mpegts, m2ts, flv
                     isLive: isLive,
                     url: url,
@@ -333,9 +333,9 @@ class PlayerService extends Emitter {
                         liveBufferLatencyChasing: true,
                         lazyLoad: false,
                  });
-                 this.mpegtsPlayer.attachMediaElement(videoEl);
+                 this.corePlayer.attachMediaElement(videoEl);
             } else {
-                this.mpegtsPlayer = mpegts.createPlayer({
+                this.corePlayer = corePlayer.createPlayer({
                     type: type!, // could also be mpegts, m2ts, flv
                     isLive: isLive,
                     url: url,
@@ -376,29 +376,29 @@ class PlayerService extends Emitter {
                  // 此處默認靜音
                  this.audioProcessingService.mute(true);
 
-                 this.mpegtsPlayer.attachMediaElement(videoEl, audioEl);
+                 this.corePlayer.attachMediaElement(videoEl, audioEl);
 
 
                  this.videoEvent(videoEl);
             }
 
-            this.mpegtsPlayer.defatulEvent();
+            this.corePlayer.defatulEvent();
 
 
         //   this.getVideoSize();
-          this.mpegtsPlayer.load();
+          this.corePlayer.load();
 
           this.canvasVideoService.drawLoading();
 
-        //   window.pp = this.mpegtsPlayer;
+        //   window.pp = this.corePlayer;
 
-        //   this.mpegtsPlayer.on('audio_segment', (data) => {
+        //   this.corePlayer.on('audio_segment', (data) => {
         //     // let h = data;
         //     // debugger;
         //   });
 
 
-        this.mpegtsPlayer.on(mpegts.Events.LOADING_COMPLETE, (parm) => {
+        this.corePlayer.on(corePlayer.Events.LOADING_COMPLETE, (parm) => {
             let data={};
 
             if(this.config.streamType === 'MpegTs' || this.config.streamType === 'MPEG-TS') {
@@ -415,9 +415,9 @@ class PlayerService extends Emitter {
           if (isLive === false) {
             this.canvasVideoService.loading = false;
             setTimeout(() => {
-                // this.mpegtsPlayer.load();
+                // this.corePlayer.load();
 
-                this.mpegtsPlayer.play();
+                this.corePlayer.play();
                 // this.canvasVideoService.createVideoFramCallBack(videoEl);
                 this.canvasVideoService.load(videoEl);
             }, 1000);
@@ -427,7 +427,7 @@ class PlayerService extends Emitter {
           }
 
 
-          this.mpegtsPlayer.on(mpegts.Events.MEDIA_INFO, (parm) => {
+          this.corePlayer.on(corePlayer.Events.MEDIA_INFO, (parm) => {
             let video_width = parm.metadata.width;
             let video_height = parm.metadata.height;
 
@@ -454,18 +454,18 @@ class PlayerService extends Emitter {
             // this.getVideoSize();
            });
 
-           this.mpegtsPlayer.on(mpegts.Events.ERROR, (error, detailError) => {
+           this.corePlayer.on(corePlayer.Events.ERROR, (error, detailError) => {
             console.log('---------');
             console.info(error);
             console.log('---------');
-            if (error === mpegts.ErrorTypes.NETWORK_ERROR || error === mpegts.ErrorTypes.MEDIA_ERROR) {
+            if (error === corePlayer.ErrorTypes.NETWORK_ERROR || error === corePlayer.ErrorTypes.MEDIA_ERROR) {
             //     this.canvasVideoService.drawLoading();
             //    this.reload2();
                this.addReloadTask({ arr_msg: [`reload: ${error}`] });
             }
           });
 
-        //   this.mpegtsPlayer.on(mpegts.Events.LOADING_COMPLETE, () => {
+        //   this.corePlayer.on(mpegts.Events.LOADING_COMPLETE, () => {
         //     setTimeout(() => {
         //         this.reload2();
         //     }, 8 * 1000);
@@ -473,26 +473,26 @@ class PlayerService extends Emitter {
 
         //   const seedFrame = () => {
         //     setTimeout(() => {
-        //     let end = this.mpegtsPlayer.buffered.end(0);
-        //     let delta = end - this.mpegtsPlayer.currentTime; // 获取buffered与当前播放位置的差值
+        //     let end = this.corePlayer.buffered.end(0);
+        //     let delta = end - this.corePlayer.currentTime; // 获取buffered与当前播放位置的差值
         //     if (delta > 5 || delta < 0) {
-        //          this.mpegtsPlayer.currentTime = this.mpegtsPlayer.buffered.end(0) - 1;
+        //          this.corePlayer.currentTime = this.corePlayer.buffered.end(0) - 1;
         //       }
         //     }, 9 * 1000);
         //   };
         let lowSpeedStartTime: number | null = null;
 
-          this.mpegtsPlayer.on(mpegts.Events.STATISTICS_INFO, (data) => {
+          this.corePlayer.on(corePlayer.Events.STATISTICS_INFO, (data) => {
              let { speed, decodedFrames } = data;
 
 
-            // let end = this.mpegtsPlayer.buffered.end(0);
-            // let delta = end - this.mpegtsPlayer.currentTime; // 获取buffered与当前播放位置的差值
+            // let end = this.corePlayer.buffered.end(0);
+            // let delta = end - this.corePlayer.currentTime; // 获取buffered与当前播放位置的差值
             // if (delta > 5 || delta < 0) {
-            //      this.mpegtsPlayer.currentTime = this.mpegtsPlayer.buffered.end(0) - 1;
+            //      this.corePlayer.currentTime = this.corePlayer.buffered.end(0) - 1;
             //   }
             // console.info(end);
-            // console.info(this.mpegtsPlayer.buffered);
+            // console.info(this.corePlayer.buffered);
 
 
             // if (speed <= 1) {
@@ -537,11 +537,11 @@ class PlayerService extends Emitter {
         });
 
 
-          this.mpegtsPlayer.on(mpegts.Events.METADATA_ARRIVED, (parm) => {
+          this.corePlayer.on(corePlayer.Events.METADATA_ARRIVED, (parm) => {
             // this.canvasVideoService.loading = false;
             // this.httpFlvStreamService.hertTime = 0;
             this.canvasVideoService.loading = false;
-            let { mseLivePlayback, mseH265Playback } = mpegts.getFeatureList();
+            let { mseLivePlayback, mseH265Playback } = corePlayer.getFeatureList();
 
 
             // 12 是H265 , FLV的 解码器id
@@ -553,7 +553,7 @@ class PlayerService extends Emitter {
                 this.createBetaPlayer2();
             } else {
                 console.log('使用 硬解');
-                this.mpegtsPlayer.play();
+                this.corePlayer.play();
             }
           });
         }
@@ -745,10 +745,10 @@ class PlayerService extends Emitter {
             this.rtcPlayerService.destroy();
         }
 
-        if (this.mpegtsPlayer) {
-            this.mpegtsPlayer.destroy();
+        if (this.corePlayer) {
+            this.corePlayer.destroy();
             debugger;
-            this.mpegtsPlayer = null;
+            this.corePlayer = null;
         }
         if (this.player2) {
             this.player2.destroy();
@@ -796,8 +796,8 @@ class PlayerService extends Emitter {
 
 
         retry() {
-           if (this.mpegtsPlayer) {
-             this.mpegtsPlayer.destroy();
+           if (this.corePlayer) {
+             this.corePlayer.destroy();
            }
         }
 
@@ -822,27 +822,12 @@ class PlayerService extends Emitter {
             this.logMonitor.log({ flvUrl: url,status: "reloading" });
 
 
-            // if (this.error_connect_times > 3) {
-            //    this.canvasVideoService.loading = false;
-            //    this.setError();
-            //    return false;
-            // }
-            // this.mpegtsPlayer.unload();
-            // this.mpegtsPlayer.load();
-            // this.canvasVideoService.drawLoading();
-            // setTimeout(() => {
-            //     try {
-            //       this.mpegtsPlayer.play();
-            //     } catch (e) {
-
-            //     }
-            // }, 200);
             if (this.error_connect_times > 4) {
                  this.canvasVideoService.loading = false;
                this.setError();
                return false;
             } else {
-               this.mpegtsPlayer.reload();
+               this.corePlayer.reload();
             }
         }
 
@@ -880,9 +865,9 @@ class PlayerService extends Emitter {
 
         setError() {
             // this.canvasVideoService.loading = false;
-            this.mpegtsPlayer.pause();
-            this.mpegtsPlayer.unload();
-            // this.mpegtsPlayer.destroy();
+            this.corePlayer.pause();
+            this.corePlayer.unload();
+            // this.corePlayer.destroy();
             if (this.config.showAudio === true) {
                 this.audioProcessingService.clearCanvas();
             } else {
@@ -893,27 +878,6 @@ class PlayerService extends Emitter {
             this.emit('otherInfo', { speed: 0 });
         }
 
-        // debounceReload() {
-        //     let $this = this;
-
-        //    this.reload = this.throttle(() => {
-        //     //    this.canvasVideoService.drawLoading();
-        //         this.httpFlvStreamService.hertTime++;
-
-        //         debugger;
-        //         if (this.httpFlvStreamService.hertTime > this.httpFlvStreamService.maxHeartTimes) {
-        //             console.log('超过最大重连次数');
-        //             this.setError();
-        //             return false;
-        //         }
-        //         $this.mpegtsPlayer.unload();
-        //         $this.mpegtsPlayer.load();
-        //         setTimeout(() => {
-        //            // $this.mpegtsPlayer.play();
-        //         }, 200);
-        //         // $this.mpegtsPlayer.play();
-        //     }, 15 * 1000);
-        // }
 
         forceReload() {
             this.error_connect_times = 0;
