@@ -582,7 +582,6 @@ class PlayerService extends Emitter {
         }
 
         function checkVideoState() {
-            debugger;
             if ($this.meidiaEl === null) {
                 return false;
             }
@@ -880,14 +879,14 @@ class PlayerService extends Emitter {
         }
 
         setError() {
-            this.canvasVideoService.loading = false;
+            // this.canvasVideoService.loading = false;
             this.mpegtsPlayer.pause();
             this.mpegtsPlayer.unload();
             // this.mpegtsPlayer.destroy();
             if (this.config.showAudio === true) {
                 this.audioProcessingService.clearCanvas();
             } else {
-               this.canvasVideoService.clearCanvas();
+               this.canvasVideoService.mediaView.clearCanvas();
             }
 
             this.canvasVideoService.drawError();
@@ -918,7 +917,7 @@ class PlayerService extends Emitter {
 
         forceReload() {
             this.error_connect_times = 0;
-            this.canvasVideoService.clear = false;
+            // this.canvasVideoService.clear = false;
             this.addReloadTask({ arr_msg: ['---设备上线 强制重连 ----'] });
 
             let { url } = this.config;

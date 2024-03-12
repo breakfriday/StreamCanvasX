@@ -24,9 +24,8 @@ class LoadingView {
         this.isLoading=true;
         this.setCanvasAttributes();
         contentEl.append(canvas_el);
-        debugger;
+
         this.drawLoading();
-        debugger;
     }
     setCanvasAttributes() {
         let { zIndex } = this;
@@ -40,7 +39,7 @@ class LoadingView {
         this.canvas_el.style.top="0px";
         this.canvas_el.style.left="0px";
 
-        this.canvas_el.style.backgroundColor= 'rgba(0, 0, 0, 0.3)';
+        this.canvas_el.style.backgroundColor= 'rgba(0, 0, 0, 0.05)';
     }
     drawLoading() {
           let { isLoading } = this;
@@ -105,14 +104,12 @@ class LoadingView {
     }
 
     unload() {
-      debugger;
         this.isLoading=false;
         this.canvas_el.remove();
         this.canvas_context=null;
         this.canvas_el=null;
     }
     destroy() {
-      debugger;
         this.unload();
     }
 }
