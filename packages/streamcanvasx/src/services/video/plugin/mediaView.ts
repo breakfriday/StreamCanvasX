@@ -201,9 +201,9 @@ class MediaView {
           this.canvas_context.clearRect(0, 0, canvasEl.width, canvasEl.height);
       }
       destroy() {
-        if (this.playerService.config.showAudio === true) {
-          this.playerService.audioProcessingService.clearCanvas();
-        }
+        // if (this.playerService.config.showAudio === true) {
+        //   this.playerService.audioProcessingService.clearCanvas();
+        // }
         if (this.canvas_el && this.contentEl) {
           this.canvas_el.remove();
           this.contentEl = null;

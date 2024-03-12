@@ -272,6 +272,7 @@ class PlayerService extends Emitter {
         let { type = 'flv' } = parms;
 
         let { isLive, url, fileData, streamType } = this.config;
+        this.logMonitor.log({ flvUrl: url ,status: "start",statusDesc: "創建实例 手动拉流" });
         if (streamType === 'AAC' || streamType === 'MP4') {
             this.createBetaPlayer();
             return false;
@@ -564,6 +565,10 @@ class PlayerService extends Emitter {
         }
       }
 
+      stopEvent() {
+
+      }
+
       videoEvent(videoEl: HTMLVideoElement) {
         let video = videoEl;
         let lastTimeReadyStateBelow3: number | null = null; // 最后一次 readyState 小于3的时间
@@ -577,6 +582,7 @@ class PlayerService extends Emitter {
         }
 
         function checkVideoState() {
+            debugger;
             if ($this.meidiaEl === null) {
                 return false;
             }
@@ -729,19 +735,20 @@ class PlayerService extends Emitter {
 
     destroy() {
         let { url } = this.config;
+        this.scheduler.clearQueue();
+        this.meidiaEl=null;
         this.logMonitor.log({ flvUrl: url ,status: "destroy",statusDesc: "销毁实例 终止拉流" });
         if (this.canvasVideoService) {
             this.canvasVideoService.destroy();
             this.canvasVideoService = null;
-            debugger;
         }
         if (this.config.streamType === 'WEBRTC') {
             this.rtcPlayerService.destroy();
-            debugger;
         }
 
         if (this.mpegtsPlayer) {
             this.mpegtsPlayer.destroy();
+            debugger;
             this.mpegtsPlayer = null;
         }
         if (this.player2) {
