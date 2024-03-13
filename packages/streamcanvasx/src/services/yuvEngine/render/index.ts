@@ -1,9 +1,9 @@
 
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
-import PlayerService from '../../player';
+import PlayerService from '../player/index';
 
 import createREGL from 'regl';
-class YuvRender {
+class YuvEnging {
     canvas_el: HTMLCanvasElement;
     regGl: createREGL.Regl;
     canvas_context: CanvasRenderingContext2D;
@@ -40,22 +40,25 @@ class YuvRender {
     initRegl() {
         this.regGl = createREGL({ canvas: this.canvas_el, extensions: ['OES_texture_float', 'angle_instanced_arrays'] });
         let regl=this.regGl;
-        const textureY = regl.texture();
-        const textureU = regl.texture();
-        const textureV = regl.texture();
+        const textureY = regl.texture(); // 存储视频帧的亮度（Y分量）信息
+        const textureU = regl.texture(); // 存储色度信息
+        const textureV = regl.texture(); // 存储色度信息
         this.yuvTexture={ textureU,textureY,textureV };
+
+        // 将yuv 数据转换为RGB
         this.drawCommand=regl({
             frag: `
               precision mediump float;
-              varying vec2 uv;
+              varying vec2 uv;   //纹理坐标，由顶点着色器计算-> 片段着色器
               uniform sampler2D textureY;
               uniform sampler2D textureU;
               uniform sampler2D textureV;
               void main() {
-                float y = texture2D(textureY, uv).r;
-                float u = texture2D(textureU, uv).r - 0.5;
+                float y = texture2D(textureY, uv).r;  //从textureY纹理中根据uv坐标采样颜色，然后提取其RGB颜色值存储到变量y中
+                float u = texture2D(textureU, uv).r - 0.5; 
                 float v = texture2D(textureV, uv).r - 0.5;
-                gl_FragColor = vec4(y + 1.403 * v, y - 0.344 * u - 0.714 * v, y + 1.77 * u, 1.0);
+                gl_FragColor = vec4(y + 1.403 * v, y - 0.344 * u - 0.714 * v, y + 1.77 * u, 1.0);  // 最终 计算转换成rgb  1.0 表示不透明
+                
               }
             `,
             vert: `
@@ -97,17 +100,26 @@ class YuvRender {
           this.canvas_el.height = height;
     }
 
-    drawFrame(yData: Uint8Array, uData: Uint8Array, vData: Uint8Array, width: number, height: number) {
-          // 更新纹理
 
+    update_yuv_texture(yData: Uint8Array, uData: Uint8Array, vData: Uint8Array, width: number, height: number) {
           this.yuvTexture.textureY({ data: yData, width, height, format: 'luminance' });
           this.yuvTexture.textureU({ data: uData, width: width / 2, height: height / 2, format: 'luminance' });
           this.yuvTexture.textureV({ data: vData, width: width / 2, height: height / 2, format: 'luminance' });
-          this.drawCommand();
+    }
+
+    render() {
+      let regl=this.regGl;
+      regl.frame(() => {
+        regl.clear({
+          color: [0, 0, 0, 1],
+          depth: 1,
+        });
+        this.drawCommand();
+      });
     }
 
     // 绘制 YUV 视频帧
 }
 
 
-export default YuvRender;
+export default YuvEnging;
