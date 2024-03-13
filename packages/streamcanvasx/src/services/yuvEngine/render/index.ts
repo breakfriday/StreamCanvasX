@@ -32,7 +32,7 @@ class YuvEnging {
     init(playerService: PlayerService) {
         this.playerService=playerService;
         this.initCanvas();
-        this.initGl();
+        this.initRegl();
     }
     initCanvas() {
         let { contentEl } = this.playerService.config;
@@ -45,7 +45,7 @@ class YuvEnging {
 
 
     initRegl() {
-        this.regGl = createREGL({ canvas: this.canvas_el, extensions: ['OES_texture_float', 'angle_instanced_arrays'] });
+        this.regGl = createREGL({ canvas: this.canvas_el });
         let regl=this.regGl;
         const textureY = regl.texture({ width: 1, height: 1, format: 'luminance' }); // 存储视频帧的亮度（Y分量）信息
         const textureU = regl.texture({ width: 1, height: 1, format: 'luminance' }); // 存储色度信息

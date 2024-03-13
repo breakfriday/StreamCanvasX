@@ -2,6 +2,8 @@ import YuvEnging from '../render/index';
 
 interface Iconfig {
     contentEl: HTMLElement;
+    frameWidth: number;
+    frameHeight: number;
 
 
 }
