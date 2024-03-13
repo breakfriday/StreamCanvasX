@@ -24,8 +24,7 @@ class Player {
     }
 
     start() {
-
-
+        this.yuvEngine.render();
     }
 }
 

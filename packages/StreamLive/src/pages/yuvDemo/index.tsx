@@ -13,9 +13,13 @@ async function fetchAndParseYUV(url, frameWidth, frameHeight) {
   const arrayBuffer = await response.arrayBuffer();
   const bytesPerFrame = frameWidth * frameHeight + 2 * (frameWidth / 2) * (frameHeight / 2);
 
+  let contentEl=document.getElementById("yuvCanvas")!;
+
   let offset = 0;
 
-   let player =new YuvPlayer({ frameWidth: 1270, frameHeight: 720,contentEl: '' });
+   let player =new YuvPlayer({ frameWidth: 1270, frameHeight: 720,contentEl: contentEl });
+
+   player.yuvEngine.render();
 
   while (offset < arrayBuffer.byteLength) {
       const ySize = frameWidth * frameHeight;
@@ -39,6 +43,9 @@ async function fetchAndParseYUV(url, frameWidth, frameHeight) {
       console.info(yuvData);
 
 
+      player.yuvEngine.update_yuv_texture({ yData,uData,vData,width: 1270,height: 720 });
+
+
       // 等待下一帧（这里需要根据实际帧率进行调整）
       await new Promise(resolve => setTimeout(resolve, 1000 / 30)); // 假设视频是 30 FPS
   }
@@ -57,7 +64,7 @@ const HlsDemo = () => {
       }}
       >fetch yuv</div>
 
-      <div id="yuvCanvas">d</div>
+      <div id="yuvCanvas" style={{ width: "1270px",height: "720px" }}>d</div>
       <div />
 
     </div>
