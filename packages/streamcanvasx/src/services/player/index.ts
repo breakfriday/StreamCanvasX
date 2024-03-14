@@ -372,6 +372,7 @@ class PlayerService extends Emitter {
 
 
                  this.audioProcessingService.init(this, { media_el: audioEl });
+                 this.audioProcessingService.initCanvas(); // 待优化， 需要手动写
 
                  // 此處默認靜音
                  this.audioProcessingService.mute(true);
@@ -442,6 +443,8 @@ class PlayerService extends Emitter {
             if (hasVideo === false && this.config.showAudio != true) {
                 this.config.showAudio = true;
                 this.meidiaEl = null;
+
+                debugger;
                 this.audioProcessingService.updateBufferData();
                 this.audioProcessingService.render();
                 this.audioEvent();
@@ -736,6 +739,7 @@ class PlayerService extends Emitter {
         let { url } = this.config;
         this.scheduler.clearQueue();
         this.meidiaEl=null;
+        this.canvasVideoService.loading=false;
         this.logMonitor.log({ flvUrl: url ,status: "destroy",statusDesc: "销毁实例 终止拉流" });
         if (this.canvasVideoService) {
             this.canvasVideoService.destroy();
