@@ -3,9 +3,19 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row } from 'antd';
 import fpmap from 'lodash/fp/map';
 
-import { Data } from 'ice';
 
 import YuvPlayer from "streamcanvasx/src/services/yuvEngine/player/index";
+
+
+function createYuvPlayers(instanceCount, frameWidth, frameHeight) {
+  const players = new Map();
+  for (let i = 0; i < instanceCount; i++) {
+      const contentEl = document.getElementById(`yuvCanvas${i}`);
+      const player = new YuvPlayer({ frameWidth, frameHeight, contentEl });
+      players.set(`player${i}`, player);
+  }
+  return players;
+}
 
 
 async function fetchAndParseYUV(url, frameWidth, frameHeight) {
@@ -13,13 +23,16 @@ async function fetchAndParseYUV(url, frameWidth, frameHeight) {
   const arrayBuffer = await response.arrayBuffer();
   const bytesPerFrame = frameWidth * frameHeight + 2 * (frameWidth / 2) * (frameHeight / 2);
 
-  let contentEl=document.getElementById("yuvCanvas")!;
+ let players= createYuvPlayers(12,frameWidth,frameHeight);
 
   let offset = 0;
 
-   let player =new YuvPlayer({ frameWidth: 1270, frameHeight: 720,contentEl: contentEl });
+  for (let player of players.values()) {
+    if (player.yuvEngine) {
+        player.yuvEngine.render();
+    }
+}
 
-   player.yuvEngine.render();
 
   while (offset < arrayBuffer.byteLength) {
       const ySize = frameWidth * frameHeight;
@@ -42,8 +55,11 @@ async function fetchAndParseYUV(url, frameWidth, frameHeight) {
       };
       console.info(yuvData);
 
-
-      player.yuvEngine.update_yuv_texture({ yData,uData,vData,width: 1270,height: 720 });
+      for (let player of players.values()) {
+        if (player.yuvEngine) {
+            player.yuvEngine.update_yuv_texture({ yData,uData,vData,width: frameWidth,height: frameHeight });
+        }
+    }
 
 
       // 等待下一帧（这里需要根据实际帧率进行调整）
@@ -52,7 +68,90 @@ async function fetchAndParseYUV(url, frameWidth, frameHeight) {
 }
 
 
-const HlsDemo = () => {
+const wsConnect=() => {
+  // 假设你已知的视频宽度和高度
+const width = 1920;
+const height = 1080;
+
+let players= createYuvPlayers(1,width,height);
+
+for (let player of players.values()) {
+  if (player.yuvEngine) {
+      player.yuvEngine.render();
+  }
+}
+//  player6.yuvEngine.render();
+//  player7.yuvEngine.render();
+//  player8.yuvEngine.render();
+
+
+//  player9.yuvEngine.render();
+//  player10.yuvEngine.render();
+//  player11.yuvEngine.render();
+
+
+// 创建WebSocket连接
+const ws = new WebSocket('ws://127.0.0.1:4300/ws/21');
+
+// 设置binaryType以确保接收到的数据为ArrayBuffer
+ws.binaryType = 'arraybuffer';
+
+ws.onopen = () => {
+    console.log('WebSocket connection established');
+};
+
+ws.onmessage = (event) => {
+    // 接收到的数据是一个ArrayBuffer
+    const data = event.data as ArrayBuffer;
+
+    // 根据YUV420p格式计算Y, U, V数据的大小
+    const ySize = width * height;
+    const uvSize = (width / 2) * (height / 2);
+
+    // 创建TypedArray来引用Y, U, V数据
+    const yData = new Uint8Array(data, 0, ySize);
+    const uData = new Uint8Array(data, ySize, uvSize);
+    const vData = new Uint8Array(data, ySize + uvSize, uvSize);
+
+    // 此处处理分离出来的Y, U, V数据
+
+    let yuvData={
+      yData,uData,vData
+    };
+    console.info(yuvData);
+
+    for (let player of players.values()) {
+      if (player.yuvEngine) {
+          player.yuvEngine.update_yuv_texture({ yData,uData,vData,width: width,height: height });
+      }
+  }
+
+
+    // player6.yuvEngine.update_yuv_texture({ yData,uData,vData,width: 1920,height: 1080 });
+    // player7.yuvEngine.update_yuv_texture({ yData,uData,vData,width: 1920,height: 1080 });
+    // player8.yuvEngine.update_yuv_texture({ yData,uData,vData,width: 1920,height: 1080 });
+
+
+    // player9.yuvEngine.update_yuv_texture({ yData,uData,vData,width: 1920,height: 1080 });
+    // player10.yuvEngine.update_yuv_texture({ yData,uData,vData,width: 1920,height: 1080 });
+    // player11.yuvEngine.update_yuv_texture({ yData,uData,vData,width: 1920,height: 1080 });
+
+
+    // 例如，可以在这里调用一个渲染函数
+    // renderFrame(yData, uData, vData, width, height);
+};
+
+ws.onerror = (error) => {
+    console.log('WebSocket error:', error);
+};
+
+ws.onclose = () => {
+    console.log('WebSocket connection closed');
+};
+};
+
+
+const yuvDemo = () => {
   useEffect(() => {}, []);
 
   return (
@@ -64,11 +163,34 @@ const HlsDemo = () => {
       }}
       >fetch yuv</div>
 
-      <div id="yuvCanvas" style={{ width: "1270px",height: "720px" }}>d</div>
+
+      <div onClick={() => {
+        wsConnect();
+      }}
+      >
+        ws connect
+      </div>
+
+      <div id="yuvCanvas0" style={{ width: "100px",height: "100px" }}>d</div>
+      <div id="yuvCanvas1" style={{ width: "100px",height: "100px" }}>d</div>
+      <div id="yuvCanvas2" style={{ width: "100px",height: "100px" }}>d</div>
+      <div id="yuvCanvas3" style={{ width: "100px",height: "100px" }}>d</div>
+      <div id="yuvCanvas4" style={{ width: "100px",height: "100px" }}>d</div>
+      <div id="yuvCanvas5" style={{ width: "100px",height: "100px" }}>d</div>
+      <div id="yuvCanvas6" style={{ width: "100px",height: "100px" }}>d</div>
+      <div id="yuvCanvas7" style={{ width: "100px",height: "100px" }}>d</div>
+
+      <div id="yuvCanvas8" style={{ width: "100px",height: "100px" }}>d</div>
+      <div id="yuvCanvas9" style={{ width: "100px",height: "100px" }}>d</div>
+      <div id="yuvCanvas10" style={{ width: "100px",height: "100px" }}>d</div>
+      <div id="yuvCanvas11" style={{ width: "100px",height: "100px" }}>d</div>
+      <div id="yuvCanvas12" style={{ width: "100px",height: "100px" }}>d</div>
+
+
       <div />
 
     </div>
   );
 };
 
-export default HlsDemo;
+export default yuvDemo;
