@@ -251,7 +251,7 @@ class MSEPlayer {
 
     detachMediaElement() {
         if (this._mediaElement) {
-            this._msectl.detachMediaElement();
+            // this._msectl.detachMediaElement();
             this._mediaElement.removeEventListener('loadedmetadata', this.e.onvLoadedMetadata);
             this._mediaElement.removeEventListener('seeking', this.e.onvSeeking);
             this._mediaElement.removeEventListener('canplay', this.e.onvCanPlay);
@@ -260,7 +260,7 @@ class MSEPlayer {
             // this._mediaElement = null;
         }
         if(this._audioMeidaElement&&this.splitAVBuffers===true){
-            this._msectl_audio.detachMediaElement();
+            // this._msectl_audio.detachMediaElement();
             this._audioMeidaElement.removeEventListener('loadedmetadata', this.e.onvLoadedMetadata);
             this._audioMeidaElement.removeEventListener('seeking', this.e.onvSeeking);
             this._audioMeidaElement.removeEventListener('canplay', this.e.onvCanPlay);

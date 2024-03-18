@@ -47,6 +47,25 @@ interface MSEEventHandlers {
 
 }
 
+function clearMediaSrc(videoElement) {
+    // 定义一个函数来清空 src 并重新加载视频元素
+    function clearSrc() {
+        videoElement.src = '';
+        videoElement.removeAttribute("src")
+        videoElement.load(); // 调用 load() 来应用更改
+        videoElement.removeEventListener('pause', clearSrc); // 清除事件监听器
+        videoElement=null
+    }
+
+    if (videoElement.paused!=true) {
+        // 如果视频正在播放，先暂停它
+        videoElement.addEventListener('pause', clearSrc); // 暂停后清空 src
+        videoElement.pause();
+    } else {
+       clearSrc()
+    }
+}
+
 class MSEController {
 
     private TAG = 'MSEController';
@@ -200,9 +219,10 @@ class MSEController {
         }
 
         if (this._mediaElement) {
-            this._mediaElement.src = '';
-            this._mediaElement.removeAttribute('src');
-            this._mediaElement = null;
+            // this._mediaElement.src = '';
+            // this._mediaElement.removeAttribute('src');
+            // this._mediaElement = null;
+            clearMediaSrc(this._mediaElement)
         }
         if (this._mediaSourceObjectURL) {
             window.URL.revokeObjectURL(this._mediaSourceObjectURL);
