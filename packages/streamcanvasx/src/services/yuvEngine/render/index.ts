@@ -66,7 +66,14 @@ class YuvEnging {
                 float y = texture2D(textureY, uv).r;  //从textureY纹理中根据uv坐标采样颜色，然后提取其RGB颜色值存储到变量y中
                 float u = texture2D(textureU, uv).r - 0.5; 
                 float v = texture2D(textureV, uv).r - 0.5;
-                gl_FragColor = vec4(y + 1.403 * v, y - 0.344 * u - 0.714 * v, y + 1.77 * u, 1.0);  // 最终 標準公式 计算转换成rgb  1.0 表示不透明
+
+                float r = y + 1.403 * v;
+                float g = y - 0.344 * u - 0.714 * v;
+                float b = y + 1.770 * u;
+
+                gl_FragColor = vec4(r, g, b, 1.0);
+
+                // gl_FragColor = vec4(y + 1.403 * v, y - 0.344 * u - 0.714 * v, y + 1.77 * u, 1.0);  // 最终 標準公式 计算转换成rgb  1.0 表示不透明
                 
               }
             `,
@@ -80,10 +87,18 @@ class YuvEnging {
             `,
             attributes: {
               position: [
-                -2, 0,
-                0, -2,
-                2, 2]
+                -1, -1, // bottom left
+                1, -1, // bottom right
+                -1, 1,// top left
+
+                -1, 1, // top left
+                1, -1,// bottom right
+                1, 1] // top right
             },
+          //   elements: [
+          //     [0, 1, 2], // first triangle
+          //     [2, 1, 3] // second triangle
+          // ],
             uniforms: {
               // textureY: () => textureY,
               // textureU: () => textureU,
@@ -92,7 +107,7 @@ class YuvEnging {
               textureU: regl.prop('textureU'),
               textureV: regl.prop('textureV'),
             },
-            count: 3
+            count: 6
           });
     }
     event() {
@@ -119,23 +134,29 @@ class YuvEnging {
         this.yuvTexture.textureY({ data: yData, width, height, format: 'luminance' });
         this.yuvTexture.textureU({ data: uData, width: width / 2, height: height / 2, format: 'luminance' });
         this.yuvTexture.textureV({ data: vData, width: width / 2, height: height / 2, format: 'luminance' });
-      }
-}
-
-    render() {
-      let regl=this.regGl;
-      regl.frame(() => {
-        regl.clear({
-          color: [0, 0, 0, 1],
-          depth: 1,
-        });
         this.drawCommand({
           textureY: this.yuvTexture.textureY,
           textureU: this.yuvTexture.textureU,
           textureV: this.yuvTexture.textureV
 
         });
-      });
+      }
+}
+
+    render() {
+      // let regl=this.regGl;
+      // regl.frame(() => {
+      //   regl.clear({
+      //     color: [0, 0, 0, 0],
+      //     depth: 1,
+      //   });
+      //   this.drawCommand({
+      //     textureY: this.yuvTexture.textureY,
+      //     textureU: this.yuvTexture.textureU,
+      //     textureV: this.yuvTexture.textureV
+
+      //   });
+      // });
     }
 
     // 绘制 YUV 视频帧
