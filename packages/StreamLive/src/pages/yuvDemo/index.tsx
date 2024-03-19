@@ -7,7 +7,7 @@ import './index.css'
 import YuvPlayer from "streamcanvasx/src/services/yuvEngine/player/index";
 
 
-const player_count=9
+const player_count=12
 
 function createYuvPlayers(instanceCount, frameWidth, frameHeight) {
   const players = new Map();
@@ -20,12 +20,12 @@ function createYuvPlayers(instanceCount, frameWidth, frameHeight) {
 }
 
 
-async function fetchAndParseYUV(url, frameWidth, frameHeight) {
+async function fetchAndParseYUV(url, frameWidth, frameHeight ,playerCount,fps) {
   const response = await fetch(url);
   const arrayBuffer = await response.arrayBuffer();
   const bytesPerFrame = frameWidth * frameHeight + 2 * (frameWidth / 2) * (frameHeight / 2);
 
- let players= createYuvPlayers(player_count,frameWidth,frameHeight);
+ let players= createYuvPlayers(playerCount,frameWidth,frameHeight);
 
   let offset = 0;
 
@@ -65,7 +65,7 @@ async function fetchAndParseYUV(url, frameWidth, frameHeight) {
 
 
       // 等待下一帧（这里需要根据实际帧率进行调整）
-      await new Promise(resolve => setTimeout(resolve, 1000 / 30)); // 假设视频是 30 FPS
+      await new Promise(resolve => setTimeout(resolve, 1000 /fps)); // 假设视频是 30 FPS
   }
 }
 
@@ -158,6 +158,66 @@ const yuvDemo = () => {
 
   return (
     <div>
+
+    <Form
+        name="basic"
+
+        autoComplete="off"
+        onFieldsChange={(value) => {
+         
+        }}
+
+        onFinish={(value) => {
+
+          let playerCount=value.playerCount
+          let fps=value.fps
+          let frameHeight=value.frameHeight
+          let frameWidth =value.frameWidth
+
+          fetchAndParseYUV('/output.yuv',frameWidth,frameHeight,playerCount,fps);
+
+
+
+          }}
+
+
+    >
+      <Form.Item
+        initialValue={6}
+        label="渲染路数"
+        name="playerCount">
+          <Input />
+      </Form.Item>
+      <Form.Item
+        initialValue={30}
+        label="手动帧率"
+        name="fps">
+          <Input />
+      </Form.Item>
+
+      <Form.Item
+        initialValue={1270}
+        label="frameWidth"
+        name="frameWidth">
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        initialValue={720}
+        label="frameHeight"
+        name="frameHeight">
+        <Input />
+      </Form.Item>
+
+      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button
+            type="primary"
+            htmlType="submit"
+          >
+            fetch_play
+          </Button>
+        </Form.Item>
+    </Form>
 
 
       <div onClick={() => {
