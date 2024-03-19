@@ -2,10 +2,12 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row } from 'antd';
 import fpmap from 'lodash/fp/map';
-
+import './index.css'
 
 import YuvPlayer from "streamcanvasx/src/services/yuvEngine/player/index";
 
+
+const player_count=9
 
 function createYuvPlayers(instanceCount, frameWidth, frameHeight) {
   const players = new Map();
@@ -23,7 +25,7 @@ async function fetchAndParseYUV(url, frameWidth, frameHeight) {
   const arrayBuffer = await response.arrayBuffer();
   const bytesPerFrame = frameWidth * frameHeight + 2 * (frameWidth / 2) * (frameHeight / 2);
 
- let players= createYuvPlayers(12,frameWidth,frameHeight);
+ let players= createYuvPlayers(player_count,frameWidth,frameHeight);
 
   let offset = 0;
 
@@ -73,7 +75,7 @@ const wsConnect=() => {
 const width = 1920;
 const height = 1080;
 
-let players= createYuvPlayers(1,width,height);
+let players= createYuvPlayers(9,width,height);
 
 for (let player of players.values()) {
   if (player.yuvEngine) {
@@ -171,20 +173,35 @@ const yuvDemo = () => {
         ws connect
       </div>
 
-      <div id="yuvCanvas0" style={{ width: "100px",height: "100px" }}>d</div>
-      <div id="yuvCanvas1" style={{ width: "100px",height: "100px" }}>d</div>
-      <div id="yuvCanvas2" style={{ width: "100px",height: "100px" }}>d</div>
-      <div id="yuvCanvas3" style={{ width: "100px",height: "100px" }}>d</div>
-      <div id="yuvCanvas4" style={{ width: "100px",height: "100px" }}>d</div>
-      <div id="yuvCanvas5" style={{ width: "100px",height: "100px" }}>d</div>
-      <div id="yuvCanvas6" style={{ width: "100px",height: "100px" }}>d</div>
-      <div id="yuvCanvas7" style={{ width: "100px",height: "100px" }}>d</div>
 
-      <div id="yuvCanvas8" style={{ width: "100px",height: "100px" }}>d</div>
-      <div id="yuvCanvas9" style={{ width: "100px",height: "100px" }}>d</div>
-      <div id="yuvCanvas10" style={{ width: "100px",height: "100px" }}>d</div>
-      <div id="yuvCanvas11" style={{ width: "100px",height: "100px" }}>d</div>
-      <div id="yuvCanvas12" style={{ width: "100px",height: "100px" }}>d</div>
+      <div className='yuv_container'>
+        {(()=>{
+         
+         return  Array.from({ length: player_count }, (_, i) => (
+            <div id={`yuvCanvas${i}`} style={{ width: "400px", height: "300px" }}>
+              {i}
+            </div>
+          ))
+
+
+
+        })()}
+
+          {/* <div id="yuvCanvas0" style={{ width: "400px",height: "300px" }}>d</div>
+          <div id="yuvCanvas1" style={{ width: "400px",height: "300px" }}>d</div>
+          <div id="yuvCanvas2" style={{ width: "400px",height: "300px" }}>d</div>
+          <div id="yuvCanvas3" style={{ width: "400px",height: "300px" }}>d</div>
+          <div id="yuvCanvas4" style={{ width: "100px",height: "100px" }}>d</div>
+          <div id="yuvCanvas5" style={{ width: "100px",height: "100px" }}>d</div>
+          <div id="yuvCanvas6" style={{ width: "100px",height: "100px" }}>d</div>
+          <div id="yuvCanvas7" style={{ width: "100px",height: "100px" }}>d</div>
+
+          <div id="yuvCanvas8" style={{ width: "100px",height: "100px" }}>d</div>
+          <div id="yuvCanvas9" style={{ width: "100px",height: "100px" }}>d</div>
+          <div id="yuvCanvas10" style={{ width: "100px",height: "100px" }}>d</div>
+          <div id="yuvCanvas11" style={{ width: "100px",height: "100px" }}>d</div>
+          <div id="yuvCanvas12" style={{ width: "100px",height: "100px" }}>d</div> */}
+      </div>
 
 
       <div />
