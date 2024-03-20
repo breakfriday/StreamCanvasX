@@ -144,10 +144,12 @@ ws.onmessage = (event) => {
 };
 
 ws.onerror = (error) => {
+  debugger
     console.log('WebSocket error:', error);
 };
 
 ws.onclose = () => {
+  debugger
     console.log('WebSocket connection closed');
 };
 };

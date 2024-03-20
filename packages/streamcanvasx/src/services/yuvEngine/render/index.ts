@@ -143,6 +143,25 @@ class YuvEnging {
       }
 }
 
+    async updateTextureAndDraw(yuvFrame: YUVFrame) {
+      return new Promise((resolve) => {
+        if(yuvFrame) {
+          let { yData, uData, vData,width,height }=yuvFrame;
+          this.yuvTexture.textureY({ data: yData, width, height, format: 'luminance' });
+          this.yuvTexture.textureU({ data: uData, width: width / 2, height: height / 2, format: 'luminance' });
+          this.yuvTexture.textureV({ data: vData, width: width / 2, height: height / 2, format: 'luminance' });
+          this.drawCommand({
+            textureY: this.yuvTexture.textureY,
+            textureU: this.yuvTexture.textureU,
+            textureV: this.yuvTexture.textureV
+
+          });
+        }
+
+        resolve({});
+      });
+    }
+
     render() {
       // let regl=this.regGl;
       // regl.frame(() => {
