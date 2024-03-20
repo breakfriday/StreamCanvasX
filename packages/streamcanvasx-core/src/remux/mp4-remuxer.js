@@ -346,13 +346,13 @@ class MP4Remuxer {
 
         let track = audioTrack;
         let samples = track.samples;
-        try{
-            if(samples&&samples.length>0){
-                samples=processAudioData(samples)
-            }
-        }catch(e){
-            debugger
-        }
+        // try{
+        //     if(samples&&samples.length>0){
+        //         samples=processAudioData(samples)
+        //     }
+        // }catch(e){
+        //     debugger
+        // }
 
 
         let dtsCorrection = undefined;
