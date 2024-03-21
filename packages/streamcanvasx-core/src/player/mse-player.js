@@ -485,13 +485,13 @@ class MSEPlayer {
 
     safeReolad(){
 
-        if(this._mediaElement){
-            this._mediaElement.src=''
-        }
+        // if(this._mediaElement){
+        //     this._mediaElement.src=''
+        // }
         
-        if(this._audioMeidaElement){
-            this._audioMeidaElement.src=''
-        }
+        // if(this._audioMeidaElement){
+        //     this._audioMeidaElement.src=''
+        // }
         
         this.unload()
         this.detachMediaElement()

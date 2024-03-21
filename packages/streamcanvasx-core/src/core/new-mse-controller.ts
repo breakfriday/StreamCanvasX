@@ -60,8 +60,8 @@ function clearMediaSrc(videoElement) {
     if (videoElement.paused!=true) {
         // 如果视频正在播放，先暂停它
         videoElement.addEventListener('pause', clearSrc); // 暂停后清空 src
-        //videoElement.pause();
-        safePause(videoElement)
+        videoElement.pause();
+   
     } else {
        clearSrc()
     }
@@ -575,7 +575,7 @@ class MSEController {
 
     _onSourceClose() {
         // fired on detaching from media element
-        Log.v(this.TAG, 'MediaSource onSourceClose');
+        //Log.v(this.TAG, 'MediaSource onSourceClose');
         console.log(this.TAG, 'MediaSource onSourceEnded')
         if (this._mediaSource && this.e != null) {
             this._mediaSource.removeEventListener('sourceopen', this.e.onSourceOpen);
