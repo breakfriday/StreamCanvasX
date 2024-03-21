@@ -60,7 +60,8 @@ function clearMediaSrc(videoElement) {
     if (videoElement.paused!=true) {
         // 如果视频正在播放，先暂停它
         videoElement.addEventListener('pause', clearSrc); // 暂停后清空 src
-        videoElement.pause();
+        //videoElement.pause();
+        safePause(videoElement)
     } else {
        clearSrc()
     }

@@ -751,8 +751,10 @@ class PlayerService extends Emitter {
 
         if (this.corePlayer) {
             this.corePlayer.destroy();
-            debugger;
+
             this.corePlayer = null;
+            this.audioEl=null;
+            this.meidiaEl=null;
         }
         if (this.player2) {
             this.player2.destroy();
@@ -812,10 +814,14 @@ class PlayerService extends Emitter {
             } else {
                 video = this.meidiaEl;
             }
-            if (video.readyState < 3 || video.paused == true || video.ended == true) {
-                return false;
-            } else {
-                return true;
+            if(video) {
+                if (video.readyState < 3 || video.paused == true || video.ended == true) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }else{
+
             }
         }
 
