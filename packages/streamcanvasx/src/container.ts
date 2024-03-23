@@ -13,8 +13,9 @@ const WavePlayerContainer = new Container();
 const waveAudioContainer = new Container();
 const waveVisualizationContainer = new Container();
 
+const streamBridgeContainer=new Container(); // bridgePlayer 的容器
 // container.bind<Logger>(Logger).toSelf();
 // container.bind<orignClass>(orignClass).toSelf();
 
 
-export { container1, Container, containerPlayer, WebRTCInjectionContainer, waveAudioContainer, WavePlayerContainer, waveVisualizationContainer };
+export { container1, Container, containerPlayer, WebRTCInjectionContainer, waveAudioContainer, WavePlayerContainer, waveVisualizationContainer ,streamBridgeContainer };

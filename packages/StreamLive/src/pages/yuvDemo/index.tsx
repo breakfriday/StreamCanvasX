@@ -2,12 +2,12 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row } from 'antd';
 import fpmap from 'lodash/fp/map';
-import './index.css'
+import './index.css';
 
 import YuvPlayer from "streamcanvasx/src/services/yuvEngine/player/index";
 
 
-const player_count=12
+const player_count=12;
 
 function createYuvPlayers(instanceCount, frameWidth, frameHeight) {
   const players = new Map();
@@ -144,12 +144,12 @@ ws.onmessage = (event) => {
 };
 
 ws.onerror = (error) => {
-  debugger
+  debugger;
     console.log('WebSocket error:', error);
 };
 
 ws.onclose = () => {
-  debugger
+  debugger;
     console.log('WebSocket connection closed');
 };
 };
@@ -161,57 +161,53 @@ const yuvDemo = () => {
   return (
     <div>
 
-    <Form
+      <Form
         name="basic"
-
         autoComplete="off"
         onFieldsChange={(value) => {
-         
+
         }}
-
         onFinish={(value) => {
-
-          let playerCount=value.playerCount
-          let fps=value.fps
-          let frameHeight=value.frameHeight
-          let frameWidth =value.frameWidth
+          let { playerCount } = value;
+          let { fps } = value;
+          let { frameHeight } = value;
+          let { frameWidth } = value;
 
           fetchAndParseYUV('/output.yuv',frameWidth,frameHeight,playerCount,fps);
-
-
-
           }}
-
-
-    >
-      <Form.Item
-        initialValue={6}
-        label="渲染路数"
-        name="playerCount">
+      >
+        <Form.Item
+          initialValue={6}
+          label="渲染路数"
+          name="playerCount"
+        >
           <Input />
-      </Form.Item>
-      <Form.Item
-        initialValue={30}
-        label="手动帧率"
-        name="fps">
+        </Form.Item>
+        <Form.Item
+          initialValue={30}
+          label="手动帧率"
+          name="fps"
+        >
           <Input />
-      </Form.Item>
+        </Form.Item>
 
-      <Form.Item
-        initialValue={1270}
-        label="frameWidth"
-        name="frameWidth">
-        <Input />
-      </Form.Item>
+        <Form.Item
+          initialValue={1270}
+          label="frameWidth"
+          name="frameWidth"
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Item
-        initialValue={720}
-        label="frameHeight"
-        name="frameHeight">
-        <Input />
-      </Form.Item>
+        <Form.Item
+          initialValue={720}
+          label="frameHeight"
+          name="frameHeight"
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button
             type="primary"
             htmlType="submit"
@@ -219,7 +215,7 @@ const yuvDemo = () => {
             fetch_play
           </Button>
         </Form.Item>
-    </Form>
+      </Form>
 
 
       <div onClick={() => {
@@ -236,20 +232,16 @@ const yuvDemo = () => {
       </div>
 
 
-      <div className='yuv_container'>
-        {(()=>{
-         
-         return  Array.from({ length: player_count }, (_, i) => (
-            <div id={`yuvCanvas${i}`} style={{ width: "400px", height: "300px" }}>
-              {i}
-            </div>
-          ))
-
-
-
+      <div className="yuv_container">
+        {(() => {
+         return Array.from({ length: player_count }, (_, i) => (
+           <div id={`yuvCanvas${i}`} style={{ width: "400px", height: "300px" }}>
+             {i}
+           </div>
+          ));
         })()}
 
-          {/* <div id="yuvCanvas0" style={{ width: "400px",height: "300px" }}>d</div>
+        {/* <div id="yuvCanvas0" style={{ width: "400px",height: "300px" }}>d</div>
           <div id="yuvCanvas1" style={{ width: "400px",height: "300px" }}>d</div>
           <div id="yuvCanvas2" style={{ width: "400px",height: "300px" }}>d</div>
           <div id="yuvCanvas3" style={{ width: "400px",height: "300px" }}>d</div>
