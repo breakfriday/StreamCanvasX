@@ -4,7 +4,7 @@ import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, C
 import fpmap from 'lodash/fp/map';
 import './index.css';
 
-import YuvPlayer from "streamcanvasx/src/services/yuvEngine/player/index";
+// import YuvPlayer from "streamcanvasx/src/services/yuvEngine/player/index";
 
 import { createStreamBridgePlayerInstance } from 'streamcanvasx/src/serviceFactories/index';
 

@@ -21,7 +21,8 @@ const TYPES = {
     IRenderEngine: Symbol.for('RenderEngine'),
     IWaveGl: Symbol.for('WaveGl'),
     IWaveVisualization: Symbol.for('IWaveVisualization'),
-    IStreamBridePlayer: Symbol.for('IStreamBridePlayer')
+    IStreamBridePlayer: Symbol.for('IStreamBridePlayer'),
+    IMediaRenderEngine: Symbol.for('IMediaRenderEngine')
 
   };
 

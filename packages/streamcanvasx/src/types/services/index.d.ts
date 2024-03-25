@@ -206,10 +206,18 @@ interface IWavePlayerExtend{
   style?: CSSStyleDeclaration;
 }
 
+enum BridgePlayerStreamType {
+  http_yuv="http_yuv",
+  ws="ws"
+}
+
+
 interface IBridgePlayerConfig {
   contentEl: HTMLElement;
   frameWidth: number;
   frameHeight: number;
+  stremType: BridgePlayerStreamType;
+  url: string;
 
 
 }
