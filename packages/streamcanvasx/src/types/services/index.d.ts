@@ -206,6 +206,16 @@ interface IWavePlayerExtend{
   style?: CSSStyleDeclaration;
 }
 
+interface IBridgePlayerConfig {
+  contentEl: HTMLElement;
+  frameWidth: number;
+  frameHeight: number;
+
+
+}
+
+export type IBridgePlayerConfig = Partial<IBridgePlayerConfig >;
+
 export type IplayerConfig = Partial<IplayerConfig>;
 
 

@@ -6,15 +6,18 @@ import './index.css';
 
 import YuvPlayer from "streamcanvasx/src/services/yuvEngine/player/index";
 
+import { createStreamBridgePlayerInstance } from 'streamcanvasx/src/serviceFactories/index';
+
 
 const player_count=12;
 
 function createYuvPlayers(instanceCount, frameWidth, frameHeight) {
   const players = new Map();
   for (let i = 0; i < instanceCount; i++) {
-      const contentEl = document.getElementById(`yuvCanvas${i}`);
-      const player = new YuvPlayer({ frameWidth, frameHeight, contentEl });
-      players.set(`player${i}`, player);
+      const contentEl = document.getElementById(`yuvCanvas${i}`)!;
+    //  const player = new YuvPlayer({ frameWidth, frameHeight, contentEl });
+    const player = createStreamBridgePlayerInstance({ frameWidth, frameHeight, contentEl });
+    players.set(`player${i}`, player);
   }
   return players;
 }

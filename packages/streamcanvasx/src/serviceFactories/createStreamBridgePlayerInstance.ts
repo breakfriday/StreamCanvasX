@@ -1,15 +1,19 @@
-import { container1, containerPlayer } from '../container';
+import { streamBridgeContainer } from '../container';
 
 
+import PlayerService from '../services/steamBridgePlayer';
+import { IBridgePlayerConfig } from '../types/services';
+import { TYPES } from './symbol';
+import StreamBridgePlayer from '../services/steamBridgePlayer';
 
 
-import PlayerService from '../services/player';
+streamBridgeContainer.bind<StreamBridgePlayer>(TYPES.IStreamBridePlayer).to(StreamBridgePlayer);
 
 
- function createPlayerServiceInstance(config: IplayerConfig): PlayerService {
-  let playerInstance = containerPlayer.get<PlayerService>(TYPES.IPlayerService);
-  playerInstance.init(config || {});
+function createStreamBridgePlayerInstance(config: IBridgePlayerConfig): PlayerService {
+  let playerInstance = streamBridgeContainer.get<PlayerService>(TYPES.IStreamBridePlayer);
+  playerInstance.init(config);
    return playerInstance;
  }
 
- export { createPlayerServiceInstance };
+ export { createStreamBridgePlayerInstance };
