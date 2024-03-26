@@ -2,22 +2,23 @@ import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../index';
 import FetchLoader from "./fetch_loader";
 import { BridgePlayerStreamType } from '../../../constant';
+import SocketClient from './socketClient';
 @injectable()
 class StreamIo {
-    _ioLoader: FetchLoader
+    _ioLoader: FetchLoader|SocketClient
     playerService: PlayerService
     constructor() {
 
     }
     init(playerService: PlayerService) {
         this.playerService=playerService;
-        let stremType=this.playerService.config.stremType
-        if(stremType===BridgePlayerStreamType.http_yuv){
+        let { stremType } = this.playerService.config;
+        if(stremType===BridgePlayerStreamType.http_yuv) {
             this._ioLoader=new FetchLoader();
         }else {
-            
+            this._ioLoader=new SocketClient();
         }
-       
+
         this._ioLoader.init(playerService);
     }
     open() {

@@ -25,11 +25,18 @@ type ApirParams = {
     params: [];
 };
 
+function generateUniqueID() {
+    const timestamp = new Date().getTime().toString(36); // 获取时间戳并转换为36进制
+    const randomString = Math.random().toString(36).substring(2, 15); // 生成随机字符串
+    return timestamp + randomString;
+}
+
 class SignalClient {
     private ws: WebSocket | null = null;
     private wsUrl: string;
     private responseMap = new Map<number|string, (response: any) => void>(); // 使用responseMap来存储每个msgId对应的解析函数
     playerService: PlayerService
+    private lastMsgId = 0;
 
     constructor() {
 
@@ -61,7 +68,8 @@ class SignalClient {
         });
     }
 
-    connect(id: string): Promise<void> {
+    connect(): Promise<void> {
+        let id=generateUniqueID();// 生成唯一id
         return this.connectSocket(id);
     }
 
@@ -97,10 +105,6 @@ class SignalClient {
         console.log('回调:', callback);
     }
 
-    private onError(event: Event): void {
-        console.error('WebSocket 错误:', event);
-    }
-
 
     send(method: string, params: any[] = []): void {
         if (!this.ws) {
@@ -117,12 +121,29 @@ class SignalClient {
 
         this.ws.send(JSON.stringify(message));
     }
+    private getNextMessageId(): number {
+        return ++this.lastMsgId;
+    }
 
-    callMethd(method: string,params: ApirParams) {
-        if (!this.ws) {
-            console.error('WebSocket 未连接');
-            return;
-        }
+    callMethd(method: string,params: ApirParams): Promise<void> {
+        return new Promise((resolve, reject) => {
+            if (!this.ws) {
+                console.error('WebSocket 未连接');
+                reject();
+            }
+            const msgId = this.getNextMessageId();
+            this.responseMap.set(msgId, resolve);
+
+            const message = JSON.stringify({ msgId, method, params });
+            this.ws!.send(message);
+
+            setTimeout(() => {
+                if (this.responseMap.has(msgId)) {
+                    this.responseMap.delete(msgId);
+                    reject(new Error('Timeout waiting for response'));
+                }
+            }, 5000); // 设置超时时间， 避免堆积。
+        });
     }
 
     private generateMsgId(): string {
