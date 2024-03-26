@@ -1,16 +1,20 @@
 
 import PlayerService from '../../index';
 import SignalClient from './signalClient';
+import StreamSocketClient from './streamSocketClient';
 
 class SocketClient {
     playerService: PlayerService;
-    signalClient: SignalClient
+    signalClient: SignalClient;
+    streamSocketClient: StreamSocketClient
     constructor() {
         this.signalClient=new SignalClient();
+        this.streamSocketClient=new StreamSocketClient();
     }
     init(playerService: PlayerService) {
         this.playerService=playerService;
         this.signalClient.init(this.playerService);
+        this.streamSocketClient.init(this.playerService);
     }
     async open() {
         try{
@@ -19,6 +23,13 @@ class SocketClient {
             await this.play();
         }catch(e) {
 
+        }
+
+        try{
+            await this.streamSocketClient.connect();
+            console.log("dataClient 连接成功")
+        }catch(e) {
+            return false;
         }
     }
 

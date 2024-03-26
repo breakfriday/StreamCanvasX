@@ -22,8 +22,8 @@ class StreamSocketClient {
     constructor() {
 
     }
-    init() {
-        this.playerService=this.playerService;
+    init(playerService: PlayerService) {
+        this.playerService=playerService;
     }
 
     private connectSocket(id: string): Promise<void> {
