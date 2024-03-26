@@ -1,4 +1,4 @@
-import { UseMode } from '../../constant';
+import { UseMode,BridgePlayerStreamType } from '../../constant';
 export interface IDrawer {
     mediaSource_el?: HTMLAudioElement | HTMLVideoElement;
     canvas?: HTMLCanvasElement;
@@ -206,19 +206,14 @@ interface IWavePlayerExtend{
   style?: CSSStyleDeclaration;
 }
 
-enum BridgePlayerStreamType {
-  http_yuv="http_yuv",
-  ws="ws"
-}
-
 
 interface IBridgePlayerConfig {
   contentEl: HTMLElement;
   frameWidth?: number;
   frameHeight?: number;
-  stremType: BridgePlayerStreamType;
-  url: string;
-  renderFps: number;
+  stremType?: BridgePlayerStreamType;
+  url?: string;
+  renderFps?: number;
 
 
 }

@@ -101,8 +101,6 @@ class SignalClient {
     setNsLevel(level: number): void {
         this.send('setNsLevel', [level]);
     }
-
-    // 根据需要为 Play, Stop, SetNsLevel 等操作添加更多方法
 }
 
 // 使用

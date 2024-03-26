@@ -43,7 +43,10 @@ class StreamBridgePlayer extends Emitter {
     }
 
     play() {
-       // this.streamIo.open();
+        this.streamIo.open();
+    }
+    abort() {
+        this.streamIo.abort();
     }
 }
 

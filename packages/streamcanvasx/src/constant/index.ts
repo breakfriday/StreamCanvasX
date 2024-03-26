@@ -313,3 +313,9 @@ export enum UseMode {
     UseCanvas,
     UseWebGPU,
   }
+
+
+export enum BridgePlayerStreamType {
+    http_yuv="http_yuv",
+    ws="ws"
+  }
