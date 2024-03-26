@@ -15,15 +15,15 @@ interface IVideoComponent {
     const containerRef = useRef(null);
 
     useEffect(() => {
-        let { url } = props;
+        let { url,frameHeight,frameWidth ,renderFps} = props;
 
         let player=createStreamBridgePlayerInstance({
              url,
             contentEl: containerRef.current!,
             renderFps: 30,
             stremType: BridgePlayerStreamType.http_yuv,
-            frameHeight: 720,
-            frameWidth: 1270
+            frameHeight,
+            frameWidth,
 
         });
 
