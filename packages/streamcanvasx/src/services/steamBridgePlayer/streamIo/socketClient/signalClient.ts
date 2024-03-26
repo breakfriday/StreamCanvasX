@@ -22,7 +22,7 @@ type ApiResponse = {
 type ApirParams = {
     type: string;
     method: string;
-    params: [];
+    params: Array<any>;
 };
 
 function generateUniqueID() {
@@ -33,7 +33,7 @@ function generateUniqueID() {
 
 class SignalClient {
     private ws: WebSocket | null = null;
-    private wsUrl: string;
+
     private responseMap = new Map<number|string, (response: any) => void>(); // 使用responseMap来存储每个msgId对应的解析函数
     playerService: PlayerService
     private lastMsgId = 0;
@@ -44,8 +44,7 @@ class SignalClient {
 
     init(playerService: PlayerService) {
         this.playerService=playerService;
-        let { url } = this.playerService.config;
-        this.wsUrl=url;
+        // let { url } = this.playerService.config;
      }
 
 
@@ -56,7 +55,7 @@ class SignalClient {
                 return;
             }
 
-            this.ws = new WebSocket(`${this.wsUrl}/signal/${id}`);
+            this.ws = new WebSocket(`ws://127.0.0.1:4300/signal/${id}`);
 
             this.ws.onopen = () => resolve();
             this.ws.onerror = (event) => reject(event);
@@ -125,7 +124,7 @@ class SignalClient {
         return ++this.lastMsgId;
     }
 
-    callMethd(method: string,params: ApirParams): Promise<void> {
+    callMethd(method: string,params: ApirParams['params']): Promise<void> {
         return new Promise((resolve, reject) => {
             if (!this.ws) {
                 console.error('WebSocket 未连接');
@@ -133,14 +132,15 @@ class SignalClient {
             }
             const msgId = this.getNextMessageId();
             this.responseMap.set(msgId, resolve);
+            let timestamp=new Date().getTime();
 
-            const message = JSON.stringify({ msgId, method, params });
+            const message = JSON.stringify({ msgId, method,timestamp, params });
             this.ws!.send(message);
 
             setTimeout(() => {
                 if (this.responseMap.has(msgId)) {
                     this.responseMap.delete(msgId);
-                    reject(new Error('Timeout waiting for response'));
+                    reject(new Error('信令响应 超时 5000'));
                 }
             }, 5000); // 设置超时时间， 避免堆积。
         });
@@ -150,25 +150,16 @@ class SignalClient {
         return Math.random().toString(36).substring(2, 15);
     }
 
-    createPlayer(params: PlayerParams): void {
-        this.send('createPlayer', [params.url, params.timeout, params.playerType, params.transportType, params.hardDecode]);
+    disconnect() {
+        if (this.ws) {
+            this.ws.close();
+            this.ws = null;
+        }
     }
-
-    play(): void {
-        this.send('play');
-    }
-
-    stop(): void {
-        this.send('stop');
-    }
-
-    setNsLevel(level: number): void {
-        this.send('setNsLevel', [level]);
+    destroy() {
+        this.disconnect();
     }
 }
 
 export default SignalClient;
-// 使用
-// const mediaPlayerWS = new MediaPlayerWS('ws://127.0.0.1:端口');
-// mediaPlayerWS.connect('playerId');
-// 继续执行创建播放器、播放、停止等操作
+
