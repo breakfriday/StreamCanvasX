@@ -1,3 +1,7 @@
+
+
+import PlayerService from "../../index";
+
 type PlayerParams = {
     url: string;
     timeout: number;
@@ -19,16 +23,32 @@ type ApiResponse = {
 class SignalClient {
     private ws: WebSocket | null = null;
     private wsUrl: string;
+    private responseMap = new Map<number, (response: any) => void>(); // 使用responseMap来存储每个msgId对应的解析函数
+    playerService: PlayerService
 
-    constructor(wsUrl: string) {
-        this.wsUrl = wsUrl;
+    constructor() {
+
     }
 
-    connect(id: string): void {
-        this.ws = new WebSocket(`${this.wsUrl}/signal/${id}`);
-        this.ws.onmessage = this.onMessage.bind(this);
-        this.ws.onerror = this.onError.bind(this);
-        this.ws.onclose = this.onClose.bind(this);
+    init(playerService: PlayerService) {
+        this.playerService=playerService;
+        let { url } = this.playerService.config;
+        this.wsUrl=url;
+     }
+
+
+    private connectSocket(id: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.ws = new WebSocket(`${this.wsUrl}/signal/${id}`);
+
+            this.ws.onopen = () => resolve();
+            this.ws.onerror = (event) => reject(event);
+            this.ws.onmessage = this.onMessage.bind(this);
+        });
+    }
+
+    connect(id: string): Promise<void> {
+        return this.connectSocket(id);
     }
 
     private onMessage(event: MessageEvent): void {
@@ -103,6 +123,7 @@ class SignalClient {
     }
 }
 
+export default SignalClient;
 // 使用
 // const mediaPlayerWS = new MediaPlayerWS('ws://127.0.0.1:端口');
 // mediaPlayerWS.connect('playerId');
