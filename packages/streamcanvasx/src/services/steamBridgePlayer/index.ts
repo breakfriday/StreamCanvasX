@@ -4,17 +4,21 @@ import YuvEnging from './render/yunEngine';
 import { IBridgePlayerConfig } from '../../types/services';
 import MediaRenderEngine from './render';
 import { TYPES } from '../../serviceFactories/symbol';
+import StreamIo from './streamIo';
 
 @injectable()
 class StreamBridgePlayer extends Emitter {
     config: IBridgePlayerConfig
     yuvEngine: YuvEnging;
     mediaRenderEngine: MediaRenderEngine
+    streamIo: StreamIo
     constructor(
         @inject(TYPES.IMediaRenderEngine) mediaRenderEngine: MediaRenderEngine,
+        @inject(TYPES.IStreamIo) streamIo: StreamIo,
     ) {
         super();
         this.mediaRenderEngine=mediaRenderEngine;
+        this.streamIo=streamIo;
     }
     init(config: IBridgePlayerConfig) {
         this.config=config;
@@ -36,6 +40,10 @@ class StreamBridgePlayer extends Emitter {
 
     start() {
         this.yuvEngine.render();
+    }
+
+    play() {
+       // this.streamIo.open();
     }
 }
 

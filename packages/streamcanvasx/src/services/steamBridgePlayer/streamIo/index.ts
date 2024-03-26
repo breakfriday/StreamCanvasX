@@ -1,6 +1,8 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../index';
 import FetchLoader from "./fetch_loader";
+
+@injectable()
 class StreamIo {
     _ioLoader: FetchLoader
     playerService: PlayerService
