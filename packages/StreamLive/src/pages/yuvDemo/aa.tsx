@@ -6,6 +6,9 @@ import { BridgePlayerStreamType } from 'streamcanvasx/src/constant';
 interface IVideoComponent {
     url: string;
     key: string | number;
+    frameHeight?: number;
+    frameWidth?: number;
+    renderFps?: number;
 
   }
   const VideoComponents: React.FC<IVideoComponent> = (props) => {
@@ -13,6 +16,7 @@ interface IVideoComponent {
 
     useEffect(() => {
         let { url } = props;
+
         let player=createStreamBridgePlayerInstance({
              url,
             contentEl: containerRef.current!,
@@ -23,10 +27,11 @@ interface IVideoComponent {
 
         });
 
+
         player.play();
     });
     return (<div>
-      <div style={{ width: '800px', height: '500px', border: '1px' }} ref={containerRef} />
+      <div style={{ width: "400px", height: "300px", border: '1px' }} ref={containerRef} />
 
     </div>);
   };

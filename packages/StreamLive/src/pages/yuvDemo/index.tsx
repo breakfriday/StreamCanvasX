@@ -8,14 +8,18 @@ import './index.css';
 
 import { createStreamBridgePlayerInstance } from 'streamcanvasx/src/serviceFactories/index';
 import { IBridgePlayerConfig } from 'streamcanvasx/src/types/services';
+import VideoComponents from './aa';
 
 const player_count=12;
 
 
 interface IFormData{
-  url: string;
-  type: number;
-  stremType: IBridgePlayerConfig["stremType"];
+  url?: string;
+  type?: number;
+  stremType?: IBridgePlayerConfig["stremType"];
+  frameWidth?: number;
+  frameHeight?: number;
+  renderFps?: number;
 }
 
 const yuvDemo = () => {
@@ -33,16 +37,23 @@ const yuvDemo = () => {
 
         }}
         onFinish={(value) => {
-          let { playerCount } = value;
+          let { url } = value;
           let { fps } = value;
           let { frameHeight } = value;
           let { frameWidth } = value;
 
-          fetchAndParseYUV('/output.yuv',frameWidth,frameHeight,playerCount,fps);
+          let itemData={ renderFps: fps,frameHeight,frameWidth ,url };
+
+          let temp = Object.assign([], data);
+
+          temp.push(itemData);
+
+
+          setData(temp);
           }}
       >
         <Form.Item
-          initialValue={""}
+          initialValue={"/output.yuv"}
           label="url"
           name="url"
         >
@@ -84,41 +95,20 @@ const yuvDemo = () => {
       </Form>
 
 
-      <div onClick={() => {
-        fetchAndParseYUV('/output.yuv',1270,720);
-      }}
-      >fetch yuv</div>
-
-
-      <div onClick={() => {
-        wsConnect();
-      }}
-      >
-        ws connect
-      </div>
-
-
       <div className="yuv_container">
-        {(() => {
-         return Array.from({ length: player_count }, (_, i) => (
-           <div id={`yuvCanvas${i}`} style={{ width: "400px", height: "300px" }}>
-             {i}
-           </div>
-          ));
-        })()}
+
 
         {
           data.map((item, inx) => {
-            let { url, type, stremType } = item;
-
+            let { url, type, stremType ,frameWidth } = item;
 
             return (
-              <div style={{ width: "400px", height: "300px" }}>
-                <VideoComponents
-                  url={url}
-                  key={inx}
-                />
-              </div>
+              <VideoComponents
+                url={url}
+                frameWidth={frameWidth}
+                key={inx}
+              />
+
          );
           })
         }
