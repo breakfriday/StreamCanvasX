@@ -22,13 +22,18 @@ class SocketClient {
         }
     }
 
-    createPlayer() {
+    async createPlayer() {
+        let { url } = this.playerService.config;
+        try{
+            await this.signalClient.callMethd("createPlayer",[url,5,0,1,1]);
+            await this.signalClient.callMethd("play",[]);
+        }catch(e) {
 
+        }
     }
     async play() {
         let { url } = this.playerService.config;
         try{
-            await this.signalClient.callMethd("createPlayer",[url,5,0,1,1]);
             await this.signalClient.callMethd("play",[]);
         }catch(e) {
 
