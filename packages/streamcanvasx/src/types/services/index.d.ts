@@ -214,10 +214,11 @@ enum BridgePlayerStreamType {
 
 interface IBridgePlayerConfig {
   contentEl: HTMLElement;
-  frameWidth: number;
-  frameHeight: number;
+  frameWidth?: number;
+  frameHeight?: number;
   stremType: BridgePlayerStreamType;
   url: string;
+  renderFps: number;
 
 
 }
