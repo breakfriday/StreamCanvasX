@@ -100,13 +100,15 @@ const yuvDemo = () => {
 
         {
           data.map((item, inx) => {
-            let { url, type, stremType ,frameWidth } = item;
+            let { url, type, stremType ,frameWidth,frameHeight } = item;
 
             return (
               <VideoComponents
-                url={url}
-                frameWidth={frameWidth}
                 key={inx}
+                url={url!}
+                frameWidth={frameWidth}
+                frameHeight={frameHeight}
+
               />
 
          );

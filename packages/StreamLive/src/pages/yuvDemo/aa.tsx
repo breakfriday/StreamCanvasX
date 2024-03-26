@@ -27,9 +27,10 @@ interface IVideoComponent {
 
         });
 
+        console.log("--start---");
 
         player.play();
-    });
+    },[]);
     return (<div>
       <div style={{ width: "400px", height: "300px", border: '1px' }} ref={containerRef} />
 
