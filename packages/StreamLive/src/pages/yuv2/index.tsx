@@ -33,8 +33,8 @@ async function fetchAndParseYUV(url, frameWidth, frameHeight ,playerCount,fps) {
   let offset = 0;
 
   for (let player of players.values()) {
-    if (player.yuvEngine) {
-        player.yuvEngine.render();
+    if (player.mediaRenderEngine.yuvEngine) {
+        player.mediaRenderEngine.yuvEngine.render();
     }
 }
 
@@ -61,8 +61,8 @@ async function fetchAndParseYUV(url, frameWidth, frameHeight ,playerCount,fps) {
       console.info(yuvData);
 
       for (let player of players.values()) {
-        if (player.yuvEngine) {
-            player.yuvEngine.update_yuv_texture({ yData,uData,vData,width: frameWidth,height: frameHeight });
+        if (player.mediaRenderEngine.yuvEngine) {
+            player.mediaRenderEngine.yuvEngine.update_yuv_texture({ yData,uData,vData,width: frameWidth,height: frameHeight });
         }
     }
 
@@ -81,8 +81,8 @@ const height = 1080;
 let players= createYuvPlayers(9,width,height);
 
 for (let player of players.values()) {
-  if (player.yuvEngine) {
-      player.yuvEngine.render();
+  if (player.mediaRenderEngine.yuvEngine) {
+      player.mediaRenderEngine.yuvEngine.render();
   }
 }
 //  player6.yuvEngine.render();
@@ -126,8 +126,8 @@ ws.onmessage = (event) => {
     console.info(yuvData);
 
     for (let player of players.values()) {
-      if (player.yuvEngine) {
-          player.yuvEngine.update_yuv_texture({ yData,uData,vData,width: width,height: height });
+      if (player.mediaRenderEngine.yuvEngine) {
+          player.mediaRenderEngine.yuvEngine.update_yuv_texture({ yData,uData,vData,width: width,height: height });
       }
   }
 

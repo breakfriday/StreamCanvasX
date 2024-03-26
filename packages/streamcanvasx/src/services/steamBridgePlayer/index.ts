@@ -27,8 +27,8 @@ class StreamBridgePlayer extends Emitter {
     }
 
     initPlugin() {
-        this.yuvEngine=new YuvEnging();
-        this.yuvEngine.init(this);
+        // this.yuvEngine=new YuvEnging();
+        // this.yuvEngine.init(this);
         this.streamIo.init(this);
         this.mediaRenderEngine.init(this);
     }
