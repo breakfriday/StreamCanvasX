@@ -25,7 +25,7 @@ class StreamIo {
         this._ioLoader.open();
     }
     abort() {
-
+        this._ioLoader.abort();
     }
 
     process() {

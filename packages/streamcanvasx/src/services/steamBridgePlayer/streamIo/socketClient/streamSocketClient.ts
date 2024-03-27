@@ -19,6 +19,9 @@ class StreamSocketClient {
     playerService: PlayerService;
     private ws: WebSocket | null = null;
     private lastMsgId = 0;
+    previousTimestamp = 0;
+    frameCount = 0;
+    fps = 0;
     constructor() {
 
     }
@@ -33,7 +36,7 @@ class StreamSocketClient {
                 return;
             }
 
-            this.ws = new WebSocket(`ws://127.0.0.1:4300/signal/${id}`);
+            this.ws = new WebSocket(`ws://127.0.0.1:4300/data/${id}`);
 
             this.ws.onopen = () => resolve();
             this.ws.onerror = (event) => reject(event);

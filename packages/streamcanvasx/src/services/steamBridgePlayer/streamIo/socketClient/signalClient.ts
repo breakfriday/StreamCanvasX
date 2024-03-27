@@ -55,7 +55,7 @@ class SignalClient {
                 return;
             }
 
-            this.ws = new WebSocket(`ws://127.0.0.1:4300/signal/${id}`);
+            this.ws = new WebSocket(`ws://127.0.0.1:4300/ws/signal/1`);
 
             this.ws.onopen = () => resolve();
             this.ws.onerror = (event) => reject(event);
@@ -74,11 +74,11 @@ class SignalClient {
 
     handleMessage(event: MessageEvent) {
         const response: ApiResponse = JSON.parse(event.data);
-        const resolve = this.responseMap.get(response.msgId);
+        const resolve = this.responseMap.get(Number(response.msgId));
 
         if (resolve) {
             resolve(response);
-            this.responseMap.delete(response.msgId);
+            this.responseMap.delete(Number(response.msgId));
         }
     }
 
