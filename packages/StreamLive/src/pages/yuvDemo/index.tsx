@@ -8,6 +8,7 @@ import './index.css';
 
 import { createStreamBridgePlayerInstance } from 'streamcanvasx/src/serviceFactories/index';
 import { IBridgePlayerConfig } from 'streamcanvasx/src/types/services';
+import { BridgePlayerStreamType } from 'streamcanvasx/src/constant';
 import VideoComponents from './aa';
 
 const player_count=12;
@@ -16,7 +17,7 @@ const player_count=12;
 interface IFormData{
   url?: string;
   type?: number;
-  stremType?: IBridgePlayerConfig["stremType"];
+  streamType?: IBridgePlayerConfig["stremType"];
   frameWidth?: number;
   frameHeight?: number;
   renderFps?: number;
@@ -40,9 +41,9 @@ const yuvDemo = () => {
           let { url } = value;
           let { fps } = value;
           let { frameHeight } = value;
-          let { frameWidth } = value;
+          let { frameWidth,streamType } = value;
 
-          let itemData={ renderFps: fps,frameHeight,frameWidth ,url };
+          let itemData={ renderFps: fps,frameHeight,frameWidth ,url ,streamType };
 
           let temp = Object.assign([], data);
 
@@ -58,6 +59,14 @@ const yuvDemo = () => {
           name="url"
         >
           <Input />
+        </Form.Item>
+
+        <Form.Item label="streamType" name="streamType" initialValue={BridgePlayerStreamType.ws}>
+          <Radio.Group>
+            <Radio value={BridgePlayerStreamType.http_yuv}> http_yuv</Radio>
+            <Radio value={BridgePlayerStreamType.ws}> ws</Radio>
+
+          </Radio.Group>
         </Form.Item>
 
         <Form.Item
@@ -100,7 +109,7 @@ const yuvDemo = () => {
 
         {
           data.map((item, inx) => {
-            let { url, type, stremType ,frameWidth,frameHeight } = item;
+            let { url, type, streamType ,frameWidth,frameHeight } = item;
 
             return (
               <VideoComponents
@@ -108,6 +117,7 @@ const yuvDemo = () => {
                 url={url!}
                 frameWidth={frameWidth}
                 frameHeight={frameHeight}
+                streamType={streamType}
 
               />
 

@@ -27,7 +27,7 @@ class SocketClient {
 
         try{
             await this.streamSocketClient.connect();
-            console.log("dataClient 连接成功")
+            console.log("dataClient 连接成功");
         }catch(e) {
             return false;
         }

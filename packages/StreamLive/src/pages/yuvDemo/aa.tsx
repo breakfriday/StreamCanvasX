@@ -9,19 +9,21 @@ interface IVideoComponent {
     frameHeight?: number;
     frameWidth?: number;
     renderFps?: number;
+    streamType?: BridgePlayerStreamType;
 
   }
   const VideoComponents: React.FC<IVideoComponent> = (props) => {
     const containerRef = useRef(null);
 
     useEffect(() => {
-        let { url,frameHeight,frameWidth ,renderFps} = props;
+        let { url,frameHeight,frameWidth ,renderFps ,streamType } = props;
+
 
         let player=createStreamBridgePlayerInstance({
              url,
             contentEl: containerRef.current!,
             renderFps: 30,
-            stremType: BridgePlayerStreamType.http_yuv,
+            stremType: streamType,
             frameHeight,
             frameWidth,
 
