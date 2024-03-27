@@ -20,15 +20,13 @@ class SocketClient {
         try{
             await this.signalClient.connect();
             console.log("signalClient 连接成功");
-            await this.play();
+            await this.createPlayer();
         }catch(e) {
 
         }
 
         try{
-            debugger
             await this.streamSocketClient.connect();
-            debugger
             console.log("dataClient 连接成功");
         }catch(e) {
             return false;
@@ -46,12 +44,8 @@ class SocketClient {
     }
     async play() {
         let { url } = this.playerService.config;
-        debugger
         try{
-            await this.signalClient.callMethd("createPlayer",[url,5,0,1,0]);
-            debugger
             await this.signalClient.callMethd("play",[]);
-            debugger
         }catch(e) {
 
         }
