@@ -22,11 +22,13 @@ class StreamSocketClient {
     previousTimestamp = 0;
     frameCount = 0;
     fps = 0;
+    clientId: number
     constructor() {
 
     }
-    init(playerService: PlayerService) {
+    init(playerService: PlayerService,clientId?: number) {
         this.playerService=playerService;
+        this.clientId=clientId;
     }
 
     private connectSocket(id: string): Promise<void> {
@@ -35,8 +37,9 @@ class StreamSocketClient {
                 resolve();
                 return;
             }
+            let { clientId } = this;
 
-            this.ws = new WebSocket(`ws://127.0.0.1:4300/ws/data/1`);
+            this.ws = new WebSocket(`ws://127.0.0.1:4300/ws/data/${clientId}`);
 
             this.ws.binaryType = 'arraybuffer';
 
@@ -78,7 +81,6 @@ class StreamSocketClient {
         const width = data.getUint16(13);// 14 2字节
         const height = data.getUint16(15);// 16   8字节
 
-        debugger;
         const yStride = data.getUint16(17);
         // const uStride = data.getUint16(25);
         // const vStride = data.getUint16(27);

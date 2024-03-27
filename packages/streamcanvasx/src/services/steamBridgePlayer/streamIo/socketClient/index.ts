@@ -3,18 +3,38 @@ import PlayerService from '../../index';
 import SignalClient from './signalClient';
 import StreamSocketClient from './streamSocketClient';
 
+
+function generateUniqueId() {
+    const now = Date.now();
+
+    const maxInt = 100;
+
+    // 生成一个0到最大安全整数之间的随机整数
+    const randomInt = Math.floor(Math.random() * maxInt);
+
+
+    debugger
+    // const random = Math.floor(Math.random()* in);
+
+    const uniqueId = randomInt;
+
+    return uniqueId;
+}
+
 class SocketClient {
     playerService: PlayerService;
     signalClient: SignalClient;
-    streamSocketClient: StreamSocketClient
+    streamSocketClient: StreamSocketClient;
+    clientId: number
     constructor() {
         this.signalClient=new SignalClient();
         this.streamSocketClient=new StreamSocketClient();
     }
     init(playerService: PlayerService) {
+        this.clientId=generateUniqueId();
         this.playerService=playerService;
-        this.signalClient.init(this.playerService);
-        this.streamSocketClient.init(this.playerService);
+        this.signalClient.init(this.playerService,this.clientId);
+        this.streamSocketClient.init(this.playerService,this.clientId);
     }
     async open() {
         try{

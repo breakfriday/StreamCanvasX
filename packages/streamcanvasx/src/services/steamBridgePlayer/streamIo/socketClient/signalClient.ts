@@ -37,13 +37,15 @@ class SignalClient {
     private responseMap = new Map<number|string, (response: any) => void>(); // 使用responseMap来存储每个msgId对应的解析函数
     playerService: PlayerService
     private lastMsgId = 0;
+    clientId: number
 
     constructor() {
 
     }
 
-    init(playerService: PlayerService) {
+    init(playerService: PlayerService,clientId?: number) {
         this.playerService=playerService;
+        this.clientId=clientId;
         // let { url } = this.playerService.config;
      }
 
@@ -55,7 +57,9 @@ class SignalClient {
                 return;
             }
 
-            this.ws = new WebSocket(`ws://127.0.0.1:4300/ws/signal/1`);
+            let { clientId } = this;
+            debugger
+            this.ws = new WebSocket(`ws://127.0.0.1:4300/ws/signal/${clientId}`);
 
             this.ws.onopen = () => resolve();
             this.ws.onerror = (event) => reject(event);
