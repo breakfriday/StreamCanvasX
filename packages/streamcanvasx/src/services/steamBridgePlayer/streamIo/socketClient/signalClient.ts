@@ -1,5 +1,4 @@
 
-
 import PlayerService from "../../index";
 
 type PlayerParams = {
@@ -12,7 +11,7 @@ type PlayerParams = {
 
 type ApiResponse = {
     type: string;
-    msgId: string;
+    msgId: string|number;
     timestamp: number;
     method: string;
     code: number;
@@ -20,10 +19,16 @@ type ApiResponse = {
     data: any[];
 };
 
+type ApirParams = {
+    type: string;
+    method: string;
+    params: [];
+};
+
 class SignalClient {
     private ws: WebSocket | null = null;
     private wsUrl: string;
-    private responseMap = new Map<number, (response: any) => void>(); // 使用responseMap来存储每个msgId对应的解析函数
+    private responseMap = new Map<number|string, (response: any) => void>(); // 使用responseMap来存储每个msgId对应的解析函数
     playerService: PlayerService
 
     constructor() {
@@ -39,11 +44,20 @@ class SignalClient {
 
     private connectSocket(id: string): Promise<void> {
         return new Promise((resolve, reject) => {
+            if (this.ws) {
+                resolve();
+                return;
+            }
+
             this.ws = new WebSocket(`${this.wsUrl}/signal/${id}`);
 
             this.ws.onopen = () => resolve();
             this.ws.onerror = (event) => reject(event);
             this.ws.onmessage = this.onMessage.bind(this);
+            this.ws.onclose = () => {
+                console.log('WebSocket closed');
+                this.ws = null;
+            };
         });
     }
 
@@ -51,14 +65,23 @@ class SignalClient {
         return this.connectSocket(id);
     }
 
+    handleMessage(event: MessageEvent) {
+        const response: ApiResponse = JSON.parse(event.data);
+        const resolve = this.responseMap.get(response.msgId);
+
+        if (resolve) {
+            resolve(response);
+            this.responseMap.delete(response.msgId);
+        }
+    }
+
     private onMessage(event: MessageEvent): void {
         const message: ApiResponse = JSON.parse(event.data);
-        console.log('从服务器接收到的消息', message);
 
         // 处理不同类型的消息（例如，api响应，回调）
         switch (message.type) {
             case 'api':
-                this.handleApiResponse(message);
+                 this.handleMessage(event);
                 break;
             case 'callback':
                 this.handleCallback(message);
@@ -68,10 +91,6 @@ class SignalClient {
         }
     }
 
-    private handleApiResponse(response: ApiResponse): void {
-        // 实现 API 响应处理逻辑
-        console.log('API响应:', response);
-    }
 
     private handleCallback(callback: ApiResponse): void {
         // 实现回调处理逻辑
@@ -82,9 +101,6 @@ class SignalClient {
         console.error('WebSocket 错误:', event);
     }
 
-    private onClose(event: CloseEvent): void {
-        console.log('WebSocket 已关闭:', event);
-    }
 
     send(method: string, params: any[] = []): void {
         if (!this.ws) {
@@ -100,6 +116,13 @@ class SignalClient {
         };
 
         this.ws.send(JSON.stringify(message));
+    }
+
+    callMethd(method: string,params: ApirParams) {
+        if (!this.ws) {
+            console.error('WebSocket 未连接');
+            return;
+        }
     }
 
     private generateMsgId(): string {
