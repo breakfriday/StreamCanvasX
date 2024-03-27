@@ -36,7 +36,9 @@ class StreamSocketClient {
                 return;
             }
 
-            this.ws = new WebSocket(`ws://127.0.0.1:4300/data/${id}`);
+            this.ws = new WebSocket(`ws://127.0.0.1:4300/ws/data/1`);
+
+            this.ws.binaryType = 'arraybuffer';
 
             this.ws.onopen = () => resolve();
             this.ws.onerror = (event) => reject(event);
@@ -65,22 +67,25 @@ class StreamSocketClient {
 
         // 数据类型: 1字节
         const dataType = data.getUint8(4);
-        if (dataType !== 0x01) { // 0x00为音频，0x01为视频
-            console.log('Not video data');
-            return;
-        }
+        // if (dataType != 1) { // 0x00为音频，0x01为视频
+        //     console.log('Not video data');
+        //     return;
+        // }
 
-        // 解析视频相关信息
-        const pts = data.getBigUint64(5);
-        const width = data.getUint16(13);
-        const height = data.getBigUint64(15);
-        const yStride = data.getUint16(23);
-        const uStride = data.getUint16(25);
-        const vStride = data.getUint16(27);
-        const dataLength = data.getUint32(29);
+        if(dataType===1) {
+               // 解析视频相关信息
+        const pts = data.getBigUint64(5);// 6位 8字节
+        const width = data.getUint16(13);// 14 2字节
+        const height = data.getUint16(15);// 16   8字节
+
+        debugger;
+        const yStride = data.getUint16(17);
+        // const uStride = data.getUint16(25);
+        // const vStride = data.getUint16(27);
+        // const dataLength = data.getUint32(29);
 
         // 计算Y, U, V数据起始位置和大小
-        const headerSize = 33; // 协议头到数据长度字节数的总长度
+        const headerSize = 27; // 协议头到数据长度字节数的总长度
         const yDataSize = yStride * Number(height);
         const uDataSize = yDataSize / 4;
         const vDataSize = yDataSize / 4;
@@ -100,6 +105,7 @@ class StreamSocketClient {
 
         console.info(yuvData);
         this.processFrame(yuvData);
+        }
     }
 
     processFrame(frame: YUVFrame) {
