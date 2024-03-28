@@ -26,10 +26,8 @@ import { CorrectDecorator } from './util/decrator/configDecrator';
 
 // 接入rtc player service
 import RTCPlayerService from '../webrtc';
-import { none } from '../decoder/CodecParser/constants';
 
 import LogMonitor from '../../LogMonitor';
-import { url } from 'inspector';
 
 
 corePlayer.LoggingControl.applyConfig({
@@ -92,7 +90,8 @@ class PlayerService extends Emitter {
     audioEl: HTMLVideoElement;
     scheduler: Scheduler;
     rtcPlayerService: RTCPlayerService;
-    logMonitor: LogMonitor
+    logMonitor: LogMonitor;
+    maxErrorTimes: 1000
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -465,6 +464,8 @@ class PlayerService extends Emitter {
             //     this.canvasVideoService.drawLoading();
             //    this.reload2();
                this.addReloadTask({ arr_msg: [`reload: ${error}`] });
+            }else{
+                this.addReloadTask({ arr_msg: [`reload: ${error}`] });
             }
           });
 
@@ -484,55 +485,52 @@ class PlayerService extends Emitter {
         //     }, 9 * 1000);
         //   };
         let lowSpeedStartTime: number | null = null;
+        let lowSpeedTimer: NodeJS.Timeout;
 
-          this.corePlayer.on(corePlayer.Events.STATISTICS_INFO, (data) => {
-             let { speed, decodedFrames } = data;
-
-
-            // let end = this.corePlayer.buffered.end(0);
-            // let delta = end - this.corePlayer.currentTime; // 获取buffered与当前播放位置的差值
-            // if (delta > 5 || delta < 0) {
-            //      this.corePlayer.currentTime = this.corePlayer.buffered.end(0) - 1;
-            //   }
-            // console.info(end);
-            // console.info(this.corePlayer.buffered);
+        //   this.corePlayer.on(corePlayer.Events.STATISTICS_INFO, (data) => {
+        //      let { speed, decodedFrames } = data;
 
 
-            // if (speed <= 1) {
-            //     if (lowSpeedStartTime === null) {
-            //         lowSpeedStartTime = Date.now();
-            //     }
-            //     if (Date.now() - lowSpeedStartTime >= 80000) {
-            //         this.reload2();
-            //        lowSpeedStartTime = null; // 重置计时器
-            //     }
-            //     // this.reload();
-            //     // this.reload();
-            // } else {
-            //     lowSpeedStartTime = null;
-            //     if (decodedFrames > 0 || hasVideo === false) {
-            //         this.canvasVideoService.loading = false;
-            //         this.httpFlvStreamService.hertTime = 0;
-            //         this.error_connect_times = 0;
-            //     }
-            // }
+        //     if (speed <= 1) {
+        //        if (lowSpeedStartTime === null) {
+        //             lowSpeedStartTime = Date.now();
+        //         }
+        //         if (Date.now() - lowSpeedStartTime >= 15000) {
+        //             this.addReloadTask({ arr_msg: ['---heartcheck 异常 流量0 ----'] });
+        //            lowSpeedStartTime = null; // 重置计时器
+        //         }
+        //     }
+        //     if (speed > 1) {
+        //         lowSpeedStartTime = null;
+        //         this.error_connect_times = 0;
+        //     }
 
+        //     this.emit('otherInfo', data);
+        // });
+
+        this.corePlayer.on(corePlayer.Events.STATISTICS_INFO, (data) => {
+            let { speed, decodedFrames } = data;
+
+            // 如果速度小于或等于1，启动一个定时器
             if (speed <= 1) {
-               if (lowSpeedStartTime === null) {
+                // 如果定时器不存在，则创建一个新的定时器
+                if (lowSpeedTimer) {
                     lowSpeedStartTime = Date.now();
+                    lowSpeedTimer = setTimeout(() => {
+                        // 15秒后检查速度是否仍然小于或等于1
+                        if (Date.now() - lowSpeedStartTime >= 12000) {
+                            this.addReloadTask({ arr_msg: ['---heartcheck 异常 流量0 ----'] });
+                        }
+                        // 清除定时器
+                        lowSpeedTimer= null;
+                    }, 12000); // 15秒后触发
                 }
-                if (Date.now() - lowSpeedStartTime >= 15000) {
-                    // this.canvasVideoService.drawLoading();
-
-                    // console.log('---heartcheck 异常 流量0 ----');
-                    // this.reload2();
-
-                    this.addReloadTask({ arr_msg: ['---heartcheck 异常 流量0 ----'] });
-                   lowSpeedStartTime = null; // 重置计时器
+            } else {
+                // 如果速度大于1，清除定时器并重置状态
+                if (lowSpeedTimer) {
+                    clearTimeout(lowSpeedTimer);
+                    lowSpeedTimer = null;
                 }
-            }
-            if (speed > 1) {
-                lowSpeedStartTime = null;
                 this.error_connect_times = 0;
             }
 
@@ -832,7 +830,7 @@ class PlayerService extends Emitter {
             this.logMonitor.log({ flvUrl: url,status: "reloading" });
 
 
-            if (this.error_connect_times > 4) {
+            if (this.error_connect_times > this.maxErrorTimes) {
                  this.canvasVideoService.loading = false;
                this.setError();
                return false;
@@ -875,8 +873,14 @@ class PlayerService extends Emitter {
 
         setError() {
             // this.canvasVideoService.loading = false;
+
+            if(this.canvasVideoService?.loadingView?.isLoading===true) {
+                this.canvasVideoService.loading = false;
+            }
+            this.error_connect_times =1000;
             this.corePlayer.pause();
             this.corePlayer.unload();
+            this.scheduler.clearQueue();
             // this.corePlayer.destroy();
             if (this.config.showAudio === true) {
                 this.audioProcessingService.clearCanvas();
