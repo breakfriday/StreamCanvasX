@@ -37,7 +37,9 @@ class SignalClient {
     private responseMap = new Map<number|string, (response: any) => void>(); // 使用responseMap来存储每个msgId对应的解析函数
     playerService: PlayerService
     private lastMsgId = 0;
-    clientId: number
+    clientId: number;
+    private _mediaStreamInfoPromise: Promise<void>;
+    private _mediaStreamInfoNotify: () => void;
 
     constructor() {
 
@@ -58,7 +60,7 @@ class SignalClient {
             }
 
             let { clientId } = this;
-            debugger
+            debugger;
             this.ws = new WebSocket(`ws://127.0.0.1:4300/ws/signal/${clientId}`);
 
             this.ws.onopen = () => resolve();
@@ -105,7 +107,16 @@ class SignalClient {
 
     private handleCallback(callback: ApiResponse): void {
         // 实现回调处理逻辑
-        console.log('回调:', callback);
+        // console.log('回调:', callback);
+    }
+
+    async getStreamInfo() {
+        if (!this._mediaStreamInfoPromise) {
+            this._mediaStreamInfoPromise = new Promise((resolve) => {
+              this._mediaStreamInfoNotify = resolve;
+            });
+          }
+          return this._mediaStreamInfoPromise;
     }
 
 

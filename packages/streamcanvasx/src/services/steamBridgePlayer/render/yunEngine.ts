@@ -149,9 +149,9 @@ class YuvEnging {
       return new Promise((resolve) => {
         if(yuvFrame) {
           let { yData, uData, vData,width,height }=yuvFrame;
-          this.yuvTexture.textureY({ data: yData, width, height, format: 'luminance' });
-          this.yuvTexture.textureU({ data: uData, width: width / 2, height: height / 2, format: 'luminance' });
-          this.yuvTexture.textureV({ data: vData, width: width / 2, height: height / 2, format: 'luminance' });
+          this.yuvTexture.textureY({ data: yData, width, height, format: 'luminance',min: 'linear', mag: 'linear'});
+          this.yuvTexture.textureU({ data: uData, width: width / 2, height: height / 2, format: 'luminance',min: 'linear', mag: 'linear' });
+          this.yuvTexture.textureV({ data: vData, width: width / 2, height: height / 2, format: 'luminance',min: 'linear', mag: 'linear' });
           this.drawCommand({
             textureY: this.yuvTexture.textureY,
             textureU: this.yuvTexture.textureU,

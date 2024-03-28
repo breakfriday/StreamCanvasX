@@ -105,7 +105,7 @@ class StreamSocketClient {
             vData
         };
 
-        console.info(yuvData);
+        // console.info(yuvData);
         this.processFrame(yuvData);
         }
     }
