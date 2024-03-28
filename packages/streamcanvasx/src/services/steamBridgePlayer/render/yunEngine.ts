@@ -83,6 +83,7 @@ class YuvEnging {
               varying vec2 uv;
               void main() {
                 uv = position * 0.5 + 0.5;
+                uv.y = 1.0 - uv.y; // 反转y轴
                 gl_Position = vec4(position, 0, 1);
               }
             `,
