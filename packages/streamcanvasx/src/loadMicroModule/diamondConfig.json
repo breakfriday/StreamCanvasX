@@ -3,8 +3,8 @@
    
     "data":[
         {"id":0,"version":"0.1.91","desc":"default 環境 ，沒有規則命中"},
-        {"id":1,"version":"0.1.91","desc":"pcweb 开发环境"},
-        {"id":2,"version":"0.1.93_test","desc":"pcweb  测试环境"},
+        {"id":1,"version":"0.1.94_2","desc":"pcweb 开发环境"},
+        {"id":2,"version":"0.1.94_2","desc":"pcweb  测试环境"},
         {"id":3,"version":"0.1.85","desc":"pcweb  演示环境"},
         {"id":4,"version":"0.1.91","desc":"IOT 测试环境"},
         {"id":5,"version":"0.1.91","desc":"IOT 演示环境"},
@@ -118,6 +118,18 @@
                 "data":[
                         "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.93_test/vendor.esm.es5.production.js",
                         "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.93_test/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.94_1",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.94_1/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.94_1/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.94_2",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.94_2/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.94_2/index.esm.es5.production.js"
             ]}
     ],
 
@@ -126,7 +138,7 @@
             "rulesId":1 , "dataId":1,"desc":"pcweb 开发环境","conditions": [{
                 "type": "and", 
                 "condition": {
-                    "name":"domain","options": ["http://192.168.100.26:8011","http://192.168.100.26:8011/*","http://localhost:9000/*"]
+                    "name":"domain","options": ["http://192.168.100.26:8011","http://192.168.100.26:8011/*","http://localhost:9000/*","http://localhost:3003/*"]
                 }}] 
         },
         {

@@ -842,7 +842,7 @@ class PlayerService extends Emitter {
         addReloadTask(parm?: {arr_msg?: Array<string>}) {
             if (this.error_connect_times > 5) {
               //  console.log("error_connect_times > 4: Scheduler clearQueu  "+this.config.url)
-                this.scheduler.clearQueue();
+                // this.scheduler.clearQueue();
                 return false;
             }
 

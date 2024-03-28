@@ -173,8 +173,8 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
               });
      }
 
-     asyncCreatePlayer();
-
+    // cratePlayer();
+    asyncCreatePlayer();
 
     return () => {
       player.destroy();
