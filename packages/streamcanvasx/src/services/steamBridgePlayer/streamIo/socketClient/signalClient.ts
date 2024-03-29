@@ -39,7 +39,7 @@ class SignalClient {
     private lastMsgId = 0;
     clientId: number;
     private _mediaStreamInfoPromise: Promise<void>;
-    private _mediaStreamInfoNotify: () => void;
+    private _mediaStreamInfoNotify: (data: any) => void;
 
     constructor() {
 
@@ -48,7 +48,14 @@ class SignalClient {
     init(playerService: PlayerService,clientId?: number) {
         this.playerService=playerService;
         this.clientId=clientId;
+        this.promiseInit();
         // let { url } = this.playerService.config;
+     }
+
+     promiseInit() {
+        this._mediaStreamInfoPromise = new Promise((resolve) => {
+            this._mediaStreamInfoNotify = resolve;
+          });
      }
 
 
@@ -105,12 +112,19 @@ class SignalClient {
     }
 
 
-    private handleCallback(callback: ApiResponse): void {
+    private handleCallback(message: ApiResponse): void {
         // 实现回调处理逻辑
         // console.log('回调:', callback);
+        if(message.method==="streamInfo") {
+            type CustomArrayType = [boolean, number, number, boolean, number, number, number, ...any[]];
+
+            let { data } = message;
+
+            this._mediaStreamInfoNotify(data);
+        }
     }
 
-    async getStreamInfo() {
+     getStreamInfo() {
         if (!this._mediaStreamInfoPromise) {
             this._mediaStreamInfoPromise = new Promise((resolve) => {
               this._mediaStreamInfoNotify = resolve;

@@ -13,7 +13,7 @@ function generateUniqueId() {
     const randomInt = Math.floor(Math.random() * maxInt);
 
 
-    debugger
+    debugger;
     // const random = Math.floor(Math.random()* in);
 
     const uniqueId = randomInt;
@@ -58,6 +58,9 @@ class SocketClient {
         try{
             await this.signalClient.callMethd("createPlayer",[url,5,0,1,0]);
             await this.signalClient.callMethd("play",[]);
+
+            let info=await this.signalClient.getStreamInfo();
+            debugger;
         }catch(e) {
 
         }

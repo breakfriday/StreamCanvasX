@@ -91,7 +91,7 @@ class PlayerService extends Emitter {
     scheduler: Scheduler;
     rtcPlayerService: RTCPlayerService;
     logMonitor: LogMonitor;
-    maxErrorTimes: 1000
+    maxErrorTimes: 100000
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -840,7 +840,7 @@ class PlayerService extends Emitter {
         }
 
         addReloadTask(parm?: {arr_msg?: Array<string>}) {
-            if (this.error_connect_times > 5) {
+            if (this.error_connect_times > this.maxErrorTimes) {
               //  console.log("error_connect_times > 4: Scheduler clearQueu  "+this.config.url)
                 // this.scheduler.clearQueue();
                 return false;
@@ -877,7 +877,7 @@ class PlayerService extends Emitter {
             if(this.canvasVideoService?.loadingView?.isLoading===true) {
                 this.canvasVideoService.loading = false;
             }
-            this.error_connect_times =1000;
+            this.error_connect_times =this.maxErrorTimes+10;
             this.corePlayer.pause();
             this.corePlayer.unload();
             this.scheduler.clearQueue();
