@@ -167,7 +167,7 @@ class PlayerService extends Emitter {
     init(config?: IplayerConfig) {
         // let { model = UseMode.UseCanvas, url = '', contentEl = null, showAudio = false, hasAudio = true, hasVideo = true, errorUrl = '', useOffScreen = false, audioDraw = 1 } = config;
 
-        this.logMonitor=new LogMonitor();
+       // this.logMonitor=new LogMonitor();
 
 
          this.config=this.correctConfig(config);
@@ -257,7 +257,7 @@ class PlayerService extends Emitter {
     createPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
         let { streamType,url } = this.config;
 
-        this.logMonitor.log({ flvUrl: url ,status: "start",statusDesc: "創建实例 手动拉流" });
+       // this.logMonitor.log({ flvUrl: url ,status: "start",statusDesc: "創建实例 手动拉流" });
 
         if (streamType === 'WEBRTC') {
             this.createWebRtcPlayer();
@@ -276,7 +276,7 @@ class PlayerService extends Emitter {
         let { type = 'flv' } = parms;
 
         let { isLive, url, fileData, streamType } = this.config;
-        this.logMonitor.log({ flvUrl: url ,status: "start",statusDesc: "創建实例 手动拉流" });
+       // this.logMonitor.log({ flvUrl: url ,status: "start",statusDesc: "創建实例 手动拉流" });
         if (streamType === 'AAC' || streamType === 'MP4') {
             this.createBetaPlayer();
             return false;
@@ -757,7 +757,7 @@ startHeartbeatCheck() {
         this.scheduler.clearQueue();
         this.meidiaEl=null;
         this.canvasVideoService.loading=false;
-        this.logMonitor.log({ flvUrl: url ,status: "destroy",statusDesc: "销毁实例 终止拉流" });
+       // this.logMonitor.log({ flvUrl: url ,status: "destroy",statusDesc: "销毁实例 终止拉流" });
         if (this.canvasVideoService) {
             this.canvasVideoService.destroy();
             this.canvasVideoService = null;
@@ -847,7 +847,7 @@ startHeartbeatCheck() {
             this.error_connect_times++;
 
             let { url } = this.config;
-            this.logMonitor.log({ flvUrl: url,status: "reloading" });
+            //this.logMonitor.log({ flvUrl: url,status: "reloading" });
 
 
             if (this.error_connect_times > this.maxErrorTimes) {
@@ -926,7 +926,7 @@ startHeartbeatCheck() {
             this.addReloadTask({ arr_msg: ['---设备上线 强制重连 ----'] });
 
             let { url } = this.config;
-            this.logMonitor.log({ flvUrl: url,message: "---设备上线 强制重连 ----'" });
+           // this.logMonitor.log({ flvUrl: url,message: "---设备上线 强制重连 ----'" });
 
             this.startHeartbeatCheck();
         }
