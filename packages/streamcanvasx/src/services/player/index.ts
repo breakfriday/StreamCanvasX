@@ -577,6 +577,7 @@ startHeartbeatCheck() {
             // let kk=this.lowSpeedStartTime;
             if (this.speed <= 1 && this.lowSpeedStartTime !== null) {
                 if (Date.now() - this.lowSpeedStartTime >= 5000) {
+                   // console.log('---heartcheck 异常 流量0 ----');
                     this.addReloadTask({ arr_msg: ['---heartcheck 异常 流量0 ----'] });
                 }
             }
