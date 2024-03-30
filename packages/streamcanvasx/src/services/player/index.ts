@@ -91,7 +91,10 @@ class PlayerService extends Emitter {
     scheduler: Scheduler;
     rtcPlayerService: RTCPlayerService;
     logMonitor: LogMonitor;
-    maxErrorTimes: 100000
+    maxErrorTimes: 100000;
+    speed?: number
+    lowSpeedStartTime: number | null = null;
+    lowSpeedTimer: NodeJS.Timeout;
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -193,6 +196,8 @@ class PlayerService extends Emitter {
         // this.wasmDecoderService.init();
 
 
+        this.speed=0;
+        this.startHeartbeatCheck();
         // const decode_worker = new Worker(new URL('../decoder/decode_worker.js', import.meta.url));
 
         // this.debounceReload();
@@ -484,8 +489,8 @@ class PlayerService extends Emitter {
         //       }
         //     }, 9 * 1000);
         //   };
-        let lowSpeedStartTime: number | null = null;
-        let lowSpeedTimer: NodeJS.Timeout;
+        // let lowSpeedStartTime: number | null = null;
+        // let lowSpeedTimer: NodeJS.Timeout;
 
         //   this.corePlayer.on(corePlayer.Events.STATISTICS_INFO, (data) => {
         //      let { speed, decodedFrames } = data;
@@ -511,27 +516,23 @@ class PlayerService extends Emitter {
         this.corePlayer.on(corePlayer.Events.STATISTICS_INFO, (data) => {
             let { speed, decodedFrames } = data;
 
-            // 如果速度小于或等于1，启动一个定时器
-            if (speed <= 1) {
-                // 如果定时器不存在，则创建一个新的定时器
-                if (lowSpeedTimer) {
-                    lowSpeedStartTime = Date.now();
-                    lowSpeedTimer = setTimeout(() => {
-                        // 15秒后检查速度是否仍然小于或等于1
-                        if (Date.now() - lowSpeedStartTime >= 12000) {
-                            this.addReloadTask({ arr_msg: ['---heartcheck 异常 流量0 ----'] });
-                        }
-                        // 清除定时器
-                        lowSpeedTimer= null;
-                    }, 12000); // 15秒后触发
-                }
+            this.speed=speed;
+
+
+            if(speed>1) {
+                this.lowSpeedStartTime =null;
+            }
+
+            if (speed <= 1&&this.lowSpeedStartTime === null) {
+               this.lowSpeedStartTime = Date.now();
             } else {
                 // 如果速度大于1，清除定时器并重置状态
-                if (lowSpeedTimer) {
-                    clearTimeout(lowSpeedTimer);
-                    lowSpeedTimer = null;
-                }
-                this.error_connect_times = 0;
+                // if (lowSpeedTimer) {
+                //     clearTimeout(lowSpeedTimer);
+                //     lowSpeedTimer = null;
+                // }
+                // this.error_connect_times = 0;
+               // this.lowSpeedStartTime=null;
             }
 
             this.emit('otherInfo', data);
@@ -565,6 +566,23 @@ class PlayerService extends Emitter {
            this.canvasVideoService.load(videoEl);
         }
       }
+
+      // 独立的心跳检查和重载逻辑
+startHeartbeatCheck() {
+    if (!this.lowSpeedTimer) {
+        this.lowSpeedStartTime = Date.now();
+        this.lowSpeedTimer = setInterval(() => {
+            // 检查是否需要重载
+            // let { speed } = this;
+            // let kk=this.lowSpeedStartTime;
+            if (this.speed <= 1 && this.lowSpeedStartTime !== null) {
+                if (Date.now() - this.lowSpeedStartTime >= 5000) {
+                    this.addReloadTask({ arr_msg: ['---heartcheck 异常 流量0 ----'] });
+                }
+            }
+        }, 5000); // 每5秒检查一次
+    }
+}
 
       stopEvent() {
 
@@ -757,6 +775,7 @@ class PlayerService extends Emitter {
         if (this.player2) {
             this.player2.destroy();
         }
+       clearInterval(this.lowSpeedTimer);
     }
 
 
@@ -875,6 +894,9 @@ class PlayerService extends Emitter {
             console.log("----setError-------");
             // this.canvasVideoService.loading = false;
 
+            clearInterval(this.lowSpeedTimer);
+            this.lowSpeedTimer=null;
+
             if(this.canvasVideoService?.loadingView?.isLoading===true) {
                 this.canvasVideoService.loading = false;
             }
@@ -904,6 +926,8 @@ class PlayerService extends Emitter {
 
             let { url } = this.config;
             this.logMonitor.log({ flvUrl: url,message: "---设备上线 强制重连 ----'" });
+
+            this.startHeartbeatCheck();
         }
 }
 
