@@ -120,60 +120,104 @@ class MediaView {
           this.canvas_el.width = width;
           this.canvas_el.height = height;
     }
+    // createVideoFramCallBack(video: HTMLVideoElement) {
+    //     let $this = this;
+
+    //     let fpsCount = 5;
+    //     let frame_count = 0;
+    //     let start_time = 0.0;
+    //     let now_time = 0.0;
+    //     let fps = 0;
+
+    //     function millisecondsToTime(ms: any) {
+    //       // 将时间戳转换为秒并取整
+    //       let seconds = Math.floor(ms / 1000);
+
+    //       // 计算小时数、分钟数和秒数
+    //       let hours = Math.floor(seconds / 3600);
+    //       let minutes = Math.floor((seconds - (hours * 3600)) / 60);
+    //        seconds = seconds - (hours * 3600) - (minutes * 60);
+
+    //       // 如果只有一位数字，前面补0
+    //       if (hours < 10) { hours = `0${hours}`; }
+    //       if (minutes < 10) { minutes = `0${minutes}`; }
+    //       if (seconds < 10) { seconds = `0${seconds}`; }
+
+    //       // 返回格式化的字符串
+    //       return `${hours}:${minutes}:${seconds}`;
+    //     }
+    //     let cb = () => {
+    //       video.requestVideoFrameCallback((now) => {
+    //           // $this.renderFrameByWebgpu(video);
+    //           let last_time = now_time;
+    //           if (start_time == 0.0) {
+    //             start_time = now;
+    //           }
+    //           now_time = now;
+    //           // let last_time = performance.now();
+
+    //           let elapsed = (now_time - last_time) / 1000.0;
+    //           // 每经过fpsCount帧后，输出一次当前的瞬时帧率
+    //           if (!(frame_count % fpsCount)) {
+    //             fps = (1 / elapsed).toFixed(3);
+    //           }
+    //           frame_count++;
+
+    //           let performanceInfo = { fps: fps, duringtime: millisecondsToTime(now - start_time) };
+    //           // console.info(performanceInfo);
+
+    //           $this.playerService.emit('performaceInfo', performanceInfo);
+    //           $this.render(video);
+    //         cb();
+    //       });
+    //     };
+    //     cb();
+    //   }
+
     createVideoFramCallBack(video: HTMLVideoElement) {
-        let $this = this;
+      let frameCount = 0;
+      let lastFrameTime = performance.now();
+      let fps = 0;
+      const fpsCount = 5;
+      let $this=this;
+      let startTime = performance.now();
 
-        let fpsCount = 5;
-        let frame_count = 0;
-        let start_time = 0.0;
-        let now_time = 0.0;
-        let fps = 0;
+      const updatePerformanceInfo = (now) => {
+          if (frameCount >= fpsCount) {
+              let elapsed = (now - lastFrameTime) / 1000;
+              fps = (fpsCount / elapsed).toFixed(1);
 
-        function millisecondsToTime(ms: any) {
-          // 将时间戳转换为秒并取整
-          let seconds = Math.floor(ms / 1000);
+              frameCount = 0;
+              lastFrameTime = now;
+          }
 
-          // 计算小时数、分钟数和秒数
-          let hours = Math.floor(seconds / 3600);
-          let minutes = Math.floor((seconds - (hours * 3600)) / 60);
-           seconds = seconds - (hours * 3600) - (minutes * 60);
 
-          // 如果只有一位数字，前面补0
-          if (hours < 10) { hours = `0${hours}`; }
-          if (minutes < 10) { minutes = `0${minutes}`; }
-          if (seconds < 10) { seconds = `0${seconds}`; }
+          let performanceInfo = { fps: fps, duringtime: $this.millisecondsToTime(now - startTime) };
+          $this.playerService.emit('performaceInfo', performanceInfo);
+          // $this.playerService.emit('performanceInfo', {
+          //     fps: fps,
+          //     duringTime: $this.millisecondsToTime(now - lastFrameTime)
+          // });
+      };
 
-          // 返回格式化的字符串
-          return `${hours}:${minutes}:${seconds}`;
-        }
-        let cb = () => {
-          video.requestVideoFrameCallback((now) => {
-              // $this.renderFrameByWebgpu(video);
-              let last_time = now_time;
-              if (start_time == 0.0) {
-                start_time = now;
-              }
-              now_time = now;
-              // let last_time = performance.now();
+      const frameCallback = (now) => {
+          frameCount++;
+          updatePerformanceInfo(now);
+          this.render(video);
+          video.requestVideoFrameCallback(frameCallback);
+      };
 
-              let elapsed = (now_time - last_time) / 1000.0;
-              // 每经过fpsCount帧后，输出一次当前的瞬时帧率
-              if (!(frame_count % fpsCount)) {
-                fps = (1 / elapsed).toFixed(3);
-              }
-              frame_count++;
+      video.requestVideoFrameCallback(frameCallback);
+  }
+  millisecondsToTime(ms) {
+    let seconds = Math.floor(ms / 1000);
+    let hours = Math.floor(seconds / 3600);
+    seconds -= hours * 3600;
+    let minutes = Math.floor(seconds / 60);
+    seconds -= minutes * 60;
 
-              let performanceInfo = { fps: fps, duringtime: millisecondsToTime(now - start_time) };
-              // console.info(performanceInfo);
-
-              $this.playerService.emit('performaceInfo', performanceInfo);
-              $this.render(video);
-            cb();
-          });
-        };
-        cb();
-      }
-
+    return [hours, minutes, seconds].map(v => v.toString().padStart(2, '0')).join(':');
+}
 
     render(videoFrame: VideoFrame | HTMLVideoElement) {
         this.videoFrame = videoFrame as VideoFrame;
