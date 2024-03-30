@@ -125,7 +125,7 @@ class PlayerService extends Emitter {
         this.renderEngine = renderEngine;
         this.scheduler = new Scheduler(1);
         this.rtcPlayerService = rtcPlayerService;
-
+        this.maxErrorTimes= 100000;
         this._times = {
             playInitStart: '', // 1
             playStart: '', // 2
@@ -872,12 +872,16 @@ class PlayerService extends Emitter {
         }
 
         setError() {
+            console.log("----setError-------");
             // this.canvasVideoService.loading = false;
 
             if(this.canvasVideoService?.loadingView?.isLoading===true) {
                 this.canvasVideoService.loading = false;
             }
-            this.error_connect_times =this.maxErrorTimes+10;
+
+
+            this.error_connect_times =this.maxErrorTimes+100;
+
             this.corePlayer.pause();
             this.corePlayer.unload();
             this.scheduler.clearQueue();
