@@ -29,6 +29,9 @@ class MediaView {
 
     isDrawingWatermark: boolean;
     isGettingWatermark: boolean;
+    frameCallbackId: number
+
+    video: HTMLVideoElement
     constructor() {
         this.canvas_el = document.createElement('canvas');
 
@@ -74,7 +77,58 @@ class MediaView {
     }
 
     load(video: HTMLVideoElement) {
-        this.createVideoFramCallBack(video);
+      this.video=video;
+
+      video.addEventListener('loadeddata', () => {
+        this.startVideoFrameCallBack();
+      });
+
+      video.addEventListener('error', () => {
+        this.cancelVideoFrameCallBack();
+      });
+
+
+      // this.createVideoFramCallBack(video);
+      }
+
+      startVideoFrameCallBack() {
+        this.cancelVideoFrameCallBack();
+
+        let frameCount = 0;
+        let lastFrameTime = performance.now();
+        let fps = 0;
+        const fpsCount = 5;
+        let $this=this;
+        let startTime = performance.now();
+
+        const updatePerformanceInfo = (now) => {
+          if (frameCount >= fpsCount) {
+              let elapsed = (now - lastFrameTime) / 1000;
+              fps = (fpsCount / elapsed).toFixed(1);
+
+              frameCount = 0;
+              lastFrameTime = now;
+          }
+
+
+          let performanceInfo = { fps: fps, duringtime: $this.millisecondsToTime(now - startTime) };
+          $this.playerService.emit('performaceInfo', performanceInfo);
+      };
+
+        const frameCallback=(now) => {
+          frameCount++;
+          this.render(this.video);
+          updatePerformanceInfo(now);
+          this.frameCallbackId = this.video.requestVideoFrameCallback(frameCallback);
+        };
+
+        this.frameCallbackId = this.video.requestVideoFrameCallback(frameCallback);
+      }
+
+      cancelVideoFrameCallBack() {
+        if(this.frameCallbackId) {
+          this.video.cancelVideoFrameCallback(this.frameCallbackId);
+        }
       }
     event() {
               // 监听 dom size 变化， 调整canvas 大小
