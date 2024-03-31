@@ -32,6 +32,7 @@ class MediaView {
     frameCallbackId: number
 
     video: HTMLVideoElement
+    startTime: number
     constructor() {
         this.canvas_el = document.createElement('canvas');
 
@@ -78,6 +79,8 @@ class MediaView {
 
     load(video: HTMLVideoElement) {
       this.video=video;
+      this.startTime = performance.now();
+
 
       video.addEventListener('loadeddata', () => {
         this.startVideoFrameCallBack();
@@ -87,6 +90,10 @@ class MediaView {
         this.cancelVideoFrameCallBack();
       });
 
+
+      video.addEventListener('loadstart', () => {
+        this.cancelVideoFrameCallBack();
+      });
 
       // this.createVideoFramCallBack(video);
       }
@@ -99,7 +106,7 @@ class MediaView {
         let fps = 0;
         const fpsCount = 5;
         let $this=this;
-        let startTime = performance.now();
+        // let startTime = performance.now();
 
         const updatePerformanceInfo = (now) => {
           if (frameCount >= fpsCount) {
@@ -111,12 +118,15 @@ class MediaView {
           }
 
 
-          let performanceInfo = { fps: fps, duringtime: $this.millisecondsToTime(now - startTime) };
+          let performanceInfo = { fps: fps, duringtime: $this.millisecondsToTime(now - this.startTime) };
           $this.playerService.emit('performaceInfo', performanceInfo);
       };
 
         const frameCallback=(now) => {
           frameCount++;
+          if(this.playerService.error_connect_times>this.playerService.maxErrorTimes) {
+            return false;
+          }
           this.render(this.video);
           updatePerformanceInfo(now);
           this.frameCallbackId = this.video.requestVideoFrameCallback(frameCallback);
