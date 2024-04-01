@@ -847,7 +847,7 @@ startHeartbeatCheck() {
             this.error_connect_times++;
 
             let { url } = this.config;
-            //this.logMonitor.log({ flvUrl: url,status: "reloading" });
+            // this.logMonitor.log({ flvUrl: url,status: "reloading" });
 
 
             if (this.error_connect_times > this.maxErrorTimes) {
@@ -924,7 +924,12 @@ startHeartbeatCheck() {
             this.error_connect_times = 0;
             // this.canvasVideoService.clear = false;
             this.addReloadTask({ arr_msg: ['---设备上线 强制重连 ----'] });
-
+            if (this.config.showAudio === true) {
+                this.audioProcessingService.clear=false;
+                this.audioProcessingService.updateBufferData();
+                this.audioProcessingService.render();
+                this.canvasVideoService.mediaView.clearCanvas();
+            }
             let { url } = this.config;
            // this.logMonitor.log({ flvUrl: url,message: "---设备上线 强制重连 ----'" });
 
