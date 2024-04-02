@@ -592,8 +592,8 @@ startHeartbeatCheck() {
       videoEvent(videoEl: HTMLVideoElement) {
         let video = videoEl;
         let lastTimeReadyStateBelow3: number | null = null; // 最后一次 readyState 小于3的时间
-        const timeoutDuration = 1000; // 检查间隔（毫秒）
-        const threshold = 2000; // 阈值（毫秒）
+        const timeoutDuration = 5000; // 检查间隔（毫秒）
+        const threshold = 3000; // 阈值（毫秒）
         let $this = this;
         let { url = '' } = this.config;
 

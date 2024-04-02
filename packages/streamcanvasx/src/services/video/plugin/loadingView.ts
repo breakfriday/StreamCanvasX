@@ -25,6 +25,7 @@ class LoadingView {
         this.isLoading=true;
         this.setCanvasAttributes();
         contentEl.append(canvas_el);
+        this.event();
 
         this.drawLoading();
     }
