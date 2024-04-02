@@ -4,7 +4,8 @@ class LoadingView {
     isLoading: boolean
     canvas_el: HTMLCanvasElement;
     canvas_context: CanvasRenderingContext2D;
-    zIndex: string
+    zIndex: string;
+    resizeObserver: ResizeObserver;
     constructor() {
 
     }
@@ -27,6 +28,31 @@ class LoadingView {
 
         this.drawLoading();
     }
+    setCanvasSize() {
+      let height = 200;
+      let width = 400;
+      let { contentEl } = this.playerService.config;
+
+      if (contentEl) {
+        height = contentEl.clientHeight;
+        width = contentEl.clientWidth;
+      }
+
+        this.canvas_el.width = width;
+        this.canvas_el.height = height;
+    }
+    event() {
+      let { contentEl } = this.playerService.config;
+                  // 监听 dom size 变化， 调整canvas 大小
+    this.resizeObserver = new ResizeObserver(() => {
+      setTimeout(() => {
+         this.setCanvasSize();
+        //  this.resizeControlPannel();
+      }, 20);
+    });
+
+    this.resizeObserver.observe(contentEl);
+  }
     setCanvasAttributes() {
         let { zIndex } = this;
         let { contentEl } = this.playerService.config;
