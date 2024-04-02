@@ -72,6 +72,7 @@ class AudioProcessingService {
       this.canvas_context=this.canvas_el.getContext("2d");
       contentEl.append(this.canvas_el);
       this.setCanvasSize();
+      this.event();
     }
     setCanvasSize() {
       let height = 200;
