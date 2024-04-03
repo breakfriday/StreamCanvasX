@@ -11,7 +11,7 @@ class LoadingView {
     }
     init(playerService: PlayerService) {
         this.playerService=playerService;
-        this.zIndex='80';
+        this.zIndex='8';
     }
     set loading(value: any) {
         this.isLoading= value;
