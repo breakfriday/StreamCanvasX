@@ -53,6 +53,8 @@ class Scheduler {
 export default Scheduler;
 
 
-// const scheduler = new Scheduler(3); // 设置并发限制为3
+// const scheduler = new Scheduler(3); // 设置并发限制为1
 
 // scheduler.addTask(() => new Promise(resolve => setTimeout(resolve, 1000, 'Task 1 Completed')));
+
+//scheduler.addAudioTask(audio)
