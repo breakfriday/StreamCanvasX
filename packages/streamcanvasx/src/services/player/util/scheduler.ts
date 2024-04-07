@@ -37,6 +37,17 @@ class Scheduler {
     clearQueue() {
         this.taskQueue = []; // 清空队列
     }
+
+    addAudioTask(audio: HTMLAudioElement) {
+        this.addTask(() => {
+            return new Promise<void>((resolve) => {
+                audio.onended = () => {
+                    resolve();
+                };
+                audio.play();
+            });
+        });
+    }
 }
 
 export default Scheduler;
