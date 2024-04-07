@@ -897,6 +897,7 @@ startHeartbeatCheck() {
 
             clearInterval(this.lowSpeedTimer);
             this.lowSpeedTimer=null;
+            this?.canvasVideoService?.mediaView?.stopHeartChceck()
 
             if(this.canvasVideoService?.loadingView?.isLoading===true) {
                 this.canvasVideoService.loading = false;
