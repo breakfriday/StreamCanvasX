@@ -41,10 +41,13 @@ class StreamBridgePlayer extends Emitter {
     }
 
     start() {
-        this.yuvEngine.render();
+        // this.yuvEngine.render();
     }
 
     play() {
+
+        this.mediaRenderEngine.drawLoading()
+      
         this.streamIo.open();
     }
     abort() {
