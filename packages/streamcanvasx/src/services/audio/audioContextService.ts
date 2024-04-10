@@ -113,6 +113,12 @@ class AudioProcessingService {
       this.canvas_el.remove();
       this.canvas_el=null;
       this.canvas_context=null;
+
+      if (this.playerService.corePlayer?.audioPlayer) {
+        this.playerService.corePlayer?.audioPlayer?.destory()
+      }else{
+        this.context.audioContext.close()
+      }
     }
 
     // visulizerDraw1() {
@@ -490,11 +496,11 @@ class AudioProcessingService {
             this.playerService.rtcPlayerService.videoService.meidiaEl.muted = false;
           }
         }
-        if (this.playerService.mpegtsPlayer?.audioPlayer) {
+        if (this.playerService.corePlayer?.audioPlayer) {
           if (parm === true) {
-            this.playerService.mpegtsPlayer?.audioPlayer?.mute(true);
+            this.playerService.corePlayer?.audioPlayer?.mute(true);
           } else {
-            this.playerService.mpegtsPlayer?.audioPlayer?.mute(false);
+            this.playerService.corePlayer?.audioPlayer?.mute(false);
           }
         } else {
           if (parm === true) {
