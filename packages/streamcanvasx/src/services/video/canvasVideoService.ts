@@ -82,10 +82,11 @@ class CanvasVideoService {
     }
     destroy() {
         this.mediaView.destroy();
-        if (this.playerService.config.showAudio === true) {
-          // this.playerService.audioProcessingService.clearCanvas();
-          this.playerService.audioProcessingService.destroy();
-        }
+        this.playerService.audioProcessingService.destroy();
+        // if (this.playerService.config.showAudio === true) {
+        //   // this.playerService.audioProcessingService.clearCanvas();
+        //   this.playerService.audioProcessingService.destroy();
+        // }
     }
     setCover(cover: boolean = false) {
       this.mediaView.setCover(cover);
