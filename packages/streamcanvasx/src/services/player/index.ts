@@ -454,6 +454,12 @@ class PlayerService extends Emitter {
                 this.audioEvent();
             }
 
+            if(hasVideo===true){
+                this.config.showAudio=false
+                this.audioProcessingService.clearCanvas()
+
+            }
+
 
             // this.metadata = {
             //   video_height, video_width,
