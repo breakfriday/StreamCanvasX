@@ -61,6 +61,13 @@ class StreamBridgePlayer extends Emitter {
         this.streamIo.destroy();
         this.mediaRenderEngine.destroy();
     }
+    setCover(parm: boolean) {
+        try{
+             this?.mediaRenderEngine?.yuvEngine.setCover(parm);
+        }catch(e) {
+
+        }
+    }
 }
 
 export default StreamBridgePlayer;

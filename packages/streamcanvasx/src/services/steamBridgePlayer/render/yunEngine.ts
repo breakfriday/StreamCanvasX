@@ -136,7 +136,7 @@ class YuvEnging {
               textureV: regl.prop('textureV'),
               canvasAspectRatio: regl.prop('canvasAspectRatio'), // 从 regl 的 context 获取画布宽高比
               videoAspectRatio: regl.prop('videoAspectRatio'), // 从属性传递视频宽高比
-              coverMode: false
+              coverMode: regl.prop('coverMode')
             },
             count: 6
           });
@@ -176,7 +176,7 @@ class YuvEnging {
           textureV: this.yuvTexture.textureV,
           videoAspectRatio: width/height,
           canvasAspectRatio: this.canvasAspectRatio,
-          coverMode: true
+          coverMode: this.coverMode
 
         });
       }

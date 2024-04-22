@@ -47,6 +47,18 @@ interface IVideoComponent {
       >destroy</Button>
 
       <Button onClick={() => {
+         let player=streamPlayer.current;
+         player.setCover(true);
+      }}
+      >cover-true</Button>
+
+      <Button onClick={() => {
+         let player=streamPlayer.current;
+         player.setCover(false);
+      }}
+      >cover-false</Button>
+
+      <Button onClick={() => {
 
       }}
       >setError</Button>
