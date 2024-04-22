@@ -22,7 +22,7 @@ interface IVideoComponent {
 
 
         let player=createStreamBridgePlayerInstance({
-             url,
+            url,
             contentEl: containerRef.current!,
             renderFps: 30,
             stremType: streamType,
@@ -36,10 +36,10 @@ interface IVideoComponent {
 
       console.log("--start---");
 
-        player.play();
+        player.createFlvPlayer();
     },[]);
     return (<div>
-      <div style={{ width: "1920px", height: "1080px", border: '1px' }} ref={containerRef} />
+      <div style={{ width: "800px", height: "400px", border: '1px' }} ref={containerRef} />
       <Button onClick={() => {
         let player=streamPlayer.current;
         player.destroy();

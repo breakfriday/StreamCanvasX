@@ -27,14 +27,22 @@ class YuvEnging {
         textureV: createREGL.Texture2D;
 
     }
+    private coverMode: boolean;
+    private canvasAspectRatio: number; // 图像的宽高比
     constructor() {
 
     }
     init(playerService: PlayerService) {
+        this.canvasAspectRatio=1;
+
         this.playerService=playerService;
         this.initCanvas();
         this.initRegl();
+        this.coverMode=false;
     }
+    setCover(cover: boolean) {
+      this.coverMode = cover;
+  }
     initCanvas() {
         let { contentEl } = this.playerService.config;
 
@@ -79,13 +87,31 @@ class YuvEnging {
               }
             `,
             vert: `
-              attribute vec2 position;
-              varying vec2 uv;
-              void main() {
+            attribute vec2 position;
+            varying vec2 uv;
+            uniform float canvasAspectRatio;
+            uniform float videoAspectRatio;
+            uniform bool coverMode;
+            void main() {
+                vec2 adjustedPosition = position;
+
+                if (coverMode) {
+                  float scale = max(canvasAspectRatio / videoAspectRatio, 1.0);
+                  adjustedPosition.x *= scale;
+                  adjustedPosition.y *= scale / (canvasAspectRatio / videoAspectRatio);
+                }else{
+                  if (videoAspectRatio > canvasAspectRatio) {
+                    adjustedPosition.y = position.y * (canvasAspectRatio / videoAspectRatio);
+                  } else {
+                    adjustedPosition.x = position.x * (videoAspectRatio / canvasAspectRatio);
+                }
+
+              } 
+             
                 uv = position * 0.5 + 0.5;
-                uv.y = 1.0 - uv.y; // 反转y轴
-                gl_Position = vec4(position, 0, 1);
-              }
+                uv.y = 1.0 - uv.y; // Flip Y-axis
+                gl_Position = vec4(adjustedPosition, 0, 1);
+            }
             `,
             attributes: {
               position: [
@@ -108,6 +134,9 @@ class YuvEnging {
               textureY: regl.prop('textureY'),
               textureU: regl.prop('textureU'),
               textureV: regl.prop('textureV'),
+              canvasAspectRatio: regl.prop('canvasAspectRatio'), // 从 regl 的 context 获取画布宽高比
+              videoAspectRatio: regl.prop('videoAspectRatio'), // 从属性传递视频宽高比
+              coverMode: false
             },
             count: 6
           });
@@ -127,19 +156,27 @@ class YuvEnging {
 
           this.canvas_el.width = width;
           this.canvas_el.height = height;
+
+          this.canvasAspectRatio= this.canvas_el.width / this.canvas_el.height; // 更新画布宽高比
+          // setTimeout(() => {
+          //   this.regGl.poll();
+          // }, 300);
     }
 
 
     update_yuv_texture(yuvFrame: YUVFrame) {
       if(yuvFrame) {
         let { yData, uData, vData,width,height }=yuvFrame;
-        this.yuvTexture.textureY({ data: yData, width, height, format: 'luminance' });
-        this.yuvTexture.textureU({ data: uData, width: width / 2, height: height / 2, format: 'luminance' });
-        this.yuvTexture.textureV({ data: vData, width: width / 2, height: height / 2, format: 'luminance' });
+        this.yuvTexture.textureY({ data: yData, width, height, format: 'luminance',min: 'linear', mag: 'linear' });
+        this.yuvTexture.textureU({ data: uData, width: width / 2, height: height / 2, format: 'luminance',min: 'linear', mag: 'linear' });
+        this.yuvTexture.textureV({ data: vData, width: width / 2, height: height / 2, format: 'luminance',min: 'linear', mag: 'linear' });
         this.drawCommand({
           textureY: this.yuvTexture.textureY,
           textureU: this.yuvTexture.textureU,
-          textureV: this.yuvTexture.textureV
+          textureV: this.yuvTexture.textureV,
+          videoAspectRatio: width/height,
+          canvasAspectRatio: this.canvasAspectRatio,
+          coverMode: true
 
         });
       }
@@ -174,21 +211,7 @@ class YuvEnging {
     destroy() {
       this.clear();
     }
-    render() {
-      // let regl=this.regGl;
-      // regl.frame(() => {
-      //   regl.clear({
-      //     color: [0, 0, 0, 0],
-      //     depth: 1,
-      //   });
-      //   this.drawCommand({
-      //     textureY: this.yuvTexture.textureY,
-      //     textureU: this.yuvTexture.textureU,
-      //     textureV: this.yuvTexture.textureV
 
-      //   });
-      // });
-    }
 
     // 绘制 YUV 视频帧
 }

@@ -33,7 +33,7 @@ const createPlayerServicePromise = async function (parm: IplayerConfig): Promise
 
         if(window.yuv===true) {
             let { url } = parm;
-             let deviceId=extractDeviceId(url);
+            let deviceId=extractDeviceId(url);
             let rtspUrl=`rtsp://120.26.38.129:42022/rtp/${deviceId}`;
             parm.rtspUrl=rtspUrl;
             return module.createStreamBridgePlayerInstance(parm);
