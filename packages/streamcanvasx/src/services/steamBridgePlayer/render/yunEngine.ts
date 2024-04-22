@@ -29,17 +29,28 @@ class YuvEnging {
     }
     private coverMode: boolean;
     private canvasAspectRatio: number; // 图像的宽高比
+
+    private rotationAngle: number = 0; // 旋转角度，默认为0
     constructor() {
 
     }
     init(playerService: PlayerService) {
         this.canvasAspectRatio=1;
+        this.rotationAngle=0;
 
         this.playerService=playerService;
         this.initCanvas();
         this.initRegl();
         this.coverMode=false;
     }
+    setRotation(angle: number) {
+      this.rotationAngle = angle; // 更新角度
+      // 可以在这里触发重绘，如果需要实时更新
+  }
+   drawRotate(angle: number) {
+    this.rotationAngle = angle; // 更新角度
+   }
+
     setCover(cover: boolean) {
       this.coverMode = cover;
   }
@@ -92,6 +103,7 @@ class YuvEnging {
             uniform float canvasAspectRatio;
             uniform float videoAspectRatio;
             uniform bool coverMode;
+            uniform float rotation;  // 旋转角度，以度为单位
             void main() {
                 vec2 adjustedPosition = position;
 
@@ -108,9 +120,19 @@ class YuvEnging {
 
               } 
              
-                uv = position * 0.5 + 0.5;
-                uv.y = 1.0 - uv.y; // Flip Y-axis
-                gl_Position = vec4(adjustedPosition, 0, 1);
+                
+              // 应用旋转矩阵
+              float rad = radians(rotation);
+              float cosAngle = cos(rad);
+              float sinAngle = sin(rad);
+              vec2 rotatedPosition = vec2(
+                  adjustedPosition.x * cosAngle - adjustedPosition.y * sinAngle,
+                  adjustedPosition.x * sinAngle + adjustedPosition.y * cosAngle
+              );
+
+              uv = position * 0.5 + 0.5;
+              uv.y = 1.0 - uv.y; // 翻转Y轴
+              gl_Position = vec4(rotatedPosition, 0, 1);
             }
             `,
             attributes: {
@@ -136,7 +158,8 @@ class YuvEnging {
               textureV: regl.prop('textureV'),
               canvasAspectRatio: regl.prop('canvasAspectRatio'), // 从 regl 的 context 获取画布宽高比
               videoAspectRatio: regl.prop('videoAspectRatio'), // 从属性传递视频宽高比
-              coverMode: regl.prop('coverMode')
+              coverMode: regl.prop('coverMode'),
+              rotation: regl.prop('rotationAngle')
             },
             count: 6
           });
@@ -176,7 +199,8 @@ class YuvEnging {
           textureV: this.yuvTexture.textureV,
           videoAspectRatio: width/height,
           canvasAspectRatio: this.canvasAspectRatio,
-          coverMode: this.coverMode
+          coverMode: this.coverMode,
+          rotationAngle: this.rotationAngle
 
         });
       }

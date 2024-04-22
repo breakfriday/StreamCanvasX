@@ -215,6 +215,7 @@ interface IBridgePlayerConfig {
   stremType?: BridgePlayerStreamType;
   url?: string;
   renderFps?: number;
+  rtspUrl?: string;
 
 
 }

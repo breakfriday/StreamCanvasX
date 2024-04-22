@@ -22,6 +22,9 @@ class StreamBridgePlayer extends Emitter {
     }
     init(config: IBridgePlayerConfig) {
         this.config=config;
+        if(this.config.rtspUrl) {
+            this.config.url=this.config.rtspUrl;
+        }
         this.initPlugin();
         // this.mediaRenderEngine.init(this);
     }
@@ -67,6 +70,13 @@ class StreamBridgePlayer extends Emitter {
         }catch(e) {
 
         }
+    }
+    drawRotate(degree?: number) {
+        try{
+            this?.mediaRenderEngine?.yuvEngine.drawRotate(degree);
+       }catch(e) {
+
+       }
     }
 }
 
