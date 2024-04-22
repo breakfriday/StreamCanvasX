@@ -147,6 +147,7 @@ class AudioContextPlayer extends Emitter {
 		this.scriptNode.connect(this.gainNode);
 		this.gainNode.connect(this.audioContext.destination);
 		this.hasInitScriptNode = true;
+        this.mute(true);
 	}
 
 
