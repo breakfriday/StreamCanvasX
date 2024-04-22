@@ -33,8 +33,7 @@ class StreamBridgePlayer extends Emitter {
         this.mediaRenderEngine.init(this);
     }
     createPlayer() {
-
-
+        this.play();
     }
     fetchStream() {
 
@@ -42,6 +41,11 @@ class StreamBridgePlayer extends Emitter {
 
     start() {
         // this.yuvEngine.render();
+    }
+
+    // for hook
+    createFlvPlayer() {
+        this.play();
     }
 
     play() {

@@ -136,6 +136,7 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
  interface IplayerConfig{
   model?: UseMode;
   url?: string;
+  rtspUrl?: string;
   useWebworker?: boolean;
   hasVideo?: boolean;
   hasAudio?: boolean;
