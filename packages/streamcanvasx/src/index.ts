@@ -7,6 +7,7 @@ import { createStreamBridgePlayerInstance } from './serviceFactories/createStrea
 
 type ICreatePlayerServiceInstance = ReturnType<typeof createPlayerServiceInstance>;
 type ICreateWaveVisualizationInstance = ReturnType<typeof createWaveVisualizationInstance>;
+type ICreateStreamBridgePlayerInstance =ReturnType<typeof createStreamBridgePlayerInstance>;
 
 
 function extractDeviceId(url: string) {
@@ -62,4 +63,5 @@ export {
     createPlayerServicePromise,
     createWaveVisualizationPromise,
     createWaveVisualizationInstance,
+    createStreamBridgePlayerInstance
 };

@@ -107,6 +107,26 @@ class StreamSocketClient {
 
         // console.info(yuvData);
         this.processFrame(yuvData);
+        } else if (dataType === 0) { // 0x00为音频
+            // 解析音频相关信息
+            const pts = data.getBigUint64(5); // 8字节
+            const sampleRate = data.getUint16(13); // 2字节
+            const channelCount = data.getUint8(15); // 1字节
+            const bitDepth = data.getUint8(16); // 1字节
+            const pcmDataLength = data.getUint32(17); // 4字节
+
+            const headerSize = 21; // 协议头到PCM数据的总长度
+            const pcmData = new Uint8Array(event.data, headerSize, pcmDataLength);
+
+            let audioData = {
+                pts: pts,
+                sampleRate: Number(sampleRate),
+                channelCount: Number(channelCount),
+                bitDepth: Number(bitDepth),
+                pcmData
+            };
+        }else{
+
         }
 
         this.playerService.mediaRenderEngine.clearLoading();

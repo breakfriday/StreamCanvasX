@@ -12,6 +12,7 @@ class StreamBridgePlayer extends Emitter {
     yuvEngine: YuvEnging;
     mediaRenderEngine: MediaRenderEngine
     streamIo: StreamIo
+    canvasToVideoSerivce: any
     constructor(
         @inject(TYPES.IMediaRenderEngine) mediaRenderEngine: MediaRenderEngine,
         @inject(TYPES.IStreamIo) streamIo: StreamIo,
@@ -26,6 +27,13 @@ class StreamBridgePlayer extends Emitter {
             this.config.url=this.config.rtspUrl;
         }
         this.initPlugin();
+
+        // for hook
+        this.canvasToVideoSerivce={
+            setCover: this.setCover,
+            drawRotate: this.drawRotate
+
+        };
         // this.mediaRenderEngine.init(this);
     }
 

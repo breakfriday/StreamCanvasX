@@ -121,13 +121,18 @@ class SignalClient {
             let { data } = message;
 
             this._mediaStreamInfoNotify(data);
+
+            let hasVideo=data[0];
+            let hasAudio=data[3];
+
+
+            this.playerService.emit('mediaInfo', { hasVideo: hasVideo, hasAudio: hasAudio });
         }
         if(message.method==="realTimeInfo") {
             let { data } = message;
-            let { fps,speed }=data;
+            let [fps,speed] =data;
 
-            this.playerService.emit('performaceInfo',{ fps });
-
+            this.playerService.emit('performaceInfo',{ fps: fps });
 
            speed=speed/1000;
            this.playerService.emit('otherInfo', { speed: data });
