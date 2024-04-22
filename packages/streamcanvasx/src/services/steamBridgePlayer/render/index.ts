@@ -42,6 +42,9 @@ class MediaRenderEngine {
     }
     this.loadingView.load();
   }
+  clearLoading() {
+    this.loadingView.destroy();
+  }
 
   destroy() {
     this.yuvEngine.destroy();

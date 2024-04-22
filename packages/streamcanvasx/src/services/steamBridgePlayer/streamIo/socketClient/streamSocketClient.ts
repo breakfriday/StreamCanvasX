@@ -108,6 +108,8 @@ class StreamSocketClient {
         // console.info(yuvData);
         this.processFrame(yuvData);
         }
+
+        this.playerService.mediaRenderEngine.clearLoading();
     }
 
     processFrame(frame: YUVFrame) {
