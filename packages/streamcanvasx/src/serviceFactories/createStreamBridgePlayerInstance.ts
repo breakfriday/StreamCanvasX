@@ -7,10 +7,12 @@ import { TYPES } from './symbol';
 import StreamBridgePlayer from '../services/steamBridgePlayer';
 import MediaRenderEngine from '../services/steamBridgePlayer/render';
 import StreamIo from '../services/steamBridgePlayer/streamIo';
+import AudioPlayer from '../services/steamBridgePlayer/audio';
 
 streamBridgeContainer.bind<StreamBridgePlayer>(TYPES.IStreamBridePlayer).to(StreamBridgePlayer);
 streamBridgeContainer.bind<MediaRenderEngine>(TYPES.IMediaRenderEngine).to(MediaRenderEngine);
 streamBridgeContainer.bind<StreamIo>(TYPES.IStreamIo).to(StreamIo);
+streamBridgeContainer.bind<AudioPlayer>(TYPES.IAudioPlayer).to(AudioPlayer);
 
 
 function createStreamBridgePlayerInstance(config: IBridgePlayerConfig): PlayerService {

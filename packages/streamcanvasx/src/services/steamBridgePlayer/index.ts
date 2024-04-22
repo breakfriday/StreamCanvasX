@@ -5,6 +5,7 @@ import { IBridgePlayerConfig } from '../../types/services';
 import MediaRenderEngine from './render';
 import { TYPES } from '../../serviceFactories/symbol';
 import StreamIo from './streamIo';
+import AudioPlayer from './audio';
 
 @injectable()
 class StreamBridgePlayer extends Emitter {
@@ -13,13 +14,16 @@ class StreamBridgePlayer extends Emitter {
     mediaRenderEngine: MediaRenderEngine
     streamIo: StreamIo
     canvasVideoService: any
+    audioProcessingService: AudioPlayer
     constructor(
         @inject(TYPES.IMediaRenderEngine) mediaRenderEngine: MediaRenderEngine,
         @inject(TYPES.IStreamIo) streamIo: StreamIo,
+        @inject(TYPES.IAudioPlayer) audioProcessingService: AudioPlayer,
     ) {
         super();
         this.mediaRenderEngine=mediaRenderEngine;
         this.streamIo=streamIo;
+        this.audioProcessingService=audioProcessingService;
     }
     init(config: IBridgePlayerConfig) {
         this.config=config;
@@ -51,6 +55,7 @@ class StreamBridgePlayer extends Emitter {
         // this.yuvEngine.init(this);
         this.streamIo.init(this);
         this.mediaRenderEngine.init(this);
+        this.audioProcessingService.init(this);
     }
     createPlayer() {
         this.play();
@@ -80,6 +85,7 @@ class StreamBridgePlayer extends Emitter {
     destroy() {
         this.streamIo.destroy();
         this.mediaRenderEngine.destroy();
+        this.audioProcessingService.destroy();
     }
     setCover(parm: boolean) {
         try{

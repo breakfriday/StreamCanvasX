@@ -230,3 +230,16 @@ export type IRTCPlayerConfig = Partial<IRTCPlayerConfig>;
 export type IWavePlayerConfig = Partial<IWavePlayerConfig>;
 export type IWavePlayerExtend = Partial<IWavePlayerExtend>;
 
+export interface PCMBufferItem{
+	data?: Float32Array[];
+	timestamp?: number; // ms
+	duration?: number; // ms
+}
+
+export interface IAduioContextPlayerConfig{
+  sampleRate?: number;
+  bufferSize?: number; // 播放时一个pcm帧中的音频点数
+  numberOfOutputChannels?: number;
+  useWorklet?: boolean;
+  isLive?: boolean;
+}

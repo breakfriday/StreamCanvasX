@@ -23,7 +23,8 @@ const TYPES = {
     IWaveVisualization: Symbol.for('IWaveVisualization'),
     IStreamBridePlayer: Symbol.for('IStreamBridePlayer'),
     IMediaRenderEngine: Symbol.for('IMediaRenderEngine'),
-    IStreamIo: Symbol.for('IStreamIo')
+    IStreamIo: Symbol.for('IStreamIo'),
+    IAudioPlayer: Symbol.for('AudioPlayer')
 
   };
 

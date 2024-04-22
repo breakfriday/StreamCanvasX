@@ -70,9 +70,16 @@ interface IVideoComponent {
       >setError</Button>
 
       <Button onClick={() => {
-
+        let player=streamPlayer.current;
+        player.audioProcessingService.mute(true);
       }}
-      >mute</Button>
+      >mute true</Button>
+
+      <Button onClick={() => {
+        let player=streamPlayer.current;
+        player.audioProcessingService.mute(false);
+      }}
+      >mute false</Button>
 
     </div>);
   };

@@ -23,8 +23,9 @@ class StreamSocketClient {
     frameCount = 0;
     fps = 0;
     clientId: number
+    hasAudioPlayer: boolean
     constructor() {
-
+        this.hasAudioPlayer=false;
     }
     init(playerService: PlayerService,clientId?: number) {
         this.playerService=playerService;
@@ -125,6 +126,14 @@ class StreamSocketClient {
                 bitDepth: Number(bitDepth),
                 pcmData
             };
+
+            if(this.hasAudioPlayer) {
+                let floatdata=this.playerService.audioProcessingService.pcmPlayer.convertUint8ArrayToFloat32(pcmData);
+                this.playerService.audioProcessingService.feed(floatdata);
+            }else{
+                this.playerService.audioProcessingService.createplayer({ sampleRate,numberOfOutputChannels: 1,isLive: true,bufferSize: 1024 });
+                this.hasAudioPlayer=true;
+            }
         }else{
 
         }
