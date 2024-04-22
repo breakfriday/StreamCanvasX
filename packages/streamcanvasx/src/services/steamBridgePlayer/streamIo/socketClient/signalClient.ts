@@ -122,6 +122,16 @@ class SignalClient {
 
             this._mediaStreamInfoNotify(data);
         }
+        if(message.method==="realTimeInfo") {
+            let { data } = message;
+            let { fps,speed }=data;
+
+            this.playerService.emit('performaceInfo',{ fps });
+
+
+           speed=speed/1000;
+           this.playerService.emit('otherInfo', { speed: data });
+        }
     }
 
      getStreamInfo() {
@@ -169,6 +179,7 @@ class SignalClient {
             setTimeout(() => {
                 if (this.responseMap.has(msgId)) {
                     this.responseMap.delete(msgId);
+                    console.error('信令响应 超时 5000');
                     reject(new Error('信令响应 超时 5000'));
                 }
             }, 5000); // 设置超时时间， 避免堆积。

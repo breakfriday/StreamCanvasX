@@ -19,7 +19,7 @@ const config = {
   plugins: [
     require.resolve('@ice/pkg-plugin-docusaurus/plugin.js'),
     [
-      '/home/break_happy/project/stream_1206/node_modules/.pnpm/@docusaurus+plugin-content-pages@2.4.3_eslint@8.55.0_react-dom@18.2.0_react@18.2.0_typescript@4.9.5/node_modules/@docusaurus/plugin-content-pages/lib/index.js',
+      '/home/break_happy/project/yuv66/node_modules/.pnpm/@docusaurus+plugin-content-pages@2.4.3_eslint@8.55.0_react-dom@18.2.0_react@18.2.0_typescript@5.3.3/node_modules/@docusaurus/plugin-content-pages/lib/index.js',
       {
         path: 'pages',
         routeBasePath: '/pages',
@@ -30,7 +30,7 @@ const config = {
 
   presets: [
     [
-      '/home/break_happy/project/stream_1206/node_modules/.pnpm/@docusaurus+preset-classic@2.4.3_@algolia+client-search@4.20.0_eslint@8.55.0_react-dom@18.2.0_je77nyfbqimn5pucm5dgvgyxua/node_modules/@docusaurus/preset-classic/lib/index.js',
+      '/home/break_happy/project/yuv66/node_modules/.pnpm/@docusaurus+preset-classic@2.4.3_@algolia+client-search@4.20.0_eslint@8.55.0_react-dom@18.2.0_oacaagktuw4g3gxssbvysfmidu/node_modules/@docusaurus/preset-classic/lib/index.js',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
@@ -96,8 +96,8 @@ const config = {
         },
       },
       prism: {
-        theme: require('/home/break_happy/project/stream_1206/node_modules/.pnpm/prism-react-renderer@1.3.5_react@18.2.0/node_modules/prism-react-renderer/themes/github'),
-        darkTheme: require('/home/break_happy/project/stream_1206/node_modules/.pnpm/prism-react-renderer@1.3.5_react@18.2.0/node_modules/prism-react-renderer/themes/dracula'),
+        theme: require('/home/break_happy/project/yuv66/node_modules/.pnpm/prism-react-renderer@1.3.5_react@18.2.0/node_modules/prism-react-renderer/themes/github'),
+        darkTheme: require('/home/break_happy/project/yuv66/node_modules/.pnpm/prism-react-renderer@1.3.5_react@18.2.0/node_modules/prism-react-renderer/themes/dracula'),
       },
       docs: {
         sidebar: {

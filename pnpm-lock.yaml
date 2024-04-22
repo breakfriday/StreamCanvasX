@@ -90,7 +90,7 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0
       streamcanvasx:
-        specifier: workspace:^0.1.0
+        specifier: workspace:^0.2.0
         version: link:../streamcanvasx
       webm-muxer:
         specifier: ^3.1.1
