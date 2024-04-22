@@ -113,8 +113,16 @@ class StreamSocketClient {
     processFrame(frame: YUVFrame) {
         this.playerService.mediaRenderEngine.yuvEngine.update_yuv_texture(frame);
     }
-    disConnect() {
 
+    disconnect() {
+        if (this.ws) {
+            this.ws.close();
+            this.ws = null;
+        }
+    }
+
+    destroy() {
+        this.disconnect();
     }
 }
 

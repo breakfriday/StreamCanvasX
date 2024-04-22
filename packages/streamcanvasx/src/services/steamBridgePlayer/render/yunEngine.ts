@@ -149,7 +149,7 @@ class YuvEnging {
       return new Promise((resolve) => {
         if(yuvFrame) {
           let { yData, uData, vData,width,height }=yuvFrame;
-          this.yuvTexture.textureY({ data: yData, width, height, format: 'luminance',min: 'linear', mag: 'linear'});
+          this.yuvTexture.textureY({ data: yData, width, height, format: 'luminance',min: 'linear', mag: 'linear' });
           this.yuvTexture.textureU({ data: uData, width: width / 2, height: height / 2, format: 'luminance',min: 'linear', mag: 'linear' });
           this.yuvTexture.textureV({ data: vData, width: width / 2, height: height / 2, format: 'luminance',min: 'linear', mag: 'linear' });
           this.drawCommand({
@@ -164,6 +164,16 @@ class YuvEnging {
       });
     }
 
+    clear() {
+      let regl=this.regGl;
+         regl.clear({
+          color: [0, 0, 0, 0],
+          depth: 1,
+        });
+    }
+    destroy() {
+      this.clear();
+    }
     render() {
       // let regl=this.regGl;
       // regl.frame(() => {

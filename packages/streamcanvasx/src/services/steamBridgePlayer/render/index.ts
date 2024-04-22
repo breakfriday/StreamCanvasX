@@ -13,15 +13,14 @@ class MediaRenderEngine {
   init(playerService: PlayerService) {
     this.playerService=playerService;
     this.resignPlugin();
-    this.setContentStyle()
+    this.setContentStyle();
   }
 
-  
-  setContentStyle(){
-    let { contentEl } = this.playerService.config;
-    contentEl.style.position="relative"
-    contentEl.style.overflow="hidden"
 
+  setContentStyle() {
+    let { contentEl } = this.playerService.config;
+    contentEl.style.position="relative";
+    contentEl.style.overflow="hidden";
   }
 
   resignPlugin() {
@@ -37,14 +36,16 @@ class MediaRenderEngine {
     this.yuvEngine.init(playerService);
   }
 
-  drawLoading(){
+  drawLoading() {
     if(this.loadingView.isLoading===true) {
       return false;
     }
     this.loadingView.load();
-
   }
 
+  destroy() {
+    this.yuvEngine.destroy();
+  }
 
     // 绘制 YUV 视频帧
 }

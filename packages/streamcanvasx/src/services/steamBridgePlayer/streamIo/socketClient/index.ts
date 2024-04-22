@@ -7,7 +7,7 @@ import StreamSocketClient from './streamSocketClient';
 function generateUniqueId() {
     const now = Date.now();
 
-    const maxInt = 100;
+    const maxInt = 900;
 
     // 生成一个0到最大安全整数之间的随机整数
     const randomInt = Math.floor(Math.random() * maxInt);
@@ -80,6 +80,11 @@ class SocketClient {
         }catch(e) {
 
         }
+    }
+
+    destroy() {
+        this.signalClient.destroy();
+        this.streamSocketClient.destroy();
     }
 }
 

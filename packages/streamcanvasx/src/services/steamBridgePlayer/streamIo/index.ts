@@ -5,7 +5,7 @@ import { BridgePlayerStreamType } from '../../../constant';
 import SocketClient from './socketClient';
 @injectable()
 class StreamIo {
-    _ioLoader: FetchLoader|SocketClient
+    _ioLoader: SocketClient
     playerService: PlayerService
     constructor() {
 
@@ -30,6 +30,10 @@ class StreamIo {
 
     process() {
 
+    }
+
+    destroy() {
+        this._ioLoader.destroy();
     }
 }
 

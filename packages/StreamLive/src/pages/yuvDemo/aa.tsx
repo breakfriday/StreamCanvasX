@@ -1,5 +1,6 @@
 
 import React, { useRef, useEffect, useState } from 'react';
+import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row } from 'antd';
 
 import { createStreamBridgePlayerInstance } from 'streamcanvasx/src/serviceFactories/index';
 import { BridgePlayerStreamType } from 'streamcanvasx/src/constant';
@@ -14,6 +15,7 @@ interface IVideoComponent {
   }
   const VideoComponents: React.FC<IVideoComponent> = (props) => {
     const containerRef = useRef(null);
+    const streamPlayer = useRef<any>(null);
 
     useEffect(() => {
         let { url,frameHeight,frameWidth ,renderFps ,streamType } = props;
@@ -29,12 +31,30 @@ interface IVideoComponent {
 
         });
 
-        console.log("--start---");
+
+      streamPlayer.current = player;
+
+      console.log("--start---");
 
         player.play();
     },[]);
     return (<div>
       <div style={{ width: "1920px", height: "1080px", border: '1px' }} ref={containerRef} />
+      <Button onClick={() => {
+        let player=streamPlayer.current;
+        player.destroy();
+      }}
+      >destroy</Button>
+
+      <Button onClick={() => {
+
+      }}
+      >setError</Button>
+
+      <Button onClick={() => {
+
+      }}
+      >mute</Button>
 
     </div>);
   };

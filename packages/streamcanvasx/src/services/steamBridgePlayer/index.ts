@@ -45,13 +45,17 @@ class StreamBridgePlayer extends Emitter {
     }
 
     play() {
+        this.mediaRenderEngine.drawLoading();
 
-        this.mediaRenderEngine.drawLoading()
-      
         this.streamIo.open();
     }
     abort() {
         this.streamIo.abort();
+    }
+
+    destroy() {
+        this.streamIo.destroy();
+        this.mediaRenderEngine.destroy();
     }
 }
 
