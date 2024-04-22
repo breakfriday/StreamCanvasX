@@ -12,7 +12,7 @@ class StreamBridgePlayer extends Emitter {
     yuvEngine: YuvEnging;
     mediaRenderEngine: MediaRenderEngine
     streamIo: StreamIo
-    canvasToVideoSerivce: any
+    canvasVideoService: any
     constructor(
         @inject(TYPES.IMediaRenderEngine) mediaRenderEngine: MediaRenderEngine,
         @inject(TYPES.IStreamIo) streamIo: StreamIo,
@@ -28,10 +28,19 @@ class StreamBridgePlayer extends Emitter {
         }
         this.initPlugin();
 
+        let $this=this;
         // for hook
-        this.canvasToVideoSerivce={
-            setCover: this.setCover,
-            drawRotate: this.drawRotate
+        this.canvasVideoService={
+            setCover: (parm: boolean) => {
+                this.setCover(parm);
+            },
+            drawRotate: (degree: number) => {
+                this.drawRotate(degree);
+            },
+            rotateReset: () => {
+
+
+            }
 
         };
         // this.mediaRenderEngine.init(this);
@@ -74,17 +83,22 @@ class StreamBridgePlayer extends Emitter {
     }
     setCover(parm: boolean) {
         try{
+            debugger;
              this?.mediaRenderEngine?.yuvEngine.setCover(parm);
         }catch(e) {
 
         }
     }
     drawRotate(degree?: number) {
+        degree=Number(degree);
         try{
             this?.mediaRenderEngine?.yuvEngine.drawRotate(degree);
        }catch(e) {
 
        }
+    }
+    mute() {
+
     }
 }
 

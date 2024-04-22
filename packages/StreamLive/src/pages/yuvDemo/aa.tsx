@@ -48,15 +48,21 @@ interface IVideoComponent {
 
       <Button onClick={() => {
          let player=streamPlayer.current;
-         player.setCover(true);
+         player.canvasVideoService.setCover(true);
       }}
       >cover-true</Button>
 
       <Button onClick={() => {
          let player=streamPlayer.current;
-         player.setCover(false);
+         player.canvasVideoService.setCover(false);
       }}
       >cover-false</Button>
+
+      <Button onClick={() => {
+       let player=streamPlayer.current;
+       player.canvasVideoService.drawRotate(180);
+      }}
+      >drawRotate(180)</Button>
 
       <Button onClick={() => {
 
