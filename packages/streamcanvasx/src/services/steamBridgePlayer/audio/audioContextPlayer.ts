@@ -6,6 +6,12 @@ import { PCMBufferItem, IAduioContextPlayerConfig } from '../../../types/service
 
 // import worklet from './audioWorklet.js';
 
+let analyseAudioConfig={
+	updataBufferPerSecond: 15,
+	renderPerSecond: 15,
+	fftsize: 128,
+	bufferSize: 0.2
+};
 @injectable()
 class AudioContextPlayer extends Emitter {
 	config: IAduioContextPlayerConfig;
@@ -29,7 +35,11 @@ class AudioContextPlayer extends Emitter {
 	canvas_context: CanvasRenderingContext2D;
 	clear?: boolean;
 	resizeObserver: ResizeObserver;
-	analyserNode: AnalyserNode
+	analyserNode: AnalyserNode;
+	bufferData: Float32Array;
+	dataArray: Float32Array;
+	bufferDataLength: number;
+	timeId?: NodeJS.Timeout
 	constructor() {
 		super();
 
@@ -120,8 +130,12 @@ class AudioContextPlayer extends Emitter {
 			});
 		}
 		this.analyserNode=this.audioContext.createAnalyser();
+		this.analyserNode.fftSize=analyseAudioConfig.fftsize;
+
 		this.gainNode = this.audioContext.createGain();
         this.gainNode.gain.value=0.3;
+
+		this.setBufferData();
 	}
 	destroy() {
         this.audioContext.close();
@@ -207,7 +221,18 @@ class AudioContextPlayer extends Emitter {
         this.mute(true);
 	}
 
+	setBufferData() {
+        let second = analyseAudioConfig.bufferSize;
+		let { sampleRate } = this.config;
+		let bufferLength = this.analyserNode.frequencyBinCount;
+        let dataArray = new Float32Array(bufferLength);
+		this.dataArray=dataArray;
+        // 根据 AudioContext 的采样率、所需的缓存时间和 FFT 大小来设置缓存区大小
+        let bufferDataLength = Math.ceil(second * sampleRate / dataArray.length) * dataArray.length;
+		this.bufferDataLength=bufferDataLength;
 
+        this.bufferData = new Float32Array(bufferDataLength);
+      }
 	play() {
 		if (this.audioContext.state === 'suspended') {
 			this.audioContext.resume();
@@ -244,7 +269,33 @@ class AudioContextPlayer extends Emitter {
       }
 
 	updateBufferData() {
+	  let { dataArray, bufferData } = this;
+      let { bufferDataLength } = this;
 
+      let { updataBufferPerSecond } = analyseAudioConfig;
+
+      if (this.clear === true) {
+        // this.destory()
+        clearTimeout(this.timeId);
+
+        return false;
+      }
+      // Move old data forward
+
+
+      this.analyserNode?.getFloatTimeDomainData(dataArray);
+
+      // 取到 0 数据不更新 bufferdata
+      let hasZero = dataArray.some(value => value === 0);
+      // debugger;
+      if (hasZero === false) {
+        bufferData.copyWithin(0, dataArray.length);
+        // Add new data to the end of the buffer
+        bufferData.set(dataArray, bufferDataLength - dataArray.length);
+      }
+
+
+      this.timeId = setTimeout(this.updateBufferData.bind(this), updataBufferPerSecond); // Updates at roughly 30 FPS
 	}
 	render() {
 
