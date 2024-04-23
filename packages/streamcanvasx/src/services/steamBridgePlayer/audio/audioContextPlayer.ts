@@ -72,6 +72,7 @@ class AudioContextPlayer extends Emitter {
 
 		this.initScriptNode();
 		this.hasInit = true;
+		this.initCanvas();
 	}
 
 	initCanvas() {
@@ -133,7 +134,7 @@ class AudioContextPlayer extends Emitter {
 		this.analyserNode.fftSize=analyseAudioConfig.fftsize;
 
 		this.gainNode = this.audioContext.createGain();
-        this.gainNode.gain.value=0.3;
+        this.gainNode.gain.value=1;
 
 		this.setBufferData();
 	}
@@ -320,15 +321,15 @@ class AudioContextPlayer extends Emitter {
 		// }, 400);
 
 		const AnimationFrame = () => {
-		   dataArray = this.bufferData;
+		dataArray = this.bufferData;
 			if (this.clear === true) {
 				// This returns the function, effectively stopping the loop
 				clearTimeout(timeId);
 				return;
 			}
 			if (canvasContext.lineWidth != 1 || canvasContext.strokeStyle != '#77ff00') {
-			  canvasContext.lineWidth = 1;
-			  canvasContext.strokeStyle = '#77ff00';
+			canvasContext.lineWidth = 1;
+			canvasContext.strokeStyle = '#77ff00';
 			}
 			// canvasContext.lineWidth = 1;
 			// canvasContext.strokeStyle = '#7f0';
@@ -358,10 +359,10 @@ class AudioContextPlayer extends Emitter {
 					// 对于下半部分
 					let y_lower = -v * scale + canvas.height / 2;
 
-					if (v === 0) {
-					  y_upper = canvas.height / 2 - gap / 2;
-					  y_lower = canvas.height / 2 + gap / 2;
-				  }
+				if (v === 0) {
+					y_upper = canvas.height / 2 - gap / 2;
+					y_lower = canvas.height / 2 + gap / 2;
+				}
 
 					if (i === 0) {
 						canvasContext.moveTo(x, y_upper); // 上半部分
@@ -382,7 +383,7 @@ class AudioContextPlayer extends Emitter {
 			timeId = setTimeout(AnimationFrame.bind(this), renderPerSecond);
 		};
 		AnimationFrame();
-	  }
+	}
 	showAudio() {
 		this.playersevice.config.showAudio=true;
 		this.updateBufferData();
