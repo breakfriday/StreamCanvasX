@@ -6,7 +6,7 @@ import MediaRenderEngine from './render';
 import { TYPES } from '../../serviceFactories/symbol';
 import StreamIo from './streamIo';
 import AudioPlayer from './audio';
-
+import Scheduler from '../player/util/scheduler';
 @injectable()
 class StreamBridgePlayer extends Emitter {
     config: IBridgePlayerConfig
@@ -15,6 +15,9 @@ class StreamBridgePlayer extends Emitter {
     streamIo: StreamIo
     canvasVideoService: any
     audioProcessingService: AudioPlayer
+    scheduler: Scheduler;
+    error_connect_times: number;
+    maxErrorTimes: number
     constructor(
         @inject(TYPES.IMediaRenderEngine) mediaRenderEngine: MediaRenderEngine,
         @inject(TYPES.IStreamIo) streamIo: StreamIo,
@@ -26,6 +29,8 @@ class StreamBridgePlayer extends Emitter {
         this.audioProcessingService=audioProcessingService;
     }
     init(config: IBridgePlayerConfig) {
+        this.scheduler = new Scheduler(1);
+        this.maxErrorTimes=1000000;
         this.config=config;
         if(this.config.rtspUrl) {
             this.config.url=this.config.rtspUrl;
@@ -106,11 +111,47 @@ class StreamBridgePlayer extends Emitter {
     mute() {
 
     }
+    checkPlaying() {
+        let { heartCheck } = this.streamIo._ioLoader.streamSocketClient;
+        if(heartCheck===true) {
+            this.mediaRenderEngine.clearLoading();
+        }
+        return heartCheck;
+    }
+
+    addReloadTask(parm?: {arr_msg?: Array<string>}) {
+        if (this.error_connect_times > this.maxErrorTimes) {
+          //  console.log("error_connect_times > 4: Scheduler clearQueu  "+this.config.url)
+            // this.scheduler.clearQueue();
+            return false;
+        }
+
+        let queue = this.scheduler.getQueue();
+        if (queue.length > 10) {
+           // console.log("task > 10 addTask false "+this.config.url)
+            return false;
+        }
+        this.scheduler.addTask(() => {
+            let { arr_msg = [''] } = parm;
+            // this.canvasVideoService.drawLoading();
+            this.mediaRenderEngine.drawLoading();
+            console.log('=======tasking=======');
+             console.log("reload");
+            console.log('=======tasking=======');
+             this.reload();
+            return new Promise(resolve => setTimeout(() => {
+                if (this.checkPlaying()) {
+                    this.error_connect_times = 0;
+                    resolve('clean');
+                } else {
+                    resolve('');
+                }
+                }, 10000)); // 已10s 的速度均衡执行reload 任务
+             });
+    }
 
     reload() {
-        debugger
         this.streamIo._ioLoader.reload();
-        debugger
     }
 }
 

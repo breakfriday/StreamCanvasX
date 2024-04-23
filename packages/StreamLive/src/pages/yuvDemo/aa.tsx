@@ -81,6 +81,12 @@ interface IVideoComponent {
       }}
       >mute false</Button>
 
+      <Button onClick={() => {
+          let player=streamPlayer.current;
+          player.reload();
+      }}
+      >reload</Button>
+
     </div>);
   };
 

@@ -23,13 +23,18 @@ class StreamSocketClient {
     frameCount = 0;
     fps = 0;
     clientId: number
-    hasAudioPlayer: boolean
+    hasAudioPlayer: boolean;
+    timer: NodeJS.Timeout;
+    timenow: number;
+    lastTime: number;
+    heartCheck: boolean
     constructor() {
         this.hasAudioPlayer=false;
     }
     init(playerService: PlayerService,clientId?: number) {
         this.playerService=playerService;
         this.clientId=clientId;
+        this.startHearChceck();
     }
 
     private connectSocket(id: string): Promise<void> {
@@ -106,6 +111,7 @@ class StreamSocketClient {
             vData
         };
 
+        this.timenow=performance.now();
         // console.info(yuvData);
         this.processFrame(yuvData);
         } else if (dataType === 0) { // 0x00为音频
@@ -160,7 +166,32 @@ class StreamSocketClient {
 
     destroy() {
         this.disconnect();
+        this.stopHeartChceck();
     }
+
+    startHearChceck() {
+        if (!this.timer) {
+          this.timer = setInterval(() => {
+             if(this.lastTime>=this.timenow) {
+              this.playerService.addReloadTask({ arr_msg: ['---fps 調用鏈檢查異常 ----'] });
+              this.heartCheck=true;
+             }else{
+              // console.log(this.lastCount)
+              // console.log(this.nowFrameCount)
+              // debugger
+              this.heartCheck=false;
+              this.lastTime=this.timenow;
+             }
+            }, 10000); // 每10秒检查一次
+        }
+      }
+
+       stopHeartChceck() {
+        if(this.timer) {
+          clearInterval(this.timer);
+          this.timer=null;
+         }
+       }
 }
 
 
