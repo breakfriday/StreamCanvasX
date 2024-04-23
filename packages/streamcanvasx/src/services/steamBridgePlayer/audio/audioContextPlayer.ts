@@ -219,7 +219,7 @@ class AudioContextPlayer extends Emitter {
 		this.analyserNode.connect(this.gainNode);
 		this.gainNode.connect(this.audioContext.destination);
 		this.hasInitScriptNode = true;
-        this.mute(true);
+         this.mute(true);
 	}
 
 	setBufferData() {
@@ -255,9 +255,9 @@ class AudioContextPlayer extends Emitter {
     }
 	mute(parm: boolean) {
 		if (parm === true) {
-			this.gainNode.disconnect();
+			this.gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
 		} else {
-			this.gainNode.connect(this.audioContext.destination);
+			this.gainNode.gain.setValueAtTime(1, this.audioContext.currentTime);
 		}
 	}
 
