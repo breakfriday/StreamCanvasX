@@ -151,6 +151,7 @@ class AudioContextPlayer extends Emitter {
 		}
 
 		this.gainNode && this.gainNode.disconnect();
+		this.clearCanvas();
 	}
 
 
