@@ -48,6 +48,7 @@ class MediaRenderEngine {
 
   destroy() {
     this.yuvEngine.destroy();
+    this.loadingView.destroy();
   }
 
     // 绘制 YUV 视频帧

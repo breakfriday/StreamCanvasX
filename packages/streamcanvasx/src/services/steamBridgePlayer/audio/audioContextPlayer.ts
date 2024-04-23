@@ -1,6 +1,6 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import Emitter from '../../../utils/emitter';
-
+import PlayerService from '../index';
 
 import { PCMBufferItem, IAduioContextPlayerConfig } from '../../../types/services';
 
@@ -24,7 +24,12 @@ class AudioContextPlayer extends Emitter {
 	isLive: boolean;
 	replayCounts: number;
 	replayPCMData: Float32Array;
-
+	playersevice: PlayerService;
+	canvas_el: HTMLCanvasElement;
+	canvas_context: CanvasRenderingContext2D;
+	clear?: boolean;
+	resizeObserver: ResizeObserver;
+	analyserNode: AnalyserNode
 	constructor() {
 		super();
 
@@ -39,15 +44,18 @@ class AudioContextPlayer extends Emitter {
 		this.hasInit = false;
 	}
 
-	init(config?: IAduioContextPlayerConfig) {
+	init(config?: IAduioContextPlayerConfig,playerService?: PlayerService) {
+		this.playersevice=playerService;
 		const default_config = {
 			sampleRate: 32000,
 			bufferSize: 1024,
 			numberOfOutputChannels: 1,
-			isLive: false,
+			isLive: true,
 			// sampleRate: 44100,
 		};
 		this.config = Object.assign(default_config, config);
+
+
 		const { useWorklet, isLive } = this.config;
 		this.isLive = isLive;
 		this.initAudioContext();
@@ -55,12 +63,63 @@ class AudioContextPlayer extends Emitter {
 		this.initScriptNode();
 		this.hasInit = true;
 	}
+
+	initCanvas() {
+		let { contentEl } =this.playersevice.config;
+
+
+		this.canvas_el = document.createElement('canvas');
+		this.canvas_el.style.position = 'absolute';
+		this.canvas_context=this.canvas_el.getContext("2d");
+		contentEl.append(this.canvas_el);
+		this.setCanvasSize();
+		this.event();
+	}
+
+	event() {
+		let { contentEl } = this.playersevice.config;
+		// 监听 dom size 变化， 调整canvas 大小
+		this.resizeObserver = new ResizeObserver(() => {
+		setTimeout(() => {
+		this.setCanvasSize();
+		//  this.resizeControlPannel();
+		}, 20);
+		});
+
+		this.resizeObserver.observe(contentEl);
+	}
+
+	setCanvasSize() {
+		let height = 200;
+		let width = 400;
+		let { contentEl } = this.playersevice.config;
+
+		if (contentEl) {
+		height = contentEl.clientHeight;
+		width = contentEl.clientWidth;
+		}
+
+		this.canvas_el.width = width;
+		this.canvas_el.height = height;
+	}
+
+	clearCanvas() {
+		if(this.canvas_context) {
+			let canvasContext = this.canvas_context;
+			let canvas = this.canvas_el;
+			this.clear = true;
+			// 清除画布
+			canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+		}
+	  }
+
 	initAudioContext() {
 		if (!this.audioContext) {
 			this.audioContext = new AudioContext({
 				sampleRate: this.config.sampleRate,
 			});
 		}
+		this.analyserNode=this.audioContext.createAnalyser();
 		this.gainNode = this.audioContext.createGain();
         this.gainNode.gain.value=0.3;
 	}
@@ -136,15 +195,13 @@ class AudioContextPlayer extends Emitter {
 						const nowBuffering = outputBuffer.getChannelData(channel);
 						nowBuffering.set(bufferItem.data[channel]);
 					}
-				} else if (this.replayCounts) {
-					this.replayCounts--;
-					this.feedPCMData(this.replayPCMData);
 				}
 			};
 		}
 
 		this.scriptNode = scriptNode;
-		this.scriptNode.connect(this.gainNode);
+		this.scriptNode.connect(this.analyserNode);
+		this.analyserNode.connect(this.gainNode);
 		this.gainNode.connect(this.audioContext.destination);
 		this.hasInitScriptNode = true;
         this.mute(true);
@@ -185,6 +242,18 @@ class AudioContextPlayer extends Emitter {
           console.error('调整音频增益失败');
         }
       }
+
+	updateBufferData() {
+
+	}
+	render() {
+
+	}
+	showAudio() {
+		this.playersevice.config.showAudio=true;
+		this.updateBufferData();
+		this.render();
+	}
 }
 
 export default AudioContextPlayer;

@@ -17,7 +17,7 @@ class AudioPlayer {
 
     createplayer(config: IAduioContextPlayerConfig) {
         this.pcmPlayer=new PCMPlayer();
-        this.pcmPlayer.init(config);
+        this.pcmPlayer.init(config,this.playerService);
     }
     feed(pcmData: Float32Array) {
         this.pcmPlayer.feedPCMDataBeta(pcmData);

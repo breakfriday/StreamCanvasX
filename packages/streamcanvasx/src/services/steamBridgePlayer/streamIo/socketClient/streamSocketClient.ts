@@ -133,6 +133,11 @@ class StreamSocketClient {
             }else{
                 this.playerService.audioProcessingService.createplayer({ sampleRate,numberOfOutputChannels: 1,isLive: true,bufferSize: 1024 });
                 this.hasAudioPlayer=true;
+                let { streamInfo } = this.playerService?.streamIo?._ioLoader.signalClient;
+                let { hasAudio,hasVideo }=streamInfo;
+                if(hasAudio===true&&hasVideo===false) {
+                    this.playerService.audioProcessingService.pcmPlayer.showAudio();
+                }
             }
         }else{
 

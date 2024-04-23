@@ -40,6 +40,10 @@ class SignalClient {
     clientId: number;
     private _mediaStreamInfoPromise: Promise<void>;
     private _mediaStreamInfoNotify: (data: any) => void;
+    streamInfo: {
+        hasVideo: boolean;
+        hasAudio: boolean;
+    }
 
     constructor() {
 
@@ -125,6 +129,7 @@ class SignalClient {
             let hasVideo=data[0];
             let hasAudio=data[3];
 
+            this.streamInfo={ hasVideo,hasAudio };
 
             this.playerService.emit('mediaInfo', { hasVideo: hasVideo, hasAudio: hasAudio });
         }

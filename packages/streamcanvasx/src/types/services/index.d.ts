@@ -216,6 +216,7 @@ interface IBridgePlayerConfig {
   url?: string;
   renderFps?: number;
   rtspUrl?: string;
+  showAudio?: boolean;
 
 
 }
