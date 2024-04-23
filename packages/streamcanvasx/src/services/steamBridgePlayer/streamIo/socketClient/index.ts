@@ -65,6 +65,16 @@ class SocketClient {
 
         }
     }
+    async reload() {
+        try{
+            await this.signalClient.callMethd("stop",[]);
+            debugger;
+            this.createPlayer();
+            debugger;
+        }catch(e) {
+
+        }
+    }
     async play() {
         let { url } = this.playerService.config;
         try{

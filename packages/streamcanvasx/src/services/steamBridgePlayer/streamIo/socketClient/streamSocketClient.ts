@@ -127,7 +127,7 @@ class StreamSocketClient {
                 pcmData
             };
 
-            debugger
+            // debugger
             if(this.hasAudioPlayer) {
                 let floatdata=this.playerService.audioProcessingService.pcmPlayer.convertInt16ArrayToFloat32(pcmData.buffer);
                 this.playerService.audioProcessingService.feed(floatdata);

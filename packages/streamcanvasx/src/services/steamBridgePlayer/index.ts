@@ -106,6 +106,12 @@ class StreamBridgePlayer extends Emitter {
     mute() {
 
     }
+
+    reload() {
+        debugger
+        this.streamIo._ioLoader.reload();
+        debugger
+    }
 }
 
 export default StreamBridgePlayer;

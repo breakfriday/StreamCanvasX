@@ -234,6 +234,7 @@ class YuvEnging {
     }
     destroy() {
       this.clear();
+      this.regGl.destroy();
     }
 
 

@@ -142,6 +142,10 @@ class SignalClient {
            speed=speed/1000;
            this.playerService.emit('otherInfo', { speed: data });
         }
+        if(message.method==='statusInfo') {
+            let { data } = message;
+            // debugger
+        }
     }
 
      getStreamInfo() {
