@@ -201,6 +201,7 @@ class AudioContextPlayer extends Emitter {
 		// debugger;
 		const { bufferSize, numberOfOutputChannels } = this.config;
 		const scriptNode = this.audioContext.createScriptProcessor(bufferSize, 0, numberOfOutputChannels); // bufferSize  numberOfOutputChannels
+		debugger;
 		if (this.isLive) { // 在线播放
 			scriptNode.onaudioprocess = (audioProcessingEvent) => {
 				const { outputBuffer } = audioProcessingEvent;
@@ -245,15 +246,16 @@ class AudioContextPlayer extends Emitter {
 			this.audioContext.suspend();
 		}
 	}
+	convertInt16ArrayToFloat32(buffer: ArrayBuffer) {
+		const dataView = new DataView(buffer);
+		const float32Data = new Float32Array(buffer.byteLength / 2); // 每个样本2个字节
+		for (let i = 0; i < float32Data.length; i++) {
+			// 读取16位有符号整数，归一化到[-1.0, 1.0]
+			float32Data[i] = dataView.getInt16(i * 2) / 32768.0;
+		}
+		return float32Data;
+	  }
 
-    convertUint8ArrayToFloat32(uint8Data: Uint8Array): Float32Array {
-        let float32Data = new Float32Array(uint8Data.length);
-        for (let i = 0; i < uint8Data.length; i++) {
-            // Map from [0, 255] to [-1.0, 1.0]
-            float32Data[i] = (uint8Data[i] / 127.5) - 1.0;
-        }
-        return float32Data;
-    }
 	mute(parm: boolean) {
 		if (parm === true) {
 			this.gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
