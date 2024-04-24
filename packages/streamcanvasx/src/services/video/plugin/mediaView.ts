@@ -349,6 +349,14 @@ class MediaView {
           let startX = (canvas.width - width) / 2;
           canvasContext.drawImage(errorImg, startX, startY, width, width);
        };
+
+       if(this.playerService.error_message) {
+        let message=this.playerService.error_message;
+        canvasContext.font = '13px Arial';
+        canvasContext.fillStyle = 'gray';
+        canvasContext.textAlign = 'center';
+        canvasContext.fillText(message, canvas.width/2 , canvas.height*0.85);
+       }
       }
       renderCanvas2d(videoFrame: VideoFrame | HTMLVideoElement) {
         let video = videoFrame as HTMLVideoElement;

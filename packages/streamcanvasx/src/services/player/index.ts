@@ -96,6 +96,7 @@ class PlayerService extends Emitter {
     speed?: number
     lowSpeedStartTime: number | null = null;
     lowSpeedTimer: NodeJS.Timeout;
+    error_message?: string
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -855,7 +856,10 @@ startHeartbeatCheck() {
             if(this.config.stopCallBack) {
                 this.config.stopCallBack().then((res) => {
                     if(res.stop===true||res.stop==="true") {
+                        this.error_message=res.message;
                         this.setError();
+                    }else{
+                        this.error_message='';
                     }
                 });
             }
