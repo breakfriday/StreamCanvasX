@@ -71,7 +71,7 @@ class SignalClient {
             }
 
             let { clientId } = this;
-            debugger;
+
             this.ws = new WebSocket(`ws://127.0.0.1:4300/ws/signal/${clientId}`);
 
             this.ws.onopen = () => resolve();

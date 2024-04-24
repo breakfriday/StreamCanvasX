@@ -13,7 +13,6 @@ function generateUniqueId() {
     const randomInt = Math.floor(Math.random() * maxInt);
 
 
-    debugger;
     // const random = Math.floor(Math.random()* in);
 
     const uniqueId = randomInt;

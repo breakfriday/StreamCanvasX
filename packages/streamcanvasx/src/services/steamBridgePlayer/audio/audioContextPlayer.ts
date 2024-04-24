@@ -81,6 +81,7 @@ class AudioContextPlayer extends Emitter {
 
 		this.canvas_el = document.createElement('canvas');
 		this.canvas_el.style.position = 'absolute';
+		this.canvas_el.setAttribute('name', 'audioCanvas');
 		this.canvas_context=this.canvas_el.getContext("2d");
 		contentEl.append(this.canvas_el);
 		this.setCanvasSize();
@@ -151,7 +152,10 @@ class AudioContextPlayer extends Emitter {
 		}
 
 		this.gainNode && this.gainNode.disconnect();
-		this.clearCanvas();
+		if(this.canvas_el) {
+			this.clearCanvas();
+			this.canvas_el.remove();
+		}
 	}
 
 

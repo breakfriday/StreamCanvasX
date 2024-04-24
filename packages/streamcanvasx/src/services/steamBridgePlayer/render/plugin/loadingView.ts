@@ -20,6 +20,7 @@ class LoadingView {
         let { contentEl } = this.playerService.config;
         let canvas_el=document.createElement("canvas");
         this.canvas_el=canvas_el;
+        this.canvas_el.setAttribute('name', 'loadingCanvas');
         this.canvas_context=canvas_el.getContext("2d");
         this.isLoading=true;
         this.setCanvasAttributes();

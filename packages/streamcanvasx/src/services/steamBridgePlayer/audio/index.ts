@@ -23,7 +23,11 @@ class AudioPlayer {
         this.pcmPlayer.feedPCMDataBeta(pcmData);
     }
     destroy() {
+        try{
         this.pcmPlayer.destroy();
+        }catch(e) {
+            let h=this.pcmPlayer;
+        }
     }
     mute(parm: boolean) {
         this.pcmPlayer.mute(parm);

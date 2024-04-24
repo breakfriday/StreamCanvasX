@@ -3,6 +3,7 @@ import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../index';
 
 import createREGL from 'regl';
+import { threadId } from 'worker_threads';
 
 interface YUVFrame {
   yData: Uint8Array;
@@ -59,6 +60,7 @@ class YuvEnging {
 
         this.canvas_el = document.createElement('canvas');
         this.canvas_el.style.position = 'absolute';
+        this.canvas_el.setAttribute('name', 'glcanvas');
         contentEl.append(this.canvas_el);
         this.setCanvasSize();
     }
@@ -234,7 +236,28 @@ class YuvEnging {
     }
     destroy() {
       this.clear();
-      this.regGl.destroy();
+
+      console.log("---------------");
+
+      console.log("destroy","嘗試銷毀 webgl");
+
+      console.log("---------------");
+      if (this.yuvTexture.textureY) {
+          this.yuvTexture.textureY.destroy();
+      }
+      if (this.yuvTexture.textureU) {
+          this.yuvTexture.textureU.destroy();
+      }
+      if (this.yuvTexture.textureV) {
+          this.yuvTexture.textureV.destroy();
+      }
+      if(this.regGl) {
+        this.regGl.destroy();
+      }
+
+      if(this.canvas_el) {
+        this.canvas_el.remove();
+      }
     }
 
 
