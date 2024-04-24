@@ -34,8 +34,8 @@ class MediaView {
     video: HTMLVideoElement
     startTime: number;
     timer: NodeJS.Timeout;
-    lastCount:number;
-    nowFrameCount:number
+    lastCount: number;
+    nowFrameCount: number
 
     constructor() {
         this.canvas_el = document.createElement('canvas');
@@ -87,8 +87,8 @@ class MediaView {
 
 
       video.addEventListener('loadeddata', () => {
-        console.log("MediaView",'loadeddata')
-        this.startHearChceck()
+        console.log("MediaView",'loadeddata');
+        this.startHearChceck();
         this.startVideoFrameCallBack();
       });
 
@@ -113,8 +113,8 @@ class MediaView {
         const fpsCount = 5;
         let $this=this;
         // let startTime = performance.now();
-        this.nowFrameCount=0
-        this.lastCount=0
+        this.nowFrameCount=0;
+        this.lastCount=0;
 
         const updatePerformanceInfo = (now) => {
           if (frameCount >= fpsCount) {
@@ -136,10 +136,10 @@ class MediaView {
             return false;
           }
           this.render(this.video);
-          this.nowFrameCount++
+          this.nowFrameCount++;
           try{
             updatePerformanceInfo(now);
-          }catch(e){
+          }catch(e) {
           }
           this.frameCallbackId = this.video.requestVideoFrameCallback(frameCallback);
         };
@@ -327,7 +327,7 @@ class MediaView {
         if (this.canvas_el && this.contentEl) {
           this.canvas_el.remove();
           this.contentEl = null;
-          this.stopHeartChceck()
+          this.stopHeartChceck();
         }
       }
 
@@ -446,32 +446,26 @@ class MediaView {
        this.canvas_el2.height = height;
      }
 
-    startHearChceck(){
-
-      if (!this.timer) {  
-        
+    startHearChceck() {
+      if (!this.timer) {
         this.timer = setInterval(() => {
-       
-           if(this.lastCount>=this.nowFrameCount){
-            this.playerService.addReloadTask({ arr_msg: ['---fps 調用鏈檢查異常 ----'] })
+           if(this.lastCount>=this.nowFrameCount) {
+            this.playerService.addReloadTask({ arr_msg: ['---fps 調用鏈檢查異常 ----'] });
            }else{
             // console.log(this.lastCount)
             // console.log(this.nowFrameCount)
             // debugger
-            this.lastCount=this.nowFrameCount
+            this.lastCount=this.nowFrameCount;
            }
           }, 10000); // 每10秒检查一次
       }
-
     }
 
-     stopHeartChceck(){
-
-      if(this.timer){
-        clearInterval(this.timer)
-        this.timer=null
+     stopHeartChceck() {
+      if(this.timer) {
+        clearInterval(this.timer);
+        this.timer=null;
        }
-
      }
 }
 
