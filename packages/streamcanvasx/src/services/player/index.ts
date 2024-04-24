@@ -28,6 +28,7 @@ import { CorrectDecorator } from './util/decrator/configDecrator';
 import RTCPlayerService from '../webrtc';
 
 import LogMonitor from '../../LogMonitor';
+import { isGeneratorFunction } from 'util/types';
 
 
 corePlayer.LoggingControl.applyConfig({
@@ -454,10 +455,9 @@ class PlayerService extends Emitter {
                 this.audioEvent();
             }
 
-            if(hasVideo===true){
-                this.config.showAudio=false
-                this.audioProcessingService.clearCanvas()
-
+            if(hasVideo===true) {
+                this.config.showAudio=false;
+                this.audioProcessingService.clearCanvas();
             }
 
 
@@ -852,6 +852,14 @@ startHeartbeatCheck() {
         reload2() {
             this.error_connect_times++;
 
+            if(this.config.stopCallBack) {
+                this.config.stopCallBack().then((res) => {
+                    if(res.stop===true||res.stop==="true") {
+                        this.setError();
+                    }
+                });
+            }
+
             let { url } = this.config;
             // this.logMonitor.log({ flvUrl: url,status: "reloading" });
 
@@ -903,7 +911,7 @@ startHeartbeatCheck() {
 
             clearInterval(this.lowSpeedTimer);
             this.lowSpeedTimer=null;
-            this?.canvasVideoService?.mediaView?.stopHeartChceck()
+            this?.canvasVideoService?.mediaView?.stopHeartChceck();
 
             if(this.canvasVideoService?.loadingView?.isLoading===true) {
                 this.canvasVideoService.loading = false;
