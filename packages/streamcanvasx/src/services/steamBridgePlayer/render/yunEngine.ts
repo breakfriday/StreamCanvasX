@@ -32,6 +32,7 @@ class YuvEnging {
     private canvasAspectRatio: number; // 图像的宽高比
 
     private rotationAngle: number = 0; // 旋转角度，默认为0
+    hasTexture: boolean
     constructor() {
 
     }
@@ -67,7 +68,28 @@ class YuvEnging {
 
 
     initRegl() {
-        this.regGl = createREGL({ canvas: this.canvas_el });
+    //   if (!this.regGl.hasExtension('WEBGL2')) {
+    //     debugger
+    //     console.error('WebGL2 is not supported by your browser.');
+    // }
+    if(window.debugYuv===true) {
+      console.log("update_yuv_texture");
+    }
+        this.regGl = createREGL({
+          canvas: this.canvas_el,
+          gl: this.canvas_el.getContext('webgl2'),
+          attributes: {
+            alpha: false, // 禁用画布的透明度，因为它可能影响性能
+            antialias: true, // 根据需要启用或禁用抗锯齿
+            depth: false, // 如果不需要深度缓存，可以禁用以节省资源
+            stencil: false,
+            preserveDrawingBuffer: false,
+            powerPreference: 'high-performance', // 倾向于使用高性能的图形处理器
+            premultipliedAlpha: false,
+            desynchronized: true, // 减少延迟
+
+          }
+      });
         let regl=this.regGl;
         const textureY = regl.texture({ width: 1, height: 1, format: 'luminance' }); // 存储视频帧的亮度（Y分量）信息
         const textureU = regl.texture({ width: 1, height: 1, format: 'luminance' }); // 存储色度信息
@@ -190,11 +212,39 @@ class YuvEnging {
 
 
     update_yuv_texture(yuvFrame: YUVFrame) {
+      if(window.debugYuv===true) {
+        console.log("update_yuv_texture");
+      }
       if(yuvFrame) {
         let { yData, uData, vData,width,height }=yuvFrame;
-        this.yuvTexture.textureY({ data: yData, width, height, format: 'luminance',min: 'linear', mag: 'linear' });
-        this.yuvTexture.textureU({ data: uData, width: width / 2, height: height / 2, format: 'luminance',min: 'linear', mag: 'linear' });
-        this.yuvTexture.textureV({ data: vData, width: width / 2, height: height / 2, format: 'luminance',min: 'linear', mag: 'linear' });
+        if(this.hasTexture) {
+          this.yuvTexture.textureY.subimage({
+            data: yData,
+            width: width,
+            height: height,
+          });
+
+          this.yuvTexture.textureU.subimage({
+            data: uData,
+            width: width/2,
+            height: height/2,
+          });
+
+
+          this.yuvTexture.textureV.subimage({
+            data: vData,
+            width: width/2,
+            height: height/2,
+          });
+
+          // 更新 U 纹理
+        }else{
+          this.yuvTexture.textureY({ data: yData, width, height, format: 'luminance',min: 'linear', mag: 'linear' });
+          this.yuvTexture.textureU({ data: uData, width: width / 2, height: height / 2, format: 'luminance',min: 'linear', mag: 'linear' });
+          this.yuvTexture.textureV({ data: vData, width: width / 2, height: height / 2, format: 'luminance',min: 'linear', mag: 'linear' });
+          this.hasTexture=true;
+        }
+
         this.drawCommand({
           textureY: this.yuvTexture.textureY,
           textureU: this.yuvTexture.textureU,
@@ -208,24 +258,24 @@ class YuvEnging {
       }
 }
 
-    async updateTextureAndDraw(yuvFrame: YUVFrame) {
-      return new Promise((resolve) => {
-        if(yuvFrame) {
-          let { yData, uData, vData,width,height }=yuvFrame;
-          this.yuvTexture.textureY({ data: yData, width, height, format: 'luminance',min: 'linear', mag: 'linear' });
-          this.yuvTexture.textureU({ data: uData, width: width / 2, height: height / 2, format: 'luminance',min: 'linear', mag: 'linear' });
-          this.yuvTexture.textureV({ data: vData, width: width / 2, height: height / 2, format: 'luminance',min: 'linear', mag: 'linear' });
-          this.drawCommand({
-            textureY: this.yuvTexture.textureY,
-            textureU: this.yuvTexture.textureU,
-            textureV: this.yuvTexture.textureV
+    // async updateTextureAndDraw(yuvFrame: YUVFrame) {
+    //   return new Promise((resolve) => {
+    //     if(yuvFrame) {
+    //       let { yData, uData, vData,width,height }=yuvFrame;
+    //       this.yuvTexture.textureY({ data: yData, width, height, format: 'luminance',min: 'linear', mag: 'linear' });
+    //       this.yuvTexture.textureU({ data: uData, width: width / 2, height: height / 2, format: 'luminance',min: 'linear', mag: 'linear' });
+    //       this.yuvTexture.textureV({ data: vData, width: width / 2, height: height / 2, format: 'luminance',min: 'linear', mag: 'linear' });
+    //       this.drawCommand({
+    //         textureY: this.yuvTexture.textureY,
+    //         textureU: this.yuvTexture.textureU,
+    //         textureV: this.yuvTexture.textureV
 
-          });
-        }
+    //       });
+    //     }
 
-        resolve({});
-      });
-    }
+    //     resolve({});
+    //   });
+    // }
 
     clear() {
       let regl=this.regGl;
@@ -242,18 +292,30 @@ class YuvEnging {
       console.log("destroy","嘗試銷毀 webgl");
 
       console.log("---------------");
-      if (this.yuvTexture.textureY) {
+
+      setTimeout(() => {
+        if (this.yuvTexture.textureY) {
           this.yuvTexture.textureY.destroy();
       }
-      if (this.yuvTexture.textureU) {
+      }, 0);
+
+      setTimeout(() => {
+        if (this.yuvTexture.textureU) {
           this.yuvTexture.textureU.destroy();
       }
-      if (this.yuvTexture.textureV) {
+      }, 0);
+
+      setTimeout(() => {
+        if (this.yuvTexture.textureV) {
           this.yuvTexture.textureV.destroy();
       }
-      if(this.regGl) {
-        this.regGl.destroy();
-      }
+      }, 0);
+      setTimeout(() => {
+        if(this.regGl) {
+          this.regGl.destroy();
+        }
+      }, 0);
+
 
       if(this.canvas_el) {
         this.canvas_el.remove();

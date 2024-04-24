@@ -78,7 +78,7 @@ class SignalClient {
             this.ws.onerror = (event) => reject(event);
             this.ws.onmessage = this.onMessage.bind(this);
             this.ws.onclose = () => {
-                console.log('WebSocket closed');
+                console.log('signalClient  WebSocket closed');
                 this.ws = null;
             };
         });

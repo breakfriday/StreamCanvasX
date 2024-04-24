@@ -53,7 +53,7 @@ class StreamSocketClient {
             this.ws.onerror = (event) => reject(event);
             this.ws.onmessage = this.onMessage.bind(this);
             this.ws.onclose = () => {
-                console.log('WebSocket closed');
+                console.log('dataclient  WebSocket closed');
                 this.ws = null;
             };
         });
