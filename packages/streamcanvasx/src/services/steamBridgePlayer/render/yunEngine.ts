@@ -260,11 +260,13 @@ class YuvEnging {
 
 
     clear() {
-      let regl=this.regGl;
-         regl.clear({
-          color: [0, 0, 0, 0],
-          depth: 1,
-        });
+      if(this.regGl) {
+        let regl=this.regGl;
+        regl.clear({
+         color: [0, 0, 0, 0],
+         depth: 1,
+       });
+      }
     }
     destroy() {
       this.clear();
@@ -294,13 +296,20 @@ class YuvEnging {
       }, 0);
       setTimeout(() => {
         if(this.regGl) {
+          this.yuvTexture=null;
           this.regGl.destroy();
+          this.regGl=null;
         }
       }, 0);
 
+     // this.yuvTexture=null;
+
+
+      this.canvas_context=null;
 
       if(this.canvas_el) {
         this.canvas_el.remove();
+        this.canvas_el=null;
       }
     }
 

@@ -36,27 +36,39 @@ class SocketClient {
         this.streamSocketClient.init(this.playerService,this.clientId);
     }
     async open() {
-        try{
-            await this.signalClient.connect();
+        // try{
+        //     await this.signalClient.connect();
+        //     console.log("signalClient 连接成功");
+        //     await this.createPlayer();
+        // }catch(e) {
+
+        // }
+
+        // try{
+        //     await this.streamSocketClient.connect();
+        //     console.log("dataClient 连接成功");
+        // }catch(e) {
+        //     return false;
+        // }
+
+        try {
+            await Promise.all([this.signalClient.connect(),this.streamSocketClient.connect()]);
             console.log("signalClient 连接成功");
+            console.log("dataClient 连接成功");
             await this.createPlayer();
         }catch(e) {
-
-        }
-
-        try{
-            await this.streamSocketClient.connect();
-            console.log("dataClient 连接成功");
-        }catch(e) {
-            return false;
+            console.error("ws client 连接失败");
         }
     }
 
     async createPlayer() {
         let { url } = this.playerService.config;
+
         try{
             await this.signalClient.callMethd("createPlayer",[url,5,0,1,0]);
             await this.signalClient.callMethd("play",[]);
+
+            debugger;
 
             let info=await this.signalClient.getStreamInfo();
             debugger;
@@ -65,6 +77,12 @@ class SocketClient {
         }
     }
     async reload() {
+        if(!this.signalClient.ws) {
+           await this.signalClient.connect();
+        }
+        if(!this.streamSocketClient.ws) {
+           await this.streamSocketClient.connect();
+        }
         try{
             await this.signalClient.callMethd("stop",[]);
             debugger;

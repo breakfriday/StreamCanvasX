@@ -32,7 +32,7 @@ function generateUniqueID() {
 }
 
 class SignalClient {
-    private ws: WebSocket | null = null;
+     ws: WebSocket | null = null;
 
     private responseMap = new Map<number|string, (response: any) => void>(); // 使用responseMap来存储每个msgId对应的解析函数
     playerService: PlayerService

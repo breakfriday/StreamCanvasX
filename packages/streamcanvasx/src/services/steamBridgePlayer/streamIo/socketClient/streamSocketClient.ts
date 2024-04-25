@@ -17,7 +17,7 @@ interface YUVFrame {
 
 class StreamSocketClient {
     playerService: PlayerService;
-    private ws: WebSocket | null = null;
+     ws: WebSocket | null = null;
     private lastMsgId = 0;
     previousTimestamp = 0;
     frameCount = 0;
