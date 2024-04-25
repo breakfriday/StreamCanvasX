@@ -193,10 +193,10 @@ class SignalClient {
             setTimeout(() => {
                 if (this.responseMap.has(msgId)) {
                     this.responseMap.delete(msgId);
-                    console.error('信令响应 超时 15000');
-                    reject(new Error('信令响应 超时 15000'));
+                    console.error('信令响应 超时 20000');
+                    reject(new Error('信令响应 超时 20000'));
                 }
-            }, 15000); // 设置超时时间， 避免堆积。
+            }, 20000); // 设置超时时间， 避免堆积。
         });
     }
 

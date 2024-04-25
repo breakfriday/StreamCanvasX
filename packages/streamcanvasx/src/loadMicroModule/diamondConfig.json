@@ -4,7 +4,7 @@
     "data":[
         {"id":0,"version":"0.1.91","desc":"default 環境 ，沒有規則命中"},
         {"id":1,"version":"0.2.2","desc":"pcweb 开发环境"},
-        {"id":2,"version":"0.1.96_1","desc":"pcweb  测试环境"},
+        {"id":2,"version":"0.2.2","desc":"pcweb  测试环境"},
         {"id":3,"version":"0.2.2","desc":"pcweb  演示环境"},
         {"id":4,"version":"0.1.91","desc":"IOT 测试环境"},
         {"id":5,"version":"0.1.91","desc":"IOT 演示环境"},
