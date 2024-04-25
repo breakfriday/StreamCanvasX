@@ -65,13 +65,16 @@ class SocketClient {
         let { url } = this.playerService.config;
 
         try{
-            await this.signalClient.callMethd("createPlayer",[url,5,0,1,0]);
-            await this.signalClient.callMethd("play",[]);
+          let res1= await this.signalClient.callMethd("createPlayer",[url,5,0,1,0]);
+          let res2= await this.signalClient.callMethd("play",[]);
 
-            debugger;
-
+          console.log("播放器创建成功");
+          if(res1.code===200&&res2.code===200) {
             let info=await this.signalClient.getStreamInfo();
-            debugger;
+          }else{
+            console.error("播放器创建失败-播放失败， reload");
+            this.reload();
+          }
         }catch(e) {
 
         }

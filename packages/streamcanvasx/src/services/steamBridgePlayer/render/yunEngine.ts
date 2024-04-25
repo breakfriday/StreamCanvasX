@@ -64,6 +64,9 @@ class YuvEnging {
         this.canvas_el.setAttribute('name', 'glcanvas');
         contentEl.append(this.canvas_el);
         this.setCanvasSize();
+
+        this.canvas_el.addEventListener('webglcontextlost', this.handleContextLost, false);
+        this.canvas_el.addEventListener('webglcontextrestored', this.handleContextRestored, false);
     }
 
 
@@ -75,9 +78,11 @@ class YuvEnging {
     if(window.debugYuv===true) {
       console.log("update_yuv_texture");
     }
+
+        this.glContext=this.canvas_el.getContext('webgl2');
         this.regGl = createREGL({
           canvas: this.canvas_el,
-          gl: this.canvas_el.getContext('webgl2'),
+          gl: this.glContext,
           attributes: {
             alpha: false, // 禁用画布的透明度，因为它可能影响性能
             antialias: true, // 根据需要启用或禁用抗锯齿
@@ -90,6 +95,8 @@ class YuvEnging {
 
           }
       });
+
+
         let regl=this.regGl;
         const textureY = regl.texture({ width: 1, height: 1, format: 'luminance' }); // 存储视频帧的亮度（Y分量）信息
         const textureU = regl.texture({ width: 1, height: 1, format: 'luminance' }); // 存储色度信息
@@ -188,6 +195,15 @@ class YuvEnging {
             count: 6
           });
     }
+    handleContextLost = (event) => {
+      event.preventDefault(); // 防止默认的上下文丢失处理，使得可以进行自定义处理
+      console.log("上下文丢");
+      this.destroyGl();
+     };
+
+    handleContextRestored() {
+      this.initRegl();
+    }
     event() {
         this.setCanvasSize();
     }
@@ -215,7 +231,7 @@ class YuvEnging {
       if(window.debugYuv===true) {
         console.log("update_yuv_texture");
       }
-      if(yuvFrame) {
+      if(yuvFrame&&this.regGl) {
         let { yData, uData, vData,width,height }=yuvFrame;
         if(this.hasTexture) {
           this.yuvTexture.textureY.subimage({
@@ -268,6 +284,25 @@ class YuvEnging {
        });
       }
     }
+
+    destroyGl() {
+      try{
+        this.yuvTexture.textureU.destroy();
+        this.yuvTexture.textureY.destroy();
+        this.yuvTexture.textureV.destroy();
+      }catch(e) {
+
+      }
+      this.yuvTexture.textureU=null;
+      this.yuvTexture.textureV=null;
+      this.yuvTexture.textureY=null;
+      try{
+        this.regGl.destroy();
+      }catch(e) {
+
+      }
+      this.regGl=null;
+    }
     destroy() {
       this.clear();
 
@@ -277,30 +312,8 @@ class YuvEnging {
 
       console.log("---------------");
 
-      setTimeout(() => {
-        if (this.yuvTexture.textureY) {
-          this.yuvTexture.textureY.destroy();
-      }
-      }, 0);
+     this.destroyGl();
 
-      setTimeout(() => {
-        if (this.yuvTexture.textureU) {
-          this.yuvTexture.textureU.destroy();
-      }
-      }, 0);
-
-      setTimeout(() => {
-        if (this.yuvTexture.textureV) {
-          this.yuvTexture.textureV.destroy();
-      }
-      }, 0);
-      setTimeout(() => {
-        if(this.regGl) {
-          this.yuvTexture=null;
-          this.regGl.destroy();
-          this.regGl=null;
-        }
-      }, 0);
 
      // this.yuvTexture=null;
 
