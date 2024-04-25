@@ -1,168 +1,133 @@
-import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
+import { injectable, inject } from 'inversify';
 import PlayerService from '../index';
+import * as twgl from 'twgl.js';
 
-import createREGL from 'regl';
-import { threadId } from 'worker_threads';
-
-interface YUVFrame {
-  yData: Uint8Array;
-  uData: Uint8Array;
-  vData: Uint8Array;
-  width: number;
-  height: number;
-}
+@injectable()
 class YuvEngine {
-    canvas_el: HTMLCanvasElement;
-    glContext: WebGL2RenderingContext;
-    playerService: PlayerService;
-    yuvTexture: {
-        textureY: WebGLTexture;
-        textureU: WebGLTexture;
-        textureV: WebGLTexture;
+  canvas: HTMLCanvasElement;
+  gl: WebGL2RenderingContext;
+  textures: {
+    y: WebGLTexture;
+    u: WebGLTexture;
+    v: WebGLTexture;
+  };
+  programInfo: twgl.ProgramInfo;
+  bufferInfo: twgl.BufferInfo;
+  playerService: PlayerService;
+  hasCreateTexture: boolean
+
+  constructor() {
+    this.textures = {
+      y: null,
+      u: null,
+      v: null
     };
-    private coverMode: boolean;
-    private canvasAspectRatio: number;
-    private rotationAngle: number = 0;
-    hasTexture: boolean = false;
+  }
 
-    constructor(playerService: PlayerService) {
-        this.playerService = playerService;
+  init(playerService: PlayerService) {
+    this.playerService = playerService;
+    this.initWebGL();
+    this.setupShaders();
+
+    this.setupBuffers();
+  }
+
+  initWebGL() {
+    this.canvas = document.createElement('canvas');
+    this.canvas.style.position = 'absolute';
+    this.canvas.setAttribute('name', 'glcanvas');
+    this.playerService.config.contentEl.append(this.canvas);
+    this.gl = this.canvas.getContext('webgl2');
+
+    if (!this.gl) {
+      console.error('WebGL 2 is not supported by your browser.');
+      return;
     }
 
-    init() {
-        this.initCanvas();
-        this.initWebGL();
-        this.coverMode = false;
-        this.canvasAspectRatio = 1;
-        this.rotationAngle = 0;
-    }
+    twgl.resizeCanvasToDisplaySize(this.canvas);
+  }
 
-    setRotation(angle: number) {
-        this.rotationAngle = angle;
-        // Trigger a redraw here if real-time updating is necessary
-    }
+  setupShaders() {
+    const vs = `
+      attribute vec4 position;
+      varying vec2 texCoords;
+      void main() {
+        texCoords = position.xy * 0.5 + 0.5;
+        gl_Position = position;
+      }
+    `;
+    const fs = `
+      precision mediump float;
+      varying vec2 texCoords;
+      uniform sampler2D yTexture;
+      uniform sampler2D uTexture;
+      uniform sampler2D vTexture;
+      void main() {
+        float y = texture2D(yTexture, texCoords).r;
+        float u = texture2D(uTexture, texCoords).r - 0.5;
+        float v = texture2D(vTexture, texCoords).r - 0.5;
+        float r = y + 1.403 * v;
+        float g = y - 0.344 * u - 0.714 * v;
+        float b = y + 1.770 * u;
+        gl_FragColor = vec4(r, g, b, 1.0);
+      }
+    `;
+    this.programInfo = twgl.createProgramInfo(this.gl, [vs, fs]);
+  }
 
-    setCover(cover: boolean) {
-        this.coverMode = cover;
-    }
+  createTextures(width: number,height: number) {
+    this.textures.y = twgl.createTexture(this.gl, { width: width, height: height, format: this.gl.LUMINANCE });
+    this.textures.u = twgl.createTexture(this.gl, { width: width/2, height: height/2, format: this.gl.LUMINANCE });
+    this.textures.v = twgl.createTexture(this.gl, { width: width/2, height: height/2, format: this.gl.LUMINANCE });
+  }
 
-    initCanvas() {
-        let { contentEl } = this.playerService.config;
-        this.canvas_el = document.createElement('canvas');
-        this.canvas_el.style.position = 'absolute';
-        this.canvas_el.setAttribute('name', 'glcanvas');
-        contentEl.append(this.canvas_el);
-        this.setCanvasSize();
-    }
+  setupBuffers() {
+    const arrays = {
+      position: {
+        numComponents: 2,
+        data: [
+          -1, -1, 1, -1, -1, 1,
+          -1, 1, 1, -1, 1, 1
+        ],
+      },
+    };
+    this.bufferInfo = twgl.createBufferInfoFromArrays(this.gl, arrays);
+  }
 
-    initWebGL() {
-        this.glContext = this.canvas_el.getContext('webgl2');
-        if (!this.glContext) {
-            console.error('WebGL2 is not supported by your browser.');
-            return;
-        }
-        this.initShaders();
-        this.initTextures();
+  update_yuv_texture(yuvFrame) {
+    const { yData, uData, vData, width, height } = yuvFrame;
+    if(this.hasCreateTexture) {
+      twgl.setTextureFromElement(this.gl, this.textures.y, yData, { width, height });
+      twgl.setTextureFromElement(this.gl, this.textures.u, uData, { width: width / 2, height: height / 2 });
+      twgl.setTextureFromElement(this.gl, this.textures.v, vData, { width: width / 2, height: height / 2 });
+      this.drawScene();
+    }else{
+      this.createTextures(width,height);
+      this.hasCreateTexture=true;
     }
+  }
 
-    initShaders() {
-        const vertexShaderSource = `
-            attribute vec2 position;
-            varying vec2 uv;
-            uniform float canvasAspectRatio;
-            uniform float videoAspectRatio;
-            uniform bool coverMode;
-            uniform float rotation;
-            void main() {
-                vec2 adjustedPosition = position;
-                if (coverMode) {
-                    float scale = max(canvasAspectRatio / videoAspectRatio, 1.0);
-                    adjustedPosition.x *= scale;
-                    adjustedPosition.y *= scale / (canvasAspectRatio / videoAspectRatio);
-                } else {
-                    if (videoAspectRatio > canvasAspectRatio) {
-                        adjustedPosition.y = position.y * (canvasAspectRatio / videoAspectRatio);
-                    } else {
-                        adjustedPosition.x = position.x * (videoAspectRatio / canvasAspectRatio);
-                    }
-                }
-                float rad = radians(rotation);
-                float cosAngle = cos(rad);
-                float sinAngle = sin(rad);
-                vec2 rotatedPosition = vec2(
-                    adjustedPosition.x * cosAngle - adjustedPosition.y * sinAngle,
-                    adjustedPosition.x * sinAngle + adjustedPosition.y * cosAngle
-                );
-                uv = position * 0.5 + 0.5;
-                uv.y = 1.0 - uv.y;
-                gl_Position = vec4(rotatedPosition, 0, 1);
-            }
-        `;
-        const fragmentShaderSource = `
-            precision mediump float;
-            varying vec2 uv;
-            uniform sampler2D textureY;
-            uniform sampler2D textureU;
-            uniform sampler2D textureV;
-            void main() {
-                float y = texture2D(textureY, uv).r;
-                float u = texture2D(textureU, uv).r - 0.5;
-                float v = texture2D(textureV, uv).r - 0.5;
-                float r = y + 1.403 * v;
-                float g = y - 0.344 * u - 0.714 * v;
-                float b = y + 1.770 * u;
-                gl_FragColor = vec4(r, g, b, 1.0);
-            }
-        `;
-        // Compile and link shaders here
-    }
+  drawScene() {
+    twgl.resizeCanvasToDisplaySize(this.canvas);
+    this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
-    initTextures() {
-        const gl = this.glContext;
-        this.yuvTexture = {
-            textureY: gl.createTexture(),
-            textureU: gl.createTexture(),
-            textureV: gl.createTexture()
-        };
-        // Initialize and configure textures here
-    }
+    twgl.setBuffersAndAttributes(this.gl, this.programInfo, this.bufferInfo);
+    twgl.setUniforms(this.programInfo, {
+      yTexture: this.textures.y,
+      uTexture: this.textures.u,
+      vTexture: this.textures.v
+    });
+    twgl.drawBufferInfo(this.gl, this.bufferInfo);
+  }
 
-    update_yuv_texture(yuvFrame) {
-        const gl = this.glContext;
-        if (yuvFrame) {
-            let { yData, uData, vData, width, height } = yuvFrame;
-            this.updateTexture(this.yuvTexture.textureY, yData, width, height);
-            this.updateTexture(this.yuvTexture.textureU, uData, width / 2, height / 2);
-            this.updateTexture(this.yuvTexture.textureV, vData, width / 2, height / 2);
-            // Update textures and draw here
-        }
-    }
-
-    updateTexture(texture, data, width, height) {
-        const gl = this.glContext;
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.LUMINANCE, width, height, 0, gl.LUMINANCE, gl.UNSIGNED_BYTE, data);
-        // Set texture parameters here if necessary
-    }
-
-    setCanvasSize() {
-        let { contentEl } = this.playerService.config;
-        this.canvas_el.width = contentEl.clientWidth;
-        this.canvas_el.height = contentEl.clientHeight;
-        this.canvasAspectRatio = this.canvas_el.width / this.canvas_el.height;
-    }
-
-    clear() {
-        const gl = this.glContext;
-        gl.clearColor(0, 0, 0, 0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-    }
-
-    destroy() {
-        const gl = this.glContext;
-        gl.deleteTexture(this.yuvTexture.textureY);
-        gl.deleteTexture(this.yuvTexture.textureU);
-        gl.deleteTexture(this.yuvTexture.textureV);
-        this.canvas_el.remove();
-    }
+  destroy() {
+    this.gl.deleteTexture(this.textures.y);
+    this.gl.deleteTexture(this.textures.u);
+    this.gl.deleteTexture(this.textures.v);
+    this.gl.deleteProgram(this.programInfo.program);
+    this.canvas.remove();
+  }
 }
+
+export default YuvEngine;
