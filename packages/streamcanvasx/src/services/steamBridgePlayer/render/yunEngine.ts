@@ -36,6 +36,7 @@ class YuvEnging {
 
     private rotationAngle: number = 0; // 旋转角度，默认为0
     hasTexture: boolean
+    contextHealth: boolean
     constructor() {
 
     }
@@ -200,15 +201,16 @@ class YuvEnging {
           });
     }
     handleContextLost = (event) => {
+      this.contextHealth=false;
       event.preventDefault(); // 防止默认的上下文丢失处理，使得可以进行自定义处理
       console.log("上下文丟失");
-      this.destroyGl();
+      // this.destroyGl();
      };
 
     handleContextRestored() {
+      this.contextHealth=true;
       console.log(" handleContextRestored 上下文恢復");
-      this.initRegl();
-      console.log(" handleContextRestored 上下文恢復 initregl");
+      // this.initRegl();
     }
     event() {
         this.setCanvasSize();
@@ -234,6 +236,9 @@ class YuvEnging {
 
 
     update_yuv_texture(yuvFrame: YUVFrame) {
+      if(this.contextHealth===false) {
+        return false;
+      }
       if(window.debugYuv===true) {
         console.log("update_yuv_texture");
       }
