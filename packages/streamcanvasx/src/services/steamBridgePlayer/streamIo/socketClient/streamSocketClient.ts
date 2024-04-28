@@ -88,8 +88,8 @@ class StreamSocketClient {
         const height = data.getUint16(15);// 16   8字节
 
         const yStride = data.getUint16(17);
-        // const uStride = data.getUint16(25);
-        // const vStride = data.getUint16(27);
+        const uStride = data.getUint16(25);
+        const vStride = data.getUint16(27);
         // const dataLength = data.getUint32(29);
 
         // 计算Y, U, V数据起始位置和大小
@@ -97,6 +97,8 @@ class StreamSocketClient {
         const yDataSize = yStride * Number(height);
         const uDataSize = yDataSize / 4;
         const vDataSize = yDataSize / 4;
+
+        debugger;
 
         const yData = new Uint8Array(event.data, headerSize, yDataSize);
         const uData = new Uint8Array(event.data, headerSize + yDataSize, uDataSize);
@@ -108,7 +110,10 @@ class StreamSocketClient {
             height: Number(height),
             yData,
             uData,
-            vData
+            vData,
+            yDataSize,
+            uDataSize,
+            vDataSize
         };
 
         this.timenow=performance.now();
@@ -165,8 +170,8 @@ class StreamSocketClient {
     }
 
     destroy() {
-        this.disconnect();
         this.stopHeartChceck();
+        this.disconnect();
     }
 
     startHearChceck() {

@@ -72,8 +72,10 @@ class SocketClient {
           if(res1.code===200&&res2.code===200) {
             let info=await this.signalClient.getStreamInfo();
           }else{
-            console.error("播放器创建失败-播放失败， reload");
-            this.reload();
+            debugger;
+            console.error("播放器创建失败-播放失败");
+
+            // this.reload();
           }
         }catch(e) {
 
@@ -112,13 +114,15 @@ class SocketClient {
     }
 
    async destroy() {
-     this.streamSocketClient.stopHeartChceck();
+    console.log("socket client destroy");
+
     try{
-        await this.signalClient.callMethd("stop",[]);
+        this.streamSocketClient.stopHeartChceck();
+        // await this.signalClient.callMethd("stop",[]);
          console.log("destroy call method stop");
     }catch(e) {
 
-            }
+     }
 
         this.signalClient.destroy();
         this.streamSocketClient.destroy();

@@ -67,7 +67,8 @@
     "streamcanvasx-core": "0.0.26",
     "webm-muxer": "^3.1.1",
     "webm-writer": "^1.0.0",
-    "worker-loader": "^3.0.8"
+    "worker-loader": "^3.0.8",
+    "twgl.js":"5.5.4"
   },
   "devDependencies": {
     "@applint/spec": "^1.2.3",
