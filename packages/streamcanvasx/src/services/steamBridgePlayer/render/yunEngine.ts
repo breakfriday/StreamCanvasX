@@ -11,6 +11,9 @@ interface YUVFrame {
   vData: Uint8Array;
   width: number;
   height: number;
+  yDataSize?: number;
+  uDataSize?: number;
+  vDataSize?: number;
 }
 
 @injectable()
@@ -65,8 +68,9 @@ class YuvEnging {
         contentEl.append(this.canvas_el);
         this.setCanvasSize();
 
-        this.canvas_el.addEventListener('webglcontextlost', this.handleContextLost, false);
-        this.canvas_el.addEventListener('webglcontextrestored', this.handleContextRestored, false);
+
+        this.canvas_el.addEventListener('webglcontextlost', (event) => { this.handleContextLost(event); }, false);
+        this.canvas_el.addEventListener('webglcontextrestored', (event) => { this.handleContextRestored(); }, false);
     }
 
 
@@ -197,12 +201,14 @@ class YuvEnging {
     }
     handleContextLost = (event) => {
       event.preventDefault(); // 防止默认的上下文丢失处理，使得可以进行自定义处理
-      console.log("上下文丢");
+      console.log("上下文丟失");
       this.destroyGl();
      };
 
     handleContextRestored() {
+      console.log(" handleContextRestored 上下文恢復");
       this.initRegl();
+      console.log(" handleContextRestored 上下文恢復 initregl");
     }
     event() {
         this.setCanvasSize();
