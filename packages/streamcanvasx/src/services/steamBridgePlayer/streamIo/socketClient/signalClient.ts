@@ -190,13 +190,13 @@ class SignalClient {
             const message = JSON.stringify({ msgId, method,timestamp, params });
             this.ws!.send(message);
 
-            setTimeout(() => {
-                if (this.responseMap.has(msgId)) {
-                    this.responseMap.delete(msgId);
-                    console.error(`信令响应 超时 60000`+`method${method}`);
-                    reject(new Error('信令响应 超时 60000'));
-                }
-            }, 60000); // 设置超时时间， 避免堆积。
+            // setTimeout(() => {
+            //     if (this.responseMap.has(msgId)) {
+            //         this.responseMap.delete(msgId);
+            //         console.error(`信令响应 超时 60000`+`method${method}`);
+            //         reject(new Error('信令响应 超时 60000'));
+            //     }
+            // }, 60000); // 设置超时时间， 避免堆积。
         });
     }
 

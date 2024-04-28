@@ -71,7 +71,7 @@ class YuvEnging {
 
 
         this.canvas_el.addEventListener('webglcontextlost', (event) => { this.handleContextLost(event); }, false);
-        this.canvas_el.addEventListener('webglcontextrestored', (event) => { this.handleContextRestored(); }, false);
+        this.canvas_el.addEventListener('webglcontextrestored', (event) => { this.handleContextRestored(event); }, false);
     }
 
 
@@ -202,15 +202,23 @@ class YuvEnging {
     }
     handleContextLost = (event) => {
       this.contextHealth=false;
+      let canvas = event.target;
+      if(!!this.canvas_el===false) {
+        this.canvas_el=canvas;
+      }
       event.preventDefault(); // 防止默认的上下文丢失处理，使得可以进行自定义处理
       console.log("上下文丟失");
       // this.destroyGl();
      };
 
-    handleContextRestored() {
+    handleContextRestored(event) {
+      let canvas = event.target;
+      if(!!this.canvas_el===false) {
+        this.canvas_el=canvas;
+      }
+      this.initRegl();
       this.contextHealth=true;
       console.log(" handleContextRestored 上下文恢復");
-      // this.initRegl();
     }
     event() {
         this.setCanvasSize();

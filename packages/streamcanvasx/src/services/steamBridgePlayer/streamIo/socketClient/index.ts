@@ -88,9 +88,8 @@ class SocketClient {
         }
         try{
             await this.signalClient.callMethd("stop",[]);
-            debugger;
-            this.createPlayer();
-            debugger;
+
+            await this.createPlayer();
         }catch(e) {
 
         }
@@ -112,7 +111,15 @@ class SocketClient {
         }
     }
 
-    destroy() {
+   async destroy() {
+     this.streamSocketClient.stopHeartChceck();
+    try{
+        await this.signalClient.callMethd("stop",[]);
+         console.log("destroy call method stop");
+    }catch(e) {
+
+            }
+
         this.signalClient.destroy();
         this.streamSocketClient.destroy();
     }
