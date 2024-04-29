@@ -11,12 +11,6 @@ export default defineConfig(() => ({
   plugins: [request(), store(), auth()],
   compileDependencies: false,
   publicPath: 'https://breakhappy.oss-cn-beijing.aliyuncs.com/streamLive/build/',
-  webpack: (webpackConfig) => {
-    webpackConfig.module?.rules?.push({
-      test: /\.worker\.js$/,
-      use: { loader: 'worker-loader' ,options: { inline: true } }
-    });
-    return webpackConfig;
-  },
+
 
 }));

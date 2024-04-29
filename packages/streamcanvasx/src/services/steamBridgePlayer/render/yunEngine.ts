@@ -14,6 +14,7 @@ interface YUVFrame {
   yDataSize?: number;
   uDataSize?: number;
   vDataSize?: number;
+  or;
 }
 
 @injectable()
@@ -37,6 +38,7 @@ class YuvEnging {
     private rotationAngle: number = 0; // 旋转角度，默认为0
     hasTexture: boolean
     contextHealth: boolean
+    lostContext: WEBGL_lose_context
     constructor() {
 
     }
@@ -84,7 +86,9 @@ class YuvEnging {
       console.log("update_yuv_texture");
     }
 
+
         this.glContext=this.canvas_el.getContext('webgl2');
+        this.lostContext=this.glContext.getExtension('WEBGL_lose_context');
         this.regGl = createREGL({
           canvas: this.canvas_el,
           gl: this.glContext,
@@ -257,12 +261,14 @@ class YuvEnging {
             data: yData,
             width: width,
             height: height,
+            type: 'uint8',
           });
 
           this.yuvTexture.textureU.subimage({
             data: uData,
             width: width/2,
             height: height/2,
+            type: 'uint8',
           });
 
 
@@ -270,13 +276,14 @@ class YuvEnging {
             data: vData,
             width: width/2,
             height: height/2,
+            type: 'uint8',
           });
 
           // 更新 U 纹理
         }else{
-          this.yuvTexture.textureY({ data: yData, width, height, format: 'luminance',min: 'linear', mag: 'linear' });
-          this.yuvTexture.textureU({ data: uData, width: width / 2, height: height / 2, format: 'luminance',min: 'linear', mag: 'linear' });
-          this.yuvTexture.textureV({ data: vData, width: width / 2, height: height / 2, format: 'luminance',min: 'linear', mag: 'linear' });
+          this.yuvTexture.textureY({ data: yData, width, height, format: 'luminance',type: 'uint8', });
+          this.yuvTexture.textureU({ data: uData, width: width / 2, height: height / 2, format: 'luminance' ,type: 'uint8' });
+          this.yuvTexture.textureV({ data: vData, width: width / 2, height: height / 2, format: 'luminance',type: 'uint8', });
           this.hasTexture=true;
         }
 
@@ -334,8 +341,11 @@ class YuvEnging {
      this.destroyGl();
 
 
+     this.canvas_el.width=0;
+     this.canvas_el.height=0;
      // this.yuvTexture=null;
 
+     this.lostContext.loseContext();
 
       this.canvas_context=null;
 
