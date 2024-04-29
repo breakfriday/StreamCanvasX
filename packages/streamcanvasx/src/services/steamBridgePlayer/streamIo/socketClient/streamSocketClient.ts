@@ -80,7 +80,7 @@ class StreamSocketClient {
         //     console.log('Not video data');
         //     return;
         // }
-        if(dataType==1||dataType==2) {
+        if(dataType==1||dataType==0||dataType==2) {
             this.timenow=performance.now();
         }
 
