@@ -84,7 +84,7 @@ class StreamSocketClient {
         if(dataType===1) {
                // 解析视频相关信息
         const pts = data.getBigUint64(5);// 6位 8字节
-        const width = data.getUint16(13);// 14 2字节
+        let width = data.getUint16(13);// 14 2字节
         const height = data.getUint16(15);// 16   8字节
 
         const yStride = data.getUint16(17);
@@ -98,7 +98,12 @@ class StreamSocketClient {
         const uDataSize = yDataSize / 4;
         const vDataSize = yDataSize / 4;
 
-        debugger;
+        let actualRowWidth=yDataSize/height;
+        if(actualRowWidth>width) {
+            console.log("存在填充数据，启用兼容模式");
+            width=actualRowWidth;
+        }
+        // debugger;
 
         const yData = new Uint8Array(event.data, headerSize, yDataSize);
         const uData = new Uint8Array(event.data, headerSize + yDataSize, uDataSize);
