@@ -80,6 +80,9 @@ class StreamSocketClient {
         //     console.log('Not video data');
         //     return;
         // }
+        if(dataType==1||dataType==2) {
+            this.timenow=performance.now();
+        }
 
         if(dataType===1) {
                // 解析视频相关信息
@@ -121,7 +124,7 @@ class StreamSocketClient {
             vDataSize
         };
 
-        this.timenow=performance.now();
+        // this.timenow=performance.now();
         // console.info(yuvData);
         this.processFrame(yuvData);
         } else if (dataType === 0) { // 0x00为音频
