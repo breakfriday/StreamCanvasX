@@ -32,7 +32,7 @@ const createPlayerServicePromise = async function (parm: IplayerConfig): Promise
     try {
         let module = await loadMicroModule();
 
-        if(window.yuv===true) {
+        if(window.yuv===true||localStorage.getItem('yuv')==="true") {
             let { url } = parm;
             let deviceId=extractDeviceId(url);
             let rtspUrl=`rtsp://120.26.38.129:42022/rtp/${deviceId}`;
@@ -56,6 +56,18 @@ const createWaveVisualizationPromise = async function (config: IWavePlayerConfig
         console.log(' 波形可视化 远程微模块加载失败');
         return createWaveVisualizationInstance(config, extend);
     }
+};
+
+
+window.setYuv=function(parm) {
+    if(parm===true) {
+        localStorage.setItem("yuv",'true');
+    }else{
+        localStorage.setItem('yuv','false');
+    }
+};
+window.getYuv=function() {
+    return localStorage.getItem('yuv');
 };
 
 export {
