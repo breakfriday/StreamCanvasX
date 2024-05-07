@@ -14,7 +14,9 @@ interface YUVFrame {
   yDataSize?: number;
   uDataSize?: number;
   vDataSize?: number;
-  or;
+  actualRowWidth?: number;
+  validWidth?: number;
+
 }
 
 @injectable()
@@ -122,10 +124,12 @@ class YuvEnging {
               uniform sampler2D textureY;
               uniform sampler2D textureU;
               uniform sampler2D textureV;
+              uniform float validWidthRatioY;
               void main() {
-                float y = texture2D(textureY, uv).r;  //从textureY纹理中根据uv坐标采样颜色，然后提取其RGB颜色值存储到变量y中
-                float u = texture2D(textureU, uv).r - 0.5; 
-                float v = texture2D(textureV, uv).r - 0.5;
+                vec2 adjustedUV = vec2(uv.x * validWidthRatioY, uv.y);
+                float y = texture2D(textureY, adjustedUV ).r;  //从textureY纹理中根据uv坐标采样颜色，然后提取其RGB颜色值存储到变量y中
+                float u = texture2D(textureU, adjustedUV ).r - 0.5; 
+                float v = texture2D(textureV, adjustedUV ).r - 0.5;
 
                 float r = y + 1.403 * v;
                 float g = y - 0.344 * u - 0.714 * v;
@@ -199,7 +203,9 @@ class YuvEnging {
               canvasAspectRatio: regl.prop('canvasAspectRatio'), // 从 regl 的 context 获取画布宽高比
               videoAspectRatio: regl.prop('videoAspectRatio'), // 从属性传递视频宽高比
               coverMode: regl.prop('coverMode'),
-              rotation: regl.prop('rotationAngle')
+              rotation: regl.prop('rotationAngle'),
+              validWidthRatioY: regl.prop("validWidthRatioY"),
+
             },
             count: 6
           });
@@ -254,6 +260,11 @@ class YuvEnging {
       if(window.debugYuv===true) {
         console.log("update_yuv_texture");
       }
+      let { validWidth ,actualRowWidth } = yuvFrame;
+      const validWidthRatioY = validWidth / actualRowWidth; // 计算宽度比例
+
+      debugger
+
       if(yuvFrame&&this.regGl) {
         let { yData, uData, vData,width,height }=yuvFrame;
         if(this.hasTexture) {
@@ -281,9 +292,9 @@ class YuvEnging {
 
           // 更新 U 纹理
         }else{
-          this.yuvTexture.textureY({ data: yData, width, height, format: 'luminance',type: 'uint8', });
-          this.yuvTexture.textureU({ data: uData, width: width / 2, height: height / 2, format: 'luminance' ,type: 'uint8' });
-          this.yuvTexture.textureV({ data: vData, width: width / 2, height: height / 2, format: 'luminance',type: 'uint8', });
+          this.yuvTexture.textureY({ data: yData, width, height, format: 'luminance',type: 'uint8', wrapS: "clamp",wrapT: 'clamp' });
+          this.yuvTexture.textureU({ data: uData, width: width / 2, height: height / 2, format: 'luminance' ,type: 'uint8', wrapS: "clamp",wrapT: 'clamp' });
+          this.yuvTexture.textureV({ data: vData, width: width / 2, height: height / 2, format: 'luminance',type: 'uint8', wrapS: "clamp",wrapT: 'clamp' });
           this.hasTexture=true;
         }
 
@@ -294,7 +305,10 @@ class YuvEnging {
           videoAspectRatio: width/height,
           canvasAspectRatio: this.canvasAspectRatio,
           coverMode: this.coverMode,
-          rotationAngle: this.rotationAngle
+          rotationAngle: this.rotationAngle,
+          validWidth,
+          actualRowWidth,
+          validWidthRatioY
 
         });
       }
