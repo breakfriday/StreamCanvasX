@@ -155,7 +155,7 @@ class PlayerService extends Emitter {
             vbps: 0, // 当前视频码率，单位bit
             ts: 0, // 当前视频帧pts，单位毫秒
         };
-        window.streamCanvasX = window.__VERSION__ || 'DEV_0.1.98_2';
+        window.streamCanvasX = window.__VERSION__ || 'DEV_0.2.4';
     }
 
     emitOtherInfo(data: {speed: string | number}) {
