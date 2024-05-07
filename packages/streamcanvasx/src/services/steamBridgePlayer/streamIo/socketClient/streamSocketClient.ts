@@ -13,6 +13,8 @@ interface YUVFrame {
     vData: Uint8Array;
     width: number;
     height: number;
+    actualRowWidth: number;
+    validWidth: number;
   }
 
 class StreamSocketClient {
@@ -102,6 +104,7 @@ class StreamSocketClient {
         const vDataSize = yDataSize / 4;
 
         let actualRowWidth=yDataSize/height;
+        let validWidth=Number(width);
         if(actualRowWidth>width) {
             console.log("存在填充数据，启用兼容模式");
             width=actualRowWidth;
@@ -121,7 +124,10 @@ class StreamSocketClient {
             vData,
             yDataSize,
             uDataSize,
-            vDataSize
+            vDataSize,
+            actualRowWidth: Number(actualRowWidth),
+            validWidth
+
         };
 
         // this.timenow=performance.now();
