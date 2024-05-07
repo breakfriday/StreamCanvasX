@@ -106,7 +106,7 @@ class StreamSocketClient {
         let actualRowWidth=yDataSize/height;
         let validWidth=Number(width);
         if(actualRowWidth>width) {
-            console.log("存在填充数据，启用兼容模式");
+           // console.log("存在填充数据，启用兼容模式");
             width=actualRowWidth;
         }
         // debugger;

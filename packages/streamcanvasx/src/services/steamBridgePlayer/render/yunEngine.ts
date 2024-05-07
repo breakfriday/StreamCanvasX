@@ -40,7 +40,11 @@ class YuvEnging {
     private rotationAngle: number = 0; // 旋转角度，默认为0
     hasTexture: boolean
     contextHealth: boolean
-    lostContext: WEBGL_lose_context
+    lostContext: WEBGL_lose_context;
+    yuvResolution: {
+      current: { actualRowWidth: number };
+      previous: { actualRowWidth: number };
+    }
     constructor() {
 
     }
@@ -52,6 +56,9 @@ class YuvEnging {
         this.initCanvas();
         this.initRegl();
         this.coverMode=false;
+        this.yuvResolution={
+          current: { actualRowWidth: 0 },previous: { actualRowWidth: 0 }
+        };
     }
     setRotation(angle: number) {
       this.rotationAngle = angle; // 更新角度
@@ -263,9 +270,16 @@ class YuvEnging {
       let { validWidth ,actualRowWidth } = yuvFrame;
       const validWidthRatioY = validWidth / actualRowWidth; // 计算宽度比例
 
-      debugger
+      let sizeChange=false;
 
-      if(yuvFrame&&this.regGl) {
+
+      if(actualRowWidth!=this.yuvResolution.previous.actualRowWidth) {
+        this.yuvResolution.previous.actualRowWidth=actualRowWidth;
+        sizeChange=true;
+      }
+
+
+      if(yuvFrame&&this.regGl&&sizeChange===false) {
         let { yData, uData, vData,width,height }=yuvFrame;
         if(this.hasTexture) {
           this.yuvTexture.textureY.subimage({
