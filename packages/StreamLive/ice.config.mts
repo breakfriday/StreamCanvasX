@@ -11,6 +11,20 @@ export default defineConfig(() => ({
   plugins: [request(), store(), auth()],
   compileDependencies: false,
   publicPath: 'https://breakhappy.oss-cn-beijing.aliyuncs.com/streamLive/build/',
+  webpack: (webpackConfig) => {
+    // 添加 worker-loader
+
+    webpackConfig.module?.rules?.push({
+      test: /-worker\.(js|ts)$/,
+      use: {
+        loader: 'worker-loader',
+        options: {
+          inline: 'no-fallback', // 使用内联模式，不生成单独的 worker 文件
+        }
+      }
+    });
 
 
+    return webpackConfig;
+  },
 }));
