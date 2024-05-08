@@ -68,7 +68,9 @@
     "webm-muxer": "^3.1.1",
     "webm-writer": "^1.0.0",
     "worker-loader": "^3.0.8",
-    "twgl.js":"5.5.4"
+    "twgl.js":"5.5.4",
+    "rollup-plugin-web-worker-loader-pkg":"1.6.1",
+    "rollup-plugin-web-worker-loader":"1.6.1"
   },
   "devDependencies": {
     "@applint/spec": "^1.2.3",

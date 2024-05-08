@@ -7,6 +7,8 @@ import { TYPES } from '../../serviceFactories/symbol';
 import StreamIo from './streamIo';
 import AudioPlayer from './audio';
 import Scheduler from '../player/util/scheduler';
+
+import processWorker from './worker/index-worker';
 @injectable()
 class StreamBridgePlayer extends Emitter {
     config: IBridgePlayerConfig
@@ -18,6 +20,7 @@ class StreamBridgePlayer extends Emitter {
     scheduler: Scheduler;
     error_connect_times: number;
     maxErrorTimes: number
+    _worker: Worker
     constructor(
         @inject(TYPES.IMediaRenderEngine) mediaRenderEngine: MediaRenderEngine,
         @inject(TYPES.IStreamIo) streamIo: StreamIo,
@@ -52,6 +55,9 @@ class StreamBridgePlayer extends Emitter {
             }
 
         };
+
+        this._worker=new processWorker();
+        this._worker.postMessage(1000);
         // this.mediaRenderEngine.init(this);
     }
 

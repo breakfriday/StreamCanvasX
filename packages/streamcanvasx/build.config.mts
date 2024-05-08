@@ -47,6 +47,9 @@ export default defineConfig({
         },
       },
     ],
+    [
+      './plugin.mjs', {},
+    ],
   ],
   transform: {
     formats: ['es2017', 'esm'],

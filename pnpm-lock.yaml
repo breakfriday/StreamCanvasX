@@ -206,6 +206,12 @@ importers:
       regl:
         specifier: ^2.1.0
         version: 2.1.0
+      rollup-plugin-web-worker-loader:
+        specifier: 1.6.1
+        version: 1.6.1(rollup@2.79.1)
+      rollup-plugin-web-worker-loader-pkg:
+        specifier: 1.6.1
+        version: 1.6.1(rollup@2.79.1)
       sm4js:
         specifier: ^0.0.6
         version: 0.0.6
@@ -17156,6 +17162,22 @@ packages:
       yargs: 17.7.2
     dev: true
 
+  /rollup-plugin-web-worker-loader-pkg@1.6.1(rollup@2.79.1):
+    resolution: {integrity: sha512-1bSntJOpvyp4Rzo8+0UyzNCWjO0YMNzYQkEn5MoDaZM+EXaZDPYL1PY2DDJValS9zEr8g6BS8lEjBb8RGx+3zA==}
+    peerDependencies:
+      rollup: ^2.79.1
+    dependencies:
+      rollup: 2.79.1
+    dev: false
+
+  /rollup-plugin-web-worker-loader@1.6.1(rollup@2.79.1):
+    resolution: {integrity: sha512-4QywQSz1NXFHKdyiou16mH3ijpcfLtLGOrAqvAqu1Gx+P8+zj+3gwC2BSL/VW1d+LW4nIHC8F7d7OXhs9UdR2A==}
+    peerDependencies:
+      rollup: ^1.9.2 || ^2.0.0
+    dependencies:
+      rollup: 2.79.1
+    dev: false
+
   /rollup@0.25.8:
     resolution: {integrity: sha512-a2S4Bh3bgrdO4BhKr2E4nZkjTvrJ2m2bWjMTzVYtoqSCn0HnuxosXnaJUHrMEziOWr3CzL9GjilQQKcyCQpJoA==}
     hasBin: true
@@ -17171,7 +17193,6 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.3
-    dev: true
 
   /rtl-css-js@1.16.1:
     resolution: {integrity: sha512-lRQgou1mu19e+Ya0LsTvKrVJ5TYUbqCVPAiImX3UfLTenarvPUl1QFdvu5Z3PYmHT9RCcwIfbjRQBntExyj3Zg==}

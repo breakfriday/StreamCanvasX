@@ -189,6 +189,13 @@
                 "data":[
                         "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.2.4/vendor.esm.es5.production.js",
                         "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.2.4/index.esm.es5.production.js"]
+            },
+            {
+               
+                "version":"0.2.4_1",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.2.4_1/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.2.4_1/index.esm.es5.production.js"]
             }
     ],
 

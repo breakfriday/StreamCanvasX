@@ -17,6 +17,7 @@ class Singleton {
         for (let i = 0; i < event.data; i++) {
             count += i;
         }
+        debugger;
     }
     updateData(event: MessageEvent<any>) {
         this.p1(event);
