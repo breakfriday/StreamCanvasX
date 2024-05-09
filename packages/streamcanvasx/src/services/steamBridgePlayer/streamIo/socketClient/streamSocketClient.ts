@@ -96,6 +96,10 @@ class StreamSocketClient {
         }
 
         if(dataType===1) {
+            if(this.playerService.enableWorker===true) {
+                this.processFrame(null,data.buffer);
+                return false;
+            }
                // 解析视频相关信息
         const pts = data.getBigUint64(5);// 6位 8字节
         let width = data.getUint16(13);// 14 2字节

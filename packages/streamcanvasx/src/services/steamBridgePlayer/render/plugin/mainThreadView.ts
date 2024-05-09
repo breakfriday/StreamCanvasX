@@ -1,4 +1,5 @@
 import PlayerService from '../../index';
+import { MessageType } from '../../const';
 class MainThreadCanvasView {
     playerService: PlayerService;
     isLoading: boolean
@@ -25,6 +26,8 @@ class MainThreadCanvasView {
         this.isLoading=true;
         this.setCanvasAttributes();
         contentEl.append(canvas_el);
+
+        this.initOffScreen();
     }
     setCanvasAttributes() {
         let { zIndex } = this;
@@ -51,6 +54,16 @@ class MainThreadCanvasView {
     }
     destroy() {
         this.unload();
+    }
+
+    initOffScreen() {
+        let { width ,height } = this.playerService.mediaRenderEngine.mainThreadCanvasView.canvas_el;
+        this.playerService._worker.postMessage({
+            type: MessageType.INIT_WORKER_CANVAS,
+            data: {
+                width,height
+            }
+          });
     }
 }
 

@@ -36,6 +36,7 @@ class StreamBridgePlayer extends Emitter {
     }
     init(config: IBridgePlayerConfig) {
         this.enableWorker=true;
+        this.initWorker();
         this.scheduler = new Scheduler(1);
         this.maxErrorTimes=1000000;
         this.config=config;
@@ -60,19 +61,23 @@ class StreamBridgePlayer extends Emitter {
 
         };
 
-        this._worker=new processWorker();
-
-
-        this._worker.onmessage=(event: MessageEvent) => {
-            let { type ,data } = event.data;
-            if(type===MessageType.RENDER_Main_THREAD) {
-                debugger;
-            this.mediaRenderEngine.mainThreadCanvasView.render(data);
-            }
-        };
         // this.mediaRenderEngine.init(this);
     }
 
+    initWorker() {
+        if(this.enableWorker===true) {
+            this._worker=new processWorker();
+
+
+            this._worker.onmessage=(event: MessageEvent) => {
+                let { type ,data } = event.data;
+                if(type===MessageType.RENDER_Main_THREAD) {
+                    debugger;
+                this.mediaRenderEngine.mainThreadCanvasView.render(data);
+                }
+            };
+        }
+    }
     initPlugin() {
         // this.yuvEngine=new YuvEnging();
         // this.yuvEngine.init(this);
@@ -109,7 +114,13 @@ class StreamBridgePlayer extends Emitter {
         this.streamIo.destroy();
         this.mediaRenderEngine.destroy();
         this.audioProcessingService.destroy();
+
+        if(this.enableWorker===true) {
+            this._worker.terminate();
+        }
     }
+
+
     setCover(parm: boolean) {
         try{
             debugger;
