@@ -1,6 +1,4 @@
-
 import createREGL from 'regl';
-
 
 interface YUVFrame {
   yData: Uint8Array;
@@ -15,7 +13,6 @@ interface YUVFrame {
   validWidth?: number;
 
 }
-
 
 class YuvEnging {
     canvas_el: OffscreenCanvas;
@@ -68,12 +65,10 @@ class YuvEnging {
       this.coverMode = cover;
   }
     initCanvas() {
-        this.canvas_el = new OffscreenCanvas(100, 100);
+        this.offscreenCanvas_height=100;
+        this.offscreenCanvas_width=100;
+        this.canvas_el = new OffscreenCanvas(this.offscreenCanvas_width,this.offscreenCanvas_height);
 
-        this.canvas_el = document.createElement('canvas');
-        this.canvas_el.style.position = 'absolute';
-        this.canvas_el.setAttribute('name', 'glcanvas');
-        contentEl.append(this.canvas_el);
         this.setCanvasSize();
 
 
@@ -88,12 +83,10 @@ class YuvEnging {
     //     console.error('WebGL2 is not supported by your browser.');
     // }
 
-
         this.glContext=this.canvas_el.getContext('webgl2');
-        let h=new offscreenCanvas(100,100);
         this.lostContext=this.glContext.getExtension('WEBGL_lose_context');
         this.regGl = createREGL({
-          canvas: new offscreenCanvas(100,100),
+          canvas: this.canvas_el,
           gl: this.glContext,
           attributes: {
             alpha: false, // 禁用画布的透明度，因为它可能影响性能
@@ -235,19 +228,11 @@ class YuvEnging {
         this.setCanvasSize();
     }
     setCanvasSize() {
-        let height = 200;
-        let width = 400;
-        let { contentEl } = this.playerService.config;
+        let height = this.offscreenCanvas_height;
+        let width = this.offscreenCanvas_width;
 
-        if (contentEl) {
-          height = contentEl.clientHeight;
-          width = contentEl.clientWidth;
-        }
 
-          this.canvas_el.width = width;
-          this.canvas_el.height = height;
-
-          this.canvasAspectRatio= this.canvas_el.width / this.canvas_el.height; // 更新画布宽高比
+          this.canvasAspectRatio= width / height; // 更新画布宽高比
           // setTimeout(() => {
           //   this.regGl.poll();
           // }, 300);
@@ -258,9 +243,7 @@ class YuvEnging {
       if(this.contextHealth===false) {
         return false;
       }
-      if(window.debugYuv===true) {
-        console.log("update_yuv_texture");
-      }
+
       let { validWidth ,actualRowWidth } = yuvFrame;
       const validWidthRatioY = validWidth / actualRowWidth; // 计算宽度比例
 
@@ -372,7 +355,6 @@ class YuvEnging {
       this.canvas_context=null;
 
       if(this.canvas_el) {
-        this.canvas_el.remove();
         this.canvas_el=null;
       }
     }

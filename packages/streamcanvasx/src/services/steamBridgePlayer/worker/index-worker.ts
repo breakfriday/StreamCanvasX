@@ -1,6 +1,5 @@
 // 使用 self 代表 Worker 自身的全局上下文
 
-import YuvEngine from './renderEngin';
 import Singleton from './singleton';
 // self.addEventListener('message', (event) => {
 //     console.log('Received in worker:', event.data);
@@ -25,7 +24,7 @@ import Singleton from './singleton';
 self.addEventListener('message', (event) => {
     // 更新数据或处理其他任务
 
-    instance.updateData(event);
+    instance.onMessage(event);
 
     // postMessage(`Data updated to: ${instance.getData()}`);
 });

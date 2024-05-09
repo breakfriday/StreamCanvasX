@@ -1,7 +1,17 @@
+
+import YuvEngine from './renderEngin';
+import { MessageType } from '../const';
 class Singleton {
     private static instance: Singleton | null = null;
+    yuvEngine: YuvEngine
     constructor() {
+        this.init();
+    }
+    init() {
+        this.yuvEngine=new YuvEngine();
 
+        this.yuvEngine.init();
+        debugger;
     }
 
     static getInstance() {
@@ -11,16 +21,14 @@ class Singleton {
         return Singleton.instance;
     }
 
-    p1(event: MessageEvent<any>) {
-        console.log('Received in worker:', event.data);
-        let count = 0;
-        for (let i = 0; i < event.data; i++) {
-            count += i;
+
+    onMessage(event: MessageEvent<any>) {
+        let { type,data } =event.data;
+        if(type==MessageType.RENDER_FRAME) {
+            debugger;
+        }else{
+
         }
-        debugger;
-    }
-    updateData(event: MessageEvent<any>) {
-        this.p1(event);
     }
 }
 
