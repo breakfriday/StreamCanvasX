@@ -219,10 +219,10 @@ class StreamSocketClient {
         debugger;
         if (!this.timer) {
           this.timer = setInterval(() => {
-            console.log('---interval ----');
-            console.log('timenow',this.timenow);
-            console.log('lasttime',this.lastTime);
-            console.log('---interval ----');
+            // console.log('---interval ----');
+            // console.log('timenow',this.timenow);
+            // console.log('lasttime',this.lastTime);
+            // console.log('---interval ----');
              if(this.lastTime>=this.timenow) {
                 console.log('---fps 調用鏈檢查異常 ----');
                 self.postMessage({ type: MessageType.ADD_RELOAD_TASK });
