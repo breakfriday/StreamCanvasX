@@ -3,12 +3,14 @@ import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../index';
 import YuvEngine from './yunEngine';
 import LoadingView from './plugin/loadingView';
+import MainThreadCanvasView from './plugin/mainThreadView';
 
 @injectable()
 class MediaRenderEngine {
   playerService: PlayerService;
   yuvEngine: YuvEngine;
-  loadingView: LoadingView
+  loadingView: LoadingView;
+  mainThreadCanvasView: MainThreadCanvasView
 
   init(playerService: PlayerService) {
     this.playerService=playerService;
@@ -25,10 +27,18 @@ class MediaRenderEngine {
 
   resignPlugin() {
     let { playerService } = this;
-    this.initYuvEngine();
+    if(this.playerService.enableWorker!=true) {
+      this.initYuvEngine();
+    }
 
     this.loadingView=new LoadingView();
     this.loadingView.init(playerService);
+
+    if(this.playerService.enableWorker===true) {
+      this.mainThreadCanvasView=new MainThreadCanvasView();
+      this.mainThreadCanvasView.init(playerService);
+      this.mainThreadCanvasView.load();
+    }
   }
   initYuvEngine() {
     let { playerService } = this;

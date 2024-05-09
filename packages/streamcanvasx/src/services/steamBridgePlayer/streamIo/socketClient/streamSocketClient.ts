@@ -182,7 +182,6 @@ class StreamSocketClient {
     }
 
     processFrame(frame: YUVFrame,data: ArrayBuffer) {
-        this.playerService.mediaRenderEngine.yuvEngine.update_yuv_texture(frame);
         // this.playerService._worker.postMessage();
 
 
@@ -192,6 +191,8 @@ class StreamSocketClient {
             type: MessageType.RENDER_FRAME,
             data: data
           }, [data]);
+       }else{
+        this.playerService.mediaRenderEngine.yuvEngine.update_yuv_texture(frame);
        }
     }
 

@@ -67,6 +67,8 @@ class Singleton {
             validWidth
 
         };
+
+        this.yuvEngine.update_yuv_texture(yuvData);
     }
     onMessage(event: MessageEvent<any>) {
         let { type,data } =event.data;

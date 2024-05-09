@@ -8,6 +8,8 @@ import StreamIo from './streamIo';
 import AudioPlayer from './audio';
 import Scheduler from '../player/util/scheduler';
 
+import { MessageType } from './const';
+
 import processWorker from './worker/index-worker';
 @injectable()
 class StreamBridgePlayer extends Emitter {
@@ -21,6 +23,7 @@ class StreamBridgePlayer extends Emitter {
     error_connect_times: number;
     maxErrorTimes: number
     _worker: Worker
+    enableWorker: boolean
     constructor(
         @inject(TYPES.IMediaRenderEngine) mediaRenderEngine: MediaRenderEngine,
         @inject(TYPES.IStreamIo) streamIo: StreamIo,
@@ -32,6 +35,7 @@ class StreamBridgePlayer extends Emitter {
         this.audioProcessingService=audioProcessingService;
     }
     init(config: IBridgePlayerConfig) {
+        this.enableWorker=true;
         this.scheduler = new Scheduler(1);
         this.maxErrorTimes=1000000;
         this.config=config;
@@ -57,7 +61,15 @@ class StreamBridgePlayer extends Emitter {
         };
 
         this._worker=new processWorker();
-        this._worker.postMessage(1000);
+
+
+        this._worker.onmessage=(event: MessageEvent) => {
+            let { type ,data } = event.data;
+            if(type===MessageType.RENDER_Main_THREAD) {
+                debugger;
+            this.mediaRenderEngine.mainThreadCanvasView.render(data);
+            }
+        };
         // this.mediaRenderEngine.init(this);
     }
 

@@ -1,4 +1,5 @@
 import createREGL from 'regl';
+import { MessageType } from '../const';
 
 interface YUVFrame {
   yData: Uint8Array;
@@ -363,7 +364,8 @@ class YuvEnging {
 
     sendImageToMainThread() {
       const bitmap = this.canvas_el.transferToImageBitmap(); // 创建 ImageBitmap
-      self.postMessage({ bitmap }, [bitmap]); // 发送 ImageBitmap 给主线程
+      self.postMessage({ type: MessageType.RENDER_Main_THREAD,
+        data: bitmap }, [bitmap]); // 发送 ImageBitmap 给主线程
   }
 
 
