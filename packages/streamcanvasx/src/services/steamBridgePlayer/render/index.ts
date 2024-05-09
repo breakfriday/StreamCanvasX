@@ -61,6 +61,9 @@ class MediaRenderEngine {
       this.yuvEngine.destroy();
     }
     this.loadingView.destroy();
+    if(this.mainThreadCanvasView) {
+      this.mainThreadCanvasView.destroy();
+    }
   }
 
     // 绘制 YUV 视频帧
