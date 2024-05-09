@@ -10,8 +10,8 @@ class Singleton {
     init() {
         this.yuvEngine=new YuvEngine();
 
-        this.yuvEngine.init();
-        debugger;
+        // this.yuvEngine.init();
+        // debugger;
     }
 
     static getInstance() {
@@ -72,11 +72,25 @@ class Singleton {
     }
     onMessage(event: MessageEvent<any>) {
         let { type,data } =event.data;
-        if(type==MessageType.RENDER_FRAME) {
-            this.parseData(data);
-        }else{
 
+
+        switch (type) {
+            case MessageType.RENDER_FRAME:
+                this.parseData(data);
+                break;
+            case MessageType.INIT_WORKER_CANVAS:
+                 this.yuvEngine.init(data);
+                break;
+            default:
+             break;
+            // Add more cases here as needed
         }
+
+        // if(type==MessageType.RENDER_FRAME) {
+        //     this.parseData(data);
+        // }else{
+
+        // }
     }
 }
 

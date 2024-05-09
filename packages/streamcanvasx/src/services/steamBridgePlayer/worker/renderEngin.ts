@@ -44,7 +44,11 @@ class YuvEnging {
     constructor() {
 
     }
-    init() {
+    init(data?: {width: number;height: number}) {
+        let { width,height }=data;
+        this.offscreenCanvas_height=height;
+        this.offscreenCanvas_width=width;
+
         this.canvasAspectRatio=1;
         this.rotationAngle=0;
         this.initCanvas();
