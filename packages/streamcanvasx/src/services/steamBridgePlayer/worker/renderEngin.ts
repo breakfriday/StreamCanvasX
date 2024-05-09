@@ -70,8 +70,8 @@ class YuvEnging {
       this.coverMode = cover;
   }
     initCanvas() {
-        this.offscreenCanvas_height=400;
-        this.offscreenCanvas_width=800;
+        // this.offscreenCanvas_height=400;
+        // this.offscreenCanvas_width=800;
         this.canvas_el = new OffscreenCanvas(this.offscreenCanvas_width,this.offscreenCanvas_height);
 
         this.setCanvasSize();

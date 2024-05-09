@@ -23,9 +23,9 @@ class Singleton {
 
 
     parseData(eventData: ArrayBuffer) {
-        debugger;
+        // debugger;
         const data = new DataView(eventData);
-        debugger;
+        // debugger;
         const pts = data.getBigUint64(5);// 6位 8字节
         let width = data.getUint16(13);// 14 2字节
         const height = data.getUint16(15);// 16   8字节
