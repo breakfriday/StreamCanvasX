@@ -73,13 +73,14 @@ class SignalClient {
             let { clientId } = this;
 
             this.ws = new WebSocket(`ws://127.0.0.1:4300/ws/signal/${clientId}`);
+            console.log('-cc ws-');
 
             this.ws.onopen = () => resolve();
             this.ws.onerror = (event) => reject(event);
             this.ws.onmessage = this.onMessage.bind(this);
             this.ws.onclose = () => {
                 console.log('signalClient  WebSocket closed');
-                this.ws = null;
+                // this.ws = null;
             };
         });
     }

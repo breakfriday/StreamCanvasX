@@ -1,4 +1,5 @@
 
+import { RegularPolygon } from 'konva/lib/shapes/RegularPolygon';
 import PlayerService from '../../index';
 import SignalClient from './signalClient';
 import StreamSocketClient from './streamSocketClient';
@@ -82,16 +83,25 @@ class SocketClient {
         }
     }
     async reload() {
-        if(!this.signalClient.ws) {
-           await this.signalClient.connect();
-        }
-        if(!this.streamSocketClient.ws) {
-           await this.streamSocketClient.connect();
-        }
-        try{
-            await this.signalClient.callMethd("stop",[]);
+        this.streamSocketClient.destroy();
+        this.signalClient.destroy();
+        this.clientId=generateUniqueId();
+        this.streamSocketClient.clientId=this.clientId;
+        this.signalClient.clientId=this.clientId;
+        await this.open();
 
-            await this.createPlayer();
+        // debugger;
+
+        // if(!this.signalClient.ws) {
+        //    await this.signalClient.connect();
+        // }
+        // if(!this.streamSocketClient.ws) {
+        //    await this.streamSocketClient.connect();
+        // }
+        try{
+            // await this.signalClient.callMethd("stop",[]);
+
+            // await this.createPlayer();
         }catch(e) {
 
         }

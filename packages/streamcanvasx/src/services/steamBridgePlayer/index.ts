@@ -72,7 +72,7 @@ class StreamBridgePlayer extends Emitter {
             this._worker.onmessage=(event: MessageEvent) => {
                 let { type ,data } = event.data;
                 if(type===MessageType.RENDER_Main_THREAD) {
-                    debugger;
+                    // debugger;
                 this.mediaRenderEngine.mainThreadCanvasView.render(data);
                 }
             };
@@ -180,6 +180,7 @@ class StreamBridgePlayer extends Emitter {
     }
 
     reload() {
+        debugger;
         this.streamIo._ioLoader.reload();
     }
 }

@@ -65,7 +65,7 @@ class StreamSocketClient {
             this.ws.onmessage = this.onMessage.bind(this);
             this.ws.onclose = () => {
                 console.log('dataclient  WebSocket closed');
-                // this.ws = null;
+                this.ws = null;
             };
         });
     }
