@@ -65,8 +65,8 @@ class YuvEnging {
       this.coverMode = cover;
   }
     initCanvas() {
-        this.offscreenCanvas_height=100;
-        this.offscreenCanvas_width=100;
+        this.offscreenCanvas_height=400;
+        this.offscreenCanvas_width=800;
         this.canvas_el = new OffscreenCanvas(this.offscreenCanvas_width,this.offscreenCanvas_height);
 
         this.setCanvasSize();
@@ -302,6 +302,8 @@ class YuvEnging {
           validWidthRatioY
 
         });
+
+        this.sendImageToMainThread();
       }
 }
 
@@ -358,6 +360,11 @@ class YuvEnging {
         this.canvas_el=null;
       }
     }
+
+    sendImageToMainThread() {
+      const bitmap = this.canvas_el.transferToImageBitmap(); // 创建 ImageBitmap
+      self.postMessage({ bitmap }, [bitmap]); // 发送 ImageBitmap 给主线程
+  }
 
 
     // 绘制 YUV 视频帧
