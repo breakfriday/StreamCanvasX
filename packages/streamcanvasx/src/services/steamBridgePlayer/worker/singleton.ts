@@ -1,14 +1,18 @@
 
 import YuvEngine from './renderEngin';
+import SocketClient from './streamIo';
 import { MessageType } from '../const';
 class Singleton {
     private static instance: Singleton | null = null;
     yuvEngine: YuvEngine
+    socketClient: SocketClient
     constructor() {
         this.init();
     }
     init() {
         this.yuvEngine=new YuvEngine();
+        this.socketClient=new SocketClient(this);
+
 
         // this.yuvEngine.init();
         // debugger;
@@ -70,6 +74,10 @@ class Singleton {
 
         this.yuvEngine.update_yuv_texture(yuvData);
     }
+
+    play() {
+        this.socketClient.open();
+    }
     onMessage(event: MessageEvent<any>) {
         let { type,data } =event.data;
 
@@ -81,6 +89,17 @@ class Singleton {
             case MessageType.INIT_WORKER_CANVAS:
                  this.yuvEngine.init(data);
                 break;
+            case MessageType.INIT_CONFIG:
+
+                   this.socketClient.init(data);
+                   break;
+            case MessageType.OPEN_SOCKET:
+                    this.play();
+                    break;
+            case MessageType.RELOAD:
+                    debugger;
+                    this.socketClient.reload();
+                    break;
             default:
              break;
             // Add more cases here as needed

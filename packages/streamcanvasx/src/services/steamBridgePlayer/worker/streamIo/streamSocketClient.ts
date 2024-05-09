@@ -1,13 +1,12 @@
-
-import PlayerService from "../../index";
-
-
+import Singleton from '../singleton';
 // 在主线程和 Worker 都可见的地方定义消息类型
-const MessageType = {
-    RENDER_FRAME: 'render_frame',
-    UPDATE_SETTINGS: 'update_settings',
-    TERMINATE: 'terminate'
-  };
+// const MessageType = {
+//     RENDER_FRAME: 'render_frame',
+//     UPDATE_SETTINGS: 'update_settings',
+//     TERMINATE: 'terminate'
+//   };
+
+  import { MessageType } from '../../const';
 
 
 function generateUniqueID() {
@@ -27,7 +26,6 @@ interface YUVFrame {
   }
 
 class StreamSocketClient {
-    playerService: PlayerService;
      ws: WebSocket | null = null;
     private lastMsgId = 0;
     previousTimestamp = 0;
@@ -39,11 +37,13 @@ class StreamSocketClient {
     timenow: number;
     lastTime: number;
     heartCheck: boolean
-    constructor() {
+
+    singleton: Singleton
+    constructor(singleton: Singleton) {
         this.hasAudioPlayer=false;
+        this.singleton=singleton;
     }
-    init(playerService: PlayerService,clientId?: number) {
-        this.playerService=playerService;
+    init(clientId?: number) {
         this.clientId=clientId;
         this.startHearChceck();
     }
@@ -65,7 +65,7 @@ class StreamSocketClient {
             this.ws.onmessage = this.onMessage.bind(this);
             this.ws.onclose = () => {
                 console.log('dataclient  WebSocket closed');
-                this.ws = null;
+                // this.ws = null;
             };
         });
     }
@@ -96,10 +96,6 @@ class StreamSocketClient {
         }
 
         if(dataType===1) {
-            if(this.playerService.enableWorker===true) {
-                this.processFrame(null,data.buffer);
-                return false;
-            }
                // 解析视频相关信息
         const pts = data.getBigUint64(5);// 6位 8字节
         let width = data.getUint16(13);// 14 2字节
@@ -148,6 +144,8 @@ class StreamSocketClient {
         this.processFrame(yuvData,data.buffer);
         } else if (dataType === 0) { // 0x00为音频
             // 解析音频相关信息
+
+            return false;
             const pts = data.getBigUint64(5); // 8字节
             const sampleRate = data.getUint16(13); // 2字节
             const channelCount = data.getUint8(15); // 1字节
@@ -182,22 +180,25 @@ class StreamSocketClient {
 
         }
 
-        this.playerService.mediaRenderEngine.clearLoading();
+        self.postMessage({ type: MessageType.CLEAR_LOADING });
+
+        // this.playerService.mediaRenderEngine.clearLoading();
     }
 
-    processFrame(frame: YUVFrame,data: ArrayBuffer) {
+    processFrame(frame: YUVFrame) {
         // this.playerService._worker.postMessage();
 
+        this.singleton.yuvEngine.update_yuv_texture(frame);
 
-       let { enableWorker } = this.playerService;
-       if(enableWorker===true) {
-        this.playerService._worker.postMessage({
-            type: MessageType.RENDER_FRAME,
-            data: data
-          }, [data]);
-       }else{
-        this.playerService.mediaRenderEngine.yuvEngine.update_yuv_texture(frame);
-       }
+    //    let { enableWorker } = this.playerService;
+    //    if(enableWorker===true) {
+    //     this.playerService._worker.postMessage({
+    //         type: MessageType.RENDER_FRAME,
+    //         data: data
+    //       }, [data]);
+    //    }else{
+    //     this.playerService.mediaRenderEngine.yuvEngine.update_yuv_texture(frame);
+    //    }
     }
 
     disconnect() {
@@ -213,10 +214,19 @@ class StreamSocketClient {
     }
 
     startHearChceck() {
+        let $self=self;
+
+        debugger;
         if (!this.timer) {
           this.timer = setInterval(() => {
+            console.log('---interval ----');
+            console.log('timenow',this.timenow);
+            console.log('lasttime',this.lastTime);
+            console.log('---interval ----');
              if(this.lastTime>=this.timenow) {
-              this.playerService.addReloadTask({ arr_msg: ['---fps 調用鏈檢查異常 ----'] });
+                console.log('---fps 調用鏈檢查異常 ----');
+                self.postMessage({ type: MessageType.ADD_RELOAD_TASK });
+            //   this.playerService.addReloadTask({ arr_msg: ['---fps 調用鏈檢查異常 ----'] });
               this.heartCheck=true;
              }else{
               // console.log(this.lastCount)
@@ -231,6 +241,8 @@ class StreamSocketClient {
 
        stopHeartChceck() {
         if(this.timer) {
+            console.log('--------stop heartchek---------');
+            debugger;
           clearInterval(this.timer);
           this.timer=null;
          }

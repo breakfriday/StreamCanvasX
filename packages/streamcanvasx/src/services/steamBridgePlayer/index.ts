@@ -36,10 +36,10 @@ class StreamBridgePlayer extends Emitter {
     }
     init(config: IBridgePlayerConfig) {
         this.enableWorker=true;
-        this.initWorker();
         this.scheduler = new Scheduler(1);
         this.maxErrorTimes=1000000;
         this.config=config;
+        this.initWorker();
         if(this.config.rtspUrl) {
             this.config.url=this.config.rtspUrl;
         }
@@ -73,9 +73,21 @@ class StreamBridgePlayer extends Emitter {
                 let { type ,data } = event.data;
                 if(type===MessageType.RENDER_Main_THREAD) {
                     // debugger;
-                this.mediaRenderEngine.mainThreadCanvasView.render(data);
+                   this.mediaRenderEngine.mainThreadCanvasView.render(data);
+                }
+                if(type===MessageType.CLEAR_LOADING) {
+                    this.mediaRenderEngine.clearLoading();
+                }
+                if(type===MessageType.ADD_RELOAD_TASK) {
+                    this.addReloadTask({});
                 }
             };
+
+
+            this._worker.postMessage({
+                type: MessageType.INIT_CONFIG,
+                data: { url: this.config.url }
+            });
         }
     }
     initPlugin() {
@@ -104,7 +116,15 @@ class StreamBridgePlayer extends Emitter {
     play() {
         this.mediaRenderEngine.drawLoading();
 
-        this.streamIo.open();
+        // this.streamIo.open();
+
+        if(this.enableWorker===true) {
+            this._worker.postMessage({
+                type: MessageType.OPEN_SOCKET
+            });
+        }else{
+            this.streamIo.open();
+        }
     }
     abort() {
         this.streamIo.abort();
@@ -180,9 +200,12 @@ class StreamBridgePlayer extends Emitter {
     }
 
     reload() {
-        debugger;
-        this.streamIo._ioLoader.reload();
-    }
+        if(this.enableWorker===true) {
+            this._worker.postMessage({ type: MessageType.RELOAD });
+        }else{
+            this.streamIo._ioLoader.reload();
+        }
+     }
 }
 
 export default StreamBridgePlayer;
