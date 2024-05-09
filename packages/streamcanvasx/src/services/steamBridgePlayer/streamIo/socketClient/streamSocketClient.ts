@@ -1,6 +1,15 @@
 
 import PlayerService from "../../index";
 
+
+// 在主线程和 Worker 都可见的地方定义消息类型
+const MessageType = {
+    RENDER_FRAME: 'render_frame',
+    UPDATE_SETTINGS: 'update_settings',
+    TERMINATE: 'terminate'
+  };
+
+
 function generateUniqueID() {
     const timestamp = new Date().getTime().toString(36); // 获取时间戳并转换为36进制
     const randomString = Math.random().toString(36).substring(2, 15); // 生成随机字符串
@@ -132,7 +141,7 @@ class StreamSocketClient {
 
         // this.timenow=performance.now();
         // console.info(yuvData);
-        this.processFrame(yuvData);
+        this.processFrame(yuvData,data.buffer);
         } else if (dataType === 0) { // 0x00为音频
             // 解析音频相关信息
             const pts = data.getBigUint64(5); // 8字节
@@ -172,8 +181,18 @@ class StreamSocketClient {
         this.playerService.mediaRenderEngine.clearLoading();
     }
 
-    processFrame(frame: YUVFrame) {
+    processFrame(frame: YUVFrame,data: ArrayBuffer) {
         this.playerService.mediaRenderEngine.yuvEngine.update_yuv_texture(frame);
+        // this.playerService._worker.postMessage();
+
+
+       let { enableWorker } = this.playerService;
+       if(enableWorker===true) {
+        this.playerService._worker.postMessage({
+            type: MessageType.RENDER_FRAME,
+            data: data
+          }, [data]);
+       }
     }
 
     disconnect() {
