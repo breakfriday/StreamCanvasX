@@ -1,3 +1,4 @@
+import { MessageType } from '../../const';
 import Singleton from '../singleton';
 type ApiResponse = {
     type: string;
@@ -120,15 +121,19 @@ class SignalClient {
 
             this.streamInfo={ hasVideo,hasAudio };
 
+            self.postMessage({ type: MessageType.MEDIA_INFO,data: { hasVideo: hasVideo, hasAudio: hasAudio } });
+
             // this.playerService.emit('mediaInfo', { hasVideo: hasVideo, hasAudio: hasAudio });
         }
         if(message.method==="realTimeInfo") {
             let { data } = message;
             let [fps,speed] =data;
 
+            self.postMessage({ type: MessageType.PERFORMACE_INFO,data: { fps } });
             // this.playerService.emit('performaceInfo',{ fps: fps });
 
            speed=speed/1000;
+           self.postMessage({ type: MessageType.OHTER_INFO,data: { speed: data } });
         //    this.playerService.emit('otherInfo', { speed: data });
         }
         if(message.method==='statusInfo') {

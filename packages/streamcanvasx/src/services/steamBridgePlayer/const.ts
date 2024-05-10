@@ -9,7 +9,10 @@ const MessageType = {
     CLEAR_LOADING: 'clear_loading',
     RELOAD: 'reload',
     ADD_RELOAD_TASK: "add_reload_task",
-    CLOSE_SOCKET: "close_socket"
+    CLOSE_SOCKET: "close_socket",
+    PERFORMACE_INFO: 'performance_info',
+    OHTER_INFO: 'other_info',
+    MEDIA_INFO: 'media_info'
   };
 
 

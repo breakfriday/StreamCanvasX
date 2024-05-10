@@ -118,6 +118,16 @@ class StreamBridgePlayer extends Emitter {
                 case MessageType.ADD_RELOAD_TASK:
                     this.addReloadTask({});
                     break;
+                case MessageType.PERFORMACE_INFO:
+                  
+                    this.emit('performaceInfo',data);
+                    break;
+                case MessageType.MEDIA_INFO:
+                    this.emit('mediaInfo',data);
+                    break;
+                case MessageType.OHTER_INFO:
+                    this.emit('otherInfo', data);
+                    break;
                 default:
                  break;
                 // Add more cases here as needed
