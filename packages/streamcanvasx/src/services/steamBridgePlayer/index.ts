@@ -10,9 +10,10 @@ import Scheduler from '../player/util/scheduler';
 
 import { MessageType } from './const';
 
-//import RenderWorker from './worker/index-worker';
+// import RenderWorker from './worker/index-worker';
 
  import RenderWorker from './worker/render/index-worker';
+ import StreamWorker from './worker/streamIo/index-worker';
 
 @injectable()
 class StreamBridgePlayer extends Emitter {
@@ -26,7 +27,9 @@ class StreamBridgePlayer extends Emitter {
     error_connect_times: number;
     maxErrorTimes: number
     _worker: Worker
+    _streamWorker: Worker
     enableWorker: boolean
+    enableStreamWorker: boolean
     constructor(
         @inject(TYPES.IMediaRenderEngine) mediaRenderEngine: MediaRenderEngine,
         @inject(TYPES.IStreamIo) streamIo: StreamIo,
@@ -39,6 +42,7 @@ class StreamBridgePlayer extends Emitter {
     }
     init(config: IBridgePlayerConfig) {
         this.enableWorker=true;
+        this.enableStreamWorker=true;
         this.scheduler = new Scheduler(1);
         this.maxErrorTimes=1000000;
         this.config=config;
@@ -92,9 +96,33 @@ class StreamBridgePlayer extends Emitter {
             // });
         }
     }
+    initStreamWorker() {
+        if(this.enableStreamWorker===true) {
+           this._streamWorker=new StreamWorker();
+
+            this._streamWorker.postMessage({
+                type: MessageType.INIT_CONFIG,
+                data: { url: this.config.url }
+            });
+
+           this._streamWorker.onmessage=(event: MessageEvent) => {
+            let { type ,data } = event.data;
+            switch (type) {
+                case MessageType.RENDER_FRAME:
+                    this._worker.postMessage({ type: MessageType.RENDER_FRAME,
+                        data: data },[data]);
+                       break;
+                default:
+                 break;
+                // Add more cases here as needed
+            }
+           };
+        }
+    }
 
     initWorker() {
         this.initRenderWorker();
+        this.initStreamWorker();
         // if(this.enableWorker===true) {
         //     this._worker=new processWorker();
 
@@ -147,7 +175,11 @@ class StreamBridgePlayer extends Emitter {
         this.mediaRenderEngine.drawLoading();
 
         // this.streamIo.open();
-        this.streamIo.open();
+        if(this.enableStreamWorker===true) {
+            this._streamWorker.postMessage({ type: MessageType.OPEN_SOCKET });
+        }else{
+            this.streamIo.open();
+        }
 
         // if(this.enableWorker===true) {
         //     this._worker.postMessage({

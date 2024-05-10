@@ -69,6 +69,7 @@ class InstanceWorker {
 
         };
 
+
         this.yuvEngine.update_yuv_texture(yuvData);
     }
 
@@ -81,9 +82,11 @@ class InstanceWorker {
 
         switch (type) {
             case MessageType.RENDER_FRAME:
+
                 this.parseData(data);
                 break;
             case MessageType.INIT_WORKER_CANVAS:
+                debugger;
                  this.yuvEngine.init(data);
                 break;
             // case MessageType.INIT_CONFIG:

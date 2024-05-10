@@ -141,7 +141,7 @@ class StreamSocketClient {
 
         // this.timenow=performance.now();
         // console.info(yuvData);
-        this.processFrame(yuvData,data.buffer);
+        this.processFrame(data.buffer);
         } else if (dataType === 0) { // 0x00为音频
             // 解析音频相关信息
 
@@ -185,10 +185,16 @@ class StreamSocketClient {
         // this.playerService.mediaRenderEngine.clearLoading();
     }
 
-    processFrame(frame: YUVFrame) {
+    processFrame(data: ArrayBuffer) {
         // this.playerService._worker.postMessage();
 
-        this.singleton.yuvEngine.update_yuv_texture(frame);
+        self.postMessage({
+            type: MessageType.RENDER_FRAME,
+            data: data
+          }, [data]);
+
+
+        // this.singleton.yuvEngine.update_yuv_texture(frame);
 
     //    let { enableWorker } = this.playerService;
     //    if(enableWorker===true) {
