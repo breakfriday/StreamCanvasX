@@ -43,6 +43,9 @@ class InstanceWorker {
                     // debugger;
                     this.socketClient.reload();
                     break;
+            case MessageType.CLOSE_SOCKET:
+                    this.socketClient.destroy();
+                    break;
             default:
              break;
             // Add more cases here as needed

@@ -8,7 +8,8 @@ const MessageType = {
     OPEN_SOCKET: 'open_socket',
     CLEAR_LOADING: 'clear_loading',
     RELOAD: 'reload',
-    ADD_RELOAD_TASK: "add_reload_task"
+    ADD_RELOAD_TASK: "add_reload_task",
+    CLOSE_SOCKET: "close_socket"
   };
 
 

@@ -205,7 +205,10 @@ class StreamBridgePlayer extends Emitter {
             this._worker.terminate();
         }
         if(this.enableStreamWorker===true) {
+            this._streamWorker.postMessage({ type: MessageType.CLOSE_SOCKET });
+            setTimeout(() => {
             this._streamWorker.terminate();
+            }, 10);
         }else{
             this.streamIo.destroy();
         }
