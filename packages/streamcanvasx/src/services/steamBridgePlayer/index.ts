@@ -46,10 +46,11 @@ class StreamBridgePlayer extends Emitter {
         this.scheduler = new Scheduler(1);
         this.maxErrorTimes=1000000;
         this.config=config;
-        this.initWorker();
         if(this.config.rtspUrl) {
             this.config.url=this.config.rtspUrl;
         }
+        this.initWorker();
+
         this.initPlugin();
 
         let $this=this;
@@ -119,7 +120,7 @@ class StreamBridgePlayer extends Emitter {
                     this.addReloadTask({});
                     break;
                 case MessageType.PERFORMACE_INFO:
-                  
+
                     this.emit('performaceInfo',data);
                     break;
                 case MessageType.MEDIA_INFO:
@@ -167,7 +168,10 @@ class StreamBridgePlayer extends Emitter {
     initPlugin() {
         // this.yuvEngine=new YuvEnging();
         // this.yuvEngine.init(this);
-        this.streamIo.init(this);
+        if(this.enableStreamWorker!=true) {
+            this.streamIo.init(this);
+        }
+
         this.mediaRenderEngine.init(this);
         this.audioProcessingService.init(this);
     }
