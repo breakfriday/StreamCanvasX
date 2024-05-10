@@ -10,7 +10,10 @@ import Scheduler from '../player/util/scheduler';
 
 import { MessageType } from './const';
 
-import processWorker from './worker/index-worker';
+//import RenderWorker from './worker/index-worker';
+
+ import RenderWorker from './worker/render/index-worker';
+
 @injectable()
 class StreamBridgePlayer extends Emitter {
     config: IBridgePlayerConfig
@@ -63,10 +66,9 @@ class StreamBridgePlayer extends Emitter {
 
         // this.mediaRenderEngine.init(this);
     }
-
-    initWorker() {
+    initRenderWorker() {
         if(this.enableWorker===true) {
-            this._worker=new processWorker();
+            this._worker=new RenderWorker();
 
 
             this._worker.onmessage=(event: MessageEvent) => {
@@ -84,11 +86,39 @@ class StreamBridgePlayer extends Emitter {
             };
 
 
-            this._worker.postMessage({
-                type: MessageType.INIT_CONFIG,
-                data: { url: this.config.url }
-            });
+            // this._worker.postMessage({
+            //     type: MessageType.INIT_CONFIG,
+            //     data: { url: this.config.url }
+            // });
         }
+    }
+
+    initWorker() {
+        this.initRenderWorker();
+        // if(this.enableWorker===true) {
+        //     this._worker=new processWorker();
+
+
+        //     this._worker.onmessage=(event: MessageEvent) => {
+        //         let { type ,data } = event.data;
+        //         if(type===MessageType.RENDER_Main_THREAD) {
+        //             // debugger;
+        //            this.mediaRenderEngine.mainThreadCanvasView.render(data);
+        //         }
+        //         if(type===MessageType.CLEAR_LOADING) {
+        //             this.mediaRenderEngine.clearLoading();
+        //         }
+        //         if(type===MessageType.ADD_RELOAD_TASK) {
+        //             this.addReloadTask({});
+        //         }
+        //     };
+
+
+        //     this._worker.postMessage({
+        //         type: MessageType.INIT_CONFIG,
+        //         data: { url: this.config.url }
+        //     });
+        // }
     }
     initPlugin() {
         // this.yuvEngine=new YuvEnging();
@@ -117,14 +147,15 @@ class StreamBridgePlayer extends Emitter {
         this.mediaRenderEngine.drawLoading();
 
         // this.streamIo.open();
+        this.streamIo.open();
 
-        if(this.enableWorker===true) {
-            this._worker.postMessage({
-                type: MessageType.OPEN_SOCKET
-            });
-        }else{
-            this.streamIo.open();
-        }
+        // if(this.enableWorker===true) {
+        //     this._worker.postMessage({
+        //         type: MessageType.OPEN_SOCKET
+        //     });
+        // }else{
+        //     this.streamIo.open();
+        // }
     }
     abort() {
         this.streamIo.abort();
@@ -200,11 +231,13 @@ class StreamBridgePlayer extends Emitter {
     }
 
     reload() {
-        if(this.enableWorker===true) {
-            this._worker.postMessage({ type: MessageType.RELOAD });
-        }else{
-            this.streamIo._ioLoader.reload();
-        }
+        // if(this.enableWorker===true) {
+        //     this._worker.postMessage({ type: MessageType.RELOAD });
+        // }else{
+        //     this.streamIo._ioLoader.reload();
+        // }
+
+        this.streamIo._ioLoader.reload();
      }
 }
 
