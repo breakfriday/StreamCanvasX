@@ -112,6 +112,9 @@ class StreamBridgePlayer extends Emitter {
                     this._worker.postMessage({ type: MessageType.RENDER_FRAME,
                         data: data },[data]);
                        break;
+                case MessageType.CLEAR_LOADING:
+                    this.mediaRenderEngine.clearLoading();
+                    break;
                 default:
                  break;
                 // Add more cases here as needed
