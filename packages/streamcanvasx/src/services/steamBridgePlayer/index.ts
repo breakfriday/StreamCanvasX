@@ -115,6 +115,9 @@ class StreamBridgePlayer extends Emitter {
                 case MessageType.CLEAR_LOADING:
                     this.mediaRenderEngine.clearLoading();
                     break;
+                case MessageType.ADD_RELOAD_TASK:
+                    this.addReloadTask({});
+                    break;
                 default:
                  break;
                 // Add more cases here as needed
@@ -280,7 +283,11 @@ class StreamBridgePlayer extends Emitter {
         //     this.streamIo._ioLoader.reload();
         // }
 
-        this.streamIo._ioLoader.reload();
+        if(this.enableStreamWorker) {
+            this._streamWorker.postMessage({ type: MessageType.RELOAD });
+        }else{
+            this.streamIo._ioLoader.reload();
+        }
      }
 }
 
