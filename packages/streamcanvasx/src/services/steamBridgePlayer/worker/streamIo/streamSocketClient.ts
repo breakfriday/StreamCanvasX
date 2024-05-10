@@ -222,7 +222,6 @@ class StreamSocketClient {
     startHearChceck() {
         let $self=self;
 
-        debugger;
         if (!this.timer) {
           this.timer = setInterval(() => {
             // console.log('---interval ----');
@@ -247,8 +246,6 @@ class StreamSocketClient {
 
        stopHeartChceck() {
         if(this.timer) {
-            console.log('--------stop heartchek---------');
-            debugger;
           clearInterval(this.timer);
           this.timer=null;
          }

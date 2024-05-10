@@ -86,7 +86,6 @@ class InstanceWorker {
                 this.parseData(data);
                 break;
             case MessageType.INIT_WORKER_CANVAS:
-                debugger;
                  this.yuvEngine.init(data);
                 break;
             // case MessageType.INIT_CONFIG:

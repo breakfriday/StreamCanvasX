@@ -194,12 +194,17 @@ class StreamBridgePlayer extends Emitter {
     }
 
     destroy() {
-        this.streamIo.destroy();
+        // this.streamIo.destroy();
         this.mediaRenderEngine.destroy();
         this.audioProcessingService.destroy();
 
         if(this.enableWorker===true) {
             this._worker.terminate();
+        }
+        if(this.enableStreamWorker===true) {
+            this._streamWorker.terminate();
+        }else{
+            this.streamIo.destroy();
         }
     }
 

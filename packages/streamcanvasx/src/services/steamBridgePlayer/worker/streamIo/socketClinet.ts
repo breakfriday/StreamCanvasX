@@ -56,7 +56,7 @@ class SocketClient {
         //     return false;
         // }
 
-        debugger;
+
         try {
             await Promise.all([this.signalClient.connect(),this.streamSocketClient.connect()]);
             console.log("signalClient 连接成功");
@@ -68,7 +68,6 @@ class SocketClient {
     }
 
     async createPlayer() {
-        debugger;
         let { url } = this;
         try{
           let res1= await this.signalClient.callMethd("createPlayer",[url,5,0,1,0]);
