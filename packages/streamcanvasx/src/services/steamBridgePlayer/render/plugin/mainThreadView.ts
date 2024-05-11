@@ -5,7 +5,9 @@ class MainThreadCanvasView {
     isLoading: boolean
     canvas_el: HTMLCanvasElement;
     canvas_context: CanvasRenderingContext2D;
-    zIndex: string
+    zIndex: string;
+    cover: boolean;
+    rotateDegreeSum: number;
     constructor() {
 
     }
@@ -26,7 +28,6 @@ class MainThreadCanvasView {
         this.isLoading=true;
         this.setCanvasAttributes();
         contentEl.append(canvas_el);
-
         this.initOffScreen();
     }
     setCanvasAttributes() {
@@ -41,8 +42,52 @@ class MainThreadCanvasView {
         this.canvas_el.style.top="0px";
         this.canvas_el.style.left="0px";
     }
+
+    calculateVideoAttributes(videoFrame: ImageBitmap): {
+      offsetX: number;
+      offsetY: number;
+      targetVideoWidth: number;
+      targetVideoHeight: number;
+     } {
+     let video = videoFrame;
+     let video_height = video.height;
+     let video_width = video.width;
+     let { width ,height } = this.canvas_el;
+
+
+     const centerX = width / 2;
+     const centerY = height / 2;
+
+     let offsetX=0;
+     let offsetY=0;
+     let targetVideoWidth=width;
+     let targetVideoHeight=height;
+
+     if(this.cover===true) {
+         if (this.cover === true && (this.rotateDegreeSum === 90 || this.rotateDegreeSum === 270)) {
+             offsetX=centerX - centerY;
+             offsetY= centerY - centerX;
+             targetVideoWidth=height;
+             targetVideoHeight=width;
+         }
+     }else{
+           let scaleRatio = Math.min(width / video_width, height / video_height);
+           // Calculate the target video dimensions after scaling
+            targetVideoWidth = video_width * scaleRatio;
+            targetVideoHeight = video_height * scaleRatio;
+
+           // Calculate the position to center the video frame on the canvas
+          offsetX = (width - targetVideoWidth) / 2;
+          offsetY = (height - targetVideoHeight) / 2;
+     }
+
+     return { targetVideoWidth,targetVideoHeight,offsetX,offsetY };
+   }
+
      render(bitmap: ImageBitmap) {
-       this.canvas_context.drawImage(bitmap, 0, 0);
+      let { offsetX,offsetY,targetVideoHeight ,targetVideoWidth }=this.calculateVideoAttributes(bitmap);
+
+       this.canvas_context.drawImage(bitmap, offsetX, offsetY,targetVideoWidth,targetVideoHeight);
     }
 
     unload() {
