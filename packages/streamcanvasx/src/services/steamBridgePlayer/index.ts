@@ -165,6 +165,7 @@ class StreamBridgePlayer extends Emitter {
             let { hasAudio,hasVideo }=this.mediaInfo;
                 if(hasAudio===true&&hasVideo===false) {
                     this.audioProcessingService.pcmPlayer.showAudio();
+                    this.mediaRenderEngine.clearLoading();
                 }
         }
     }
