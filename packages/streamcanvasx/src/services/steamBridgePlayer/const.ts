@@ -15,7 +15,8 @@ const MessageType = {
     MEDIA_INFO: 'media_info',
     INIT_CANVAS_TRANSFERCONTROL: 'init_canvas_transfercontrol',
     RESIZE: 'resize',
-    RELOAD_CANVAS: 'reload_canvas'
+    RELOAD_CANVAS: 'reload_canvas',
+    RECIVE_AUDIO_DATA: 'recive_audio_data'
   };
 
 

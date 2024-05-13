@@ -143,6 +143,7 @@ class StreamSocketClient {
         // console.info(yuvData);
         this.processFrame(data.buffer);
         } else if (dataType === 0) { // 0x00为音频
+            self.postMessage({ type: MessageType.RECIVE_AUDIO_DATA ,data: data.buffer });
             // 解析音频相关信息
 
             return false;

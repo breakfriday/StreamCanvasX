@@ -40,6 +40,7 @@ class StreamBridgePlayer extends Emitter {
     _streamWorker: Worker
     enableWorker: boolean
     enableStreamWorker: boolean
+    mediaInfo: {hasAudio: boolean;hasVideo: boolean}
     constructor(
         @inject(TYPES.IMediaRenderEngine) mediaRenderEngine: MediaRenderEngine,
         @inject(TYPES.IStreamIo) streamIo: StreamIo,
@@ -135,15 +136,36 @@ class StreamBridgePlayer extends Emitter {
                     break;
                 case MessageType.MEDIA_INFO:
                     this.emit('mediaInfo',data);
+                    this.mediaInfo=data;
                     break;
                 case MessageType.OHTER_INFO:
                     this.emit('otherInfo', data);
                     break;
+                case MessageType.RECIVE_AUDIO_DATA:
+                    this.audioPlay(data);
+                     break;
+
                 default:
-                 break;
+                    break;
                 // Add more cases here as needed
             }
            };
+        }
+    }
+
+    audioPlay(data: ArrayBuffer) {
+        if(this.audioProcessingService.hasCreatPlayer) {
+            let audio_data=this.audioProcessingService.parseAudioData(data);
+            let pcm_data=audio_data.pcmData;
+            let floatdata=this.audioProcessingService.pcmPlayer.convertInt16ArrayToFloat32(pcm_data.buffer);
+            this.audioProcessingService.feed(floatdata);
+        }else{
+            let audio_data=this.audioProcessingService.parseAudioData(data);
+            this.audioProcessingService.createplayer(audio_data);
+            let { hasAudio,hasVideo }=this.mediaInfo;
+                if(hasAudio===true&&hasVideo===false) {
+                    this.audioProcessingService.pcmPlayer.showAudio();
+                }
         }
     }
 
