@@ -12,7 +12,8 @@ const MessageType = {
     CLOSE_SOCKET: "close_socket",
     PERFORMACE_INFO: 'performance_info',
     OHTER_INFO: 'other_info',
-    MEDIA_INFO: 'media_info'
+    MEDIA_INFO: 'media_info',
+    INIT_CANVAS_TRANSFERCONTROL: 'init_canvas_transfercontrol'
   };
 
 

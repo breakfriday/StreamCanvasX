@@ -15,6 +15,15 @@ import { MessageType } from './const';
  import RenderWorker from './worker/render/index-worker';
  import StreamWorker from './worker/streamIo/index-worker';
 
+ const defaultConfig={
+    OffscreenCanvasConfig: {
+        // 是否启用离屏渲染
+        enableOffscreenRendering: true,
+        // 使用的渲染方式: 'transferControl' 或 'newOffscreen'
+        creationMethod: 'newOffscreen',
+     }
+ };
+
 @injectable()
 class StreamBridgePlayer extends Emitter {
     config: IBridgePlayerConfig
@@ -45,6 +54,7 @@ class StreamBridgePlayer extends Emitter {
         this.enableStreamWorker=true;
         this.scheduler = new Scheduler(1);
         this.maxErrorTimes=1000000;
+        config=Object.assign({},defaultConfig,config);
         this.config=config;
         if(this.config.rtspUrl) {
             this.config.url=this.config.rtspUrl;
@@ -120,7 +130,6 @@ class StreamBridgePlayer extends Emitter {
                     this.addReloadTask({});
                     break;
                 case MessageType.PERFORMACE_INFO:
-
                     this.emit('performaceInfo',data);
                     break;
                 case MessageType.MEDIA_INFO:
@@ -252,11 +261,16 @@ class StreamBridgePlayer extends Emitter {
 
     }
     checkPlaying() {
-        let { heartCheck } = this.streamIo._ioLoader.streamSocketClient;
-        if(heartCheck===true) {
-            this.mediaRenderEngine.clearLoading();
+        if(this.enableStreamWorker===true) {
+            return false;
         }
-        return heartCheck;
+        if(this.enableStreamWorker!=true) {
+            let { heartCheck } = this.streamIo._ioLoader.streamSocketClient;
+            if(heartCheck===true) {
+                this.mediaRenderEngine.clearLoading();
+            }
+            return heartCheck;
+        }
     }
 
     addReloadTask(parm?: {arr_msg?: Array<string>}) {

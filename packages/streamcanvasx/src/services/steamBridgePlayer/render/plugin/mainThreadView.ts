@@ -1,5 +1,7 @@
 import PlayerService from '../../index';
 import { MessageType } from '../../const';
+
+
 class MainThreadCanvasView {
     playerService: PlayerService;
     isLoading: boolean
@@ -30,6 +32,7 @@ class MainThreadCanvasView {
         contentEl.append(canvas_el);
         this.initOffScreen();
     }
+
     setCanvasAttributes() {
         let { zIndex } = this;
         let { contentEl } = this.playerService.config;
@@ -85,11 +88,25 @@ class MainThreadCanvasView {
    }
 
      render(bitmap: ImageBitmap) {
-      let { offsetX,offsetY,targetVideoHeight ,targetVideoWidth }=this.calculateVideoAttributes(bitmap);
+      this.renderBitmap(bitmap);
+      // this.renderBitmap(bitmap);
+      // let { offsetX,offsetY,targetVideoHeight ,targetVideoWidth }=this.calculateVideoAttributes(bitmap);
 
-       this.canvas_context.drawImage(bitmap, offsetX, offsetY,targetVideoWidth,targetVideoHeight);
+      //  this.canvas_context.drawImage(bitmap, offsetX, offsetY,targetVideoWidth,targetVideoHeight);
     }
 
+    renderBitmap(bitmap: ImageBitmap) {
+      // let { offsetX,offsetY,targetVideoHeight ,targetVideoWidth }=this.calculateVideoAttributes(bitmap);
+      // this.canvas_context.drawImage(bitmap, offsetX, offsetY,targetVideoWidth,targetVideoHeight);
+      this.canvas_context.drawImage(bitmap, 0, 0);
+     }
+
+     renderBlob(blob: Blob) {
+        createImageBitmap(blob).then(bitmap => {
+            let { offsetX,offsetY,targetVideoHeight ,targetVideoWidth }=this.calculateVideoAttributes(bitmap);
+            this.canvas_context.drawImage(bitmap, offsetX, offsetY,targetVideoWidth,targetVideoHeight);
+        });
+     }
     unload() {
       if(this.canvas_el) {
         this.canvas_el.remove();
@@ -102,6 +119,14 @@ class MainThreadCanvasView {
     }
 
     initOffScreen() {
+      let { config } = this.playerService;
+      if(config.OffscreenCanvasConfig.creationMethod==="transferControl") {
+        const offscreen = this.canvas_el.transferControlToOffscreen();
+        this.playerService._worker.postMessage({
+          type: MessageType.INIT_CANVAS_TRANSFERCONTROL,
+          offscreen: offscreen
+        },[offscreen]);
+      }else{
         let { width ,height } = this.playerService.mediaRenderEngine.mainThreadCanvasView.canvas_el;
         this.playerService._worker.postMessage({
             type: MessageType.INIT_WORKER_CANVAS,
@@ -109,6 +134,7 @@ class MainThreadCanvasView {
                 width,height
             }
           });
+      }
     }
 }
 

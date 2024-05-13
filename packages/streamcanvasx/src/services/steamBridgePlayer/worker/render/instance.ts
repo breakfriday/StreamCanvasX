@@ -86,8 +86,12 @@ class InstanceWorker {
                 this.parseData(data);
                 break;
             case MessageType.INIT_WORKER_CANVAS:
-                 this.yuvEngine.init(data);
+                 this.yuvEngine.initNewOffscreenCanvs(data);
                 break;
+            case MessageType.INIT_CANVAS_TRANSFERCONTROL:
+                  this.yuvEngine.initTransferControlCanvs(data);
+                  break;
+
             // case MessageType.INIT_CONFIG:
 
             //     //    this.socketClient.init(data);

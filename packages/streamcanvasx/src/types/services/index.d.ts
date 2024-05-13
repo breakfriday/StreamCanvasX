@@ -218,6 +218,9 @@ interface IBridgePlayerConfig {
   renderFps?: number;
   rtspUrl?: string;
   showAudio?: boolean;
+  OffscreenCanvasConfig?: {
+    creationMethod: string;
+  };
 
 
 }

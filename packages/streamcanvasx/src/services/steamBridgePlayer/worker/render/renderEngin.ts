@@ -62,6 +62,36 @@ class YuvEnging {
       this.rotationAngle = angle; // 更新角度
       // 可以在这里触发重绘，如果需要实时更新
   }
+  initTransferControlCanvs(canvas: OffscreenCanvas) {
+      let { width ,height } = canvas;
+      this.offscreenCanvas_height=height;
+      this.offscreenCanvas_width=width;
+
+      this.canvasAspectRatio=1;
+      this.rotationAngle=0;
+      this.canvas_el=canvas;
+      this.initRegl();
+      this.coverMode=false;
+      this.yuvResolution={
+            current: { actualRowWidth: 0 },previous: { actualRowWidth: 0 }
+          };
+      this.canvas_el.addEventListener('webglcontextlost', (event) => { this.handleContextLost(event); }, false);
+      this.canvas_el.addEventListener('webglcontextrestored', (event) => { this.handleContextRestored(event); }, false);
+  }
+  initNewOffscreenCanvs(data?: {width: number;height: number}) {
+    let { width,height }=data;
+    this.offscreenCanvas_height=height;
+    this.offscreenCanvas_width=width;
+
+    this.canvasAspectRatio=1;
+    this.rotationAngle=0;
+    this.initCanvas();
+    this.initRegl();
+    this.coverMode=false;
+    this.yuvResolution={
+      current: { actualRowWidth: 0 },previous: { actualRowWidth: 0 }
+    };
+  }
    drawRotate(angle: number) {
     this.rotationAngle = angle; // 更新角度
    }
@@ -367,10 +397,15 @@ class YuvEnging {
     }
 
     sendImageToMainThread() {
-      const bitmap = this.canvas_el.transferToImageBitmap(); // 创建 ImageBitmap
+      const bitmap: ImageBitmap = this.canvas_el.transferToImageBitmap(); // 创建 ImageBitmap
       self.postMessage({ type: MessageType.RENDER_Main_THREAD,
         data: bitmap }, [bitmap]); // 发送 ImageBitmap 给主线程
   }
+    sendImageBlObToMainThread() {
+      this.canvas_el.convertToBlob().then(blob => {
+        self.postMessage({ type: MessageType.RENDER_Main_THREAD,data: blob });
+      });// 对于blob 不需要使用传输列表
+    }
 
 
     // 绘制 YUV 视频帧
