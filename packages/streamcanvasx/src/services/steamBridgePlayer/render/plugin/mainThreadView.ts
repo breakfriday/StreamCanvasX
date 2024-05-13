@@ -1,5 +1,6 @@
 import PlayerService from '../../index';
 import { MessageType } from '../../const';
+import { data } from 'codec-parser';
 
 
 class MainThreadCanvasView {
@@ -10,12 +11,14 @@ class MainThreadCanvasView {
     zIndex: string;
     cover: boolean;
     rotateDegreeSum: number;
+    resizeObserver: ResizeObserver;
     constructor() {
 
     }
     init(playerService: PlayerService) {
         this.playerService=playerService;
         this.zIndex='7';
+        this.event();
     }
     set loading(value: any) {
         this.isLoading= value;
@@ -35,6 +38,21 @@ class MainThreadCanvasView {
         this.setCanvasAttributes();
         contentEl.append(canvas_el);
         this.initOffScreen();
+    }
+
+    event() {
+      let { contentEl } = this.playerService.config;
+      // 监听 dom size 变化， 调整canvas 大小
+      this.resizeObserver = new ResizeObserver(() => {
+        setTimeout(() => {
+          let width=contentEl.clientWidth;
+          let height=contentEl.clientHeight;
+          this.playerService._worker.postMessage({ type: MessageType.RESIZE,data: { width,height } });
+        //  this.resizeControlPannel();
+          }, 20);
+      });
+
+      this.resizeObserver.observe(contentEl);
     }
 
     setCanvasAttributes() {

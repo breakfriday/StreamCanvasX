@@ -63,16 +63,18 @@ class YuvEnging {
       this.rotationAngle = angle; // 更新角度
       // 可以在这里触发重绘，如果需要实时更新
   }
-  initTransferControlCanvs(canvas: OffscreenCanvas) {
-      let h=canvas;
+  initTransferControlCanvs(canvas: OffscreenCanvas,opt?: {width: number;height: number}) {
       let { width ,height } = canvas;
+      if(opt) {
+        width=opt.width;
+        height=opt.height;
+      }
       this.offscreenCanvas_height=height;
       this.offscreenCanvas_width=width;
       this.enableTransferControlCanvs=true;
 
       this.canvasAspectRatio=width/height;
 
-      // this.canvasAspectRatio=1;
       this.rotationAngle=0;
       this.canvas_el=canvas;
       this.initRegl();
@@ -88,8 +90,6 @@ class YuvEnging {
     this.offscreenCanvas_height=height;
     this.offscreenCanvas_width=width;
     this.enableTransferControlCanvs=false;
-
-    debugger;
 
     this.canvasAspectRatio=1;
     this.rotationAngle=0;
@@ -112,8 +112,9 @@ class YuvEnging {
         // this.offscreenCanvas_width=800;
         this.canvas_el = new OffscreenCanvas(this.offscreenCanvas_width,this.offscreenCanvas_height);
 
-        this.setCanvasSize();
+        // this.setCanvasSize();
 
+        this.canvasAspectRatio= this.offscreenCanvas_width / this.offscreenCanvas_height; // 更新画布宽高比
 
         this.canvas_el.addEventListener('webglcontextlost', (event) => { this.handleContextLost(event); }, false);
         this.canvas_el.addEventListener('webglcontextrestored', (event) => { this.handleContextRestored(event); }, false);
@@ -267,15 +268,19 @@ class YuvEnging {
       this.contextHealth=true;
       console.log(" handleContextRestored 上下文恢復");
     }
-    event() {
-        this.setCanvasSize();
-    }
-    setCanvasSize() {
-        let height = this.offscreenCanvas_height;
-        let width = this.offscreenCanvas_width;
+    // event() {
+    //     this.setCanvasSize();
+    // }
+    setCanvasSize(data?: {width: number;height: number}) {
+        // let height = this.offscreenCanvas_height;
+        // let width = this.offscreenCanvas_width;
+        let { width,height }=data;
 
+        this.canvas_el.width=width;
+        this.canvas_el.height=height;
+        this.canvasAspectRatio= width / height; // 更新画布宽高比
+        this.regGl.poll();
 
-          this.canvasAspectRatio= width / height; // 更新画布宽高比
           // setTimeout(() => {
           //   this.regGl.poll();
           // }, 300);
@@ -287,19 +292,22 @@ class YuvEnging {
         return false;
       }
 
+      if(!!this.regGl===false) {
+        return false;
+      }
+
       let { validWidth ,actualRowWidth } = yuvFrame;
       const validWidthRatioY = validWidth / actualRowWidth; // 计算宽度比例
-
-      let sizeChange=false;
 
 
       if(actualRowWidth!=this.yuvResolution.previous.actualRowWidth) {
         this.yuvResolution.previous.actualRowWidth=actualRowWidth;
-        sizeChange=true;
+        this.clear();
+        this.hasTexture=false;
       }
 
 
-      if(yuvFrame&&this.regGl&&sizeChange===false) {
+      if(yuvFrame&&this.regGl) {
         let { yData, uData, vData,width,height }=yuvFrame;
         if(this.hasTexture) {
           this.yuvTexture.textureY.subimage({
@@ -419,6 +427,14 @@ class YuvEnging {
       });// 对于blob 不需要使用传输列表
     }
 
+
+    // 這個reload 主要是在size 調整， 或者紋理數據大小發生變換的場景下使用。
+    reload(canvas?: OffscreenCanvas) {
+       this.clear();
+       this.destroyGl();
+       this.hasTexture=false;
+       this.initTransferControlCanvs(canvas);
+    }
 
     // 绘制 YUV 视频帧
 }

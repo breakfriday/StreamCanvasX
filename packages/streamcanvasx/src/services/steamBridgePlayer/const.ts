@@ -13,7 +13,9 @@ const MessageType = {
     PERFORMACE_INFO: 'performance_info',
     OHTER_INFO: 'other_info',
     MEDIA_INFO: 'media_info',
-    INIT_CANVAS_TRANSFERCONTROL: 'init_canvas_transfercontrol'
+    INIT_CANVAS_TRANSFERCONTROL: 'init_canvas_transfercontrol',
+    RESIZE: 'resize',
+    RELOAD_CANVAS: 'reload_canvas'
   };
 
 
