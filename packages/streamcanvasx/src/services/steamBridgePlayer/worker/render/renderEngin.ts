@@ -40,34 +40,39 @@ class YuvEnging {
       previous: { actualRowWidth: number };
     }
     offscreenCanvas_width: number
-    offscreenCanvas_height: number
+    offscreenCanvas_height: number;
+    enableTransferControlCanvs: boolean
     constructor() {
 
     }
-    init(data?: {width: number;height: number}) {
-        let { width,height }=data;
-        this.offscreenCanvas_height=height;
-        this.offscreenCanvas_width=width;
+    // init(data?: {width: number;height: number}) {
+    //     let { width,height }=data;
+    //     this.offscreenCanvas_height=height;
+    //     this.offscreenCanvas_width=width;
 
-        this.canvasAspectRatio=1;
-        this.rotationAngle=0;
-        this.initCanvas();
-        this.initRegl();
-        this.coverMode=false;
-        this.yuvResolution={
-          current: { actualRowWidth: 0 },previous: { actualRowWidth: 0 }
-        };
-    }
+    //     this.canvasAspectRatio=1;
+    //     this.rotationAngle=0;
+    //     this.initCanvas();
+    //     this.initRegl();
+    //     this.coverMode=false;
+    //     this.yuvResolution={
+    //       current: { actualRowWidth: 0 },previous: { actualRowWidth: 0 }
+    //     };
+    // }
     setRotation(angle: number) {
       this.rotationAngle = angle; // 更新角度
       // 可以在这里触发重绘，如果需要实时更新
   }
   initTransferControlCanvs(canvas: OffscreenCanvas) {
+      let h=canvas;
       let { width ,height } = canvas;
       this.offscreenCanvas_height=height;
       this.offscreenCanvas_width=width;
+      this.enableTransferControlCanvs=true;
 
-      this.canvasAspectRatio=1;
+      this.canvasAspectRatio=width/height;
+
+      // this.canvasAspectRatio=1;
       this.rotationAngle=0;
       this.canvas_el=canvas;
       this.initRegl();
@@ -82,6 +87,9 @@ class YuvEnging {
     let { width,height }=data;
     this.offscreenCanvas_height=height;
     this.offscreenCanvas_width=width;
+    this.enableTransferControlCanvs=false;
+
+    debugger;
 
     this.canvasAspectRatio=1;
     this.rotationAngle=0;
@@ -338,7 +346,11 @@ class YuvEnging {
 
         });
 
+        if(this.enableTransferControlCanvs===true) {
+          return false;
+        }else{
         this.sendImageToMainThread();
+        }
       }
 }
 

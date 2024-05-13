@@ -21,12 +21,16 @@ class MainThreadCanvasView {
         this.isLoading= value;
       }
     load() {
+       let creationMethod=this.playerService.config?.OffscreenCanvasConfig?.creationMethod;
+
         this.isLoading=true;
         let { contentEl } = this.playerService.config;
         let canvas_el=document.createElement("canvas");
         this.canvas_el=canvas_el;
         this.canvas_el.setAttribute('name', 'mainThreadCanvas');
-        this.canvas_context=canvas_el.getContext("2d");
+        if(creationMethod!="transferControl") {
+          this.canvas_context=canvas_el.getContext("2d");
+        }
         this.isLoading=true;
         this.setCanvasAttributes();
         contentEl.append(canvas_el);
@@ -124,7 +128,7 @@ class MainThreadCanvasView {
         const offscreen = this.canvas_el.transferControlToOffscreen();
         this.playerService._worker.postMessage({
           type: MessageType.INIT_CANVAS_TRANSFERCONTROL,
-          offscreen: offscreen
+          data: offscreen
         },[offscreen]);
       }else{
         let { width ,height } = this.playerService.mediaRenderEngine.mainThreadCanvasView.canvas_el;

@@ -15,12 +15,13 @@ import { MessageType } from './const';
  import RenderWorker from './worker/render/index-worker';
  import StreamWorker from './worker/streamIo/index-worker';
 
+
  const defaultConfig={
     OffscreenCanvasConfig: {
         // 是否启用离屏渲染
         enableOffscreenRendering: true,
         // 使用的渲染方式: 'transferControl' 或 'newOffscreen'
-        creationMethod: 'newOffscreen',
+        creationMethod: 'transferControl',
      }
  };
 
