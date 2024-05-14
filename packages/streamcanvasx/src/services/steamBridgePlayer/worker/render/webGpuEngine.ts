@@ -41,27 +41,22 @@ class YuvWebGpuEngine {
         const fragmentShaderModuele= this.device.createShaderModule({
             code: fragmentWGSL,
         });
+        const pipelineLayout = this.device.createPipelineLayout({
+            bindGroupLayouts: [],
+        });
 
-        const shaderModule = this.device.createShaderModule({
-            code: `
-                @vertex
-                fn vertex_main(@builtin(vertex_index) VertexIndex : u32) -> @builtin(position) vec4<f32> {
-                    var pos = array<vec2<f32>, 6>(
-                        vec2<f32>(-1.0, -1.0),
-                        vec2<f32>(1.0, -1.0),
-                        vec2<f32>(-1.0, 1.0),
-                        vec2<f32>(-1.0, 1.0),
-                        vec2<f32>(1.0, -1.0),
-                        vec2<f32>(1.0, 1.0)
-                    );
-                    return vec4<f32>(pos[VertexIndex], 0.0, 1.0);
-                }
+        let pipeline = this.device.createRenderPipeline({
+            layout: pipelineLayout,
+            vertex: {
+                module: vertexShaderModule,
+                entryPoint: 'vertex_main',
+            },
+            fragment: {
+                module: fragmentShaderModuele,
+                entryPoint: 'fragment_main',
+                targets: [{ format: 'bgra8unorm' }],
+            },
 
-                @fragment
-                fn fragment_main() -> @location(0) vec4<f32> {
-                    return vec4<f32>(1.0, 0.0, 0.0, 1.0); // Red color for testing
-                }
-            `,
         });
     }
 
