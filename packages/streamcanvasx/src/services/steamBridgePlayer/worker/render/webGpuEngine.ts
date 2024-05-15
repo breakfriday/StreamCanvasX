@@ -117,7 +117,7 @@ createTextures(frame: YUVFrame) {
     this.uTexture = this.createTexture(frame.uData, frame.width / 2, frame.height / 2);
     this.vTexture = this.createTexture(frame.vData, frame.width / 2, frame.height / 2);
 
-    // 获取管线的绑定组布局
+    // 获取管道的绑定组布局
     const bindGroupLayout = this.pipeline.getBindGroupLayout(0);
 
 
@@ -136,10 +136,10 @@ createTextures(frame: YUVFrame) {
     }
     updateTextures(frame: YUVFrame) {
         this.device.queue.writeTexture(
-            { texture: this.yTexture },
-            frame.yData,
-            { bytesPerRow: frame.width },
-            [frame.width, frame.height, 1]
+            { texture: this.yTexture }, // 目标纹理
+            frame.yData,// 數據
+            { bytesPerRow: frame.width },// 数据布局，包含填充字节  ,這個比webgl 方便多了
+            [frame.width, frame.height, 1] // 目标尺寸，使用实际视频帧的分辨率
         );
 
         this.device.queue.writeTexture(
@@ -158,8 +158,41 @@ createTextures(frame: YUVFrame) {
     }
 
     render() {
+        // 创建命令编码器
+    const commandEncoder = this.device.createCommandEncoder();
 
-    }
+    // 获取当前帧的纹理视图
+    const textureView = this.context.getCurrentTexture().createView();
+
+
+    const renderPassDescriptor: GPURenderPassDescriptor = {
+        colorAttachments: [
+            {
+                view: textureView, // 渲染目标视图
+                loadOp: 'clear', // 清除操作
+                clearValue: { r: 0, g: 0, b: 0, a: 1 }, // 清除颜色
+                storeOp: 'store', // 存储操作
+            },
+        ],
+      };
+
+      // 开始记录渲染通道命令
+    const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+
+    // 设置渲染管道
+    passEncoder.setPipeline(this.pipeline);
+
+    // 设置绑定组，包含纹理和采样器
+    passEncoder.setBindGroup(0, this.bindGroup);
+
+     // 结束渲染通道命令记录
+    passEncoder.end();
+
+    const commandBuffer = commandEncoder.finish();
+
+      // 提交命令队列
+    this.device.queue.submit([commandBuffer]);
+ }
 }
 
 export default YuvWebGpuEngine;
