@@ -56,7 +56,7 @@ class YuvWebGpuEngine {
             ],
         });
 
-        // 指定管线布局
+        // 创建管道布局，传入绑定组布局
         const pipelineLayout = this.device.createPipelineLayout({
             bindGroupLayouts: [bindGroupLayout],
         });
@@ -111,28 +111,50 @@ class YuvWebGpuEngine {
     }
 
 
-    createTextures(frame: YUVFrame) {
+createTextures(frame: YUVFrame) {
     // 创建 Y、U、V 分量的纹理
     this.yTexture = this.createTexture(frame.yData, frame.width, frame.height);
     this.uTexture = this.createTexture(frame.uData, frame.width / 2, frame.height / 2);
     this.vTexture = this.createTexture(frame.vData, frame.width / 2, frame.height / 2);
 
-    const bindGroupLayout = this.pipeline.getBindGroupLayout(0);
     // 获取管线的绑定组布局
-    this.bindGroup = this.device.createBindGroup({
-        layout: bindGroupLayout,
-        entries: [
-            { binding: 0, resource: this.device.createSampler() },// 绑定点 0, 1, 2: 分别是三个采样器（sampler），用于从纹理中采样数据。
-            { binding: 1, resource: this.device.createSampler() },
-            { binding: 2, resource: this.device.createSampler() },
-            { binding: 3, resource: this.yTexture.createView() },// 绑定点 3: 绑定到 Y 纹理的视图。
-            { binding: 4, resource: this.uTexture.createView() },// 绑定点 4: 绑定到 Y 纹理的视图。
-            { binding: 5, resource: this.vTexture.createView() },// 绑定点 4: 绑定到 Y 纹理的视图。
-        ],
-    });
+    const bindGroupLayout = this.pipeline.getBindGroupLayout(0);
+
+
+    // 创建绑定组：从管道中获取绑定组布局，使用它来创建绑定组，并将实际的资源（纹理和采样器）绑定到绑定点上。
+        this.bindGroup = this.device.createBindGroup({
+            layout: bindGroupLayout,
+            entries: [
+                { binding: 0, resource: this.device.createSampler() },// 绑定点 0, 1, 2: 分别是三个采样器（sampler），用于从纹理中采样数据。
+                { binding: 1, resource: this.device.createSampler() },
+                { binding: 2, resource: this.device.createSampler() },
+                { binding: 3, resource: this.yTexture.createView() },// 绑定点 3: 绑定到 Y 纹理的视图。
+                { binding: 4, resource: this.uTexture.createView() },// 绑定点 4: 绑定到 u 纹理的视图。
+                { binding: 5, resource: this.vTexture.createView() },// 绑定点 4: 绑定到 v 纹理的视图。
+            ],
+        });
     }
     updateTextures(frame: YUVFrame) {
+        this.device.queue.writeTexture(
+            { texture: this.yTexture },
+            frame.yData,
+            { bytesPerRow: frame.width },
+            [frame.width, frame.height, 1]
+        );
 
+        this.device.queue.writeTexture(
+            { texture: this.uTexture },
+            frame.uData,
+            { bytesPerRow: frame.width / 2 },
+            [frame.width / 2, frame.height / 2, 1]
+        );
+
+        this.device.queue.writeTexture(
+            { texture: this.vTexture },
+            frame.vData,
+            { bytesPerRow: frame.width / 2 },
+            [frame.width / 2, frame.height / 2, 1]
+        );
     }
 
     render() {
