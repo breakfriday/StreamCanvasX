@@ -26,7 +26,7 @@ class YuvWebGpuEngine {
     bindGroup: GPUBindGroup
     GpuContext: GPUCanvasContext;
     canvas_el: OffscreenCanvas;
-    vertBuffer: GPUBuffer
+    vertexBuffer: GPUBuffer
 
     constructor(canvas: HTMLCanvasElement) {
 
@@ -34,11 +34,11 @@ class YuvWebGpuEngine {
 
     init() {
         this.initGpu();
-        this.initVertexBuffer();
+        this.createVertexBuffer();
         this.createPipeline();
     }
-    // 創建頂點緩衝區
-    initVertexBuffer() {
+
+    private createVertexBuffer() {
         const vertexData = new Float32Array([
             -1.0, -1.0,
              1.0, -1.0,
@@ -48,13 +48,14 @@ class YuvWebGpuEngine {
              1.0, 1.0,
         ]);
 
-        this.vertBuffer = this.device.createBuffer({
+        this.vertexBuffer = this.device.createBuffer({
             size: vertexData.byteLength,
             usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
         });
 
-        this.device.queue.writeBuffer(this.vertBuffer, 0, vertexData);
+        this.device.queue.writeBuffer(this.vertexBuffer, 0, vertexData);
     }
+
 
     private createPipeline() {
         const vertexShaderModule = this.device.createShaderModule({
@@ -208,6 +209,8 @@ createTextures(frame: YUVFrame) {
 
     // 设置绑定组，包含纹理和采样器
     passEncoder.setBindGroup(0, this.bindGroup);
+
+    passEncoder.setVertexBuffer(0,this.vertexBuffer);
 
      // 结束渲染通道命令记录
     passEncoder.end();
