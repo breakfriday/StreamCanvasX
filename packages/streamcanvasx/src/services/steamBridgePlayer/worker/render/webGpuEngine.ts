@@ -25,7 +25,8 @@ class YuvWebGpuEngine {
     private textureView: GPUTextureView;
     bindGroup: GPUBindGroup
     GpuContext: GPUCanvasContext;
-    canvas_el: OffscreenCanvas
+    canvas_el: OffscreenCanvas;
+    vertBuffer: GPUBuffer
 
     constructor(canvas: HTMLCanvasElement) {
 
@@ -33,7 +34,26 @@ class YuvWebGpuEngine {
 
     init() {
         this.initGpu();
+        this.initVertexBuffer();
         this.createPipeline();
+    }
+    // 創建頂點緩衝區
+    initVertexBuffer() {
+        const vertexData = new Float32Array([
+            -1.0, -1.0,
+             1.0, -1.0,
+            -1.0, 1.0,
+            -1.0, 1.0,
+             1.0, -1.0,
+             1.0, 1.0,
+        ]);
+
+        this.vertBuffer = this.device.createBuffer({
+            size: vertexData.byteLength,
+            usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
+        });
+
+        this.device.queue.writeBuffer(this.vertBuffer, 0, vertexData);
     }
 
     private createPipeline() {
@@ -66,6 +86,10 @@ class YuvWebGpuEngine {
             vertex: {
                 module: vertexShaderModule,
                 entryPoint: 'vertex_main',
+                buffers: [{
+                    arrayStride: 2 * 4, // x,y 每个顶点两个 32 位浮点数，每个浮点数占 4 个字节
+                    attributes: [{ shaderLocation: 0, offset: 0, format: 'float32x2' }],
+                }]
             },
             fragment: {
                 module: fragmentShaderModuele,
