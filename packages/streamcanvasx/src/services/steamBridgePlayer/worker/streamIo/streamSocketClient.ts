@@ -65,7 +65,7 @@ class StreamSocketClient {
             this.ws.onmessage = this.onMessage.bind(this);
             this.ws.onclose = () => {
                 console.log('dataclient  WebSocket closed');
-                // this.ws = null;
+                this.ws = null;
             };
         });
     }
@@ -230,11 +230,12 @@ class StreamSocketClient {
             // console.log('lasttime',this.lastTime);
             // console.log('---interval ----');
              if(this.lastTime>=this.timenow) {
-                console.log('---fps 調用鏈檢查異常 ----');
+                console.log('---fps check error ----');
                 self.postMessage({ type: MessageType.ADD_RELOAD_TASK });
             //   this.playerService.addReloadTask({ arr_msg: ['---fps 調用鏈檢查異常 ----'] });
               this.heartCheck=true;
              }else{
+                console.log('---fps check health ok');
               // console.log(this.lastCount)
               // console.log(this.nowFrameCount)
               // debugger

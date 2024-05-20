@@ -87,15 +87,22 @@ class SocketClient {
         }
     }
     async reload() {
+        function delay(ms: number) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+          }
+
         await this.signalClient.callMethd("stop",[]);
+        console.log("call method stop done");
 
         this.signalClient.destroy();
         this.streamSocketClient.destroy();
+        await delay(6000);
         this.clientId=generateUniqueId();
         this.streamSocketClient.clientId=this.clientId;
         this.signalClient.clientId=this.clientId;
         await this.open();
 
+        this.streamSocketClient.startHearChceck();
         // debugger;
 
         // if(!this.signalClient.ws) {

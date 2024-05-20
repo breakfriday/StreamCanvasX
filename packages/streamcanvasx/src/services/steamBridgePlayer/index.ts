@@ -336,7 +336,7 @@ class StreamBridgePlayer extends Emitter {
 
         setTimeout(() => {
             this.addReloadTask({ arr_msg: ['---设备上线 强制重连 ----'] });
-        }, 15000); // 手机app 有问题 要二次reload
+        }, 18000); // 手机app 有问题 要二次reload
     }
 
     reload() {

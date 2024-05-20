@@ -64,12 +64,13 @@ class SignalClient {
 
             this.ws = new WebSocket(`ws://127.0.0.1:4300/ws/signal/${clientId}`);
 
+
             this.ws.onopen = () => resolve();
             this.ws.onerror = (event) => reject(event);
             this.ws.onmessage = this.onMessage.bind(this);
             this.ws.onclose = () => {
                 console.log('signalClient  WebSocket closed');
-                // this.ws = null;
+                 this.ws = null;
             };
         });
     }
@@ -174,7 +175,7 @@ class SignalClient {
     callMethd(method: string,params: ApirParams['params']): Promise<void> {
         return new Promise((resolve, reject) => {
             if (!this.ws) {
-                console.error('WebSocket 未连接');
+                console.error('WebSocket is null');
                 reject();
             }
             const msgId = this.getNextMessageId();
@@ -182,7 +183,12 @@ class SignalClient {
             let timestamp=new Date().getTime();
 
             const message = JSON.stringify({ msgId, method,timestamp, params });
-            this.ws!.send(message);
+            console.log(message);
+            if(this.ws) {
+                this.ws!.send(message);
+            }else{
+                console.error('WebSocket is null');
+            }
 
             // setTimeout(() => {
             //     if (this.responseMap.has(msgId)) {
