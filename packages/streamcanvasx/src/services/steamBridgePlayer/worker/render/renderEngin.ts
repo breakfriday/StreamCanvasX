@@ -304,6 +304,7 @@ class YuvEnging {
         this.yuvResolution.previous.actualRowWidth=actualRowWidth;
         this.clear();
         this.hasTexture=false;
+        return false;
       }
 
 

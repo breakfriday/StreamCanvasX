@@ -37,6 +37,7 @@ class StreamSocketClient {
     timenow: number;
     lastTime: number;
     heartCheck: boolean
+    resolveDisconnect?: (value: unknown) => void
 
     singleton: Singleton
     constructor(singleton: Singleton) {
@@ -64,6 +65,10 @@ class StreamSocketClient {
             this.ws.onerror = (event) => reject(event);
             this.ws.onmessage = this.onMessage.bind(this);
             this.ws.onclose = () => {
+                if(this.resolveDisconnect) {
+                  this.resolveDisconnect({});
+                  this.resolveDisconnect = null;
+                }
                 console.log('dataclient  WebSocket closed');
                 this.ws = null;
             };

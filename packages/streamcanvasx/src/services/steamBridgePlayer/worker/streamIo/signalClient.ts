@@ -35,7 +35,8 @@ class SignalClient {
         hasVideo: boolean;
         hasAudio: boolean;
     }
-    singleton: Singleton
+    singleton: Singleton;
+    resolveDisconnect?: (value: unknown) => void
     constructor(singleton: Singleton) {
         this.singleton=singleton;
     }
@@ -71,6 +72,11 @@ class SignalClient {
             this.ws.onclose = () => {
                 console.log('signalClient  WebSocket closed');
                  this.ws = null;
+
+                 if(this.resolveDisconnect) {
+                   this.resolveDisconnect({});
+                   this.resolveDisconnect = null;
+                 }
             };
         });
     }
