@@ -59,11 +59,11 @@ class SocketClient {
 
         try {
             await Promise.all([this.signalClient.connect(),this.streamSocketClient.connect()]);
-            console.log("signalClient 连接成功");
-            console.log("dataClient 连接成功");
+            console.log("signalClient  connect success");
+            console.log("dataClient  connect sucess");
             await this.createPlayer();
         }catch(e) {
-            console.error("ws client 连接失败");
+            console.error("ws client failed");
         }
     }
 
@@ -73,11 +73,11 @@ class SocketClient {
           let res1= await this.signalClient.callMethd("createPlayer",[url,5,0,1,0]);
           let res2= await this.signalClient.callMethd("play",[]);
 
-          console.log("播放器创建成功");
+          console.log(`player create success   and  url is  ${url}`);
           if(res1.code===200&&res2.code===200) {
             let info=await this.signalClient.getStreamInfo();
           }else{
-            console.error("播放器创建失败-播放失败");
+            console.error("player create failed ");
             self.postMessage({ type: MessageType.ADD_RELOAD_TASK });
 
             // this.reload();
@@ -87,6 +87,8 @@ class SocketClient {
         }
     }
     async reload() {
+        await this.signalClient.callMethd("stop",[]);
+
         this.signalClient.destroy();
         this.streamSocketClient.destroy();
         this.clientId=generateUniqueId();

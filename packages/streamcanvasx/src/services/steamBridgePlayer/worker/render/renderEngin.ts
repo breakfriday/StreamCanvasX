@@ -429,7 +429,8 @@ class YuvEnging {
 
 
     // 這個reload 主要是在size 調整， 或者紋理數據大小發生變換的場景下使用。
-    reload(canvas?: OffscreenCanvas) {
+    reload() {
+      let canvas=this.canvas_el;
        this.clear();
        this.destroyGl();
        this.hasTexture=false;

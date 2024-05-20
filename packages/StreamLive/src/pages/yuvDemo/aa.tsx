@@ -83,7 +83,8 @@ interface IVideoComponent {
 
       <Button onClick={() => {
           let player=streamPlayer.current;
-          player.reload();
+          debugger
+          player.forceReload();
       }}
       >reload</Button>
 

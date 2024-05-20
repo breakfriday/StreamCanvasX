@@ -328,6 +328,17 @@ class StreamBridgePlayer extends Emitter {
              });
     }
 
+
+    forceReload() {
+        this.error_connect_times = 0;
+        // this.canvasVideoService.clear = false;
+        this.addReloadTask({ arr_msg: ['---设备上线 强制重连 ----'] });
+
+        setTimeout(() => {
+            this.addReloadTask({ arr_msg: ['---设备上线 强制重连 ----'] });
+        }, 15000); // 手机app 有问题 要二次reload
+    }
+
     reload() {
         // if(this.enableWorker===true) {
         //     this._worker.postMessage({ type: MessageType.RELOAD });
@@ -337,6 +348,7 @@ class StreamBridgePlayer extends Emitter {
 
         if(this.enableStreamWorker) {
             this._streamWorker.postMessage({ type: MessageType.RELOAD });
+            this._worker.postMessage({ type: MessageType.RELOAD_CANVAS });
         }else{
             this.streamIo._ioLoader.reload();
         }

@@ -92,6 +92,7 @@ class InstanceWorker {
                   this.yuvEngine.initTransferControlCanvs(data);
                   break;
             case MessageType.RELOAD_CANVAS:
+                this.yuvEngine.reload();
                   break;
             case MessageType.RESIZE:
                 this.yuvEngine.setCanvasSize(data);
