@@ -14,6 +14,7 @@ import { MessageType } from './const';
 
  import RenderWorker from './worker/render/index-worker';
  import StreamWorker from './worker/streamIo/index-worker';
+import { debug } from 'console';
 
 
  const defaultConfig={
@@ -40,7 +41,8 @@ class StreamBridgePlayer extends Emitter {
     _streamWorker: Worker
     enableWorker: boolean
     enableStreamWorker: boolean
-    mediaInfo: {hasAudio: boolean;hasVideo: boolean}
+    mediaInfo: {hasAudio: boolean;hasVideo: boolean};
+    heart_check: boolean
     constructor(
         @inject(TYPES.IMediaRenderEngine) mediaRenderEngine: MediaRenderEngine,
         @inject(TYPES.IStreamIo) streamIo: StreamIo,
@@ -121,6 +123,9 @@ class StreamBridgePlayer extends Emitter {
            this._streamWorker.onmessage=(event: MessageEvent) => {
             let { type ,data } = event.data;
             switch (type) {
+                case MessageType.HEART_CHECK:
+                    this.heart_check=data.heartCheck;
+                    break;
                 case MessageType.RENDER_FRAME:
                     this._worker.postMessage({ type: MessageType.RENDER_FRAME,
                         data: data },[data]);
@@ -286,7 +291,7 @@ class StreamBridgePlayer extends Emitter {
     }
     checkPlaying() {
         if(this.enableStreamWorker===true) {
-            return false;
+           return this.heart_check;
         }
         if(this.enableStreamWorker!=true) {
             let { heartCheck } = this.streamIo._ioLoader.streamSocketClient;
@@ -314,9 +319,9 @@ class StreamBridgePlayer extends Emitter {
             // this.canvasVideoService.drawLoading();
             this.mediaRenderEngine.drawLoading();
             console.log('=======tasking=======');
-             console.log("reload");
-            console.log('=======tasking=======');
-             this.reload();
+            console.log("reload");
+           console.log('=======tasking=======');
+            this.reload();
             return new Promise(resolve => setTimeout(() => {
                 if (this.checkPlaying()) {
                     this.error_connect_times = 0;
@@ -324,7 +329,7 @@ class StreamBridgePlayer extends Emitter {
                 } else {
                     resolve('');
                 }
-                }, 10000)); // 已10s 的速度均衡执行reload 任务
+                }, 8000)); // 已10s 的速度均衡执行reload 任务
              });
     }
 
@@ -334,11 +339,15 @@ class StreamBridgePlayer extends Emitter {
         // this.canvasVideoService.clear = false;
         this.addReloadTask({ arr_msg: ['---设备上线 强制重连 ----'] });
 
-        setTimeout(() => {
-            this.addReloadTask({ arr_msg: ['---设备上线 强制重连 ----'] });
-        }, 18000); // 手机app 有问题 要二次reload
+        // setTimeout(() => {
+        //     this.addReloadTask({ arr_msg: ['---设备上线 强制重连 ----'] });
+        // }, 18000); // 手机app 有问题 要二次reload
     }
 
+    getQueue() {
+        let que=this.scheduler.getQueue();
+        console.info(que);
+    }
     reload() {
         // if(this.enableWorker===true) {
         //     this._worker.postMessage({ type: MessageType.RELOAD });

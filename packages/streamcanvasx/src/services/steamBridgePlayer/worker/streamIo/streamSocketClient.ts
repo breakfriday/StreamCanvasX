@@ -7,6 +7,8 @@ import Singleton from '../singleton';
 //   };
 
   import { MessageType } from '../../const';
+import { setFips } from 'crypto';
+import { data } from 'codec-parser';
 
 
 function generateUniqueID() {
@@ -82,6 +84,8 @@ class StreamSocketClient {
     onMessage(event: MessageEvent) {
         // 接收到的数据是一个ArrayBuffer
         const data = new DataView(event.data);
+
+        self.postMessage({ type: MessageType.HEART_CHECK ,data: { heartCheck: true } });
 
         // 协议头: 固定4字节
         const header = data.getUint32(0);
@@ -238,15 +242,16 @@ class StreamSocketClient {
                 console.log('---fps check error ----');
                 self.postMessage({ type: MessageType.ADD_RELOAD_TASK });
             //   this.playerService.addReloadTask({ arr_msg: ['---fps 調用鏈檢查異常 ----'] });
-              this.heartCheck=true;
+              this.heartCheck=false;
              }else{
                 console.log('---fps check health ok');
               // console.log(this.lastCount)
               // console.log(this.nowFrameCount)
               // debugger
-              this.heartCheck=false;
+              this.heartCheck=true;
               this.lastTime=this.timenow;
              }
+            self.postMessage({ type: MessageType.HEART_CHECK ,data: { heartCheck: this.heartCheck } });
             }, 10000); // 每10秒检查一次
         }
       }

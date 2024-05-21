@@ -9,6 +9,7 @@ class Scheduler {
     }
 
     addTask(task: () => Promise<any>) {
+        console.log('ssssss  addtask');
         this.taskQueue.push(task); // 将任务添加到队列中
         this.runNextTask();
     }

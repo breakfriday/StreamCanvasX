@@ -16,7 +16,8 @@ const MessageType = {
     INIT_CANVAS_TRANSFERCONTROL: 'init_canvas_transfercontrol',
     RESIZE: 'resize',
     RELOAD_CANVAS: 'reload_canvas',
-    RECIVE_AUDIO_DATA: 'recive_audio_data'
+    RECIVE_AUDIO_DATA: 'recive_audio_data',
+    HEART_CHECK: "heart_check"
   };
 
 
