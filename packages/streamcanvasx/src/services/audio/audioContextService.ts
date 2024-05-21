@@ -109,19 +109,22 @@ class AudioProcessingService {
     }
 
     destroy() {
-      if(this.canvas_el){
+      if(this.canvas_el) {
         this.clearCanvas();
         this.canvas_el.remove();
         this.canvas_el=null;
         this.canvas_context=null;
       }
-     
+
 
       if (this.playerService.corePlayer?.audioPlayer) {
-        this.playerService.corePlayer?.audioPlayer?.destory()
+        try{
+        this.playerService.corePlayer?.audioPlayer?.destory();
+        }catch(e) {
+          this.playerService.corePlayer?.audioPlayer.audioCtx.close();
+        }
       }else{
-        this.context.audioContext.close()
-
+        this.context.audioContext.close();
       }
     }
 
