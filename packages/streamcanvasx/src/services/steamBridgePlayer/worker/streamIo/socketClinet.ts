@@ -91,8 +91,13 @@ class SocketClient {
             return new Promise(resolve => setTimeout(resolve, ms));
           }
 
-        await this.signalClient.callMethd("stop",[]);
-        console.log("call method stop done");
+          try{
+            await this.signalClient.callMethd("stop",[]);
+            console.log("call method stop done");
+          }catch(e) {
+
+          }
+
 
         this.signalClient.destroy();
         this.streamSocketClient.destroy();
