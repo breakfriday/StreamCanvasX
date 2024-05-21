@@ -1,4 +1,4 @@
-import Singleton from '../singleton';
+import Singleton from './instance';
 // 在主线程和 Worker 都可见的地方定义消息类型
 // const MessageType = {
 //     RENDER_FRAME: 'render_frame',
@@ -47,7 +47,6 @@ class StreamSocketClient {
         this.singleton=singleton;
     }
     init(clientId?: number) {
-        this.clientId=clientId;
         this.startHearChceck();
     }
 
@@ -57,13 +56,15 @@ class StreamSocketClient {
                 resolve();
                 return;
             }
-            let { clientId } = this;
 
-            this.ws = new WebSocket(`ws://127.0.0.1:4300/ws/data/${clientId}`);
+
+            this.ws = new WebSocket(`ws://127.0.0.1:4300/ws/data/${id}`);
 
             this.ws.binaryType = 'arraybuffer';
 
-            this.ws.onopen = () => resolve();
+            this.ws.onopen = () => {
+                resolve({ clientId: id,ws: this.ws,type: "data" });
+            };
             this.ws.onerror = (event) => reject(event);
             this.ws.onmessage = this.onMessage.bind(this);
             this.ws.onclose = () => {
@@ -76,8 +77,7 @@ class StreamSocketClient {
             };
         });
     }
-    connect(): Promise<void> {
-        let id=generateUniqueID();// 生成唯一id
+    connect(id: string): Promise<void> {
         return this.connectSocket(id);
     }
 
@@ -252,7 +252,7 @@ class StreamSocketClient {
               this.lastTime=this.timenow;
              }
             self.postMessage({ type: MessageType.HEART_CHECK ,data: { heartCheck: this.heartCheck } });
-            }, 10000); // 每10秒检查一次
+            }, 5000); // 每10秒检查一次
         }
       }
 

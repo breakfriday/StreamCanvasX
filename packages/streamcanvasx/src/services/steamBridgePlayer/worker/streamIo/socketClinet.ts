@@ -4,6 +4,7 @@ import StreamSocketClient from './streamSocketClient';
 import { IplayerConfig } from '../../../../types/services';
 import Instance from './instance';
 import { MessageType } from '../../const';
+import { map } from 'lodash';
 
 function generateUniqueId() {
     const now = Date.now();
@@ -26,7 +27,11 @@ class SocketClient {
     streamSocketClient: StreamSocketClient;
     clientId: number;
     url: string
-    singleton: Instance
+    singleton: Instance;
+
+     webSocketConnections: Map<string, {ws_singal: WebSocket;ws_data: WebSocket}> = new Map<string, {ws_singal: WebSocket;ws_data: WebSocket}>();
+
+
     constructor(singleton: Instance) {
         this.singleton=singleton;
         this.signalClient=new SignalClient(this.singleton);
@@ -36,9 +41,16 @@ class SocketClient {
         this.clientId=generateUniqueId();
         this.url=config.url;
 
-
+        this.webSocketConnections=new Map();
         this.signalClient.init(this.clientId);
         this.streamSocketClient.init(this.clientId);
+    }
+
+    addWebSocketConnection(id: string, ws_singal: WebSocket,ws_data: WebSocket) {
+        this.webSocketConnections.set(id,{ ws_singal: ws_singal,ws_data: ws_data });
+    }
+    deleteWebSocketConnection(id: string) {
+        this.webSocketConnections.delete(id);
     }
     async open() {
         // try{
@@ -58,7 +70,16 @@ class SocketClient {
 
 
         try {
-            await Promise.all([this.signalClient.connect(),this.streamSocketClient.connect()]);
+             let id=String(this.clientId);
+
+
+            let res= await Promise.all([this.signalClient.connect(id),this.streamSocketClient.connect(id)]);
+            let ws1=res[0]['ws'];
+            let ws2=res[1]['ws'];
+
+            this.addWebSocketConnection(this.clientId,ws1,ws2);
+
+
             console.log("signalClient  connect success");
             console.log("dataClient  connect sucess");
             await this.createPlayer();

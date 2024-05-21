@@ -42,7 +42,6 @@ class SignalClient {
     }
 
     init(clientId?: number) {
-        this.clientId=clientId;
         this.promiseInit();
         // let { url } = this.playerService.config;
      }
@@ -54,19 +53,20 @@ class SignalClient {
      }
 
 
-    private connectSocket(id: string): Promise<void> {
+    private connectSocket(id: number): Promise<void> {
         return new Promise((resolve, reject) => {
             if (this.ws) {
                 resolve();
                 return;
             }
 
-            let { clientId } = this;
 
-            this.ws = new WebSocket(`ws://127.0.0.1:4300/ws/signal/${clientId}`);
+            this.ws = new WebSocket(`ws://127.0.0.1:4300/ws/signal/${id}`);
 
 
-            this.ws.onopen = () => resolve();
+            this.ws.onopen = () => {
+                resolve({ clientId: id ,ws: this.ws });
+            };
             this.ws.onerror = (event) => reject(event);
             this.ws.onmessage = this.onMessage.bind(this);
             this.ws.onclose = () => {
@@ -81,8 +81,7 @@ class SignalClient {
         });
     }
 
-    connect(): Promise<void> {
-        let id=generateUniqueID();// 生成唯一id
+    connect(id: string): Promise<void> {
         return this.connectSocket(id);
     }
 
@@ -212,8 +211,8 @@ class SignalClient {
 
     disconnect() {
         if (this.ws) {
+            console.log('client close  signalCLient ws');
             this.ws.close();
-            this.ws = null;
         }
     }
     destroy() {
