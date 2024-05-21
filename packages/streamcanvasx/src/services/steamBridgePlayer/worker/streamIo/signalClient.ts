@@ -72,6 +72,8 @@ class SignalClient {
             this.ws.onclose = () => {
                 console.log('signalClient  WebSocket closed');
                  this.ws = null;
+                 let clientId=id;
+
 
                  if(this.resolveDisconnect) {
                    this.resolveDisconnect({});

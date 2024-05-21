@@ -29,7 +29,7 @@ class SocketClient {
     url: string
     singleton: Instance;
 
-     webSocketConnections: Map<string, {ws_singal: WebSocket;ws_data: WebSocket}> = new Map<string, {ws_singal: WebSocket;ws_data: WebSocket}>();
+     webSocketConnections: Map<string, {ws_singal: WebSocket;ws_data: WebSocket;status?: string}> = new Map<string, {ws_singal: WebSocket;ws_data: WebSocket;status?: string}>();
 
 
     constructor(singleton: Instance) {
@@ -52,7 +52,13 @@ class SocketClient {
     deleteWebSocketConnection(id: string) {
         this.webSocketConnections.delete(id);
     }
+    updateWebSocketConnection(id: string, status: string) {
+        const webSocketData = this.webSocketConnections.get(id);
+        webSocketData.status=status;
+        this.webSocketConnections.set(id, webSocketData);
+    }
     async open() {
+        this.clientId=generateUniqueId();
         // try{
         //     await this.signalClient.connect();
         //     console.log("signalClient 连接成功");
@@ -77,7 +83,7 @@ class SocketClient {
             let ws1=res[0]['ws'];
             let ws2=res[1]['ws'];
 
-            this.addWebSocketConnection(this.clientId,ws1,ws2);
+            this.addWebSocketConnection(String(this.clientId),ws1,ws2);
 
 
             console.log("signalClient  connect success");
@@ -122,10 +128,12 @@ class SocketClient {
 
         this.signalClient.destroy();
         this.streamSocketClient.destroy();
+        this.updateWebSocketConnection(String(this.clientId),"0");
+
+
         await delay(6000);
-        this.clientId=generateUniqueId();
-        this.streamSocketClient.clientId=this.clientId;
-        this.signalClient.clientId=this.clientId;
+
+
         await this.open();
 
         this.streamSocketClient.startHearChceck();
