@@ -35,10 +35,12 @@ const createPlayerServicePromise = async function (parm: IplayerConfig): Promise
     if(url_obj.protocol==='rtsp:') {
         parm.rtspUrl=url;
     }else{
-        let deviceId=extractDeviceId(url);
-        let { host } = url_obj;
-        let rtspUrl=`rtsp://${host}/rtp/${deviceId}`;
-        parm.rtspUrl=rtspUrl;
+        if(!parm.rtspUr===true) {
+            let deviceId=extractDeviceId(url);
+            let { host,hostname } = url_obj;
+            let rtspUrl=`rtsp://${hostname}:42022/rtp/${deviceId}`;
+            parm.rtspUrl=rtspUrl;
+        }
     }
 
 
