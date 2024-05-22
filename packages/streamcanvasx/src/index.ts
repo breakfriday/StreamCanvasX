@@ -4,6 +4,7 @@ import { createWaveVisualizationInstance } from './serviceFactories/createWaveVi
 import { IplayerConfig, IWavePlayerConfig, IWavePlayerExtend } from './types/services';
 import { getConfig, loadMicroModule } from './loadMicroModule';
 import { createStreamBridgePlayerInstance } from './serviceFactories/createStreamBridgePlayerInstance';
+import { error } from 'console';
 
 type ICreatePlayerServiceInstance = ReturnType<typeof createPlayerServiceInstance>;
 type ICreateWaveVisualizationInstance = ReturnType<typeof createWaveVisualizationInstance>;
@@ -28,22 +29,36 @@ function extractDeviceId(url: string) {
   }
 
 
-const createPlayerServicePromise = async function (parm: IplayerConfig): Promise<ICreatePlayerServiceInstance> {
+const createPlayerServicePromise = async function (parm: IplayerConfig): Promise<ICreatePlayerServiceInstance|ICreateStreamBridgePlayerInstance> {
+    let { url } = parm;
+    let url_obj=new URL(url);
+    if(url_obj.protocol==='rtsp:') {
+        parm.rtspUrl=url;
+    }else{
+        let deviceId=extractDeviceId(url);
+        let { host } = url_obj;
+        let rtspUrl=`rtsp://${host}/rtp/${deviceId}`;
+        parm.rtspUrl=rtspUrl;
+    }
+
+
     try {
+        // throw new Error("This is a manually thrown error");
         let module = await loadMicroModule();
 
         if(window.yuv===true||localStorage.getItem('yuv')==="true") {
-            let { url } = parm;
-            let deviceId=extractDeviceId(url);
-            let rtspUrl=`rtsp://120.26.38.129:42022/rtp/${deviceId}`;
-            parm.rtspUrl=rtspUrl;
             return module.createStreamBridgePlayerInstance(parm);
         }else{
             return module.createPlayerServiceInstance(parm);
         }
     } catch (e) {
         console.log(' 播放器 远程微模块加载失败');
-        return createPlayerServiceInstance(parm);
+
+        if(window.yuv===true||localStorage.getItem('yuv')==="true") {
+            return createStreamBridgePlayerInstance(parm);
+        }else{
+            return createPlayerServiceInstance(parm);
+        }
     }
 };
 
