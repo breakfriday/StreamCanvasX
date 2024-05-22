@@ -52,8 +52,9 @@ class StreamSocketClient {
 
     private connectSocket(id: string): Promise<void> {
         return new Promise((resolve, reject) => {
-            if (this.ws) {
-                resolve();
+            if (this.ws&&this.ws.readyState===1) {
+                console.error('dataClient connect error  ws is alrady exit  this.ws.readyState===1 ');
+                resolve({ clientId: id,ws: this.ws,type: "data" });
                 return;
             }
 
@@ -73,7 +74,7 @@ class StreamSocketClient {
                   this.resolveDisconnect = null;
                 }
                 console.log('dataclient  WebSocket closed');
-                this.ws = null;
+                // this.ws = null;
             };
         });
     }

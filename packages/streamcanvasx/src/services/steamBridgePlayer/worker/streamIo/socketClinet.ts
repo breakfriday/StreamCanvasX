@@ -58,7 +58,7 @@ class SocketClient {
         this.webSocketConnections.set(id, webSocketData);
     }
     async open() {
-        this.clientId=generateUniqueId();
+        let clientId=generateUniqueId();
         // try{
         //     await this.signalClient.connect();
         //     console.log("signalClient 连接成功");
@@ -76,13 +76,14 @@ class SocketClient {
 
 
         try {
-             let id=String(this.clientId);
+             let id=String(clientId);
 
 
             let res= await Promise.all([this.signalClient.connect(id),this.streamSocketClient.connect(id)]);
             let ws1=res[0]['ws'];
             let ws2=res[1]['ws'];
 
+            this.clientId=clientId;
             this.addWebSocketConnection(String(this.clientId),ws1,ws2);
 
 
@@ -118,20 +119,23 @@ class SocketClient {
             return new Promise(resolve => setTimeout(resolve, ms));
           }
 
-          try{
-            await this.signalClient.callMethd("stop",[]);
-            console.log("call method stop done");
-          }catch(e) {
+        //   try{
+        //     await this.signalClient.callMethd("stop",[]);
+        //     console.log("call method stop done");
+        //   }catch(e) {
 
-          }
-
-
-        this.signalClient.destroy();
-        this.streamSocketClient.destroy();
-        this.updateWebSocketConnection(String(this.clientId),"0");
+        //   }
 
 
-        await delay(6000);
+        // this.signalClient.destroy();
+        // this.streamSocketClient.destroy();
+        // this.updateWebSocketConnection(String(this.clientId),"0");
+
+
+        this.disaConnect(String(this.clientId));
+
+
+        // await delay(6000);
 
 
         await this.open();
@@ -152,6 +156,18 @@ class SocketClient {
         }catch(e) {
 
         }
+    }
+
+    disaConnect(id: string) {
+        this.updateWebSocketConnection(String(this.clientId),"0");
+        const webSocketData = this.webSocketConnections.get(id);
+
+        let { ws_data } = webSocketData;
+        let { ws_singal } = webSocketData;
+        this.streamSocketClient.stopHeartChceck();
+
+        ws_singal.close();
+        ws_data.close();
     }
     async play() {
         try{
@@ -177,7 +193,7 @@ class SocketClient {
         // await this.signalClient.callMethd("stop",[]);
          console.log("destroy call method stop");
     }catch(e) {
-
+        console.error("destroy error");
      }
 
         this.signalClient.destroy();

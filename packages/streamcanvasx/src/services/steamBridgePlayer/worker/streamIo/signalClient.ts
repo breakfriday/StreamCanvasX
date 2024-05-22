@@ -55,8 +55,9 @@ class SignalClient {
 
     private connectSocket(id: number): Promise<void> {
         return new Promise((resolve, reject) => {
-            if (this.ws) {
-                resolve();
+            if (this.ws&&this.ws.readyState===1) {
+                console.error(" singalClient connect error  ws is already exit  readyState===1");
+                resolve({ clientId: id ,ws: this.ws });
                 return;
             }
 
@@ -71,7 +72,7 @@ class SignalClient {
             this.ws.onmessage = this.onMessage.bind(this);
             this.ws.onclose = () => {
                 console.log('signalClient  WebSocket closed');
-                 this.ws = null;
+                //  this.ws = null;
                  let clientId=id;
 
 
@@ -181,8 +182,8 @@ class SignalClient {
 
     callMethd(method: string,params: ApirParams['params']): Promise<void> {
         return new Promise((resolve, reject) => {
-            if (!this.ws) {
-                console.error('WebSocket is null');
+            if (this.ws.readyState!=1) {
+                console.error('WebSocket error readyState!=1');
                 reject();
             }
             const msgId = this.getNextMessageId();
