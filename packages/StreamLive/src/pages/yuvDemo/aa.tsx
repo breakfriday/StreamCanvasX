@@ -2,7 +2,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input, Radio, Switch, Slider, Col, Row } from 'antd';
 
-import { createStreamBridgePlayerInstance } from 'streamcanvasx/src/serviceFactories/index';
+import { createPlayerServicePromise } from 'streamcanvasx/src/index';
 import { BridgePlayerStreamType } from 'streamcanvasx/src/constant';
 interface IVideoComponent {
     url: string;
@@ -18,10 +18,10 @@ interface IVideoComponent {
     const streamPlayer = useRef<any>(null);
 
     useEffect(() => {
+         window.yuv=true;
         let { url,frameHeight,frameWidth ,renderFps ,streamType } = props;
-
-
-        let player=createStreamBridgePlayerInstance({
+        const createPlayer=async () => {
+          let player=await createPlayerServicePromise({
             url,
             contentEl: containerRef.current!,
             renderFps: 30,
@@ -30,13 +30,11 @@ interface IVideoComponent {
             frameWidth,
 
         });
+          streamPlayer.current = player;
+          player.createFlvPlayer();
+        };
 
-
-      streamPlayer.current = player;
-
-      console.log("--start---");
-
-        player.createFlvPlayer();
+        createPlayer();
     },[]);
     return (<div>
       <div style={{ width: "800px", height: "400px", border: '1px' }} ref={containerRef} />

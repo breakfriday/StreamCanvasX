@@ -4,7 +4,7 @@ import { createWaveVisualizationInstance } from './serviceFactories/createWaveVi
 import { IplayerConfig, IWavePlayerConfig, IWavePlayerExtend } from './types/services';
 import { getConfig, loadMicroModule } from './loadMicroModule';
 import { createStreamBridgePlayerInstance } from './serviceFactories/createStreamBridgePlayerInstance';
-import { error } from 'console';
+
 
 type ICreatePlayerServiceInstance = ReturnType<typeof createPlayerServiceInstance>;
 type ICreateWaveVisualizationInstance = ReturnType<typeof createWaveVisualizationInstance>;
