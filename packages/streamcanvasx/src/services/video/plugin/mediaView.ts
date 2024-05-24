@@ -365,6 +365,7 @@ class MediaView {
       }
       renderCanvas2d(videoFrame: VideoFrame | HTMLVideoElement) {
         this.showError=false;
+        
 
         let video = videoFrame as HTMLVideoElement;
 
