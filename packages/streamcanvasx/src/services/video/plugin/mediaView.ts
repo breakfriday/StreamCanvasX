@@ -35,7 +35,8 @@ class MediaView {
     startTime: number;
     timer: NodeJS.Timeout;
     lastCount: number;
-    nowFrameCount: number
+    nowFrameCount: number;
+    showError?: boolean
 
     constructor() {
         this.canvas_el = document.createElement('canvas');
@@ -195,6 +196,9 @@ class MediaView {
 
           this.canvas_el.width = width;
           this.canvas_el.height = height;
+          if(this.showError===true) {
+            this.drawError();
+          }
     }
     // createVideoFramCallBack(video: HTMLVideoElement) {
     //     let $this = this;
@@ -357,8 +361,11 @@ class MediaView {
         canvasContext.textAlign = 'center';
         canvasContext.fillText(message, canvas.width/2 , canvas.height*0.85);
        }
+       this.showError=true;
       }
       renderCanvas2d(videoFrame: VideoFrame | HTMLVideoElement) {
+        this.showError=false;
+
         let video = videoFrame as HTMLVideoElement;
 
         let width = 400;

@@ -39,8 +39,10 @@ class LoadingView {
         width = contentEl.clientWidth;
       }
 
+      if(this.canvas_el) {
         this.canvas_el.width = width;
         this.canvas_el.height = height;
+      }
     }
     event() {
       let { contentEl } = this.playerService.config;
