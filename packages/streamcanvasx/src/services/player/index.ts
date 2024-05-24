@@ -841,8 +841,11 @@ startHeartbeatCheck() {
             }
             if(video) {
                 if (video.readyState < 3 || video.paused == true || video.ended == true) {
+                    console.log(`readyState${video.readyState} pause: ${video.paused} end:${video.ended}`);
+                    console.log("checkplaying false");
                     return false;
                 } else {
+                    console.log("checkplaying success");
                     return true;
                 }
             }else{
@@ -854,14 +857,14 @@ startHeartbeatCheck() {
             this.error_connect_times++;
 
             if(this.config.stopCallBack) {
-                this.config.stopCallBack().then((res) => {
-                    if(res.stop===true||res.stop==="true") {
-                        this.error_message=res.message;
-                        this.setError();
-                    }else{
-                        this.error_message='';
-                    }
-                });
+                    this.config.stopCallBack().then((res) => {
+                        if(res.stop===true||res.stop==="true") {
+                            this.error_message=res.message;
+                            this.setError();
+                        }else{
+                            this.error_message='';
+                        }
+                    });
             }
 
             let { url } = this.config;

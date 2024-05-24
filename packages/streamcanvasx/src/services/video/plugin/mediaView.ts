@@ -136,6 +136,7 @@ class MediaView {
           if(this.playerService.error_connect_times>this.playerService.maxErrorTimes) {
             return false;
           }
+          // this.showError=true;
           this.render(this.video);
           this.nowFrameCount++;
           try{
@@ -158,6 +159,9 @@ class MediaView {
       this.resizeObserver = new ResizeObserver(() => {
         setTimeout(() => {
            this.setCanvasSize();
+           if(this.showError===true) {
+            this.drawError();
+           }
           //  this.resizeControlPannel();
         }, 20);
       });
@@ -196,9 +200,9 @@ class MediaView {
 
           this.canvas_el.width = width;
           this.canvas_el.height = height;
-          if(this.showError===true) {
-            this.drawError();
-          }
+          // if(this.showError===true) {
+          //   // this.drawError();
+          // }
     }
     // createVideoFramCallBack(video: HTMLVideoElement) {
     //     let $this = this;
@@ -283,6 +287,7 @@ class MediaView {
       const frameCallback = (now) => {
           frameCount++;
           updatePerformanceInfo(now);
+          this.showError=false;
           this.render(video);
           video.requestVideoFrameCallback(frameCallback);
       };
@@ -364,9 +369,6 @@ class MediaView {
        this.showError=true;
       }
       renderCanvas2d(videoFrame: VideoFrame | HTMLVideoElement) {
-        this.showError=false;
-        
-
         let video = videoFrame as HTMLVideoElement;
 
         let width = 400;
