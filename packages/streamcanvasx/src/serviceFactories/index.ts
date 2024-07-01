@@ -6,6 +6,7 @@ import { createRTCPlayerServiceInstance } from './createWebRtcInstance';
 import { createWaveAudioServiceInstance } from './createWaveAudio';
 import { createWavePlayerServiceInstance } from './createWavePlayerInstance';
 import { createWaveVisualizationInstance } from './createWaveVisualizationInstance';
+import { createStreamBridgePlayerInstance } from './createStreamBridgePlayerInstance';
 export {
         createOriginServiceInstance,
         createAudioProcessingServiceInstance,
@@ -15,4 +16,5 @@ export {
         createWavePlayerServiceInstance,
         createWaveAudioServiceInstance,
         createWaveVisualizationInstance,
+        createStreamBridgePlayerInstance
 };

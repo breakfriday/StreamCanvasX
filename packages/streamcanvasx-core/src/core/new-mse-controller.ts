@@ -15,6 +15,7 @@ interface Config {
     autoCleanupSourceBuffer?: boolean;
     autoCleanupMaxBackwardDuration?:number
     autoCleanupMinBackwardDuration?:number
+    url?:string
 }
 
 interface InitSegment {
@@ -44,6 +45,26 @@ interface MSEEventHandlers {
     onSourceBufferError: (event: Event) => void;
     onSourceBufferUpdateEnd: (event: Event) => void;
 
+}
+
+function clearMediaSrc(videoElement) {
+    // 定义一个函数来清空 src 并重新加载视频元素
+    function clearSrc() {
+        videoElement.src = '';
+        videoElement.removeAttribute("src")
+        videoElement.load(); // 调用 load() 来应用更改
+        videoElement.removeEventListener('pause', clearSrc); // 清除事件监听器
+        videoElement=null
+    }
+
+    if (videoElement.paused!=true) {
+        // 如果视频正在播放，先暂停它
+        videoElement.addEventListener('pause', clearSrc); // 暂停后清空 src
+        videoElement.pause();
+   
+    } else {
+       clearSrc()
+    }
 }
 
 class MSEController {
@@ -199,9 +220,10 @@ class MSEController {
         }
 
         if (this._mediaElement) {
-            this._mediaElement.src = '';
-            this._mediaElement.removeAttribute('src');
-            this._mediaElement = null;
+            // this._mediaElement.src = '';
+            // this._mediaElement.removeAttribute('src');
+            // this._mediaElement = null;
+            clearMediaSrc(this._mediaElement)
         }
         if (this._mediaSourceObjectURL) {
             window.URL.revokeObjectURL(this._mediaSourceObjectURL);
@@ -528,6 +550,7 @@ class MSEController {
 
     _onSourceOpen() {
         Log.v(this.TAG, 'MediaSource onSourceOpen');
+        console.log(this.TAG, 'MediaSource onSourceOpen_ '+this._config.url)
         this._mediaSource.removeEventListener('sourceopen', this.e.onSourceOpen);
         // deferred sourcebuffer creation / initialization
         if (this._pendingSourceBufferInit.length > 0) {
@@ -547,11 +570,13 @@ class MSEController {
     _onSourceEnded() {
         // fired on endOfStream
         Log.v(this.TAG, 'MediaSource onSourceEnded');
+        console.log(this.TAG, 'MediaSource onSourceEnded')
     }
 
     _onSourceClose() {
         // fired on detaching from media element
-        Log.v(this.TAG, 'MediaSource onSourceClose');
+        //Log.v(this.TAG, 'MediaSource onSourceClose');
+        console.log(this.TAG, 'MediaSource onSourceEnded')
         if (this._mediaSource && this.e != null) {
             this._mediaSource.removeEventListener('sourceopen', this.e.onSourceOpen);
             this._mediaSource.removeEventListener('sourceended', this.e.onSourceEnded);
@@ -585,6 +610,7 @@ class MSEController {
 
     _onSourceBufferError(e) {
         Log.e(this.TAG, `SourceBuffer Error: ${e}`);
+        console.error(this.TAG,`SourceBuffer Error: ${e}`)
         // this error might not always be fatal, just ignore it
     }
 

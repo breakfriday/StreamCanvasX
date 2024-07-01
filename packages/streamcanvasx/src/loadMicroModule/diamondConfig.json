@@ -2,12 +2,12 @@
 
    
     "data":[
-        {"id":0,"version":"0.1.79","desc":"default 環境 ，沒有規則命中"},
-        {"id":1,"version":"0.1.90","desc":"pcweb 开发环境"},
-        {"id":2,"version":"0.1.90","desc":"pcweb  测试环境"},
-        {"id":3,"version":"0.1.85","desc":"pcweb  演示环境"},
-        {"id":4,"version":"0.1.79","desc":"IOT 测试环境"},
-        {"id":5,"version":"0.1.78","desc":"IOT 演示环境"},
+        {"id":0,"version":"0.1.91","desc":"default 環境 ，沒有規則命中"},
+        {"id":1,"version":"0.2.4_3","desc":"pcweb 开发环境"},
+        {"id":2,"version":"0.2.4_3","desc":"pcweb  测试环境"},
+        {"id":3,"version":"0.2.4_3","desc":"pcweb  演示环境"},
+        {"id":4,"version":"0.1.91","desc":"IOT 测试环境"},
+        {"id":5,"version":"0.1.91","desc":"IOT 演示环境"},
         {"id":6,"version":"0.1.85-beta","desc":"806 波形"}
     ],
     "resources": [
@@ -94,7 +94,123 @@
                 "data":[
                         "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.90/vendor.esm.es5.production.js",
                         "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.90/index.esm.es5.production.js"
-            ]}
+            ]},
+            {
+                "version":"0.1.91",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.91/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.91/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.92_log",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.92_log/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.92_log/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.93_staging_next",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.93_staging_next/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.93_staging_next/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.93_test",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.93_test/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.93_test/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.94_1",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.94_1/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.94_1/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.94_2",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.94_2/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.94_2/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.94_3",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.94_3/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.94_3/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.95",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.95/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.95/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.96",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.96/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.96/index.esm.es5.production.js"
+            ]},
+            {
+                "version":"0.1.96_1",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.96_1/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.96_1/index.esm.es5.production.js"
+            ]},
+            {
+               
+                "version":"0.1.98_1",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.98_1/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.98_1/index.esm.es5.production.js"]
+            },
+            {
+               
+                "version":"0.1.98_2",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.98_2/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.1.98_2/index.esm.es5.production.js"]
+            },
+            {
+               
+                "version":"0.2.1",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.2.1/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.2.1/index.esm.es5.production.js"]
+            },
+            {
+               
+                "version":"0.2.2",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.2.2/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.2.2/index.esm.es5.production.js"]
+            },
+            {
+               
+                "version":"0.2.4",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.2.4/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.2.4/index.esm.es5.production.js"]
+            },
+            {
+               
+                "version":"0.2.4_1",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.2.4_1/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.2.4_1/index.esm.es5.production.js"]
+            },
+            {
+               
+                "version":"0.2.4_2",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.2.4_2/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.2.4_2/index.esm.es5.production.js"]
+            },
+            {
+               
+                "version":"0.2.4_3",
+                "data":[
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.2.4_3/vendor.esm.es5.production.js",
+                        "//breakhappy.oss-cn-beijing.aliyuncs.com/streamcanvasx/0.2.4_3/index.esm.es5.production.js"]
+            }
     ],
 
     "rules":[
@@ -102,7 +218,7 @@
             "rulesId":1 , "dataId":1,"desc":"pcweb 开发环境","conditions": [{
                 "type": "and", 
                 "condition": {
-                    "name":"domain","options": ["http://192.168.100.26:8011","http://192.168.100.26:8011/*","http://localhost:9000/*"]
+                    "name":"domain","options": ["http://192.168.100.26:8011","http://192.168.100.26:8011/*","http://localhost:9000/*","http://localhost:3003/*"]
                 }}] 
         },
         {

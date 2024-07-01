@@ -62,6 +62,14 @@ const asideMenuConfig: MenuDataItem[] = [
         name: 'wave',
         path: 'wave',
       },
+      {
+        name: 'yuvDemo',
+        path: 'yuvDemo',
+      },
+      {
+        name: 'yuv2',
+        path: 'yuv2',
+      }
     ],
   },
   {

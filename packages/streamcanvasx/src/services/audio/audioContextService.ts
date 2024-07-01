@@ -24,6 +24,9 @@ class AudioProcessingService {
     timeId: any;
     canvasWorker: Worker;
     medialEl: HTMLVideoElement;
+    canvas_el: HTMLCanvasElement;
+    resizeObserver: ResizeObserver;
+    canvas_context: CanvasRenderingContext2D;
 
 
     constructor() {
@@ -47,6 +50,7 @@ class AudioProcessingService {
 
 
          if (playerService.config.showAudio === true) {
+          this.initCanvas();
           if (playerService.config.useOffScreen === true) {
             this.update_buffer_worker();
            } else {
@@ -60,12 +64,68 @@ class AudioProcessingService {
         //  this.canvasWorker = new Worker(new URL('./worker.js', import.meta.url));
     }
 
+    initCanvas() {
+      let { contentEl } = this.playerService.config;
+
+      this.canvas_el = document.createElement('canvas');
+      this.canvas_el.style.position = 'absolute';
+      this.canvas_context=this.canvas_el.getContext("2d");
+      contentEl.append(this.canvas_el);
+      this.setCanvasSize();
+      this.event();
+    }
+    setCanvasSize() {
+      let height = 200;
+      let width = 400;
+      let { contentEl } = this.playerService.config;
+
+      if (contentEl) {
+        height = contentEl.clientHeight;
+        width = contentEl.clientWidth;
+      }
+
+        this.canvas_el.width = width;
+        this.canvas_el.height = height;
+    }
+    event() {
+      let { contentEl } = this.playerService.config;
+                  // 监听 dom size 变化， 调整canvas 大小
+    this.resizeObserver = new ResizeObserver(() => {
+      setTimeout(() => {
+         this.setCanvasSize();
+        //  this.resizeControlPannel();
+      }, 20);
+    });
+
+    this.resizeObserver.observe(contentEl);
+  }
+
     clearCanvas() {
-      let canvasContext = this.playerService.canvasVideoService.canvas_context;
-      let canvas = this.playerService.canvasVideoService.canvas_el;
+      let canvasContext = this.canvas_context;
+      let canvas = this.canvas_el;
       this.clear = true;
       // 清除画布
       canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    destroy() {
+      if(this.canvas_el) {
+        this.clearCanvas();
+        this.canvas_el.remove();
+        this.canvas_el=null;
+        this.canvas_context=null;
+      }
+
+
+      if (this.playerService.corePlayer?.audioPlayer) {
+        try{
+        this.playerService.corePlayer?.audioPlayer?.destory();
+        }catch(e) {
+          this.playerService.corePlayer?.audioPlayer.audioCtx.close();
+        }
+      }else{
+        this.context.audioContext.close();
+      }
     }
 
     // visulizerDraw1() {
@@ -124,8 +184,8 @@ class AudioProcessingService {
     visulizerDraw1() {
       let dataArray = this.bufferData;
       let bufferLength = this.bufferDataLength;
-      let canvasContext = this.playerService.canvasVideoService.canvas_context;
-      let canvas = this.playerService.canvasVideoService.canvas_el;
+      let canvasContext = this.canvas_context;
+      let canvas = this.canvas_el;
       let { renderPerSecond } = this.playerService.config;
 
       let timeId: any = '';
@@ -184,8 +244,8 @@ class AudioProcessingService {
   drawSymmetricWaveform() {
     let dataArray = this.bufferData;
     let bufferLength = this.bufferDataLength;
-    let canvasContext = this.playerService.canvasVideoService.canvas_context;
-    let canvas = this.playerService.canvasVideoService.canvas_el;
+    let canvasContext = this.canvas_context;
+    let canvas = this.canvas_el;
 
     let { renderPerSecond } = this.playerService.config;
 
@@ -211,7 +271,7 @@ class AudioProcessingService {
         // canvasContext.lineWidth = 1;
         // canvasContext.strokeStyle = '#7f0';
 
-        if (this.playerService.canvasVideoService.loading === false) {
+
             canvasContext.clearRect(0, 0, canvas.width, canvas.height);
             // canvasContext.lineWidth = 2;
             // canvasContext.strokeStyle = '#7f0';
@@ -255,7 +315,6 @@ class AudioProcessingService {
 
             canvasContext.lineTo(canvas.width, canvas.height / 2);
             canvasContext.stroke();
-        }
 
         // Use setTimeout here to loop function call. Adjust the delay time as per your requirement. Here 1000/60 mimics a framerate of 60 FPS, similar to requestAnimationFrame
         timeId = setTimeout(AnimationFrame.bind(this), renderPerSecond);
@@ -264,7 +323,7 @@ class AudioProcessingService {
   }
   // render by offscreen
   visulizerDraw2() {
-    const offscreen_canvas = this.playerService.canvasVideoService.canvas_el.transferControlToOffscreen();
+    const offscreen_canvas = this.canvas_el.transferControlToOffscreen();
 
     let { renderPerSecond } = this.playerService.config;
 
@@ -277,8 +336,8 @@ class AudioProcessingService {
 
 
     visulizerDraw() {
-      let canvasContext = this.playerService.canvasVideoService.canvas_context;
-      let canvas = this.playerService.canvasVideoService.canvas_el;
+      let canvasContext = this.canvas_context;
+      let canvas = this.canvas_el;
 
       const bufferLength = this.context.analyserNode.frequencyBinCount;
       const dataArray = new Uint8Array(bufferLength);
@@ -444,11 +503,11 @@ class AudioProcessingService {
             this.playerService.rtcPlayerService.videoService.meidiaEl.muted = false;
           }
         }
-        if (this.playerService.mpegtsPlayer?.audioPlayer) {
+        if (this.playerService.corePlayer?.audioPlayer) {
           if (parm === true) {
-            this.playerService.mpegtsPlayer?.audioPlayer?.mute(true);
+            this.playerService.corePlayer?.audioPlayer?.mute(true);
           } else {
-            this.playerService.mpegtsPlayer?.audioPlayer?.mute(false);
+            this.playerService.corePlayer?.audioPlayer?.mute(false);
           }
         } else {
           if (parm === true) {
@@ -502,7 +561,7 @@ class AudioProcessingService {
 
 
         if (showAudio === true) {
-          this.playerService.canvasVideoService.loading = false;
+          // this.playerService.canvasVideoService.loading = false;
           if (useOffScreen === true) {
             this.visulizerDraw2();
           } else {

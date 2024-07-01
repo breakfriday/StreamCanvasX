@@ -9,6 +9,7 @@ class Scheduler {
     }
 
     addTask(task: () => Promise<any>) {
+        console.log('ssssss  addtask');
         this.taskQueue.push(task); // 将任务添加到队列中
         this.runNextTask();
     }
@@ -37,11 +38,24 @@ class Scheduler {
     clearQueue() {
         this.taskQueue = []; // 清空队列
     }
+
+    addAudioTask(audio: HTMLAudioElement) {
+        this.addTask(() => {
+            return new Promise<void>((resolve) => {
+                audio.onended = () => {
+                    resolve();
+                };
+                audio.play();
+            });
+        });
+    }
 }
 
 export default Scheduler;
 
 
-// const scheduler = new Scheduler(3); // 设置并发限制为3
+// const scheduler = new Scheduler(3); // 设置并发限制为1
 
 // scheduler.addTask(() => new Promise(resolve => setTimeout(resolve, 1000, 'Task 1 Completed')));
+
+//scheduler.addAudioTask(audio)

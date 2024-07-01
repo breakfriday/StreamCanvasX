@@ -1,4 +1,4 @@
-import { UseMode } from '../../constant';
+import { UseMode,BridgePlayerStreamType } from '../../constant';
 export interface IDrawer {
     mediaSource_el?: HTMLAudioElement | HTMLVideoElement;
     canvas?: HTMLCanvasElement;
@@ -136,9 +136,11 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
  interface IplayerConfig{
   model?: UseMode;
   url?: string;
+  rtspUrl?: string;
   useWebworker?: boolean;
   hasVideo?: boolean;
   hasAudio?: boolean;
+  hasControl?: boolean;
   contentEl?: HTMLElement;
   showAudio?: boolean;
   errorUrl?: string;
@@ -166,6 +168,7 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   fileData?: File;
   isLive?: boolean;
   splitAVBuffers?: boolean;
+  stopCallBack?(): Promise<{ message?: string; stop?: boolean }>;
 
 }
 
@@ -205,6 +208,25 @@ interface IWavePlayerExtend{
   style?: CSSStyleDeclaration;
 }
 
+
+interface IBridgePlayerConfig {
+  contentEl: HTMLElement;
+  frameWidth?: number;
+  frameHeight?: number;
+  stremType?: BridgePlayerStreamType;
+  url?: string;
+  renderFps?: number;
+  rtspUrl?: string;
+  showAudio?: boolean;
+  OffscreenCanvasConfig?: {
+    creationMethod: string;
+  };
+
+
+}
+
+export type IBridgePlayerConfig = Partial<IBridgePlayerConfig >;
+
 export type IplayerConfig = Partial<IplayerConfig>;
 
 
@@ -213,3 +235,16 @@ export type IRTCPlayerConfig = Partial<IRTCPlayerConfig>;
 export type IWavePlayerConfig = Partial<IWavePlayerConfig>;
 export type IWavePlayerExtend = Partial<IWavePlayerExtend>;
 
+export interface PCMBufferItem{
+	data?: Float32Array[];
+	timestamp?: number; // ms
+	duration?: number; // ms
+}
+
+export interface IAduioContextPlayerConfig{
+  sampleRate?: number;
+  bufferSize?: number; // 播放时一个pcm帧中的音频点数
+  numberOfOutputChannels?: number;
+  useWorklet?: boolean;
+  isLive?: boolean;
+}

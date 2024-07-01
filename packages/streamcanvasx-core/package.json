@@ -1,6 +1,6 @@
 {
   "name": "streamcanvasx-core",
-  "version": "0.0.24",
+  "version": "0.0.32",
   "description": " Stream Player core",
   "main": "./dist/playercore.js",
   "types": "./d.ts/mpegts.d.ts",

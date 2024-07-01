@@ -2,7 +2,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Divider, Space, Button, Checkbox, Form, Input, InputNumber } from 'antd';
 // import { createPlayerServiceInstance } from 'streamcanvasx/src/serviceFactories/index';
-import { createPlayerServiceInstance } from 'streamcanvasx/src/index';
+import { createPlayerServiceInstance,createPlayerServicePromise } from 'streamcanvasx/src/index';
 import { PlayCircleFilled } from '@ant-design/icons';
 // import records from '../canvasToVideo/mp4';
 import RecodDialog from './recordDialog';
@@ -79,50 +79,102 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
         wasmModulePath: '',
         useWasm: true,
       } : null,
+      hasControl: true
     };
 
-    let player = createPlayerServiceInstance(config);
+    let player: any;
 
-    streamPlayer.current = player;
+     async function asyncCreatePlayer() {
+      let player = await createPlayerServicePromise(config);
 
-    // player.createFlvPlayer({});
+      streamPlayer.current = player;
 
-    player.createPlayer({});
+      // player.createFlvPlayer({});
 
-    player.on('otherInfo', (data) => {
-      let { speed } = data;
-      setInfo({ speed });
-    });
+      player.createPlayer({});
 
-    // player.on('mediaInfo', (data) => {
-    //   debugger;
-    // });
+      player.on('otherInfo', (data) => {
+        let { speed } = data;
+        setInfo({ speed });
+      });
 
-    player.on('errorInfo', (data) => {
-      console.log('--------------------');
-      console.info(data);
-      console.log('--------------------');
-    });
+      // player.on('mediaInfo', (data) => {
+      //   debugger;
+      // });
 
-    player.on('performaceInfo', (data) => {
-      setInfo1(data);
-    });
+      player.on('errorInfo', (data) => {
+        console.log('--------------------');
+        console.info(data);
+        console.log('--------------------');
+      });
 
-    // player.on('mediaInfo', (data) => {
-    //    let data1 = data;
-    //    alert(JSON.stringify(data1));
-    //    debugger;
-    // });
+      player.on('performaceInfo', (data) => {
+        setInfo1(data);
+      });
+
+      // player.on('mediaInfo', (data) => {
+      //    let data1 = data;
+      //    alert(JSON.stringify(data1));
+      //    debugger;
+      // });
 
 
-    player.on('audioInfo', (data) => {
-      setAudioInfo(data);
-    });
+      player.on('audioInfo', (data) => {
+        setAudioInfo(data);
+      });
 
-    player.on('recordTextContent', (text) => {
-      setRecordTextContent(text);
-    });
+      player.on('recordTextContent', (text) => {
+        setRecordTextContent(text);
+      });
+     }
 
+
+     function cratePlayer() {
+              player = createPlayerServiceInstance(config);
+
+              streamPlayer.current = player;
+
+              // player.createFlvPlayer({});
+
+              player.createPlayer({});
+
+              player.on('otherInfo', (data) => {
+                let { speed } = data;
+                setInfo({ speed });
+              });
+
+              // player.on('mediaInfo', (data) => {
+              //   debugger;
+              // });
+
+              player.on('errorInfo', (data) => {
+                console.log('--------------------');
+                console.info(data);
+                console.log('--------------------');
+              });
+
+              player.on('performaceInfo', (data) => {
+                setInfo1(data);
+              });
+
+              // player.on('mediaInfo', (data) => {
+              //    let data1 = data;
+              //    alert(JSON.stringify(data1));
+              //    debugger;
+              // });
+
+
+              player.on('audioInfo', (data) => {
+                setAudioInfo(data);
+              });
+
+              player.on('recordTextContent', (text) => {
+                setRecordTextContent(text);
+              });
+     }
+
+    //   cratePlayer();
+    asyncCreatePlayer();
 
     return () => {
       player.destroy();
@@ -147,9 +199,13 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
       <div>{JSON.stringify(info1)}</div>
       <div>{JSON.stringify(audioInfo)}</div>
       <Button onClick={() => {
+          let play = streamPlayer.current;
+          play.setError();
+      }}
+      >setError</Button>
+      <Button onClick={() => {
         let play = streamPlayer.current;
         let data = play.getStatus();
-        debugger;
       }}
       >getstatus</Button>
       <Button onClick={() => {
