@@ -71,6 +71,8 @@ class AudioProcessingService {
       this.canvas_el.style.position = 'absolute';
       this.canvas_context=this.canvas_el.getContext("2d");
       contentEl.append(this.canvas_el);
+      this.canvas_el.style.top='0px';
+      this.canvas_el.style.left='0px';
       this.setCanvasSize();
       this.event();
     }

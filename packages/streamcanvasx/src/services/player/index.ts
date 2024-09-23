@@ -191,15 +191,18 @@ class PlayerService extends Emitter {
         this.canvasVideoService.init(this, { model: model, contentEl, useOffScreen });
         this.canvasToVideoSerivce.init(this);
 
-        if (config.streamType === 'AAC' || config.streamType === 'MP4' || config.streamType === 'MpegTs' || config.streamType === 'MPEG-TS') {
+        if (config.streamType === 'AAC') {
             this.mseDecoderService.init(this);
             this.preProcessing.init(this);
         }
         // this.wasmDecoderService.init();
 
 
-        this.speed=0;
-        this.startHeartbeatCheck();
+        if (config.isLive != false || this.config.streamType === 'flv') {
+            this.speed = 0;
+            this.startHeartbeatCheck();
+        }
+
         // const decode_worker = new Worker(new URL('../decoder/decode_worker.js', import.meta.url));
 
         // this.debounceReload();
@@ -444,13 +447,22 @@ class PlayerService extends Emitter {
             let { hasVideo } = parm;
             let { hasAudio } = parm;
 
+
+            //  兼容 flv head 異常
+            if (this.hasMediaoInfo === true) {
+                return false;
+            } else {
+                this.hasMediaoInfo = true;
+            }
+
+
             this.emit('mediaInfo', { hasVideo, hasAudio });
 
             if (hasVideo === false && this.config.showAudio != true) {
                 this.config.showAudio = true;
                 this.meidiaEl = null;
 
-                debugger;
+                // debugger;
                 this.audioProcessingService.updateBufferData();
                 this.audioProcessingService.render();
                 this.audioEvent();
@@ -572,6 +584,47 @@ class PlayerService extends Emitter {
            // this.canvasVideoService.createVideoFramCallBack(videoEl);
            this.canvasVideoService.load(videoEl);
         }
+      }
+
+
+      createMp4player(parm: {type: string}) {
+        let config = {};
+        let videoEl = document.createElement('video');
+        videoEl.style.height = '100%';
+        videoEl.style.width = '100%';
+        videoEl.controls = true;
+        let { type } = parm;
+
+
+        this.meidiaEl = videoEl;
+        this.corePlayer = corePlayer.createPlayer({
+            type: type, // could also be mpegts, m2ts, flv
+            isLive: false,
+            url: this.config.url,
+            splitAVBuffers: false,
+            // hasAudio: hasAudio,
+            // hasVideo: hasVideo,
+
+          }, {
+
+             enableWorker: true,
+             autoCleanupSourceBuffer: true,
+
+         });
+         this.corePlayer.attachMediaElement(videoEl);
+      //    this.corePlayer.load();
+        // this.corePlayer.play();
+
+        this.meidiaEl.addEventListener('play', () => {
+            this.corePlayer.load();
+            this.corePlayer.play();
+        });
+
+        this.config.contentEl.append(videoEl);
+      }
+
+      createTsPlayer() {
+
       }
 
       // 独立的心跳检查和重载逻辑

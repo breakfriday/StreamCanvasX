@@ -22,6 +22,7 @@ const LiveVideo = (props) => {
         showAudio,
         hasVideo,
         hasAudio,
+        isLive: false,
         contentEl: containerRef.current!,
         streamType: 'AAC',
         audioPlayback: {
