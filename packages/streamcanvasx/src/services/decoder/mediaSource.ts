@@ -207,7 +207,7 @@ class MseDecoder {
           this._sourceBufferRemoved = 0;
           // this.mediaSource.sourceBuffers[0].
           this._mediaSourceOpenNotify();
-          // this.$videoElement.play();
+           this.$videoElement.play();
         });
     }
 

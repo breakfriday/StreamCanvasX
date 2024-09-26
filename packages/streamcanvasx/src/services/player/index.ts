@@ -614,6 +614,12 @@ class PlayerService extends Emitter {
          this.corePlayer.attachMediaElement(videoEl);
       //    this.corePlayer.load();
         // this.corePlayer.play();
+        this.corePlayer.load();
+        this.corePlayer.play();
+
+     setTimeout(() => {
+        this.corePlayer.unload();
+     }, 800);
 
         this.meidiaEl.addEventListener('play', () => {
             this.corePlayer.load();
