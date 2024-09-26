@@ -207,8 +207,12 @@ class MseDecoder {
           this._sourceBufferRemoved = 0;
           // this.mediaSource.sourceBuffers[0].
           this._mediaSourceOpenNotify();
-          this.$videoElement.play();
+          // this.$videoElement.play();
         });
+    }
+
+    play() {
+      this.$videoElement.play();
     }
 
     // 检查_sourceBufferQueue 从中找一条 插入
@@ -239,6 +243,8 @@ class MseDecoder {
 
         this.$videoElement = document.createElement('audio');
         this.$videoElement.controls = true;
+        this.$videoElement.style.position='absolute';
+        this.$videoElement.style.zIndex="20";
 
         contentEl.append(this.$videoElement);
       } else {
