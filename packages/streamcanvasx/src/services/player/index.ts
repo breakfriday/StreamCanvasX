@@ -29,6 +29,7 @@ import RTCPlayerService from '../webrtc';
 
 import LogMonitor from '../../LogMonitor';
 import { isGeneratorFunction } from 'util/types';
+import { timeStamp } from 'console';
 
 
 corePlayer.LoggingControl.applyConfig({
@@ -192,8 +193,8 @@ class PlayerService extends Emitter {
         this.canvasToVideoSerivce.init(this);
 
         if (config.streamType === 'AAC') {
-            this.mseDecoderService.init(this);
-            this.preProcessing.init(this);
+            // this.mseDecoderService.init(this);
+            // this.preProcessing.init(this);
         }
         // this.wasmDecoderService.init();
 
@@ -209,21 +210,26 @@ class PlayerService extends Emitter {
     }
 
     createBetaPlayer() {
-        // let videoEl = document.createElement('video');
-        // this.meidiaEl = videoEl;
-        // this.meidiaEl.autoplay = true;
-        // this.meidiaEl.controls = false;
+        let videoEl = document.createElement('audio');
+        videoEl.src=this.config.url
+        videoEl.style.position='absolute'
+        videoEl.style.zIndex='100'
+        this.meidiaEl = videoEl;
+        this.meidiaEl.autoplay = true;
+        this.meidiaEl.controls = true;
+        this.config.contentEl.append(this.meidiaEl)
+        this.audioProcessingService.init(this, { media_el: this.meidiaEl });
 
-        this.httpFlvStreamService.fetchStream();
+        // this.httpFlvStreamService.fetchStream();
 
-         let { hasAudio, showAudio } = this.config;
+        //  let { hasAudio, showAudio } = this.config;
 
 
-            let media_el = this.mseDecoderService.$videoElement;
-            this.meidiaEl = media_el;
+        //     let media_el = this.mseDecoderService.$videoElement;
+        //     this.meidiaEl = media_el;
 
-            // debugger;
-            this.audioProcessingService.init(this, { media_el: media_el });
+        //     // debugger;
+        //     this.audioProcessingService.init(this, { media_el: media_el });
 
 
             // 此處默認靜音
