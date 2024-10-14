@@ -211,13 +211,13 @@ class PlayerService extends Emitter {
 
     createBetaPlayer() {
         let videoEl = document.createElement('audio');
-        videoEl.src=this.config.url
-        videoEl.style.position='absolute'
-        videoEl.style.zIndex='100'
+        videoEl.src=this.config.url;
+        videoEl.style.position='absolute';
+        videoEl.style.zIndex='100';
         this.meidiaEl = videoEl;
         this.meidiaEl.autoplay = true;
         this.meidiaEl.controls = true;
-        this.config.contentEl.append(this.meidiaEl)
+        this.config.contentEl.append(this.meidiaEl);
         this.audioProcessingService.init(this, { media_el: this.meidiaEl });
 
         // this.httpFlvStreamService.fetchStream();
@@ -601,7 +601,6 @@ class PlayerService extends Emitter {
         videoEl.controls = true;
         let { type } = parm;
 
-
         this.meidiaEl = videoEl;
         this.corePlayer = corePlayer.createPlayer({
             type: type, // could also be mpegts, m2ts, flv
@@ -623,14 +622,6 @@ class PlayerService extends Emitter {
         this.corePlayer.load();
         this.corePlayer.play();
 
-     setTimeout(() => {
-        this.corePlayer.unload();
-     }, 800);
-
-        this.meidiaEl.addEventListener('play', () => {
-            this.corePlayer.load();
-            this.corePlayer.play();
-        });
 
         this.config.contentEl.append(videoEl);
       }
