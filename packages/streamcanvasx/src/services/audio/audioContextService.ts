@@ -507,9 +507,11 @@ class AudioProcessingService {
         }
         if (this.playerService.corePlayer?.audioPlayer) {
           if (parm === true) {
-            this.playerService.corePlayer?.audioPlayer?.mute(true);
+            this.playerService.corePlayer?.audioPlayer?.volume(0);
+           // this.playerService.corePlayer?.audioPlayer?.mute(true);
           } else {
-            this.playerService.corePlayer?.audioPlayer?.mute(false);
+            this.playerService.corePlayer?.audioPlayer?.volume(1);
+           // this.playerService.corePlayer?.audioPlayer?.mute(false);
           }
         } else {
           if (parm === true) {
