@@ -29,8 +29,8 @@ import RTCPlayerService from '../webrtc';
 
 import LogMonitor from '../../LogMonitor';
 import { isGeneratorFunction } from 'util/types';
-import { timeStamp } from 'console';
-
+// import { timeStamp } from 'console';
+import AudioPlayer from './audioPlayer';
 
 corePlayer.LoggingControl.applyConfig({
     forceGlobalTag: true,
@@ -97,7 +97,8 @@ class PlayerService extends Emitter {
     speed?: number
     lowSpeedStartTime: number | null = null;
     lowSpeedTimer: NodeJS.Timeout;
-    error_message?: string
+    error_message?: string;
+    _audioPlayer: AudioPlayer;
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -282,6 +283,12 @@ class PlayerService extends Emitter {
             this.createFlvPlayer(parms);
         }
     }
+    initAudiPlayer() {
+        if (!this._audioPlayer) {
+            this._audioPlayer = new AudioPlayer();
+            this._audioPlayer.init({ sampleRate: 8000 });
+        }
+    }
     createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string}) {
         if (window.wasmDebug) {
             this.createBetaPlayer2();
@@ -411,10 +418,16 @@ class PlayerService extends Emitter {
 
         //   window.pp = this.corePlayer;
 
-        //   this.corePlayer.on('audio_segment', (data) => {
-        //     // let h = data;
-        //     // debugger;
-        //   });
+          this.corePlayer.on('audio_segment', (data) => {
+             this.initAudiPlayer();
+             let { buffer } = data;
+             if (this._audioPlayer) {
+                let data = this._audioPlayer.convetBufferToPcmFloat32(buffer);
+                this._audioPlayer.feedPCMDataBeta(data);
+             }
+            // let h = data;
+            // debugger;
+          });
 
 
         this.corePlayer.on(corePlayer.Events.LOADING_COMPLETE, (parm) => {
@@ -843,6 +856,10 @@ startHeartbeatCheck() {
             this.player2.destroy();
         }
        clearInterval(this.lowSpeedTimer);
+       if (this._audioPlayer) {
+        this._audioPlayer.destroy();
+        this._audioPlayer = null;
+       }
     }
 
 
