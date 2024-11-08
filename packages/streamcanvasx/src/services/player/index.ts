@@ -200,6 +200,9 @@ class PlayerService extends Emitter {
 
 
         if (config.isLive != false || this.config.streamType === 'flv') {
+            if(config.isLive===false) {
+                return false;
+            }
             this.speed = 0;
             this.startHeartbeatCheck();
         }
@@ -937,6 +940,9 @@ startHeartbeatCheck() {
         }
 
         addReloadTask(parm?: {arr_msg?: Array<string>}) {
+            if(this.config.isLive===false) {
+                return false;
+            }
             if (this.error_connect_times > this.maxErrorTimes) {
               //  console.log("error_connect_times > 4: Scheduler clearQueu  "+this.config.url)
                 // this.scheduler.clearQueue();
