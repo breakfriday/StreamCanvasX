@@ -318,6 +318,9 @@ class PlayerService extends Emitter {
 
         let videoEl = document.createElement('video');
         this.meidiaEl = videoEl;
+        if(this.config.hasAudio===false) { // 支持特殊场景首屏播放
+            videoEl.muted=true;
+        }
         // document.getElementById('cont').append(videoEl);
         // videoEl.controls = true;
         // videoEl.width = 300;
