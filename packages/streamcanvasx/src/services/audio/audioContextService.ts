@@ -497,6 +497,9 @@ class AudioProcessingService {
       }
 
       mute(parm?: boolean) {
+        if(this.playerService._audioPlayer) {
+          this.playerService._audioPlayer.mute(parm);
+        }
         if (this.playerService.config.streamType === 'WEBRTC') {
           // webrtc 的特殊播放， 需要先將播放器禁音樂， audiocontext  的斷開輸出節點才能生效， 打開輸出不需要重置mute屬性
           if (parm === true) {
