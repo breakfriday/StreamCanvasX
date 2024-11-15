@@ -99,6 +99,7 @@ class PlayerService extends Emitter {
     lowSpeedTimer: NodeJS.Timeout;
     error_message?: string;
     _audioPlayer: AudioPlayer;
+    wasmModel: boolean
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -596,7 +597,11 @@ class PlayerService extends Emitter {
 
                     console.log('使用jessibuca 軟解码中');
 
+
+                    this.wasmModel=true;
+
                     this.createBetaPlayer2();
+                    return false;
                 } else {
                     console.log('使用 硬解');
                     this.corePlayer.play();
@@ -651,6 +656,9 @@ class PlayerService extends Emitter {
 
     // 独立的心跳检查和重载逻辑
     startHeartbeatCheck() {
+        if(this.wasmModel===true) {
+            return false;
+        }
         if (!this.lowSpeedTimer) {
             this.lowSpeedStartTime = Date.now();
             this.lowSpeedTimer = setInterval(() => {
@@ -835,11 +843,25 @@ class PlayerService extends Emitter {
     }
 
     destroy() {
+        console.log("----destroy-----1-----");
         let { url } = this.config;
         this.scheduler.clearQueue();
         this.meidiaEl = null;
         this.canvasVideoService.loading = false;
-        // this.logMonitor.log({ flvUrl: url ,status: "destroy",statusDesc: "销毁实例 终止拉流" });
+
+        try{
+              if (this.player2) {
+            this.player2.destroy();
+            this.player2 = null;
+        }
+          if (this.corePlayer) {
+            this.corePlayer.destroy();
+
+            this.corePlayer = null;
+            this.audioEl = null;
+            this.meidiaEl = null;
+        }
+            console.log("----destroy-----2-----");
         if (this.canvasVideoService) {
             this.canvasVideoService.destroy();
             this.canvasVideoService = null;
@@ -848,21 +870,20 @@ class PlayerService extends Emitter {
             this.rtcPlayerService.destroy();
         }
 
-        if (this.corePlayer) {
-            this.corePlayer.destroy();
-
-            this.corePlayer = null;
-            this.audioEl = null;
-            this.meidiaEl = null;
-        }
+        console.log("----destroy-----3-----");
         if (this.player2) {
             this.player2.destroy();
+            this.player2=null;
         }
         clearInterval(this.lowSpeedTimer);
         if (this._audioPlayer) {
             this._audioPlayer.destroy();
             this._audioPlayer = null;
         }
+        }catch(e) {
+
+        }
+        // this.logMonitor.log({ flvUrl: url ,status: "destroy",statusDesc: "销毁实例 终止拉流" });
     }
 
 
@@ -934,6 +955,9 @@ class PlayerService extends Emitter {
 
     reload2() {
         this.error_connect_times++;
+        if(this.wasmModel===true) {
+            return false;
+        }
 
         if (this.config.stopCallBack) {
             this.config.stopCallBack().then((res) => {
@@ -960,6 +984,9 @@ class PlayerService extends Emitter {
     }
 
     addReloadTask(parm?: { arr_msg?: Array<string> }) {
+        if(this.wasmModel===true) {
+            return false;
+        }
         if (this.config.isLive === false) {
             return false;
         }
