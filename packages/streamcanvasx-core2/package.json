@@ -2,7 +2,7 @@
   "name": "streamcanvasx-core2",
   "version": "1.7.3",
   "description": "HTML5 MPEG2-TS Stream Player",
-  "main": "./dist/streamcanvasx-core2.js",
+  "main": "./dist/streamcanvasx_core2.js",
   "types": "./d.ts/mpegts.d.ts",
   "repository": {
     "type": "git",
