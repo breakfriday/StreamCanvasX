@@ -20,21 +20,19 @@ const LiveVideo = (props) => {
         type: "mse",
         url: "http://localhost:8081/output.flv",
         withCredentials: false
-      }
+      };
 
       const player=streamcanvasCore.createPlayer(mediaDdataSource,{
-        enableWorker:true,
-        seekType:"range"
-      })
-      
-      let videl_el=videoRef.current
+        enableWorker: true,
+        seekType: "range"
+      });
 
-      player.attachMediaElement(videl_el!)
-      player.load()
+      let videl_el=videoRef.current;
+
+      player.attachMediaElement(videl_el!);
+      player.load();
       player.play();
-
     };
-
 
 
     useEffect(() => {
