@@ -65,6 +65,7 @@
     "regl": "^2.1.0",
     "sm4js": "^0.0.6",
     "streamcanvasx-core": "0.2.2",
+    "streamcanvasx-core2":  "workspace:^",
     "webm-muxer": "^3.1.1",
     "webm-writer": "^1.0.0",
     "worker-loader": "^3.0.8",
