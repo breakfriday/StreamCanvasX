@@ -297,9 +297,9 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
         >transform</Button>
 
         <Button onClick={() => {
-          let play = streamPlayer.current;
+          let play = streamPlayer.current!;
           // console.log(degree);
-          play.canvasVideoService.captureShot();
+         let { imageUrl }= play.canvasVideoService.captureShot();
           // play.canvasVideoService.drawRotate(degree);
         }}
         >captureShot</Button>

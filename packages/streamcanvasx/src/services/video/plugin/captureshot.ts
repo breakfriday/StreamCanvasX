@@ -19,8 +19,11 @@ function captureShot(videoElement: HTMLVideoElement) {
     } else {
       console.error('Failed to get 2D context from canvas.');
     }
+    const imageUrl = canvas.toDataURL('image/png');
 
-    return canvas;
+    return {
+        imageUrl,width: canvas.width,height: canvas.height
+    };
   }
 
 

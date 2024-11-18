@@ -113,9 +113,9 @@ class CanvasVideoService {
      captureShot() {
       let video_el=this.playerService.meidiaEl;
 
-      let canvas=captureShot(video_el);
+      let { imageUrl ,height,width }=captureShot(video_el);
 
-      return canvas;
+      return { imageUrl ,height,width };
      }
 }
 
