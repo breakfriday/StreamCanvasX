@@ -12,7 +12,7 @@ import ControlPanel from "./plugin/contrlPannel";
 import MediaView from './plugin/mediaView';
 
 import LoadingView from './plugin/loadingView';
-
+import captureShot from './plugin/captureshot';
 
 @injectable()
 class CanvasVideoService {
@@ -109,6 +109,13 @@ class CanvasVideoService {
      }
      drawHorizontalMirror() {
       this.mediaView.drawHorizontalMirror();
+     }
+     captureShot() {
+      let video_el=this.playerService.meidiaEl;
+
+      let canvas=captureShot(video_el);
+
+      return canvas;
      }
 }
 

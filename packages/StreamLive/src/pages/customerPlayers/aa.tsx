@@ -6,6 +6,7 @@ import { createPlayerServiceInstance,createPlayerServicePromise } from 'streamca
 import { PlayCircleFilled } from '@ant-design/icons';
 // import records from '../canvasToVideo/mp4';
 import RecodDialog from './recordDialog';
+import PlayerService from 'streamcanvasx/src/services/player';
 
 interface IVideoComponent {
   url: string;
@@ -28,7 +29,7 @@ interface IVideoComponent {
 }
 
 const VideoComponents: React.FC<IVideoComponent> = (props) => {
-  const streamPlayer = useRef<any>(null);
+  const streamPlayer = useRef<PlayerService>(null);
   const [info, setInfo] = useState<any>();
 
   const [info1, setInfo1] = useState<any>();
@@ -173,8 +174,8 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
               });
      }
 
-    //   cratePlayer();
-    asyncCreatePlayer();
+      cratePlayer();
+    // asyncCreatePlayer();
 
     return () => {
       player.destroy();
@@ -294,6 +295,15 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
           // play.canvasVideoService.drawRotate(degree);
         }}
         >transform</Button>
+
+        <Button onClick={() => {
+          let play = streamPlayer.current;
+          // console.log(degree);
+          play.canvasVideoService.captureShot();
+          // play.canvasVideoService.drawRotate(degree);
+        }}
+        >captureShot</Button>
+
         <Button onClick={() => {
           let play = streamPlayer.current;
           // console.log(degree);
