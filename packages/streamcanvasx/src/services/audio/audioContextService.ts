@@ -529,6 +529,16 @@ class AudioProcessingService {
         }
       }
 
+      setVolume(v: number) {
+        // this.playerService.meidiaEl.volume=v;
+        // this.playerService.audioEl.volume=v;
+        if(v>0) {
+          this.mute(false);
+        }
+
+        this.medialEl.volume=v;
+      }
+
 
       setBufferData() {
         let second = this.playerService.config.bufferSize;
