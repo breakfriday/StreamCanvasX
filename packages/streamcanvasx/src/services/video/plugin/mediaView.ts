@@ -482,7 +482,7 @@ class MediaView {
       drawCoordinateLines( canvasX: number, canvasY: number) {
         let canvasContext=this.canvas_context
         // Set style for the coordinate lines
-        this.canvas_context.strokeStyle = 'blue'; 
+        this.canvas_context.strokeStyle = 'green'; 
         this.canvas_context.lineWidth = 1;
         this.canvas_context.setLineDash([]); 
     
