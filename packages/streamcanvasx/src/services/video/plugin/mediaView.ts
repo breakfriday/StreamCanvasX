@@ -470,14 +470,37 @@ class MediaView {
 
           this.canvas_context.beginPath();
           this.canvas_context.arc(x, y, 5, 0, 2 * Math.PI); // Draw a circle to mark the point
-          this.canvas_context.fillStyle = 'red'; // Set the color of the point
+          this.canvas_context.fillStyle = 'green'; // Set the color of the point
           this.canvas_context.fill();
+
+
+          this.drawCoordinateLines(x,y)
 
         }
 
-
-
       }
+      drawCoordinateLines( canvasX: number, canvasY: number) {
+        let canvasContext=this.canvas_context
+        // Set style for the coordinate lines
+        this.canvas_context.strokeStyle = 'blue'; 
+        this.canvas_context.lineWidth = 1;
+        this.canvas_context.setLineDash([]); 
+    
+     
+        this.canvas_context.beginPath();
+        this.canvas_context.moveTo(0, canvasY); 
+        this.canvas_context.lineTo(canvasContext.canvas.width, canvasY); 
+        this.canvas_context.stroke();
+    
+    
+        canvasContext.beginPath();
+        canvasContext.moveTo(canvasX, 0); 
+        canvasContext.lineTo(canvasX, canvasContext.canvas.height); 
+        canvasContext.stroke();
+    
+        
+
+    }
 
       setCover(cover: boolean = false) {
         this.cover = cover;
