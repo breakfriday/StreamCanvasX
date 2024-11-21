@@ -117,6 +117,10 @@ class CanvasVideoService {
 
       return { imageUrl ,height,width };
      }
+     setDevicePoint(opt:{show:boolean,xPercent?:number,yPercent?:number}){
+          this.mediaView.setDeviceCenterPont(opt)
+
+     }
 }
 
 

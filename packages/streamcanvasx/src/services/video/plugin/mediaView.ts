@@ -36,7 +36,12 @@ class MediaView {
     timer: NodeJS.Timeout;
     lastCount: number;
     nowFrameCount: number;
-    showError?: boolean
+    showError?: boolean;
+    deviceCenterPont?:{
+      xPercent?:number,
+      yPercent?:number,
+      show?:boolean
+    }
 
     constructor() {
         this.canvas_el = document.createElement('canvas');
@@ -45,6 +50,7 @@ class MediaView {
         this.canvas_el2 = document.createElement('canvas');
 
         this.canvas_el.style.position = 'absolute';
+        this.deviceCenterPont={}
     }
     init(playerService: PlayerService, data: {model?: UseMode; contentEl?: HTMLElement | null; useOffScreen: boolean}) {
         // this.initGpu();
@@ -80,6 +86,11 @@ class MediaView {
 
 
         // this.initgl();
+    }
+
+    setDeviceCenterPont(opt:{show:boolean,xPercent?:number,yPercent?:number}){
+       let deviceCenterPont=Object.assign(this.deviceCenterPont,opt)
+       this.deviceCenterPont=deviceCenterPont
     }
 
     load(video: HTMLVideoElement) {
@@ -386,6 +397,7 @@ class MediaView {
 
         let { offsetX,offsetY,targetVideoHeight,targetVideoWidth }=this.calculateVideoAttributes(video);
         this.canvas_context.drawImage(videoFrame, offsetX, offsetY, targetVideoWidth, targetVideoHeight);
+        this.drawCenterPoint(video)
     }
 
 
@@ -431,6 +443,40 @@ class MediaView {
              offsetY = (height - targetVideoHeight) / 2;
         }
         return { targetVideoWidth,targetVideoHeight,offsetX,offsetY };
+      }
+     markPointOnCanvas(videoFrame: HTMLVideoElement, xPercent: number, yPercent: number) {
+          // Calculate the attributes of the video on canvas
+          let { offsetX, offsetY, targetVideoWidth, targetVideoHeight } = this.calculateVideoAttributes(videoFrame);
+      
+          // Convert the percentage to the original video dimensions
+          const video_width = videoFrame.videoWidth;
+          const video_height = videoFrame.videoHeight;
+      
+          const pixelX = (xPercent / 100) * video_width;
+          const pixelY = (yPercent / 100) * video_height;
+      
+          // Calculate the position of the point on the canvas
+          const canvasX = offsetX + (pixelX * (targetVideoWidth / video_width));
+          const canvasY = offsetY + (pixelY * (targetVideoHeight / video_height));
+          
+      
+          return {x:canvasX,y:canvasY}
+      }
+
+      drawCenterPoint(videoFrame: HTMLVideoElement){
+        if(this.deviceCenterPont?.show===true){
+          let {xPercent,yPercent}=this.deviceCenterPont
+          let {x,y}=this.markPointOnCanvas(videoFrame,xPercent,yPercent)
+
+          this.canvas_context.beginPath();
+          this.canvas_context.arc(x, y, 5, 0, 2 * Math.PI); // Draw a circle to mark the point
+          this.canvas_context.fillStyle = 'red'; // Set the color of the point
+          this.canvas_context.fill();
+
+        }
+
+
+
       }
 
       setCover(cover: boolean = false) {
