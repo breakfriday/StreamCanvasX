@@ -121,6 +121,11 @@ class CanvasVideoService {
           this.mediaView.setDeviceCenterPont(opt)
 
      }
+     calculateCanvasPointToVideoFramePoint(opt:{canvasX:number, canvasY:number}){
+      let {canvasX,canvasY}=opt
+      let data=this.mediaView.calculateCanvasPointToVideoFramePoint({canvasX,canvasY})
+      return data
+     }
 }
 
 
