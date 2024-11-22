@@ -220,6 +220,9 @@ class MediaView {
           let relative_x= pointPercent.percentX-this.deviceCenterPont.xPercent
           let relative_y= pointPercent.percentY-this.deviceCenterPont.yPercent
 
+
+          this.playerService.emit('select_point',{relative_x,relative_y});
+
           console.log(JSON.stringify({relative_x,relative_y}))
 
         }else{
