@@ -54,6 +54,7 @@ class MediaView {
         this.canvas_el2 = document.createElement('canvas');
 
         this.canvas_el.style.position = 'absolute';
+        this.canvas_el.style.zIndex="5"
         this.deviceCenterPont={}
         this._videoInfo={}
     }
@@ -182,7 +183,58 @@ class MediaView {
         }, 20);
       });
 
+      let canvas_el=this.canvas_el
+    //   canvas_el.addEventListener('mousemove', (event) => {
+    //     if(this.deviceCenterPont&&this.deviceCenterPont.show===true&&this.deviceCenterPont.xPercent){
+    //       const rect = canvas_el.getBoundingClientRect();
+    //       const canvasX = event.clientX - rect.left;
+    //       const canvasY = event.clientY - rect.top;
+  
+  
+    //       let pointPercent=this.calculateCanvasPointToVideoFramePoint({canvasX,canvasY})
+  
+    //       if(pointPercent&&pointPercent.percentX){
+    //         let relative_x= pointPercent.percentX-this.deviceCenterPont.xPercent
+    //         let relative_y= pointPercent.percentY-this.deviceCenterPont.yPercent
+  
+    //         console.log(JSON.stringify({relative_x,relative_y}))
+  
+    //       }else{
+  
+    //       }
+    //     }
+    
+
+    // });
+
+    canvas_el.addEventListener('click', (event) => {
+      if(this.deviceCenterPont&&this.deviceCenterPont.show===true&&this.deviceCenterPont.xPercent){
+        const rect = canvas_el.getBoundingClientRect();
+        const canvasX = event.clientX - rect.left;
+        const canvasY = event.clientY - rect.top;
+
+
+        let pointPercent=this.calculateCanvasPointToVideoFramePoint({canvasX,canvasY})
+
+        if(pointPercent&&pointPercent.percentX){
+          let relative_x= pointPercent.percentX-this.deviceCenterPont.xPercent
+          let relative_y= pointPercent.percentY-this.deviceCenterPont.yPercent
+
+          console.log(JSON.stringify({relative_x,relative_y}))
+
+        }else{
+
+        }
+      }
+  
+
+  });
+
+
       this.resizeObserver.observe(this.contentEl);
+    }
+    drawPercenta(){
+
     }
     initgl() {
 
