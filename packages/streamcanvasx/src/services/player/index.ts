@@ -465,16 +465,23 @@ class PlayerService extends Emitter {
             });
 
             if (isLive === false) {
-                this.canvasVideoService.loading = false;
-                setTimeout(() => {
-                    // this.corePlayer.load();
+                // this.canvasVideoService.loading = false;
+                // setTimeout(() => {
+                //     // this.corePlayer.load();
 
-                    this.corePlayer.play();
-                    // this.canvasVideoService.createVideoFramCallBack(videoEl);
-                    this.canvasVideoService.load(videoEl);
-                }, 1000);
-
-
+                //     this.corePlayer.play();
+                //     // this.canvasVideoService.createVideoFramCallBack(videoEl);
+                //     this.canvasVideoService.load(videoEl);
+                // }, 1000);
+               this.corePlayer.play();
+                // this.canvasVideoService.createVideoFramCallBack(videoEl);
+               this.config.contentEl.append(videoEl);
+               videoEl.style.width="100%";
+               videoEl.style.height="100%";
+               videoEl.controls=true;
+               videoEl.style.position="absolute";
+               videoEl.style.zIndex="6";
+               this.canvasVideoService.loading = false;
                 return false;
             }
 
