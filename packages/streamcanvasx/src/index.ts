@@ -4,6 +4,7 @@ import { createWaveVisualizationInstance } from './serviceFactories/createWaveVi
 import { IplayerConfig, IWavePlayerConfig, IWavePlayerExtend } from './types/services';
 import { getConfig, loadMicroModule } from './loadMicroModule';
 import { createStreamBridgePlayerInstance } from './serviceFactories/createStreamBridgePlayerInstance';
+import streamcanvasCore from "streamcanvasx-core2"
 
 
 type ICreatePlayerServiceInstance = ReturnType<typeof createPlayerServiceInstance>;
@@ -92,5 +93,6 @@ export {
     createPlayerServicePromise,
     createWaveVisualizationPromise,
     createWaveVisualizationInstance,
-    createStreamBridgePlayerInstance
+    createStreamBridgePlayerInstance,
+    streamcanvasCore
 };

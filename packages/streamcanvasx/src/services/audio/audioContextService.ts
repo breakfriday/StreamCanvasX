@@ -71,6 +71,8 @@ class AudioProcessingService {
       this.canvas_el.style.position = 'absolute';
       this.canvas_context=this.canvas_el.getContext("2d");
       contentEl.append(this.canvas_el);
+      this.canvas_el.style.top='0px';
+      this.canvas_el.style.left='0px';
       this.setCanvasSize();
       this.event();
     }
@@ -83,9 +85,10 @@ class AudioProcessingService {
         height = contentEl.clientHeight;
         width = contentEl.clientWidth;
       }
-
+      if(this.canvas_el) {
         this.canvas_el.width = width;
         this.canvas_el.height = height;
+      }
     }
     event() {
       let { contentEl } = this.playerService.config;
@@ -495,6 +498,9 @@ class AudioProcessingService {
       }
 
       mute(parm?: boolean) {
+        if(this.playerService._audioPlayer) {
+          this.playerService._audioPlayer.mute(parm);
+        }
         if (this.playerService.config.streamType === 'WEBRTC') {
           // webrtc 的特殊播放， 需要先將播放器禁音樂， audiocontext  的斷開輸出節點才能生效， 打開輸出不需要重置mute屬性
           if (parm === true) {
@@ -505,9 +511,11 @@ class AudioProcessingService {
         }
         if (this.playerService.corePlayer?.audioPlayer) {
           if (parm === true) {
-            this.playerService.corePlayer?.audioPlayer?.mute(true);
+            this.playerService.corePlayer?.audioPlayer?.volume(0);
+           // this.playerService.corePlayer?.audioPlayer?.mute(true);
           } else {
-            this.playerService.corePlayer?.audioPlayer?.mute(false);
+            this.playerService.corePlayer?.audioPlayer?.volume(1);
+           // this.playerService.corePlayer?.audioPlayer?.mute(false);
           }
         } else {
           if (parm === true) {
@@ -520,6 +528,16 @@ class AudioProcessingService {
             this.context.analyserNode!.connect(this.context.audioContext!.destination);
           }
         }
+      }
+
+      setVolume(v: number) {
+        // this.playerService.meidiaEl.volume=v;
+        // this.playerService.audioEl.volume=v;
+        if(v>0) {
+          this.mute(false);
+        }
+
+        this.medialEl.volume=v;
       }
 
 

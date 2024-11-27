@@ -12,7 +12,7 @@ import ControlPanel from "./plugin/contrlPannel";
 import MediaView from './plugin/mediaView';
 
 import LoadingView from './plugin/loadingView';
-
+import captureShot from './plugin/captureshot';
 
 @injectable()
 class CanvasVideoService {
@@ -109,6 +109,22 @@ class CanvasVideoService {
      }
      drawHorizontalMirror() {
       this.mediaView.drawHorizontalMirror();
+     }
+     captureShot() {
+      let video_el=this.playerService.meidiaEl;
+
+      let { imageUrl ,height,width }=captureShot(video_el);
+
+      return { imageUrl ,height,width };
+     }
+     setDevicePoint(opt:{show:boolean,xPercent?:number,yPercent?:number}){
+          this.mediaView.setDeviceCenterPont(opt)
+
+     }
+     calculateCanvasPointToVideoFramePoint(opt:{canvasX:number, canvasY:number}){
+      let {canvasX,canvasY}=opt
+      let data=this.mediaView.calculateCanvasPointToVideoFramePoint({canvasX,canvasY})
+      return data
      }
 }
 

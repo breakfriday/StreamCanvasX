@@ -36,8 +36,17 @@ class MediaView {
     timer: NodeJS.Timeout;
     lastCount: number;
     nowFrameCount: number;
-    showError?: boolean
+    showError?: boolean;
+    deviceCenterPont?:{
+      xPercent?:number,
+      yPercent?:number,
+      show?:boolean
+    }
+    _videoInfo?:{
+      videoWidth?:number,
+      videoHeight?:number
 
+    }
     constructor() {
         this.canvas_el = document.createElement('canvas');
 
@@ -45,6 +54,9 @@ class MediaView {
         this.canvas_el2 = document.createElement('canvas');
 
         this.canvas_el.style.position = 'absolute';
+        this.canvas_el.style.zIndex="5"
+        this.deviceCenterPont={}
+        this._videoInfo={}
     }
     init(playerService: PlayerService, data: {model?: UseMode; contentEl?: HTMLElement | null; useOffScreen: boolean}) {
         // this.initGpu();
@@ -80,6 +92,11 @@ class MediaView {
 
 
         // this.initgl();
+    }
+
+    setDeviceCenterPont(opt:{show:boolean,xPercent?:number,yPercent?:number}){
+       let deviceCenterPont=Object.assign(this.deviceCenterPont,opt)
+       this.deviceCenterPont=deviceCenterPont
     }
 
     load(video: HTMLVideoElement) {
@@ -166,7 +183,61 @@ class MediaView {
         }, 20);
       });
 
+      let canvas_el=this.canvas_el
+    //   canvas_el.addEventListener('mousemove', (event) => {
+    //     if(this.deviceCenterPont&&this.deviceCenterPont.show===true&&this.deviceCenterPont.xPercent){
+    //       const rect = canvas_el.getBoundingClientRect();
+    //       const canvasX = event.clientX - rect.left;
+    //       const canvasY = event.clientY - rect.top;
+  
+  
+    //       let pointPercent=this.calculateCanvasPointToVideoFramePoint({canvasX,canvasY})
+  
+    //       if(pointPercent&&pointPercent.percentX){
+    //         let relative_x= pointPercent.percentX-this.deviceCenterPont.xPercent
+    //         let relative_y= pointPercent.percentY-this.deviceCenterPont.yPercent
+  
+    //         console.log(JSON.stringify({relative_x,relative_y}))
+  
+    //       }else{
+  
+    //       }
+    //     }
+    
+
+    // });
+
+    canvas_el.addEventListener('click', (event) => {
+      if(this.deviceCenterPont&&this.deviceCenterPont.show===true&&this.deviceCenterPont.xPercent){
+        const rect = canvas_el.getBoundingClientRect();
+        const canvasX = event.clientX - rect.left;
+        const canvasY = event.clientY - rect.top;
+
+
+        let pointPercent=this.calculateCanvasPointToVideoFramePoint({canvasX,canvasY})
+
+        if(pointPercent&&pointPercent.percentX){
+          let relative_x= pointPercent.percentX-this.deviceCenterPont.xPercent
+          let relative_y= pointPercent.percentY-this.deviceCenterPont.yPercent
+
+
+          this.playerService.emit('select_point',{relative_x,relative_y});
+
+          console.log(JSON.stringify({relative_x,relative_y}))
+
+        }else{
+
+        }
+      }
+  
+
+  });
+
+
       this.resizeObserver.observe(this.contentEl);
+    }
+    drawPercenta(){
+
     }
     initgl() {
 
@@ -370,6 +441,8 @@ class MediaView {
       }
       renderCanvas2d(videoFrame: VideoFrame | HTMLVideoElement) {
         let video = videoFrame as HTMLVideoElement;
+        let {videoHeight,videoWidth}=video
+        this._videoInfo={videoHeight,videoWidth}
 
         let width = 400;
         let height = 200;
@@ -386,6 +459,7 @@ class MediaView {
 
         let { offsetX,offsetY,targetVideoHeight,targetVideoWidth }=this.calculateVideoAttributes(video);
         this.canvas_context.drawImage(videoFrame, offsetX, offsetY, targetVideoWidth, targetVideoHeight);
+        this.drawCenterPoint(video)
     }
 
 
@@ -432,6 +506,111 @@ class MediaView {
         }
         return { targetVideoWidth,targetVideoHeight,offsetX,offsetY };
       }
+      calculatePointOnCanvas(videoFrame: HTMLVideoElement, xPercent: number, yPercent: number) {
+          // Calculate the attributes of the video on canvas
+          let { offsetX, offsetY, targetVideoWidth, targetVideoHeight } = this.calculateVideoAttributes(videoFrame);
+      
+          // Convert the percentage to the original video dimensions
+          const video_width = videoFrame.videoWidth;
+          const video_height = videoFrame.videoHeight;
+      
+          const pixelX = (xPercent / 100) * video_width;
+          const pixelY = (yPercent / 100) * video_height;
+      
+          // Calculate the position of the point on the canvas
+          const canvasX = offsetX + (pixelX * (targetVideoWidth / video_width));
+          const canvasY = offsetY + (pixelY * (targetVideoHeight / video_height));
+          
+      
+          return {x:canvasX,y:canvasY}
+      }
+
+      calculateCanvasPointToVideoFramePoint(opt:{canvasX:number, canvasY:number}){
+           let video_info=this._videoInfo
+           // 获取视频的原始宽度和高度
+            let video_width = video_info.videoWidth;
+            let video_height = video_info.videoHeight;
+
+            let {canvasX,canvasY}=opt
+
+            // 假设我们有一个目标宽度和高度
+            let width = 400;
+            let height = 200;
+            if (this.contentEl) {
+                width = this.contentEl.clientWidth;
+                height = this.contentEl.clientHeight;
+            }
+
+            // 计算视频缩放比例
+            let scaleRatio = Math.min(width / video_width, height / video_height);
+
+            // 计算缩放后的视频宽高
+            let targetVideoWidth = video_width * scaleRatio;
+            let targetVideoHeight = video_height * scaleRatio;
+
+            // 计算偏移量
+            let offsetX = (width - targetVideoWidth) / 2;
+            let offsetY = (height - targetVideoHeight) / 2;
+
+            // 去除偏移量以获取相对视频内容的坐标
+            let relativeX = canvasX - offsetX;
+            let relativeY = canvasY - offsetY;
+
+            // 检查点是否在视频内容范围内
+            if (relativeX < 0 || relativeX > targetVideoWidth || relativeY < 0 || relativeY > targetVideoHeight) {
+                console.info("给定点不在视频内容范围内'")
+                return false
+            }
+
+            // 反向计算得到在原始视频中的位置
+            let originalX = relativeX / scaleRatio;
+            let originalY = relativeY / scaleRatio;
+
+            // 计算基于视频帧的百分比位置
+            let percentX = (originalX / video_width) * 100;
+            let percentY = (originalY / video_height) * 100;
+
+            return { percentX, percentY };
+      }
+
+      drawCenterPoint(videoFrame: HTMLVideoElement){
+        if(this.deviceCenterPont?.show===true){
+          let {xPercent,yPercent}=this.deviceCenterPont
+          let {x,y}=this.calculatePointOnCanvas(videoFrame,xPercent,yPercent)
+
+          this.canvas_context.beginPath();
+          this.canvas_context.arc(x, y, 5, 0, 2 * Math.PI); // Draw a circle to mark the point
+          this.canvas_context.fillStyle = 'green'; // Set the color of the point
+          this.canvas_context.fill();
+
+
+          this.drawCoordinateLines(x,y)
+
+        }
+
+      }
+      drawCoordinateLines( canvasX: number, canvasY: number) {
+        let canvasContext=this.canvas_context
+        // Set style for the coordinate lines
+        this.canvas_context.strokeStyle = 'green'; 
+        this.canvas_context.lineWidth = 1;
+        this.canvas_context.setLineDash([]); 
+    
+     
+        this.canvas_context.beginPath();
+        this.canvas_context.moveTo(0, canvasY); 
+        this.canvas_context.lineTo(canvasContext.canvas.width, canvasY); 
+        this.canvas_context.stroke();
+    
+    
+        canvasContext.beginPath();
+        canvasContext.moveTo(canvasX, 0); 
+        canvasContext.lineTo(canvasX, canvasContext.canvas.height); 
+        canvasContext.stroke();
+    
+        
+
+    }
 
       setCover(cover: boolean = false) {
         this.cover = cover;
