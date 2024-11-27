@@ -30,7 +30,7 @@ import RTCPlayerService from '../webrtc';
 import LogMonitor from '../../LogMonitor';
 import { isGeneratorFunction } from 'util/types';
 // import { timeStamp } from 'console';
-import AudioPlayer from './audioPlayer';
+import AudioPlayer from './audioPlayer2';
 
 corePlayer.LoggingControl.applyConfig({
     forceGlobalTag: true,
@@ -425,9 +425,25 @@ class PlayerService extends Emitter {
             this.corePlayer.on('audio_segment', (data) => {
                 this.initAudiPlayer();
                 let { buffer } = data;
+                // if (this._audioPlayer) {
+                //     let data = this._audioPlayer.convetBufferToPcmFloat32(buffer);
+                //     this._audioPlayer.feedPCMDataBeta(data);
+                // }
+
+                let audioBuffer = data;
                 if (this._audioPlayer) {
-                    let data = this._audioPlayer.convetBufferToPcmFloat32(buffer);
-                    this._audioPlayer.feedPCMDataBeta(data);
+                    const pcmDataBuffer = audioBuffer;
+
+                    // 使用 ArrayBuffer 创建新的 Int16Array 视图
+                    const pcmData = new Int16Array(pcmDataBuffer);
+
+                    // 转换 Int16Array 到 Float32Array
+                    const floatData = new Float32Array(pcmData.length);
+                    for (let i = 0; i < pcmData.length; i++) {
+                        // 将 PCM 数据从 Int16 转换为 Float32
+                        floatData[i] = pcmData[i] / 32768; // PCM 数据的范围是 -32768 到 32767
+                    }
+                     this._audioPlayer.feedPCMDataBeta(floatData);
                 }
                 // let h = data;
                 // debugger;
