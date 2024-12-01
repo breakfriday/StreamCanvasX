@@ -1,13 +1,11 @@
 
-class AudioContextPlayer  {
-
-
+class AudioContextPlayer {
 	constructor(preProcessingService) {
 		this.audioContext = null;
 		this.hasInitScriptNode = false;
 		this.hasInitAudioWorkletNode = false;
 		this.bufferList = [];
-		this.playedBufferCount = 1000;
+		this.playedBufferCount = 200;
 		this.playingIndex = 0;
 		this.currentTime = 0;
 		this.remainingPCMData = new Float32Array(0);
@@ -17,7 +15,7 @@ class AudioContextPlayer  {
 	init(config) {
 		const default_config = {
 			sampleRate: 8000,
-			bufferSize: 1024,
+			bufferSize: 128,
 			numberOfOutputChannels: 1,
 			isLive: true,
 		};
@@ -37,15 +35,13 @@ class AudioContextPlayer  {
 			});
 		}
 		this.gainNode = this.audioContext.createGain();
-		this.gainNode.gain.value=6
-		
+		this.gainNode.gain.value=1;
 	}
 	destroy() {
 		this.audioContext = null;
 		this.hasInit = false;
 		this.hasInitScriptNode = false;
 		this.bufferList = [];
-		this.playedBufferCount = 1000;
 		this.playingIndex = 0;
 		if (this.scriptNode) {
 			this.scriptNode && this.scriptNode.disconnect();
@@ -57,32 +53,10 @@ class AudioContextPlayer  {
 	}
 
 
-	// feedPCMData(pcmData: Float32Array) {
-	// 	const { bufferSize, numberOfOutputChannels } = this.config;
-	// 	let allPCMData = new Float32Array((this.remainingPCMData.length + pcmData.length));
-	// 	allPCMData.set(this.remainingPCMData, 0);
-	// 	allPCMData.set(pcmData, this.remainingPCMData.length);
-	// 	let count = Math.floor(allPCMData.length / (bufferSize * numberOfOutputChannels));
-
-	// 	for (let i = 0; i < count; i++) {
-	// 		let bufferItem: PCMBufferItem = {
-	// 			data: [],
-	// 		};
-
-	// 		for (let outputChannel = 0; outputChannel < numberOfOutputChannels; outputChannel++) {
-	// 			bufferItem.data.push(new Float32Array(bufferSize));
-	// 		}
-
-	// 		for (let index = 0; index < bufferSize; index++) {
-	// 			for (let outputChannel = 0; outputChannel < numberOfOutputChannels; outputChannel++) {
-	// 				bufferItem.data[outputChannel][index] = allPCMData[outputChannel + index * numberOfOutputChannels + i * (bufferSize * numberOfOutputChannels)];
-	// 			}
-	// 		}
-	// 		this.bufferList.push(bufferItem);
-	// 	}
-	// 	this.remainingPCMData = allPCMData.slice(count * bufferSize * numberOfOutputChannels);
-	// }
 	feedPCMDataBeta(pcmData) { // 单声道
+		if(this.pcmData.length===0) {
+			return false;
+		}
 		const { bufferSize } = this.config;
 		let allPCMData = new Float32Array((this.remainingPCMData.length + pcmData.length));
 		allPCMData.set(this.remainingPCMData, 0);
@@ -93,9 +67,11 @@ class AudioContextPlayer  {
 				data: [allPCMData.slice(i * bufferSize, (i + 1) * bufferSize)],
 			};
 			this.bufferList.push(bufferItem);
+			if (this.bufferList.length > this.playedBufferCount) {
+                this.bufferList.shift();
+            }
 		}
 		this.remainingPCMData = allPCMData.slice(count * bufferSize);
-	
 	}
 	initScriptNode() {
 		if (this.hasInitScriptNode) {
@@ -114,45 +90,16 @@ class AudioContextPlayer  {
 						const nowBuffering = outputBuffer.getChannelData(channel);
 						nowBuffering.set(bufferItem.data[channel]);
 					}
-				} else if (this.replayCounts > 0) {
-					this.replayCounts--;
-					this.feedPCMData(this.replayPCMData);
 				}
 			};
-		} 
+		}
 
 		this.scriptNode = scriptNode;
 		this.scriptNode.connect(this.gainNode);
 		this.gainNode.connect(this.audioContext.destination);
 		this.hasInitScriptNode = true;
 	}
-	
-	updateCurrentTime(currentTime) { // ms
-		let second = currentTime / 1000;
-		this.currentTime = second;
-		let buffered = this.buffered();
-		this.emit('audioInfo', { second, buffered });
-	}
-	isBuffered(second) {
-		let ms = second * 1000;
-		let index = this.bufferList.findIndex(item => {
-			return ms >= item.timestamp && ms <= item.timestamp + item.duration;
-		});
-		return index !== -1;
-	}
-	buffered() {
-		if (this.bufferList && this.bufferList.length) {
-			let { length } = this.bufferList;
-			return { start: this.bufferList[0].timestamp / 1000, end: (this.bufferList[length - 1].timestamp + this.bufferList[length - 1].duration) / 1000 }; // s
-		}
-	}
-	bufferedIndex(second) {
-		let ms = second * 1000;
-		let index = this.bufferList.findIndex(item => {
-			return ms >= item.timestamp && ms <= item.timestamp + item.duration;
-		});
-		return index;
-	}
+
 
 	play() {
 		if (this.audioContext.state === 'suspended') {
