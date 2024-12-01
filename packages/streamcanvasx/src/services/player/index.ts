@@ -286,8 +286,13 @@ class PlayerService extends Emitter {
     }
     initAudiPlayer() {
         if (!this._audioPlayer) {
-            this._audioPlayer = new AudioPlayer();
-            this._audioPlayer.init({ sampleRate: 8000 });
+            this._audioPlayer = new AudioPlayer({});
+            this._audioPlayer.init({
+                sampleRate: 8000, // μ-law PCM 通常是 8000 Hz
+                bufferSize: 256, // 缓冲大小，可根据需要调整
+                numberOfOutputChannels: 1, // 单声道
+                isLive: true, // 是否实时播放
+             });
         }
     }
     createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string }) {

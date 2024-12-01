@@ -5,7 +5,7 @@ class AudioContextPlayer {
 		this.hasInitScriptNode = false;
 		this.hasInitAudioWorkletNode = false;
 		this.bufferList = [];
-		this.playedBufferCount = 200;
+		this.playedBufferCount = 100;
 		this.playingIndex = 0;
 		this.currentTime = 0;
 		this.remainingPCMData = new Float32Array(0);
@@ -15,7 +15,7 @@ class AudioContextPlayer {
 	init(config) {
 		const default_config = {
 			sampleRate: 8000,
-			bufferSize: 128,
+			bufferSize: 256,
 			numberOfOutputChannels: 1,
 			isLive: true,
 		};
@@ -42,6 +42,7 @@ class AudioContextPlayer {
 		this.hasInit = false;
 		this.hasInitScriptNode = false;
 		this.bufferList = [];
+		this.playedBufferCount = 0;
 		this.playingIndex = 0;
 		if (this.scriptNode) {
 			this.scriptNode && this.scriptNode.disconnect();
@@ -54,7 +55,7 @@ class AudioContextPlayer {
 
 
 	feedPCMDataBeta(pcmData) { // 单声道
-		if(this.pcmData.length===0) {
+		if(pcmData.length===0) {
 			return false;
 		}
 		const { bufferSize } = this.config;
