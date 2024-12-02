@@ -293,6 +293,8 @@ class PlayerService extends Emitter {
                 numberOfOutputChannels: 1, // 单声道
                 isLive: true, // 是否实时播放
              });
+
+             return false;
         }
     }
     createFlvPlayer(parms: { type?: string; isLive?: boolean; url?: string }) {
@@ -446,7 +448,10 @@ class PlayerService extends Emitter {
                     const floatData = new Float32Array(pcmData.length);
                     for (let i = 0; i < pcmData.length; i++) {
                         // 将 PCM 数据从 Int16 转换为 Float32
-                        floatData[i] = pcmData[i] / 32768; // PCM 数据的范围是 -32768 到 32767
+
+                        // floatData[i] = pcmData[i] / 32768; // PCM 数据的范围是 -32768 到 32767
+
+                        floatData[i] = Math.max(-1, Math.min(1, pcmData[i] / 32768));
                     }
                      this._audioPlayer.feedPCMDataBeta(floatData);
                 }

@@ -5,7 +5,7 @@ class AudioContextPlayer {
 		this.hasInitScriptNode = false;
 		this.hasInitAudioWorkletNode = false;
 		this.bufferList = [];
-		this.playedBufferCount = 50;
+		this.playedBufferCount = 5;
 		this.playingIndex = 0;
 		this.currentTime = 0;
 		this.remainingPCMData = new Float32Array(0);
@@ -35,7 +35,7 @@ class AudioContextPlayer {
 			});
 		}
 		this.gainNode = this.audioContext.createGain();
-		this.gainNode.gain.value=1;
+		this.gainNode.gain.value=0.7;
 	}
 	destroy() {
 		this.audioContext = null;
@@ -86,6 +86,8 @@ class AudioContextPlayer {
 			this.remainingPCMData = allPCMData.slice(count * bufferSize); // 剩余的数据
 		} else {
 			this.remainingPCMData = new Float32Array(0); // 清空剩余数据
+
+			return false;
 		}
 	}
 
@@ -141,8 +143,10 @@ class AudioContextPlayer {
 	mute(parm) {
 		if (parm === true) {
 			this.gainNode.disconnect();
+			this.audioContext.suspend();
 		} else {
 			this.gainNode.connect(this.audioContext.destination);
+			this.audioContext.resume();
 		}
 	}
 }
