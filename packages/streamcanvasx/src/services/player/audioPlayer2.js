@@ -5,7 +5,7 @@ class AudioContextPlayer {
 		this.hasInitScriptNode = false;
 		this.hasInitAudioWorkletNode = false;
 		this.bufferList = [];
-		this.playedBufferCount = 100;
+		this.playedBufferCount = 50;
 		this.playingIndex = 0;
 		this.currentTime = 0;
 		this.remainingPCMData = new Float32Array(0);
@@ -55,25 +55,40 @@ class AudioContextPlayer {
 
 
 	feedPCMDataBeta(pcmData) { // 单声道
-		if(pcmData.length===0) {
-			return false;
+		if (pcmData.length === 0) {
+			return false; // 如果 PCM 数据为空，直接返回
 		}
+
 		const { bufferSize } = this.config;
-		let allPCMData = new Float32Array((this.remainingPCMData.length + pcmData.length));
-		allPCMData.set(this.remainingPCMData, 0);
-		allPCMData.set(pcmData, this.remainingPCMData.length);
+
+		// 合并剩余的 PCM 数据和当前的 PCM 数据
+		let allPCMData = new Float32Array(this.remainingPCMData.length + pcmData.length);
+		allPCMData.set(this.remainingPCMData, 0); // 先把剩余数据填充到新的数组
+		allPCMData.set(pcmData, this.remainingPCMData.length); // 然后把当前数据接上
+
+		// 计算可以填充的缓冲区数量
 		let count = Math.floor(allPCMData.length / bufferSize);
+
+		// 处理数据并填充缓冲区
 		for (let i = 0; i < count; i++) {
 			let bufferItem = {
-				data: [allPCMData.slice(i * bufferSize, (i + 1) * bufferSize)],
+				data: [allPCMData.slice(i * bufferSize, (i + 1) * bufferSize)], // 每个缓冲区的数据
 			};
 			this.bufferList.push(bufferItem);
 			if (this.bufferList.length > this.playedBufferCount) {
-                this.bufferList.shift();
-            }
+				this.bufferList.shift(); // 如果缓冲区超出了最大值，移除最旧的缓冲区
+			}
 		}
-		this.remainingPCMData = allPCMData.slice(count * bufferSize);
+
+		// 更新 remainingPCMData，确保剩余未处理的部分
+		let remainingDataLength = allPCMData.length - count * bufferSize;
+		if (remainingDataLength > 0) {
+			this.remainingPCMData = allPCMData.slice(count * bufferSize); // 剩余的数据
+		} else {
+			this.remainingPCMData = new Float32Array(0); // 清空剩余数据
+		}
 	}
+
 	initScriptNode() {
 		if (this.hasInitScriptNode) {
 				return;
@@ -84,6 +99,17 @@ class AudioContextPlayer {
 		if (this.isLive) { // 在线播放
 			scriptNode.onaudioprocess = (audioProcessingEvent) => {
 				const { outputBuffer } = audioProcessingEvent;
+
+				// 如果没有数据可以播放，就直接清空输出缓冲区
+				if (this.bufferList.length === 0) {
+					// 清空每个通道的输出数据，防止回音
+					this.remainingPCMData = new Float32Array(0);
+					for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
+						const nowBuffering = outputBuffer.getChannelData(channel);
+						nowBuffering.fill(0); // 填充0，清空输出缓冲区
+					}
+					return; // 如果没有数据，直接返回，不进行后续处理
+				}
 				if (this.bufferList.length) {
 					const bufferItem = this.bufferList.shift();
 
