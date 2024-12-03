@@ -169,6 +169,7 @@ export interface I_DEFAULT_PLAYER_OPTIONS {
   isLive?: boolean;
   splitAVBuffers?: boolean;
   stopCallBack?(): Promise<{ message?: string; stop?: boolean }>;
+  muted?: boolean;
 
 }
 

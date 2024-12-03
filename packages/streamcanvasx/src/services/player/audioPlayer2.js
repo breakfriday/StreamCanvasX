@@ -51,6 +51,7 @@ class AudioContextPlayer {
 			this.audioWorkletNode && this.audioWorkletNode.disconnect();
 		}
 		this.gainNode && this.gainNode.disconnect();
+		this.audioContext.close();
 	}
 
 
@@ -143,10 +144,8 @@ class AudioContextPlayer {
 	mute(parm) {
 		if (parm === true) {
 			this.gainNode.disconnect();
-			this.audioContext.suspend();
 		} else {
 			this.gainNode.connect(this.audioContext.destination);
-			this.audioContext.resume();
 		}
 	}
 }

@@ -99,7 +99,7 @@ class PlayerService extends Emitter {
     lowSpeedTimer: NodeJS.Timeout;
     error_message?: string;
     _audioPlayer: AudioPlayer;
-    wasmModel: boolean
+    wasmModel: boolean;
     constructor(
 
         @inject(TYPES.IHttpFlvStreamLoader) httpFlvStreamService: HttpFlvStreamService,
@@ -293,6 +293,10 @@ class PlayerService extends Emitter {
                 numberOfOutputChannels: 1, // 单声道
                 isLive: true, // 是否实时播放
              });
+
+             if(this.config.muted===true||this.config.mute===true) {
+                this._audioPlayer.mute(true);
+             }
 
              return false;
         }
