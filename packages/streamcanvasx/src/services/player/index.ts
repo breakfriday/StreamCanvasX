@@ -12,7 +12,7 @@ import FLVDemuxStream from '../demux/flvDemuxStream';
 import { UseMode } from '../../constant';
 import corePlayer from 'streamcanvasx-core';
 // import Mpegts from 'streamcanvasx-core';
-import { IplayerConfig } from '../../types/services';
+import { IplayerConfig } from '../../types/services/index';
 import AudioProcessingService from '../audio/audioContextService';
 import WasmDecoderService from '../decoder/wasmDecoder';
 import CanvasToVideoSerivce from '../muxer/canvasToVideo';
