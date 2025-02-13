@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const commonConfig = {
     entry: './src/index.ts', // 入口文件
     resolve: {
-      extensions: ['.d.ts','.ts','.tsx', '.js', '.jsx', '.json'], // 解析扩展名
+      extensions: ['.ts','.tsx', '.js', '.jsx', '.json'], // 解析扩展名
       mainFiles: ['index'],
     },
     module: {
@@ -15,7 +15,7 @@ const commonConfig = {
           use: {
             loader: 'worker-loader',
             options: {
-              inline: true, // 内联 Worker
+              inline: "no-fallback", // 内联 Worker
             },
           },
         },
