@@ -24,6 +24,16 @@ module.exports = {
   ],
   module: {
     rules: [
+        {
+            test: /(.*)(-)?[wW]orker\.[jt]s$/, // 匹配 Worker 文件的正则
+            use: {
+              loader: 'worker-loader',
+              options: {
+                inline: true, // 是否将 Worker 文件内联到主文件
+                // other options can be set here, like `sourcemap`
+              },
+            },
+          },
       {
         test: /\.(tsx|ts)?$/,
         loader: 'swc-loader',
