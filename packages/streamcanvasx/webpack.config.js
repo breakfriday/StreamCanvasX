@@ -78,6 +78,12 @@ const commonConfig = {
         filename: 'styles.css', // 提取 CSS 文件
       }),
     ],
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+        name: "vendor"
+      },
+    },
     // optimization: {
     //   splitChunks: {
     //     chunks: 'all', // 代码分割
@@ -90,7 +96,7 @@ const esmConfig = {
     ...commonConfig,
     output: {
       path: path.resolve(__dirname, 'dist/esm'), // 输出到 dist/esm 目录
-      filename: 'bundle.esm.js',
+      filename: '[name].bundle.esm.js',
       library: {
         type: 'module', // ESM 格式
       },
@@ -103,5 +109,9 @@ const esmConfig = {
     },
   };
 
+
+  const umdConfig={
+
+  };
 
   module.exports=esmConfig;
