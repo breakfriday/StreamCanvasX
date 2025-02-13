@@ -110,8 +110,16 @@ const esmConfig = {
   };
 
 
-  const umdConfig={
-
+  const umdConfig = {
+    ...commonConfig,
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: '[name].bundle.umd.js',
+      library: {
+        name: "streamCanvasX", // 定义库的全局变量名（当 type 为 umd 或 var 时使用）。
+        type: "umd",
+        export: 'default',
+      },
+    },
   };
-
-  module.exports=esmConfig;
+  module.exports=[esmConfig,umdConfig];
