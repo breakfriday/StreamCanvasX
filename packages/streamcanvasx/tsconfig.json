@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "emitDecoratorMetadata":true,
     "experimentalDecorators": true,
     "module": "ESNext",
@@ -16,6 +17,9 @@
     "noImplicitAny": true,
     "skipLibCheck": true,
     "importHelpers": true,
+    "paths": {
+      "@types/*": ["src/types/*"]
+    }
   },
   "include": ["src"],
 }
