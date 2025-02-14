@@ -113,7 +113,7 @@ const esmConfig = {
   const umdConfig = {
     ...commonConfig,
     output: {
-      path: path.resolve(__dirname, 'dist'),
+      path: path.resolve(__dirname, 'dist/umd'),
       filename: '[name].bundle.umd.js',
       library: {
         name: "streamCanvasX", // 定义库的全局变量名（当 type 为 umd 或 var 时使用）。
