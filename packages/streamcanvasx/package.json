@@ -93,7 +93,8 @@
     "sass-loader": "^13.2.0",
     "less-loader": "^11.0.0",
     "mini-css-extract-plugin": "^2.7.0",
-    "worker-loader":"3.0.8"
+    "worker-loader":"3.0.8",
+    "tsconfig-paths-webpack-plugin":"4.2.0"
   },
   "publishConfig": {
     "access": "public"
