@@ -14,6 +14,7 @@
     "docs": "pnpm -r --filter=./packages/streamcanvasx run start",
     "buildDocs:streamcanvasx": "pnpm -r --filter=./packages/streamcanvasx run build",
     "buildPlayer:streamcanvasx": "pnpm -r --filter=./packages/streamcanvasx run build_webpack",
+    "buildPlayer:types": "pnpm -r --filter=./packages/streamcanvasx run build_types",
     "publish:streamcanvasx": "pnpm -r publish --filter=./packages/streamcanvasx --no-git-checks",
     "startCore": "pnpm -r --filter=./packages/streamcanvasx-core run serve",
     "buildCore": "pnpm -r --filter=./packages/streamcanvasx-core run build",

@@ -3,6 +3,10 @@
     "baseUrl": ".",
     "emitDecoratorMetadata":true,
     "experimentalDecorators": true,
+    "declaration": true,
+    "declarationDir": "./dist/types",  // 指定声明文件输出目录
+    "emitDeclarationOnly": true,       // 只生成声明文件，不生成 .js
+    "outDir": "./dist",
     "module": "ESNext",
     "target": "ESNext",
     "jsx": "react",
