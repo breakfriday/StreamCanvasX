@@ -4,7 +4,7 @@ import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../player';
 import WaveGl from './webgl-waveform-visualization';
 
-import { IRTCPlayerConfig } from '../../types/services';
+// import { IRTCPlayerConfig } from '../../types/services';
 import { TYPES } from '../../serviceFactories/symbol';
 
 

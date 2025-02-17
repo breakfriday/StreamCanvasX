@@ -2,7 +2,7 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import PlayerService from '../index';
 import PCMPlayer from './audioContextPlayer';
-import { PCMBufferItem, IAduioContextPlayerConfig } from '../../../types/services';
+// import { PCMBufferItem, IAduioContextPlayerConfig } from '../../../types/services';
 
 @injectable()
 class AudioPlayer {

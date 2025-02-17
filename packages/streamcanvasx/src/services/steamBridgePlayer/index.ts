@@ -1,7 +1,7 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import Emitter from '../../utils/emitter';
 import YuvEnging from './render/yunEngine';
-import { IBridgePlayerConfig } from '../../types/services';
+// import { IBridgePlayerConfig } from '../../types/services';
 import MediaRenderEngine from './render';
 import { TYPES } from '../../serviceFactories/symbol';
 import StreamIo from './streamIo';

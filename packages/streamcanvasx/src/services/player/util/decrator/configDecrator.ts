@@ -1,5 +1,5 @@
 
-import { IplayerConfig } from "../../../../types/services";
+// import { IplayerConfig } from "../../../../types/services";
 import { UseMode } from "../../../../constant";
 
 function removeNullAndUndefined(obj: any): any {

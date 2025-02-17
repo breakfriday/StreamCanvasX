@@ -6,7 +6,7 @@ import { TYPES } from '../../serviceFactories/symbol';
 
 import { WHEPClient } from './whep.js';
 
-import { IRTCPlayerConfig } from '../../types/services';
+// import { IRTCPlayerConfig } from '../../types/services';
 import VideoService from '../video/videoService';
 import WebRTCStreamAdaptor from './webRTCStreamAdaptor';
 import PlayerService from '../player';
