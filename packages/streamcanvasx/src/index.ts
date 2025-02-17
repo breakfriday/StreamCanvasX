@@ -1,7 +1,7 @@
 
 import { createPlayerServiceInstance } from './serviceFactories/createPlayerInstance';
 import { createWaveVisualizationInstance } from './serviceFactories/createWaveVisualizationInstance';
-import { IplayerConfig, IWavePlayerConfig, IWavePlayerExtend } from './types/services';
+// import { IplayerConfig, IWavePlayerConfig, IWavePlayerExtend } from './types/services';
 import { getConfig, loadMicroModule } from './loadMicroModule';
 import { createStreamBridgePlayerInstance } from './serviceFactories/createStreamBridgePlayerInstance';
 import streamcanvasCore from "streamcanvasx-core2"

@@ -2,7 +2,7 @@ import { container1 } from '../container';
 import { OriginSerivce } from '../services/orignClass';
 import { ServiceA } from '../services/ServiceA';
 import { TYPES } from './symbol';
-import { IOriginSerivce, IServiceA } from '../types/services';
+// import { IOriginSerivce, IServiceA } from '../types/services';
 import { interfaces } from 'inversify';
 
 

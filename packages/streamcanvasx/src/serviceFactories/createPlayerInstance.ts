@@ -18,7 +18,7 @@ import FLVDemuxStream from '../services/demux/flvDemuxStream';
 
 import AudioProcessingService from '../services/audio/audioContextService';
 
-import { IplayerConfig, IRTCPlayerConfig } from '../types/services';
+// import { IplayerConfig, IRTCPlayerConfig } from '../types/services';
 
 import WasmDecoderService from '../services/decoder/wasmDecoder';
 

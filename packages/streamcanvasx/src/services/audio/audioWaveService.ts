@@ -1,7 +1,7 @@
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import RingBuffer from './ringBuffer';
 import WavePlayerService from '../audio/wavePlayer';
-import { IWavePlayerConfig } from '../../types/services';
+// import { IWavePlayerConfig } from '../../types/services';
 
 
 @injectable()

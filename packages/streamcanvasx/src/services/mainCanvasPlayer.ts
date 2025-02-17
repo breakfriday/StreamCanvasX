@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 import mpegts from 'streamcanvasx-core';
-import { ImainPlayerService } from '../types/services/index';
+// import { ImainPlayerService } from '../types/services/index';
 import Mpegts from 'streamcanvasx-core';
 import { debug } from 'console';
 

@@ -1,4 +1,16 @@
-import { UseMode,BridgePlayerStreamType } from '../../constant';
+
+export enum UseMode {
+  UseWebGL,
+  UseCanvas,
+  UseWebGPU,
+}
+
+
+export enum BridgePlayerStreamType {
+  http_yuv="http_yuv",
+  ws="ws"
+}
+
 export interface IDrawer {
     mediaSource_el?: HTMLAudioElement | HTMLVideoElement;
     canvas?: HTMLCanvasElement;

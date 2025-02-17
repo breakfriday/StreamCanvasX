@@ -9,7 +9,7 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "lib": ["ES2017", "DOM", "DOM.Iterable"],
-    "typeRoots": [ "./node_modules/@types","./node_modules/@webgpu/types"],
+    "typeRoots": [ "./node_modules/@types","./node_modules/@webgpu/types","./src/types"],
     "allowJs": true,
     "noUnusedLocals": true,
     "noImplicitReturns": true,
@@ -18,7 +18,8 @@
     "skipLibCheck": true,
     "importHelpers": true,
     "paths": {
-      "@types/*": ["src/types/*"]
+      "@types/*": ["src/types/*"],
+      "@service/*": ["src/service/*"]
     }
   },
   "include": ["src"],

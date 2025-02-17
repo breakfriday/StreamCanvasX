@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import Emitter from '../../utils/emitter';
 import PlayerService from '../player';
-import { Idemux } from '../../types/services/index';
+// import { Idemux } from '../../types/services/index';
 const MEDIA_TYPE = {
     audio: 1,
     video: 2,

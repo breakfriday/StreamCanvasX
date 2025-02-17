@@ -3,7 +3,7 @@ import { WebRTCInjectionContainer } from '../container';
 import RTCPlayerService from '../services/webrtc';
 import { TYPES } from './symbol';
 
-import { IRTCPlayerConfig } from '../types/services';
+// import { IRTCPlayerConfig } from '../types/services';
 import VideoService from '../services/video/videoService';
 
 WebRTCInjectionContainer.bind<RTCPlayerService>(TYPES.IRTCPlayerService).to(RTCPlayerService);
