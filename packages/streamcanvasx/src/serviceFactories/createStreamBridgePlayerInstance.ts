@@ -2,7 +2,7 @@ import { streamBridgeContainer } from '../container';
 
 
 import PlayerService from '../services/steamBridgePlayer';
-import { IBridgePlayerConfig } from '../types/services';
+// import { IBridgePlayerConfig } from '../types/services';
 import { TYPES } from './symbol';
 import StreamBridgePlayer from '../services/steamBridgePlayer';
 import MediaRenderEngine from '../services/steamBridgePlayer/render';

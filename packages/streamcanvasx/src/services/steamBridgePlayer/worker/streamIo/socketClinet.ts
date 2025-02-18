@@ -1,7 +1,7 @@
 
 import SignalClient from './signalClient';
 import StreamSocketClient from './streamSocketClient';
-import { IplayerConfig } from '../../../../types/services';
+// import { IplayerConfig } from '../../../../types/services';
 import Instance from './instance';
 import { MessageType } from '../../const';
 import { map } from 'lodash';

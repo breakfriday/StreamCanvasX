@@ -1,10 +1,10 @@
 
 import { createPlayerServiceInstance } from './serviceFactories/createPlayerInstance';
 import { createWaveVisualizationInstance } from './serviceFactories/createWaveVisualizationInstance';
-import { IplayerConfig, IWavePlayerConfig, IWavePlayerExtend } from './types/services';
+// import { IplayerConfig, IWavePlayerConfig, IWavePlayerExtend } from './types/services';
 import { getConfig, loadMicroModule } from './loadMicroModule';
 import { createStreamBridgePlayerInstance } from './serviceFactories/createStreamBridgePlayerInstance';
-import streamcanvasCore from "streamcanvasx-core2"
+import streamcanvasCore from "streamcanvasx-core2";
 
 
 type ICreatePlayerServiceInstance = ReturnType<typeof createPlayerServiceInstance>;
@@ -30,7 +30,7 @@ function extractDeviceId(url: string) {
   }
 
 
-const createPlayerServicePromise = async function (parm: IplayerConfig): Promise<ICreatePlayerServiceInstance|ICreateStreamBridgePlayerInstance> {
+const createPlayerServicePromise = async function (parm: IplayerConfig,loadUrls?: Array<string>): Promise<ICreatePlayerServiceInstance|ICreateStreamBridgePlayerInstance> {
     let { url } = parm;
     let url_obj=new URL(url);
     if(url_obj.protocol==='rtsp:') {
@@ -47,7 +47,7 @@ const createPlayerServicePromise = async function (parm: IplayerConfig): Promise
 
     try {
         // throw new Error("This is a manually thrown error");
-        let module = await loadMicroModule();
+        let module = await loadMicroModule(loadUrls);
 
         if(window.yuv===true||localStorage.getItem('yuv')==="true") {
             return module.createStreamBridgePlayerInstance(parm);

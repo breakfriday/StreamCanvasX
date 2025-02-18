@@ -13,18 +13,22 @@
     "start:myApp": "pnpm -r --filter=./packages/myApp run start",
     "docs": "pnpm -r --filter=./packages/streamcanvasx run start",
     "buildDocs:streamcanvasx": "pnpm -r --filter=./packages/streamcanvasx run build",
+    "buildPlayer:streamcanvasx": "pnpm -r --filter=./packages/streamcanvasx run build_webpack",
+    "buildPlayer:types": "pnpm -r --filter=./packages/streamcanvasx run build_types",
     "publish:streamcanvasx": "pnpm -r publish --filter=./packages/streamcanvasx --no-git-checks",
     "startCore": "pnpm -r --filter=./packages/streamcanvasx-core run serve",
     "buildCore": "pnpm -r --filter=./packages/streamcanvasx-core run build",
     "watchCore": "pnpm -r --filter=./packages/streamcanvasx-core run watch"
   },
+  "devDependencies": {
+    "eslint": "^8.35.0",
+    "stylelint": "^15.2.0",
+    "typescript": "^4.9.5",
+    "prettier":"3.5.1",
+    "@applint/spec": "^1.2.3"
+
+  },
   "repository": "git@github.com:breakfriday/canvasTable.git",
   "author": "breakhappy <break_happy@163.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/node": "^18.18.8",
-    "eslint": "^8.52.0",
-    "stylelint": "^15.11.0",
-    "typescript": "^4.9.5"
-  }
+  "license": "MIT"
 }

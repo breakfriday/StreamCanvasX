@@ -3,7 +3,7 @@ import { TYPES } from '../../serviceFactories/symbol';
 import AudioWaveService from './audioWaveService';
 import WaveGl from '../renderingEngines/webgl-waveform-visualization';
 import WaveVisualization from '../waveVisualization/waveVisualization';
-import { IWavePlayerConfig, IWavePlayerExtend } from '../../types/services';
+// import { IWavePlayerConfig, IWavePlayerExtend } from '../../types/services';
 import Scheduler from './scheduler';
 import _ from 'lodash';
 

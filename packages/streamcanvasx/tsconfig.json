@@ -1,14 +1,19 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "emitDecoratorMetadata":true,
     "experimentalDecorators": true,
+    "declaration": true,
+    "declarationDir": "./dist/types",  // 指定声明文件输出目录
+    "emitDeclarationOnly": true,       // 只生成声明文件，不生成 .js
+    "outDir": "./dist",
     "module": "ESNext",
     "target": "ESNext",
     "jsx": "react",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "lib": ["ES2017", "DOM", "DOM.Iterable"],
-    "typeRoots": [ "./node_modules/@types","./node_modules/@webgpu/types"],
+    "typeRoots": [ "./node_modules/@types","./node_modules/@webgpu/types","./src/types"],
     "allowJs": true,
     "noUnusedLocals": true,
     "noImplicitReturns": true,
@@ -16,6 +21,10 @@
     "noImplicitAny": true,
     "skipLibCheck": true,
     "importHelpers": true,
+    "paths": {
+      "@types/*": ["src/types/*"],
+      "@service/*": ["src/service/*"]
+    }
   },
   "include": ["src"],
 }

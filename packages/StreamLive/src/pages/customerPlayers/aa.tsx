@@ -86,7 +86,7 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
     let player: any;
 
      async function asyncCreatePlayer() {
-      let player = await createPlayerServicePromise(config);
+      let player = await createPlayerServicePromise(config,["http://localhost:8080/esm/vendor.bundle.esm.js","http://localhost:8080/esm/main.bundle.esm.js"]);
 
       streamPlayer.current = player;
 
@@ -174,8 +174,8 @@ const VideoComponents: React.FC<IVideoComponent> = (props) => {
               });
      }
 
-      cratePlayer();
-    // asyncCreatePlayer();
+    //  cratePlayer();
+     asyncCreatePlayer();
 
     return () => {
       player.destroy();

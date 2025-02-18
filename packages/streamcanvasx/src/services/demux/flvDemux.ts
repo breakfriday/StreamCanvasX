@@ -1,7 +1,7 @@
 
 import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import Emitter from '../../utils/emitter';
-import { Idemux } from '../../types/services/index';
+// import { Idemux } from '../../types/services/index';
 import BaseDemux from './baseDemux';
 import PlayerService from '../player';
 const MEDIA_TYPE = {

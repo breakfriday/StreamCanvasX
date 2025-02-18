@@ -4,7 +4,7 @@ import WavePlayerService from '../services/audio/wavePlayer';
 import AudioWaveService from '../services/audio/audioWaveService';
 import { TYPES } from './symbol';
 
-import { IWavePlayerConfig } from '../types/services';
+// import { IWavePlayerConfig } from '../types/services';
 
 WavePlayerContainer.bind<WavePlayerService>(TYPES.IWavePlayerService).to(WavePlayerService);
 WavePlayerContainer.bind<AudioWaveService>(TYPES.IAudioWaveService).to(AudioWaveService);

@@ -3,7 +3,7 @@ import { TYPES } from '../../serviceFactories/symbol';
 // import AudioWaveService from '../audio/audioWaveService';
 import WavePlayerService from '../audio/wavePlayer';
 import WaveGl from '../renderingEngines/webgl-waveform-visualization';
-import { IWavePlayerConfig, IWavePlayerExtend } from '../../types/services';
+// import { IWavePlayerConfig, IWavePlayerExtend } from '../../types/services';
 
 
 @injectable()

@@ -2,7 +2,7 @@ import { injectable, inject, Container, LazyServiceIdentifer } from 'inversify';
 import Emitter from '../../../utils/emitter';
 import PlayerService from '../index';
 
-import { PCMBufferItem, IAduioContextPlayerConfig } from '../../../types/services';
+// import { PCMBufferItem, IAduioContextPlayerConfig } from '../../../types/services';
 
 // import worklet from './audioWorklet.js';
 

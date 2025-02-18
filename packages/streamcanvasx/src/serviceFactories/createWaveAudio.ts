@@ -3,7 +3,7 @@ import { waveAudioContainer } from '../container';
 
 import { TYPES } from './symbol';
 
-import { IRTCPlayerConfig } from '../types/services';
+// import { IRTCPlayerConfig } from '../types/services';
 import RenderEngine from '../services/renderingEngines/baseEngine';
 import WaveGl from '../services/renderingEngines/webgl-waveform-visualization';
 

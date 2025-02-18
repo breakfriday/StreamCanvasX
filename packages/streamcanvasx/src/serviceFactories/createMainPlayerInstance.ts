@@ -2,9 +2,9 @@ import { container1 } from '../container';
 import AudioProcessingService from '../services/audioProcessingService';
 import mainPlayerService from '../services/mainCanvasPlayer';
 import { TYPES } from './symbol';
-import { IAudioProcessingService } from '../types/services';
+// import { IAudioProcessingService } from '../types/services';
 import { interfaces } from 'inversify';
-import { ImainPlayerService } from '../types/services';
+// import { ImainPlayerService } from '../types/services';
 
 // const worker = new Worker(new URL('work.js', import.meta.url));
 
