@@ -1,3 +1,3 @@
-const { getPrettierConfig } = require('@iceworks/spec');
+const { getPrettierConfig } =require('@applint/spec');
 
-module.exports = getPrettierConfig('react');
+module.exports = getPrettierConfig('common');
