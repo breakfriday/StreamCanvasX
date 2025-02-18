@@ -20,6 +20,14 @@
     "buildCore": "pnpm -r --filter=./packages/streamcanvasx-core run build",
     "watchCore": "pnpm -r --filter=./packages/streamcanvasx-core run watch"
   },
+  "devDependencies": {
+    "eslint": "^8.35.0",
+    "stylelint": "^15.2.0",
+    "typescript": "^4.9.5",
+    "prettier":"3.5.1",
+    "@applint/spec": "^1.2.3"
+
+  },
   "repository": "git@github.com:breakfriday/canvasTable.git",
   "author": "breakhappy <break_happy@163.com>",
   "license": "MIT"

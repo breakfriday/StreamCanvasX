@@ -75,13 +75,10 @@
     "rollup-plugin-web-worker-loader": "1.6.1"
   },
   "devDependencies": {
-    "@applint/spec": "^1.2.3",
     "@ice/pkg": "^1.0.0",
     "@ice/pkg-plugin-docusaurus": "^1.0.0",
     "@types/node": "^18.11.17",
     "antd": "^4.24.0",
-    "eslint": "^8.0.0",
-    "stylelint": "^15.0.0",
     "@webgpu/types": "^0.1.40",
     "webpack": "5.97.1",
     "webpack-cli": "6.0.1",
