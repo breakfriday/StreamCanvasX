@@ -30,10 +30,15 @@ const getConfig = async () => {
 };
 
 
-let loadMicroModule = async function (): Promise<any> {
+let loadMicroModule = async function (esm_urls?: Array<string>): Promise<any> {
     let resouce_url = await getConfig();
     let vendorUrl = resouce_url[0];
     let indexUrl = resouce_url[1];
+
+    if(esm_urls) {
+        vendorUrl = esm_urls[0];
+       indexUrl = esm_urls[1];
+    }
 
      try {
          // 首先加载vendor模块
